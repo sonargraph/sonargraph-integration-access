@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.hello2morrow.com/sonargraph/core/export"
+    targetNamespace="http://www.hello2morrow.com/sonargraph/core/export">
+
+    <xs:simpleType name="xsdOrderNumber">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="xsdIssueCategories">
+        <xs:sequence>
+            <xs:element name="category" type="xsdIssueCategory" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueCategory">
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="presentationName" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMetricCategory">
+        <xs:attribute name="id" type="xs:ID" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="presentationName" type="xs:string" use="required"/>
+        <xs:attribute name="orderNumber" type="xsdOrderNumber" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMetricCategories">
+        <xs:sequence>
+            <xs:element name="category" type="xsdMetricCategory" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+     <xs:complexType name="xsdMetricProvider">
+        <xs:attribute name="id" type="xs:ID" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="presentationName" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMetricProviders">
+        <xs:sequence>
+            <xs:element name="provider" type="xsdMetricProvider" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMetricLevel">
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="presentationName" type="xs:string" use="required" />
+        <xs:attribute name="orderNumber" type="xsdOrderNumber" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMetricLevels">
+        <xs:sequence>
+            <xs:element name="level" type="xsdMetricLevel" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMetricId">
+        <xs:attribute name="id" type="xs:ID" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="presentationName" type="xs:string" use="required" />
+        <xs:attribute name="description" type="xs:string" use="required" />
+        <xs:attribute name="categories" type="xs:IDREFS" use="required" />
+        <xs:attribute name="provider" type="xs:IDREF" use="required" />
+        <xs:attribute name="isFloat" type="xs:boolean" use="required" />
+        <xs:attribute name="levels" type="xs:IDREFS" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMetricIds">
+        <xs:sequence>
+            <xs:element name="metricId" type="xsdMetricId" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdExportMetaData">
+        <xs:sequence>
+            <xs:element name="issueCategories" type="xsdIssueCategories" minOccurs="1" maxOccurs="1" />
+            <xs:element name="metricProviders" type="xsdMetricProviders" minOccurs="1" maxOccurs="1" />
+            <xs:element name="metricCategories" type="xsdMetricCategories" minOccurs="1" maxOccurs="1" />
+            <xs:element name="metricLevels" type="xsdMetricLevels" minOccurs="1" maxOccurs="1" />
+            <xs:element name="metricIds" type="xsdMetricIds" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="xsdExportMetaDataRoot">
+        <xs:complexContent>
+            <xs:extension base="xsdExportMetaData">
+                <xs:attribute name="version" type="xs:string" use="required" />
+                <xs:attribute name="systemPathUsedForExport" type="xs:string" use="required" />
+                <xs:attribute name="systemId" type="xs:string" use="required" />
+                <xs:attribute name="timestamp" type="xs:dateTime" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+        
+    <xs:element name="exportMetaData" type="xsdExportMetaDataRoot"/>
+    
+</xs:schema>
