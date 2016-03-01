@@ -1,0 +1,76 @@
+/**
+ * Sonargraph Integration Access
+ * Copyright (C) 2016 hello2morrow GmbH
+ * mailto: support AT hello2morrow DOT com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.hello2morrow.sonargraph.integration.access.model.internal;
+
+import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
+
+public class MetricValueImpl implements IMetricValue
+{
+    private final IMetricId m_id;
+    private final IMetricLevel m_level;
+    private final Number m_value;
+
+    public MetricValueImpl(final IMetricId metricId, final IMetricLevel level, final Number value)
+    {
+        assert metricId != null : "Parameter 'id' of method 'MetricValue' must not be null";
+        assert level != null : "Parameter 'level' of method 'MetricValue' must not be null";
+        assert value != null : "Parameter 'value' of method 'MetricValue' must not be null";
+
+        m_id = metricId;
+        m_level = level;
+        m_value = value;
+    }
+
+    /* (non-Javadoc)
+     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricValue#getId()
+     */
+    @Override
+    public IMetricId getId()
+    {
+        return m_id;
+    }
+
+    /* (non-Javadoc)
+     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricValue#getLevel()
+     */
+    @Override
+    public IMetricLevel getLevel()
+    {
+        return m_level;
+    }
+
+    /* (non-Javadoc)
+     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricValue#getValue()
+     */
+    @Override
+    public Number getValue()
+    {
+        return m_value;
+    }
+
+    /* (non-Javadoc)
+     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricValue#isFloat()
+     */
+    @Override
+    public boolean isFloat()
+    {
+        return m_id.isFloat();
+    }
+}

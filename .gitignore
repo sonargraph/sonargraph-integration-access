@@ -1,0 +1,5 @@
+/build.eclipse/
+/src/generated/
+/classes/
+/target/
+*_access*.log
