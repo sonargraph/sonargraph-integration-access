@@ -56,9 +56,9 @@ public final class MetricCategoryImpl extends ElementImpl implements IMetricCate
         {
             return true;
         }
-        if(obj == null)
+        if (obj == null)
         {
-        	return false;
+            return false;
         }
         if (!super.equals(obj))
         {

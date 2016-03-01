@@ -18,7 +18,6 @@
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 

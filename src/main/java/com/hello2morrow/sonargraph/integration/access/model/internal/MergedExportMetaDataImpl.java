@@ -43,11 +43,11 @@ public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl impleme
         assert systems != null : "Parameter 'systems' of method 'MergedExportMetaDataImpl' must not be null";
         m_systems = new ArrayList<>(systems);
 
-        issueCategories.values().forEach(category -> super.addIssueCategory(category));
-        metricCategories.values().forEach(category -> super.addMetricCategory(category));
-        metricProviders.values().forEach(provider -> super.addMetricProvider(provider));
-        metricIds.values().forEach(metricId -> super.addMetricId(metricId));
-        metricLevels.values().forEach(level -> super.addMetricLevel(level));
+        issueCategories.values().forEach(super::addIssueCategory);
+        metricCategories.values().forEach(super::addMetricCategory);
+        metricProviders.values().forEach(super::addMetricProvider);
+        metricIds.values().forEach(super::addMetricId);
+        metricLevels.values().forEach(super::addMetricLevel);
     }
 
     @Override

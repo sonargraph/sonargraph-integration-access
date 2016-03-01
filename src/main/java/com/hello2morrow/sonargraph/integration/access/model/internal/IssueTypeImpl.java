@@ -71,9 +71,9 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
         {
             return true;
         }
-        if(obj == null)
+        if (obj == null)
         {
-        	return false;
+            return false;
         }
         if (!super.equals(obj))
         {

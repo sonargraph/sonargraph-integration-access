@@ -37,13 +37,13 @@ public interface IInfoProcessor
     public String getBaseDirectory();
 
     /**
-     * @param predicate the predicate used to filter the existing issues. If <code>null</code>, then all issues are returned.
+     * @param filter the predicate used to filter the existing issues. If <code>null</code>, then all issues are returned.
      * @return Unmodifiable list of issues matching the predicate.
      */
     public List<IIssue> getIssues(Predicate<IIssue> filter);
 
     /**
-     * @param predicate the predicate used to filter the existing resolutions. If <code>null</code>, then all resolutions are returned.
+     * @param filter the predicate used to filter the existing resolutions. If <code>null</code>, then all resolutions are returned.
      * @return Unmodifiable list of resolutions matching the predicate.
      */
     public List<IResolution> getResolutions(Predicate<IResolution> filter);
@@ -56,7 +56,7 @@ public interface IInfoProcessor
 
     public List<IMetricLevel> getMetricLevels();
 
-    public Optional<IMetricLevel> getMetricLevel(String systemLevel);
+    public Optional<IMetricLevel> getMetricLevel(String levelName);
 
     public Map<INamedElement, IMetricValue> getMetricValues(String levelName, String metricIdName);
 

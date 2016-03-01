@@ -55,9 +55,9 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
         {
             return true;
         }
-        if(obj == null)
+        if (obj == null)
         {
-        	return false;
+            return false;
         }
         if (!super.equals(obj))
         {

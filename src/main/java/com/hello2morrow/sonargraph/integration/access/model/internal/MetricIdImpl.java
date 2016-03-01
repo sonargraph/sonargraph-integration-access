@@ -97,9 +97,9 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         {
             return true;
         }
-        if(obj == null)
+        if (obj == null)
         {
-        	return false;
+            return false;
         }
         if (!super.equals(obj))
         {

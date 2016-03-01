@@ -24,12 +24,6 @@ public final class SingleExportMetaDataImpl extends AbstractExportMetaDataImpl i
 {
     private final IBasicSoftwareSystemInfo m_systemInfo;
 
-    /**
-     * @param systemPath
-     * @param systemId
-     * @param version
-     * @param timestamp
-     */
     public SingleExportMetaDataImpl(final IBasicSoftwareSystemInfo systemInfo, final String resourceIdentifier)
     {
         super(resourceIdentifier);

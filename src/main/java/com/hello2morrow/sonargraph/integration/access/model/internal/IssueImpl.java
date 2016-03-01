@@ -99,9 +99,9 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         {
             return true;
         }
-        if(obj == null)
+        if (obj == null)
         {
-        	return false;
+            return false;
         }
         if (!super.equals(obj))
         {
