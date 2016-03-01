@@ -23,6 +23,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaDat
 import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.ISingleExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MergedExportMetaDataImpl;
@@ -161,6 +162,7 @@ class MetaDataControllerImpl implements IMetaDataController
         final Map<String, IMetricCategory> metricCategories = new LinkedHashMap<>();
         final Map<String, IMetricProvider> metricProviders = new LinkedHashMap<>();
         final Map<String, IMetricId> metricIds = new LinkedHashMap<>();
+        final Map<String, IMetricLevel> metricLevels = new LinkedHashMap<>();
 
         for (final Map.Entry<String, ISingleExportMetaData> next : exportDataMap.entrySet())
         {
@@ -206,13 +208,21 @@ class MetaDataControllerImpl implements IMetaDataController
                     metricIds.put(nextId.getKey(), nextId.getValue());
                 }
             }
+
+            for (final Map.Entry<String, IMetricLevel> nextLevel : data.getMetricLevels().entrySet())
+            {
+                if (!metricLevels.containsKey(nextLevel.getKey()))
+                {
+                    metricLevels.put(nextLevel.getKey(), nextLevel.getValue());
+                }
+            }
         }
 
         final String identifier = exportDataMap.values().stream().map((final ISingleExportMetaData metaData) -> metaData.getResourceIdentifier())
                 .reduce((path1, path2) -> path1 + ", " + path2).get();
 
         final MergedExportMetaDataImpl mergedExportMetaData = new MergedExportMetaDataImpl(systemMap.values(), issueCategories, metricCategories,
-                metricProviders, metricIds, identifier);
+                metricProviders, metricIds, metricLevels, identifier);
         result.setOutcome(mergedExportMetaData);
         return result;
     }
