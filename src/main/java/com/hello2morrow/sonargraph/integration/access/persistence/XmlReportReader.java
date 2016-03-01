@@ -232,16 +232,21 @@ public final class XmlReportReader
                     return;
                 }
 
-                module.addRootDirectory(rootDirectory);
-                m_globalXmlToElementMap.put(nextRoot, rootDirectory);
-
-                for (final XsdSourceFile nextSourceFile : nextRoot.getSourceElement())
+                if (rootDirectory != null)
                 {
-                    final XsdElementKind sourceKind = (XsdElementKind) nextSourceFile.getKind();
-                    final ISourceFile sourceFile = new SourceFileImpl(rootDirectory, sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
-                            nextSourceFile.getName(), nextSourceFile.getPresentationName(), nextSourceFile.getFqName());
-                    m_globalXmlToElementMap.put(nextSourceFile, sourceFile);
-                    rootDirectory.addSourceFile(sourceFile);
+
+                    module.addRootDirectory(rootDirectory);
+                    m_globalXmlToElementMap.put(nextRoot, rootDirectory);
+
+                    for (final XsdSourceFile nextSourceFile : nextRoot.getSourceElement())
+                    {
+                        final XsdElementKind sourceKind = (XsdElementKind) nextSourceFile.getKind();
+                        final ISourceFile sourceFile = new SourceFileImpl(rootDirectory, sourceKind.getStandardKind(),
+                                sourceKind.getPresentationKind(), nextSourceFile.getName(), nextSourceFile.getPresentationName(),
+                                nextSourceFile.getFqName());
+                        m_globalXmlToElementMap.put(nextSourceFile, sourceFile);
+                        rootDirectory.addSourceFile(sourceFile);
+                    }
                 }
             }
         }

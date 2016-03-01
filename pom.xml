@@ -8,6 +8,7 @@
   <url>http://www.hello2morrow.com</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonar.sources>src/main/java</sonar.sources>
   </properties>
   <licenses>
     <license>
@@ -122,6 +123,11 @@
           <additionalparam>-Xdoclint:none</additionalparam>
           <excludePackageNames>com.hello2morrow.sonargraph.core.persistence.*</excludePackageNames>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.0.1</version>
       </plugin>
     </plugins>
   </build>

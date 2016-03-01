@@ -307,9 +307,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addDuplicateCodeBlock(final IDuplicateCodeBlockIssue duplicate)
     {
         assert duplicate != null : "Parameter 'duplicate' of method 'addDuplicateCodeBlock' must not be null";
-
-        //FIXME: Enable again, when Fq Names of blocks are unique again!
-        //assert !m_duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
+        assert !m_duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
 
         m_duplicateCodeBlockIssueMap.put(duplicate.getName(), duplicate);
         addIssue(duplicate);
