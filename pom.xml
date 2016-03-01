@@ -120,6 +120,7 @@
         </executions>
         <configuration>
           <additionalparam>-Xdoclint:none</additionalparam>
+          <excludePackageNames>com.hello2morrow.sonargraph.core.persistence.*</excludePackageNames>
         </configuration>
       </plugin>
     </plugins>
