@@ -555,7 +555,7 @@ public final class XmlReportReader
             {
                 final IElement element = m_globalXmlToElementMap.get(nextOccurence.getSource());
                 assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
-                final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl(((ISourceFile) element),
+                final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl((ISourceFile) element,
                         nextOccurence.getBlockSize(), nextOccurence.getStartLine(), nextOccurence.getTolerance());
                 occurrences.add(occurrence);
             }

@@ -19,8 +19,8 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
             final List<IMetricLevel> levels, final IMetricProvider provider, final boolean isFloat)
     {
         super(name, presentationName, description);
-        assert categories != null && categories.size() > 0 : "Parameter 'categories' of method 'setCategories' must not be empty";
-        assert levels != null && levels.size() > 0 : "Parameter 'levels' of method 'MetricIdImpl' must not be empty";
+        assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'setCategories' must not be empty";
+        assert levels != null && !levels.isEmpty() : "Parameter 'levels' of method 'MetricIdImpl' must not be empty";
         assert provider != null : "Parameter 'provider' of method 'MetricId' must not be null";
 
         m_categories = categories;
@@ -79,6 +79,10 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         if (this == obj)
         {
             return true;
+        }
+        if(obj == null)
+        {
+        	return false;
         }
         if (!super.equals(obj))
         {

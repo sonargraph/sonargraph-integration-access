@@ -7,7 +7,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 
 public interface IMetricId extends IElementWithDescription
 {
-    public static enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IStandardEnumeration
     {
         CORE_VIOLATIONS_PARSER_DEPENDENCIES("Number of Violations (Parser Dependencies)"),
         CORE_COMPONENTS("Number of Components"),

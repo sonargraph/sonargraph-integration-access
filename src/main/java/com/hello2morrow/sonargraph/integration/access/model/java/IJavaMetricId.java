@@ -6,7 +6,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 
 public interface IJavaMetricId extends IMetricId
 {
-    public static enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IStandardEnumeration
     {
         JAVA_PACKAGES("Number of Packages"),
         JAVA_CYCLIC_PACKAGES("Number of Cyclic Packages"),

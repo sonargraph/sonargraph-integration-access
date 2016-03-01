@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public final class ExceptionUtility
 {
-    private final static String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     private ExceptionUtility()
     {

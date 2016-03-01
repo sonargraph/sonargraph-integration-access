@@ -106,6 +106,10 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
         {
             return true;
         }
+        if(obj == null)
+        {
+        	return false;
+        }
         if (!super.equals(obj))
         {
             return false;

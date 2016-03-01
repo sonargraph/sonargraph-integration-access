@@ -71,7 +71,7 @@ public class OperationResult implements IResult
         }
     }
 
-    private final List<Message> m_messages = new ArrayList<Message>();
+    private final List<Message> m_messages = new ArrayList<>();
     private final String m_description;
     private Boolean m_isSuccess = null;
 
@@ -188,7 +188,7 @@ public class OperationResult implements IResult
     {
         assert status != null : "Parameter 'status' of method 'getMessages' must not be null";
 
-        final List<String> messages = new ArrayList<String>();
+        final List<String> messages = new ArrayList<>();
         for (final Message nextMessage : m_messages)
         {
             if (nextMessage.getStatus() == status)

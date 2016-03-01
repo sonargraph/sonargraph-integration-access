@@ -10,14 +10,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public abstract class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
 {
-    private final Set<ISourceFile> m_sourceFiles = new TreeSet<>(new Comparator<ISourceFile>()
-    {
-        @Override
-        public int compare(final ISourceFile s1, final ISourceFile s2)
-        {
-            return s1.getFqName().compareTo(s2.getFqName());
-        }
-    });
+    private final Set<ISourceFile> m_sourceFiles = new TreeSet<>((s1, s2) -> s1.getFqName().compareTo(s2.getFqName()));
 
     private final NamedElementContainerImpl m_module;
     private final String m_relativePath;

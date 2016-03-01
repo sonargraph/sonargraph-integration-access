@@ -75,6 +75,10 @@ public final class ElementIssueImpl extends AbstractElementIssueImpl
         {
             return true;
         }
+        if(obj == null)
+        {
+        	return false;
+        }
         if (!super.equals(obj))
         {
             return false;

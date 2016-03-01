@@ -73,6 +73,10 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         {
             return true;
         }
+        if(obj == null)
+        {
+        	return false;
+        }
         if (!super.equals(obj))
         {
             return false;

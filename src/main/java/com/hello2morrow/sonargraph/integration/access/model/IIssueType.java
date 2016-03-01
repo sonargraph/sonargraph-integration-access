@@ -5,7 +5,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 
 public interface IIssueType extends IElement
 {
-    public static enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IStandardEnumeration
     {
         ARCHITECTURE_VIOLATION("Architecture Violation");
 

@@ -20,7 +20,7 @@ public final class StringUtility
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static final String EMPTY_STRING = "";
-    public static final String EQUALS = "=";
+    public static final String EQUALS = "="; // NOSONAR
     public static final String NOT_AVAILABLE = "n/a";
     public static final char DOT = '.';
     public static final String BLANK = " ";
@@ -88,7 +88,7 @@ public final class StringUtility
         assert input != null : "'input' must not be null";
         assert input.length() > 0 : "'input' must not be empty";
         String result = input;
-        boolean cont = false;
+        boolean cont;
         do
         {
             if (result.length() > 0 && result.charAt(result.length() - 1) == c)
@@ -184,7 +184,7 @@ public final class StringUtility
         {
             return Collections.emptyList();
         }
-        final List<String> result = new ArrayList<String>();
+        final List<String> result = new ArrayList<>();
 
         for (final String line : string.trim().split("\\r\\n|\\n"))
         {
@@ -197,7 +197,7 @@ public final class StringUtility
     {
         assert input != null : "Parameter 'input' of method 'toList' must not be null";
         final String harmonizedInput = harmonizeNewLineBreaks(input);
-        final List<String> lines = new ArrayList<String>();
+        final List<String> lines = new ArrayList<>();
 
         final String lineSeparator = DEFAULT_LINE_SEPARATOR;
         final StringTokenizer tokenizer = new StringTokenizer(harmonizedInput, lineSeparator, true);
@@ -256,7 +256,7 @@ public final class StringUtility
             return Collections.emptyList();
         }
 
-        final List<String> result = new ArrayList<String>();
+        final List<String> result = new ArrayList<>();
         final StringTokenizer tokenizer = new StringTokenizer(trimmedString, separator);
         while (tokenizer.hasMoreTokens())
         {

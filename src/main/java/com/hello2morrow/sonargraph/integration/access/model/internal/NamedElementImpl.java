@@ -80,6 +80,10 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         {
             return true;
         }
+        if(obj == null)
+        {
+        	return false;
+        }
         if (!super.equals(obj))
         {
             return false;

@@ -27,7 +27,7 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
     public void setAffectedElements(final List<INamedElement> elements)
     {
         assert elements != null : "Parameter 'elements' of method 'setCyclicElements' must not be null";
-        assert elements.size() > 0 : "Parameter 'elements' of method 'setCyclicElements' must not be empty";
+        assert !elements.isEmpty() : "Parameter 'elements' of method 'setCyclicElements' must not be empty";
         m_cyclicElements.addAll(elements);
     }
 
@@ -65,6 +65,10 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
         if (this == obj)
         {
             return true;
+        }
+        if(obj == null)
+        {
+        	return false;
         }
         if (!super.equals(obj))
         {

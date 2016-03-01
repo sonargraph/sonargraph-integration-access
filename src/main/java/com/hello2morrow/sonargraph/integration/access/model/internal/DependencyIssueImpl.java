@@ -69,6 +69,10 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
         {
             return true;
         }
+        if(obj == null)
+        {
+        	return false;
+        }
         if (!super.equals(obj))
         {
             return false;

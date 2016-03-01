@@ -40,7 +40,7 @@ class MetaDataControllerImpl implements IMetaDataController
     {
         assert exportMetaDataFile != null : "Parameter 'exportMetaDataFile' of method 'loadExportMetaData' must not be null";
 
-        final OperationResultWithOutcome<IExportMetaData> result = new OperationResultWithOutcome<IExportMetaData>("Load meta-data from '"
+        final OperationResultWithOutcome<IExportMetaData> result = new OperationResultWithOutcome<>("Load meta-data from '"
                 + exportMetaDataFile + "'");
         try (final FileInputStream inputStream = new FileInputStream(exportMetaDataFile))
         {
@@ -100,9 +100,9 @@ class MetaDataControllerImpl implements IMetaDataController
     @Override
     public OperationResultWithOutcome<IMergedExportMetaData> mergeExportMetaDataFiles(final List<File> files)
     {
-        assert files != null && files.size() > 0 : "Parameter 'files' of method 'mergeExportMetaDataFiles' must not be empty";
+        assert files != null && !files.isEmpty() : "Parameter 'files' of method 'mergeExportMetaDataFiles' must not be empty";
 
-        final OperationResultWithOutcome<IMergedExportMetaData> result = new OperationResultWithOutcome<IMergedExportMetaData>(
+        final OperationResultWithOutcome<IMergedExportMetaData> result = new OperationResultWithOutcome<>(
                 "Merge meta-data from files");
 
         final Map<String, ISingleExportMetaData> exportDataMap = new LinkedHashMap<>();

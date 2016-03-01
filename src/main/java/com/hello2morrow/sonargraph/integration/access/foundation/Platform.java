@@ -126,8 +126,6 @@ public final class Platform
     {
         if (VERSION == null)
         {
-            VERSION = JavaVersion.UNKNOWN;
-
             final String version = System.getProperty("java.specification.version", "unknown");
 
             switch (version)
@@ -144,6 +142,8 @@ public final class Platform
             case "1.8":
                 VERSION = JavaVersion.JAVA_8;
                 break;
+            default:
+                VERSION = JavaVersion.UNKNOWN;
             }
         }
         return VERSION;
@@ -310,7 +310,7 @@ public final class Platform
 
     public static List<String> getEnvironmentInfo()
     {
-        final List<String> envInfo = new ArrayList<String>();
+        final List<String> envInfo = new ArrayList<>();
         envInfo.add(getOperatingSystem().getPresentationName());
         envInfo.add(getJavaVendor().getPresentationName());
         envInfo.add(getJavaVersion().getPresentationName());

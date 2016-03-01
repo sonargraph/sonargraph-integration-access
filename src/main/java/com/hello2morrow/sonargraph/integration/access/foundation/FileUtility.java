@@ -77,7 +77,7 @@ public final class FileUtility
     {
         assert path != null : "'path' must not be null";
         final StringTokenizer tokenizer = new StringTokenizer(path, PATH_SEPARATOR);
-        final List<String> relativePathParts = new ArrayList<String>();
+        final List<String> relativePathParts = new ArrayList<>();
         while (tokenizer.hasMoreTokens())
         {
             relativePathParts.add(tokenizer.nextToken());
@@ -259,8 +259,7 @@ public final class FileUtility
         if (!absolutePath.isAbsolute())
         {
             final String fullPath = basePath.getAbsolutePath() + FileUtility.PATH_SEPARATOR_CHAR + relativePath;
-            final File calculatedPath = new File(fullPath);
-            return calculatedPath;
+            return new File(fullPath);
         }
 
         return absolutePath;
@@ -309,15 +308,8 @@ public final class FileUtility
     {
         assert directory != null : "Parameter 'directory' of method 'listFilesInDir' must not be null";
 
-        final File[] files = directory.listFiles(new FilenameFilter()
-        {
-            @Override
-            public boolean accept(final File dir, final String name)
-            {
-                final boolean matches = name.matches(regex);
-                return matches;
-            }
-        });
+        final FilenameFilter filter = (dir, name) -> name.matches(regex);
+        final File[] files = directory.listFiles(filter);
         if (files == null)
         {
             return new File[0];
