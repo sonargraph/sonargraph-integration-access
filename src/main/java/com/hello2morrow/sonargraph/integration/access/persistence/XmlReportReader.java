@@ -113,8 +113,8 @@ public final class XmlReportReader
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
     private static final String REPORT_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/report.xsd";
     private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
-    private final Map<Object, IElement> m_globalXmlToElementMap = new HashMap<>();
-    private final Map<Object, IIssue> m_globalXmlIdToIssueMap = new HashMap<>();
+    private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
+    private final Map<Object, IIssue> globalXmlIdToIssueMap = new HashMap<>();
 
     public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
     {
@@ -187,8 +187,8 @@ public final class XmlReportReader
         processIssues(softwareSystem, report, result);
         processResolutions(softwareSystem, report, result);
 
-        m_globalXmlToElementMap.clear();
-        m_globalXmlIdToIssueMap.clear();
+        globalXmlToElementMap.clear();
+        globalXmlIdToIssueMap.clear();
 
         return Optional.of(softwareSystem);
     }
@@ -201,7 +201,7 @@ public final class XmlReportReader
             final ModuleImpl module = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), xsdModule.getName(),
                     xsdModule.getPresentationName(), xsdModule.getFqName(), xsdModule.getDescription(), xsdModule.getLanguage());
             softwareSystem.addModule(module);
-            m_globalXmlToElementMap.put(xsdModule, module);
+            globalXmlToElementMap.put(xsdModule, module);
             for (final XsdRootDirectory nextRoot : xsdModule.getRootDirectory())
             {
                 final XsdElementKind elementKind = (XsdElementKind) nextRoot.getKind();
@@ -236,7 +236,7 @@ public final class XmlReportReader
                 {
 
                     module.addRootDirectory(rootDirectory);
-                    m_globalXmlToElementMap.put(nextRoot, rootDirectory);
+                    globalXmlToElementMap.put(nextRoot, rootDirectory);
 
                     for (final XsdSourceFile nextSourceFile : nextRoot.getSourceElement())
                     {
@@ -244,7 +244,7 @@ public final class XmlReportReader
                         final ISourceFile sourceFile = new SourceFileImpl(rootDirectory, sourceKind.getStandardKind(),
                                 sourceKind.getPresentationKind(), nextSourceFile.getName(), nextSourceFile.getPresentationName(),
                                 nextSourceFile.getFqName());
-                        m_globalXmlToElementMap.put(nextSourceFile, sourceFile);
+                        globalXmlToElementMap.put(nextSourceFile, sourceFile);
                         rootDirectory.addSourceFile(sourceFile);
                     }
                 }
@@ -266,7 +266,7 @@ public final class XmlReportReader
 
         for (final XsdResolution nextResolution : report.getResolutions().getResolution())
         {
-            ResolutionType type = null;
+            ResolutionType type;
             if (nextResolution.isIsRefactoring())
             {
                 type = ResolutionType.REFACTORING;
@@ -303,8 +303,8 @@ public final class XmlReportReader
             for (final Object nextXsdIssue : nextResolution.getIssueIds())
             {
                 final XsdIssue xsdIssue = (XsdIssue) nextXsdIssue;
-                assert m_globalXmlIdToIssueMap.containsKey(xsdIssue) : "No issue with id '" + xsdIssue.getId() + "' exists";
-                issues.add(m_globalXmlIdToIssueMap.get(xsdIssue));
+                assert globalXmlIdToIssueMap.containsKey(xsdIssue) : "No issue with id '" + xsdIssue.getId() + "' exists";
+                issues.add(globalXmlIdToIssueMap.get(xsdIssue));
             }
 
             final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isIsApplicable(),
@@ -313,7 +313,7 @@ public final class XmlReportReader
         }
     }
 
-    private void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private static void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
@@ -324,7 +324,7 @@ public final class XmlReportReader
         }
     }
 
-    private void processFeatures(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private static void processFeatures(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
@@ -349,7 +349,7 @@ public final class XmlReportReader
             final NamedElementImpl element = new NamedElementImpl(elementKind.getStandardKind(), elementKind.getPresentationKind(),
                     nextElement.getName(), nextElement.getPresentationName(), nextElement.getFqName(), nextElement.getLine());
             softwareSystem.addElement(element);
-            m_globalXmlToElementMap.put(nextElement, element);
+            globalXmlToElementMap.put(nextElement, element);
         }
     }
 
@@ -360,7 +360,7 @@ public final class XmlReportReader
 
         for (final XsdModuleElements nextModuleElements : report.getModuleElements())
         {
-            final IElement moduleElement = m_globalXmlToElementMap.get(nextModuleElements.getRef());
+            final IElement moduleElement = globalXmlToElementMap.get(nextModuleElements.getRef());
             assert moduleElement != null : "Module does not exist";
             final ModuleImpl module = (ModuleImpl) moduleElement;
 
@@ -370,7 +370,7 @@ public final class XmlReportReader
                 final NamedElementImpl element = new NamedElementImpl(elementKind.getStandardKind(), elementKind.getPresentationKind(),
                         nextElement.getName(), nextElement.getPresentationName(), nextElement.getFqName(), nextElement.getLine());
                 module.addElement(element);
-                m_globalXmlToElementMap.put(nextElement, element);
+                globalXmlToElementMap.put(nextElement, element);
             }
         }
     }
@@ -385,21 +385,21 @@ public final class XmlReportReader
         {
             softwareSystem.addIssueCategory(category);
         }
-        m_globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
+        globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
 
         final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap = XmlExportMetaDataReader.processMetricCategories(xsdReport.getMetaData());
         for (final MetricCategoryImpl category : categoryXsdToPojoMap.values())
         {
             softwareSystem.addMetricCategory(category);
         }
-        m_globalXmlToElementMap.putAll(categoryXsdToPojoMap);
+        globalXmlToElementMap.putAll(categoryXsdToPojoMap);
 
         final Map<Object, MetricProviderImpl> providerXsdToPojoMap = XmlExportMetaDataReader.processProviders(xsdReport.getMetaData());
         for (final MetricProviderImpl provider : providerXsdToPojoMap.values())
         {
             softwareSystem.addMetricProvider(provider);
         }
-        m_globalXmlToElementMap.putAll(providerXsdToPojoMap);
+        globalXmlToElementMap.putAll(providerXsdToPojoMap);
 
         final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap = XmlExportMetaDataReader.processMetricLevels(xsdReport.getMetaData());
         for (final MetricLevelImpl level : metricLevelXsdToPojoMap.values())
@@ -413,7 +413,7 @@ public final class XmlReportReader
         {
             softwareSystem.addMetricId(id);
         }
-        m_globalXmlToElementMap.putAll(metricIdXsdToPojoMap);
+        globalXmlToElementMap.putAll(metricIdXsdToPojoMap);
 
         final XsdSystemMetricValues xsdSystemMetricLevel = xsdReport.getSystemMetricValues();
         if (xsdSystemMetricLevel != null)
@@ -477,11 +477,11 @@ public final class XmlReportReader
     private void addMetricValue(final SoftwareSystemImpl softwareSystem, final ModuleImpl module, final IMetricLevel level, final Object metricIdRef,
             final Object elementRef, final Supplier<Number> supplier)
     {
-        final Object metricId = m_globalXmlToElementMap.get(metricIdRef);
+        final Object metricId = globalXmlToElementMap.get(metricIdRef);
         assert metricId != null && metricId instanceof IMetricId : "Unexpected class in method 'processMetrics': " + metricId + ", "
                 + ((XsdMetricId) metricIdRef).getName() + "' has not been added";
 
-        final IElement element = m_globalXmlToElementMap.get(elementRef);
+        final IElement element = globalXmlToElementMap.get(elementRef);
         assert element != null : "Element " + ((XsdElement) elementRef).getName() + " not found!";
         assert element != null && element instanceof INamedElement : "Unexpected class in method 'addMetricValue': " + element;
 
@@ -493,7 +493,7 @@ public final class XmlReportReader
     private void addMetricValue(final SoftwareSystemImpl softwareSystem, final IMetricLevel level, final Object metricIdRef,
             final Supplier<Number> supplier)
     {
-        final Object metricId = m_globalXmlToElementMap.get(metricIdRef);
+        final Object metricId = globalXmlToElementMap.get(metricIdRef);
         assert metricId != null && metricId instanceof IMetricId : "Unexpected class in method 'processMetrics': " + metricId + ", "
                 + ((XsdMetricId) metricIdRef).getName() + "' has not been added";
 
@@ -549,18 +549,18 @@ public final class XmlReportReader
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextDependencyIssue);
 
             final String fromId = ((XsdElement) nextDependencyIssue.getFrom()).getId();
-            final IElement from = m_globalXmlToElementMap.get(nextDependencyIssue.getFrom());
+            final IElement from = globalXmlToElementMap.get(nextDependencyIssue.getFrom());
             assert from != null : "'from' element (" + fromId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
             assert from != null && from instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + from;
 
             final String toId = ((XsdElement) nextDependencyIssue.getTo()).getId();
-            final IElement to = m_globalXmlToElementMap.get(nextDependencyIssue.getTo());
+            final IElement to = globalXmlToElementMap.get(nextDependencyIssue.getTo());
             assert to != null : "'to' element (" + toId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
             assert to != null && to instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + to;
             final IDependencyIssue dependencyIssue = new DependencyIssueImpl(issueType, nextDependencyIssue.getDescription(), issueProvider,
                     nextDependencyIssue.isHasResolution(), (INamedElement) from, (INamedElement) to, nextDependencyIssue.getLine());
             softwareSystem.addIssue(dependencyIssue);
-            m_globalXmlIdToIssueMap.put(nextDependencyIssue, dependencyIssue);
+            globalXmlIdToIssueMap.put(nextDependencyIssue, dependencyIssue);
         }
     }
 
@@ -575,7 +575,7 @@ public final class XmlReportReader
 
             for (final XsdDuplicateCodeBlockOccurrence nextOccurence : nextDuplicate.getOccurrence())
             {
-                final IElement element = m_globalXmlToElementMap.get(nextOccurence.getSource());
+                final IElement element = globalXmlToElementMap.get(nextOccurence.getSource());
                 assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
                 final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl((ISourceFile) element,
                         nextOccurence.getBlockSize(), nextOccurence.getStartLine(), nextOccurence.getTolerance());
@@ -587,7 +587,7 @@ public final class XmlReportReader
             duplicate.setBlockSize(nextDuplicate.getBlockSize());
             softwareSystem.addDuplicateCodeBlock(duplicate);
 
-            m_globalXmlIdToIssueMap.put(nextDuplicate, duplicate);
+            globalXmlIdToIssueMap.put(nextDuplicate, duplicate);
         }
     }
 
@@ -610,14 +610,14 @@ public final class XmlReportReader
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
                 {
-                    final IElement element = m_globalXmlToElementMap.get(nextElement.getRef());
+                    final IElement element = globalXmlToElementMap.get(nextElement.getRef());
                     assert element instanceof INamedElement : "Unexpected class " + element.getClass().getName();
                     cyclicElements.add((INamedElement) element);
                 }
                 cycleGroup.setAffectedElements(cyclicElements);
 
                 softwareSystem.addCycleGroup(cycleGroup);
-                m_globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
+                globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
             }
         }
     }
@@ -627,7 +627,7 @@ public final class XmlReportReader
         for (final XsdSimpleElementIssue next : report.getIssues().getElementIssues().getIssue())
         {
             final XsdElement affectedElement = (XsdElement) next.getAffectedElement();
-            final IElement affected = m_globalXmlToElementMap.get(affectedElement);
+            final IElement affected = globalXmlToElementMap.get(affectedElement);
             assert affected != null : "Affected element of issue '" + next + "' has not been processed";
             assert affected != null && affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
 
@@ -637,7 +637,7 @@ public final class XmlReportReader
             final AbstractElementIssueImpl issue = new ElementIssueImpl(issueType, next.getDescription() != null ? next.getDescription() : "",
                     issueProvider, (INamedElement) affected, next.isHasResolution(), next.getLine());
             softwareSystem.addIssue(issue);
-            m_globalXmlIdToIssueMap.put(next, issue);
+            globalXmlIdToIssueMap.put(next, issue);
         }
     }
 
@@ -658,14 +658,14 @@ public final class XmlReportReader
                         + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
-            final IElement namedElement = m_globalXmlToElementMap.get(next.getCategory());
+            final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
             assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
             final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, (IIssueCategory) namedElement);
             softwareSystem.addIssueType(issueType);
         }
     }
 
-    private void processIssueProviders(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private static void processIssueProviders(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         for (final XsdIssueProvider next : report.getIssueProviders().getIssueProvider())
         {
@@ -674,7 +674,7 @@ public final class XmlReportReader
         }
     }
 
-    private IIssueProvider getIssueProvider(final SoftwareSystemImpl softwareSystem, final XsdIssue xsdIssue)
+    private static IIssueProvider getIssueProvider(final SoftwareSystemImpl softwareSystem, final XsdIssue xsdIssue)
     {
         final String issueProviderName = ((XsdIssueProvider) xsdIssue.getProvider()).getName();
         final IIssueProvider issueProvider = softwareSystem.getIssueProviders().get(issueProviderName);
@@ -682,7 +682,7 @@ public final class XmlReportReader
         return issueProvider;
     }
 
-    private IIssueType getIssueType(final SoftwareSystemImpl softwareSystem, final XsdIssue xsdIssue)
+    private static IIssueType getIssueType(final SoftwareSystemImpl softwareSystem, final XsdIssue xsdIssue)
     {
         final String issueTypeName = ((XsdIssueType) xsdIssue.getType()).getName();
         final IIssueType issueType = softwareSystem.getIssueTypes().get(issueTypeName);
@@ -690,7 +690,7 @@ public final class XmlReportReader
         return issueType;
     }
 
-    private RootDirectoryImpl createRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
+    private static RootDirectoryImpl createRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
             final String presentationName, final String fqName) throws IOException
     {
         assert module != null : "Parameter 'module' of method 'createRootDirectory' must not be null";
@@ -699,11 +699,10 @@ public final class XmlReportReader
         assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'createJavaClassRootDirectory' must not be empty";
         assert fqName != null && fqName.length() > 0 : "Parameter 'fqName' of method 'createJavaClassRootDirectory' must not be empty";
 
-        final RootDirectoryImpl rootDir = new SourceRootDirectoryImpl(module, standardKind, presentationKind, presentationName, fqName);
-        return rootDir;
+        return new SourceRootDirectoryImpl(module, standardKind, presentationKind, presentationName, fqName);
     }
 
-    private ClassRootDirectory createJavaClassRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
+    private static ClassRootDirectory createJavaClassRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
             final String presentationName, final String fqName) throws IOException
     {
         assert module != null : "Parameter 'module' of method 'createJavaClassRootDirectory' must not be null";
@@ -712,8 +711,7 @@ public final class XmlReportReader
         assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'createJavaClassRootDirectory' must not be empty";
         assert fqName != null && fqName.length() > 0 : "Parameter 'fqName' of method 'createJavaClassRootDirectory' must not be empty";
 
-        final ClassRootDirectory rootDir = new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
-        return rootDir;
+        return new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
     }
 
     private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter() throws Exception
@@ -721,8 +719,7 @@ public final class XmlReportReader
         final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
         final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
 
-        final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter = new JaxbAdapter<>(
+        return new JaxbAdapter<>(
                 "com.hello2morrow.sonargraph.core.persistence.report", metricsXsd, reportXsd);
-        return jaxbAdapter;
     }
 }

@@ -30,76 +30,76 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 class MetricsAccessImpl
 {
-    private final SingleExportMetaDataImpl m_metaData;
+    private final SingleExportMetaDataImpl metaData;
 
-    private final Map<String, IMetricLevel> m_metricLevels = new HashMap<>();
+    private final Map<String, IMetricLevel> metricLevels = new HashMap<>();
 
     public MetricsAccessImpl(final String path, final String systemId, final String version, final long timestamp)
     {
         assert version != null : "Parameter 'version' of method 'MetricsAccess' must not be null";
-        m_metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(path, systemId, version, timestamp), path);
+        metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(path, systemId, version, timestamp), path);
     }
 
     void addMetricId(final IMetricId metricId)
     {
-        m_metaData.addMetricId(metricId);
+        metaData.addMetricId(metricId);
     }
 
     Map<String, IMetricId> getMetricIds()
     {
-        return m_metaData.getMetricIds();
+        return metaData.getMetricIds();
     }
 
     void addMetricLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'addMetricLevel' must not be null";
-        assert !m_metricLevels.containsKey(level.getName()) : "level '" + level + "' has already been added";
+        assert !metricLevels.containsKey(level.getName()) : "level '" + level + "' has already been added";
 
-        m_metricLevels.put(level.getName(), level);
+        metricLevels.put(level.getName(), level);
     }
 
     IMetricLevel getMetricLevel(final String level)
     {
         assert level != null && level.length() > 0 : "Parameter 'level' of method 'getMetricLevel' must not be empty";
-        return m_metricLevels.get(level);
+        return metricLevels.get(level);
     }
 
     Map<String, IMetricLevel> getMetricLevels()
     {
         final Map<String, IMetricLevel> result = new LinkedHashMap<>();
-        m_metricLevels.values().stream().sorted(new IMetricLevel.MetricLevelComparator()).forEach(c -> result.put(c.getName(), c));
+        metricLevels.values().stream().sorted(new IMetricLevel.MetricLevelComparator()).forEach(c -> result.put(c.getName(), c));
         return Collections.unmodifiableMap(result);
     }
 
     void addMetricCategory(final IMetricCategory metricCategory)
     {
         assert metricCategory != null : "Parameter 'metricCategory' of method 'addMetricCategory' must not be null";
-        m_metaData.addMetricCategory(metricCategory);
+        metaData.addMetricCategory(metricCategory);
     }
 
     Map<String, IMetricCategory> getMetricCategories()
     {
-        return m_metaData.getMetricCategories();
+        return metaData.getMetricCategories();
     }
 
     void addMetricProvider(final IMetricProvider provider)
     {
-        m_metaData.addMetricProvider(provider);
+        metaData.addMetricProvider(provider);
     }
 
     public Map<String, IMetricProvider> getMetricProviders()
     {
-        return m_metaData.getMetricProviders();
+        return metaData.getMetricProviders();
     }
 
     public void addIssueCategory(final IIssueCategory category)
     {
         assert category != null : "Parameter 'category' of method 'addIssueCategory' must not be null";
-        m_metaData.addIssueCategory(category);
+        metaData.addIssueCategory(category);
     }
 
     public Map<String, IIssueCategory> getIssueCategories()
     {
-        return m_metaData.getIssueCategories();
+        return metaData.getIssueCategories();
     }
 }

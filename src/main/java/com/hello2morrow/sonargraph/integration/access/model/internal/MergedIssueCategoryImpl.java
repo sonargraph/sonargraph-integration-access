@@ -26,25 +26,65 @@ import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory
 
 public class MergedIssueCategoryImpl extends IssueCategoryImpl implements IMergedIssueCategory
 {
-    private final List<IBasicSoftwareSystemInfo> m_projects = new ArrayList<>();
+    private final List<IBasicSoftwareSystemInfo> projects = new ArrayList<>();
 
     public MergedIssueCategoryImpl(final String name, final String presentationName, final IBasicSoftwareSystemInfo project)
     {
         super(name, presentationName);
         assert project != null : "Parameter 'project' of method 'MergedIssueCategoryImpl' must not be null";
-        m_projects.add(project);
+        projects.add(project);
     }
 
     @Override
     public List<IBasicSoftwareSystemInfo> getProjects()
     {
-        return Collections.unmodifiableList(m_projects);
+        return Collections.unmodifiableList(projects);
     }
 
     @Override
     public void addSystem(final IBasicSoftwareSystemInfo systemInfo)
     {
         assert systemInfo != null : "Parameter 'systemInfo' of method 'addSystem' must not be null";
-        m_projects.add(systemInfo);
+        projects.add(systemInfo);
     }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((projects == null) ? 0 : projects.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final MergedIssueCategoryImpl other = (MergedIssueCategoryImpl) obj;
+        if (projects == null)
+        {
+            if (other.projects != null)
+            {
+                return false;
+            }
+        }
+        else if (!projects.equals(other.projects))
+        {
+            return false;
+        }
+        return true;
+    }
+
 }

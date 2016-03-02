@@ -21,17 +21,50 @@ import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 
 public class FeaturesImpl extends ElementImpl implements IFeature
 {
-    private final boolean m_licensed;
+    private final boolean isLicensed;
 
     public FeaturesImpl(final String name, final String presentationName, final boolean licensed)
     {
         super(name, presentationName);
-        m_licensed = licensed;
+        this.isLicensed = licensed;
     }
 
     @Override
     public boolean isLicensed()
     {
-        return m_licensed;
+        return isLicensed;
     }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (isLicensed ? 1231 : 1237);
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final FeaturesImpl other = (FeaturesImpl) obj;
+        if (isLicensed != other.isLicensed)
+        {
+            return false;
+        }
+        return true;
+    }
+
 }

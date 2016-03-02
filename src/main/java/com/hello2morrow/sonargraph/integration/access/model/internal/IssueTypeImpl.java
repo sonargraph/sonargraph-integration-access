@@ -23,8 +23,8 @@ import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public final class IssueTypeImpl extends ElementImpl implements IIssueType
 {
-    private final IIssueCategory m_category;
-    private final Severity m_severity;
+    private final IIssueCategory category;
+    private final Severity severity;
 
     public IssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category)
     {
@@ -32,8 +32,8 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
         assert severity != null : "Parameter 'severity' of method 'IssueType' must not be null";
         assert category != null : "Parameter 'category' of method 'IssueType' must not be null";
 
-        m_severity = severity;
-        m_category = category;
+        this.severity = severity;
+        this.category = category;
     }
 
     /* (non-Javadoc)
@@ -42,7 +42,7 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
     @Override
     public IIssueCategory getCategory()
     {
-        return m_category;
+        return category;
     }
 
     /* (non-Javadoc)
@@ -51,7 +51,7 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
     @Override
     public Severity getSeverity()
     {
-        return m_severity;
+        return severity;
     }
 
     @Override
@@ -59,8 +59,8 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_category == null) ? 0 : m_category.hashCode());
-        result = prime * result + ((m_severity == null) ? 0 : m_severity.hashCode());
+        result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
         return result;
     }
 
@@ -84,18 +84,18 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
             return false;
         }
         final IssueTypeImpl other = (IssueTypeImpl) obj;
-        if (m_category == null)
+        if (category == null)
         {
-            if (other.m_category != null)
+            if (other.category != null)
             {
                 return false;
             }
         }
-        else if (!m_category.equals(other.m_category))
+        else if (!category.equals(other.category))
         {
             return false;
         }
-        if (m_severity != other.m_severity)
+        if (severity != other.severity)
         {
             return false;
         }

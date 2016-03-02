@@ -29,17 +29,17 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
 {
-    private final String m_presentationName;
-    private int m_blockSize;
-    private final List<IDuplicateCodeBlockOccurrence> m_occurrences;
+    private final String presentationName;
+    private int blockSize;
+    private final List<IDuplicateCodeBlockOccurrence> occurrences;
 
     public DuplicateCodeBlockIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final List<IDuplicateCodeBlockOccurrence> occurrences)
     {
         super(name, presentationName, description, issueType, provider, hasResolution, -1);
         assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'DuplicateCodeBlockIssue' must not be empty";
-        m_presentationName = presentationName;
-        m_occurrences = occurrences;
+        this.presentationName = presentationName;
+        this.occurrences = occurrences;
     }
 
     /* (non-Javadoc)
@@ -48,19 +48,19 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
     @Override
     public String getPresentationName()
     {
-        return m_presentationName;
+        return presentationName;
     }
 
     @Override
     public List<INamedElement> getAffectedElements()
     {
-        return Collections.unmodifiableList(m_occurrences.stream().map(o -> o.getSourceFile()).collect(Collectors.toList()));
+        return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).collect(Collectors.toList()));
     }
 
     public void setBlockSize(final int blockSize)
     {
         assert blockSize > 0 : "Parameter 'blockSize' of method 'setBlockSize' must be > 0";
-        m_blockSize = blockSize;
+        this.blockSize = blockSize;
     }
 
     /* (non-Javadoc)
@@ -69,13 +69,13 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
     @Override
     public int getBlockSize()
     {
-        return m_blockSize;
+        return blockSize;
     }
 
     @Override
     public List<IDuplicateCodeBlockOccurrence> getOccurrences()
     {
-        return Collections.unmodifiableList(m_occurrences);
+        return Collections.unmodifiableList(occurrences);
     }
 
     @Override
@@ -83,9 +83,9 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + m_blockSize;
-        result = prime * result + ((m_occurrences == null) ? 0 : m_occurrences.hashCode());
-        result = prime * result + ((m_presentationName == null) ? 0 : m_presentationName.hashCode());
+        result = prime * result + blockSize;
+        result = prime * result + ((occurrences == null) ? 0 : occurrences.hashCode());
+        result = prime * result + ((presentationName == null) ? 0 : presentationName.hashCode());
         return result;
     }
 
@@ -109,29 +109,29 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
             return false;
         }
         final DuplicateCodeBlockIssueImpl other = (DuplicateCodeBlockIssueImpl) obj;
-        if (m_blockSize != other.m_blockSize)
+        if (blockSize != other.blockSize)
         {
             return false;
         }
-        if (m_occurrences == null)
+        if (occurrences == null)
         {
-            if (other.m_occurrences != null)
+            if (other.occurrences != null)
             {
                 return false;
             }
         }
-        else if (!m_occurrences.equals(other.m_occurrences))
+        else if (!occurrences.equals(other.occurrences))
         {
             return false;
         }
-        if (m_presentationName == null)
+        if (presentationName == null)
         {
-            if (other.m_presentationName != null)
+            if (other.presentationName != null)
             {
                 return false;
             }
         }
-        else if (!m_presentationName.equals(other.m_presentationName))
+        else if (!presentationName.equals(other.presentationName))
         {
             return false;
         }

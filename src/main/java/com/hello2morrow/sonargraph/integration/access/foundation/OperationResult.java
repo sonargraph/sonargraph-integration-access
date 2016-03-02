@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OperationResult implements IResult
 {
@@ -49,76 +50,76 @@ public class OperationResult implements IResult
 
     public static final class Message
     {
-        private final Status m_status;
-        private final IMessageCause m_cause;
-        private final String m_message;
+        private final Status status;
+        private final IMessageCause cause;
+        private final String messageString;
 
         public Message(final Status status, final IMessageCause cause, final String message)
         {
             assert status != null : "Parameter 'status' of method 'Message' must not be null";
             assert cause != null : "Parameter 'cause' of method 'Message' must not be null";
             assert message != null && message.length() > 0 : "Parameter 'message' of method 'Message' must not be empty";
-            m_status = status;
-            m_cause = cause;
-            m_message = message;
+            this.status = status;
+            this.cause = cause;
+            this.messageString = message;
         }
 
         public Status getStatus()
         {
-            return m_status;
+            return status;
         }
 
         public IMessageCause getCause()
         {
-            return m_cause;
+            return cause;
         }
 
         public String getMessage()
         {
-            return m_message;
+            return messageString;
         }
 
         @Override
         public String toString()
         {
-            final StringBuilder builder = new StringBuilder(m_status.getPresentationName());
+            final StringBuilder builder = new StringBuilder(status.getPresentationName());
             builder.append(" - ");
-            builder.append(m_message);
+            builder.append(messageString);
             return builder.toString();
         }
     }
 
-    private final List<Message> m_messages = new ArrayList<>();
-    private final String m_description;
-    private Boolean m_isSuccess = null;
+    private final List<Message> messages = new ArrayList<>();
+    private final String description;
+    private Boolean isSuccess = null;
 
     public OperationResult(final String description)
     {
         assert description != null : "'description' must not be null";
         assert description.length() > 0 : "'description' must not be empty";
-        m_description = description;
+        this.description = description;
     }
 
     public final String getDescription()
     {
-        return m_description;
+        return description;
     }
 
     public final List<Message> getMessages()
     {
-        return Collections.unmodifiableList(m_messages);
+        return Collections.unmodifiableList(messages);
     }
 
     public final boolean isEmpty()
     {
-        return m_messages.isEmpty();
+        return messages.isEmpty();
     }
 
     private boolean contains(final Status status)
     {
         assert status != null : "Parameter 'status' of method 'containsMessageWithStatus' must not be null";
 
-        for (final Message nextMessage : m_messages)
+        for (final Message nextMessage : messages)
         {
             if (nextMessage.getStatus() == status)
             {
@@ -145,15 +146,15 @@ public class OperationResult implements IResult
 
     public final void setIsSuccess(final boolean isSuccess)
     {
-        m_isSuccess = Boolean.valueOf(isSuccess);
+        this.isSuccess = Boolean.valueOf(isSuccess);
     }
 
     @Override
     public final boolean isSuccess()
     {
-        if (m_isSuccess == null)
+        if (isSuccess == null)
         {
-            for (final Message nextMessage : m_messages)
+            for (final Message nextMessage : messages)
             {
                 if (nextMessage.getStatus() == Status.ERROR)
                 {
@@ -163,7 +164,7 @@ public class OperationResult implements IResult
             return true;
         }
 
-        return m_isSuccess.booleanValue();
+        return isSuccess.booleanValue();
     }
 
     @Override
@@ -176,7 +177,7 @@ public class OperationResult implements IResult
     {
         assert status != null : "Parameter 'status' of method 'getCauses' must not be null";
         final List<IMessageCause> causes = new ArrayList<>();
-        for (final Message nextMessage : m_messages)
+        for (final Message nextMessage : messages)
         {
             if (nextMessage.getStatus() == status)
             {
@@ -204,16 +205,7 @@ public class OperationResult implements IResult
     private List<String> getMessages(final Status status)
     {
         assert status != null : "Parameter 'status' of method 'getMessages' must not be null";
-
-        final List<String> messages = new ArrayList<>();
-        for (final Message nextMessage : m_messages)
-        {
-            if (nextMessage.getStatus() == status)
-            {
-                messages.add(nextMessage.getMessage());
-            }
-        }
-        return messages;
+        return messages.stream().filter(m -> m.getStatus() == status).map(m -> m.getMessage()).collect(Collectors.toList());
     }
 
     public final List<String> getInfoMessages()
@@ -234,7 +226,7 @@ public class OperationResult implements IResult
     public final void addInfo(final IMessageCause cause)
     {
         assert cause != null : "Parameter 'cause' of method 'addInfo' must not be null";
-        m_messages.add(new Message(Status.INFO, cause, cause.getPresentationName()));
+        messages.add(new Message(Status.INFO, cause, cause.getPresentationName()));
     }
 
     public final String addInfo(final IMessageCause cause, final String detail)
@@ -242,7 +234,7 @@ public class OperationResult implements IResult
         assert cause != null : "Parameter 'cause' of method 'addInfo' must not be null";
         assert detail != null && detail.length() > 0 : "Parameter 'detail' of method 'addInfo' must not be empty";
         final Message message = new Message(Status.INFO, cause, cause.getPresentationName() + ". " + detail);
-        m_messages.add(message);
+        messages.add(message);
         return message.getMessage();
     }
 
@@ -251,14 +243,14 @@ public class OperationResult implements IResult
         assert cause != null : "Parameter 'cause' of method 'addWarning' must not be null";
         assert detail != null && detail.length() > 0 : "Parameter 'detail' of method 'addWarning' must not be empty";
         final Message message = new Message(Status.WARNING, cause, cause.getPresentationName() + ". " + String.format(detail, args));
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addWarning(final IMessageCause cause)
     {
         assert cause != null : "Parameter 'cause' of method 'addWarning' must not be null";
         final Message message = new Message(Status.WARNING, cause, cause.getPresentationName() + ".");
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addWarning(final IMessageCause cause, final Throwable throwable)
@@ -267,14 +259,14 @@ public class OperationResult implements IResult
         assert throwable != null : "Parameter 'throwable' of method 'addWarning' must not be null";
         final Message message = new Message(Status.WARNING, cause, cause.getPresentationName() + "." + StringUtility.LINE_SEPARATOR
                 + ExceptionUtility.collectAll(throwable));
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addError(final IMessageCause cause)
     {
         assert cause != null : "Parameter 'cause' of method 'addError' must not be null";
         final Message message = new Message(Status.ERROR, cause, cause.getPresentationName() + ".");
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addError(final IMessageCause cause, final String detail, final Object... args)
@@ -282,7 +274,7 @@ public class OperationResult implements IResult
         assert cause != null : "Parameter 'cause' of method 'addError' must not be null";
         assert detail != null && detail.length() > 0 : "Parameter 'detail' of method 'addError' must not be empty";
         final Message message = new Message(Status.ERROR, cause, cause.getPresentationName() + ". " + String.format(detail, args));
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addError(final IMessageCause cause, final Throwable throwable)
@@ -291,7 +283,7 @@ public class OperationResult implements IResult
         assert throwable != null : "Parameter 'throwable' of method 'addError' must not be null";
         final Message message = new Message(Status.ERROR, cause, cause.getPresentationName() + "." + StringUtility.LINE_SEPARATOR
                 + ExceptionUtility.collectAll(throwable));
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addError(final IMessageCause cause, final Throwable throwable, final String detail, final Object... args)
@@ -301,21 +293,21 @@ public class OperationResult implements IResult
         assert detail != null && detail.length() > 0 : "Parameter 'detail' of method 'addError' must not be empty";
         final Message message = new Message(Status.ERROR, cause, cause.getPresentationName() + ". " + String.format(detail, args)
                 + StringUtility.LINE_SEPARATOR + ExceptionUtility.collectAll(throwable));
-        m_messages.add(message);
+        messages.add(message);
     }
 
     public final void addMessagesFrom(final OperationResult result)
     {
         assert result != null : "Parameter 'result' of method 'addOperationResult' must not be null";
         assert result != this : "result must not be this";
-        m_messages.addAll(result.getMessages());
+        messages.addAll(result.getMessages());
     }
 
     public List<String> getMessagesAsStringList()
     {
         final List<String> result = new ArrayList<>();
 
-        for (final Message next : m_messages)
+        for (final Message next : messages)
         {
             result.add(next.toString());
 
@@ -327,9 +319,9 @@ public class OperationResult implements IResult
     public String toString()
     {
         final StringBuilder builder = new StringBuilder(isFailure() ? "Failure: " : "Success: ");
-        builder.append(m_description);
+        builder.append(description);
 
-        for (final Message next : m_messages)
+        for (final Message next : messages)
         {
             builder.append(StringUtility.LINE_SEPARATOR);
             builder.append(next.toString());
@@ -339,7 +331,7 @@ public class OperationResult implements IResult
 
     public void reset()
     {
-        m_messages.clear();
-        m_isSuccess = null;
+        messages.clear();
+        isSuccess = null;
     }
 }

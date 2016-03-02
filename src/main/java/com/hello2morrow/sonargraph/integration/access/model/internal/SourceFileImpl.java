@@ -22,26 +22,65 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public final class SourceFileImpl extends NamedElementImpl implements ISourceFile
 {
-    private final IRootDirectory m_root;
+    private final IRootDirectory root;
 
     public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
             final String presentationName, final String fqName)
     {
         super(kind, presentationKind, name, presentationName, fqName, -1);
         assert rootDirectory != null : "Parameter 'rootDirectory' of method 'SourceFileImpl' must not be null";
-        m_root = rootDirectory;
+        root = rootDirectory;
     }
 
     @Override
     public String getRelativeRootDirectoryPath()
     {
-        return m_root.getRelativePath();
+        return root.getRelativePath();
     }
 
     @Override
     public String getRelativePath()
     {
-        //TODO [Dietmar] Strange mix up - why not rel. path? 
+        //TODO [Dietmar] Strange mix up - why not rel. path?
         return getPresentationName();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((root == null) ? 0 : root.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final SourceFileImpl other = (SourceFileImpl) obj;
+        if (root == null)
+        {
+            if (other.root != null)
+            {
+                return false;
+            }
+        }
+        else if (!root.equals(other.root))
+        {
+            return false;
+        }
+        return true;
     }
 }

@@ -32,14 +32,14 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public final class ModuleImpl extends NamedElementContainerImpl implements IModule
 {
-    private final String m_language;
-    private final List<IRootDirectory> m_rootDirectories = new ArrayList<>(2);
+    private final String language;
+    private final List<IRootDirectory> rootDirectories = new ArrayList<>(2);
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final String language)
     {
         super(kind, presentationKind, name, presentationName, fqName, description);
-        m_language = language;
+        this.language = language;
     }
 
     /* (non-Javadoc)
@@ -48,14 +48,14 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     @Override
     public String getLanguage()
     {
-        return m_language;
+        return language;
     }
 
     public void addRootDirectory(final RootDirectoryImpl root)
     {
         assert root != null : "Parameter 'root' of method 'addRootDirectory' must not be null";
-        assert !m_rootDirectories.contains(root) : "root '" + root.getName() + "' has already been added";
-        m_rootDirectories.add(root);
+        assert !rootDirectories.contains(root) : "root '" + root.getName() + "' has already been added";
+        rootDirectories.add(root);
         addElement(root);
     }
 
@@ -65,7 +65,7 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     @Override
     public List<IRootDirectory> getRootDirectories()
     {
-        return Collections.unmodifiableList(m_rootDirectories);
+        return Collections.unmodifiableList(rootDirectories);
     }
 
     @Override
@@ -88,21 +88,7 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     public Optional<ISourceFile> getSourceForElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceForElement' must not be null";
-
-        //        for (final IRootDirectory root : m_rootDirectories)
-        //        {
-        //            for (final ISourceFile source : root.getSourceFiles())
-        //            {
-        //                if (namedElement.getFqName().startsWith(source.getFqName()))
-        //                {
-        //                    return Optional.of(source);
-        //                }
-        //            }
-        //        }
-        //
-        //        return Optional.empty();
-
-        return m_rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
+        return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
     }
 
@@ -111,8 +97,7 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_language == null) ? 0 : m_language.hashCode());
-        result = prime * result + ((m_rootDirectories == null) ? 0 : m_rootDirectories.hashCode());
+        result = prime * result + ((language == null) ? 0 : language.hashCode());
         return result;
     }
 
@@ -136,25 +121,14 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
             return false;
         }
         final ModuleImpl other = (ModuleImpl) obj;
-        if (m_language == null)
+        if (language == null)
         {
-            if (other.m_language != null)
+            if (other.language != null)
             {
                 return false;
             }
         }
-        else if (!m_language.equals(other.m_language))
-        {
-            return false;
-        }
-        if (m_rootDirectories == null)
-        {
-            if (other.m_rootDirectories != null)
-            {
-                return false;
-            }
-        }
-        else if (!m_rootDirectories.equals(other.m_rootDirectories))
+        else if (!language.equals(other.language))
         {
             return false;
         }

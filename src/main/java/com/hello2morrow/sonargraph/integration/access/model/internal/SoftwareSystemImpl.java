@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,25 +47,26 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
-    private final String m_systemId;
-    private final String m_path;
-    private final String m_baseDir;
-    private final String m_version;
-    private final String m_virtualModel;
-    private final long m_timestamp;
-    private int m_numberOfIssues = 0;
+    private static final String SOFTWARE_SYSTEM = "SoftwareSystem";
+    private final String systemId;
+    private final String path;
+    private final String baseDir;
+    private final String version;
+    private final String virtualModel;
+    private final long timestamp;
+    private int numberOfIssues = 0;
 
     //TODO: Decide if the order of elements in the report is important for us.
     //Do we want to impose some default ordering / sorting?
-    private final Map<String, IModule> m_modules = new LinkedHashMap<>();
-    private final Map<String, IIssueProvider> m_issueProviders = new HashMap<>();
-    private final Map<String, IIssueType> m_issueTypes = new HashMap<>();
-    private final Map<IIssueType, List<IIssue>> m_issueMap = new HashMap<>();
-    private final Map<String, IAnalyzer> m_analyzerMap = new HashMap<>();
-    private final Map<String, IFeature> m_featuresMap = new HashMap<>();
-    private final Map<IAnalyzer, Map<String, ICycleGroup>> m_cycleGroups = new HashMap<>();
-    private final Map<String, IDuplicateCodeBlockIssue> m_duplicateCodeBlockIssueMap = new HashMap<>();
-    private final Map<ResolutionType, List<IResolution>> m_resolutionMap = new HashMap<>();
+    private final Map<String, IModule> modules = new LinkedHashMap<>();
+    private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
+    private final Map<String, IIssueType> issueTypes = new HashMap<>();
+    private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
+    private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
+    private final Map<String, IFeature> featuresMap = new HashMap<>();
+    private final Map<IAnalyzer, Map<String, ICycleGroup>> cycleGroups = new HashMap<>();
+    private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
+    private final Map<ResolutionType, List<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
@@ -76,19 +78,19 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         assert timestamp > 0 : "Parameter 'timestamp' of method 'SoftwareSystem' must be > 0";
         assert virtualModel != null && virtualModel.length() > 0 : "Parameter 'virtualModel' of method 'SoftwareSystemImpl' must not be empty";
 
-        m_systemId = systemId;
-        m_path = path;
+        this.systemId = systemId;
+        this.path = path;
 
-        int lastIndexOf = m_path.lastIndexOf('/');
+        int lastIndexOf = path.lastIndexOf('/');
         if (lastIndexOf == -1)
         {
-            lastIndexOf = m_path.lastIndexOf('\\');
+            lastIndexOf = path.lastIndexOf('\\');
         }
-        assert lastIndexOf != -1 : "Invalid path for system file: " + m_path;
-        m_baseDir = FileUtility.convertPathToUniversalForm(m_path.substring(0, lastIndexOf));
-        m_version = version;
-        m_timestamp = timestamp;
-        m_virtualModel = virtualModel;
+        assert lastIndexOf != -1 : "Invalid path for system file: " + path;
+        this.baseDir = FileUtility.convertPathToUniversalForm(path.substring(0, lastIndexOf));
+        this.version = version;
+        this.timestamp = timestamp;
+        this.virtualModel = virtualModel;
 
         setMetricsAccess(new MetricsAccessImpl(path, systemId, version, timestamp));
         setElementRegistry(new ElementRegistryImpl());
@@ -101,7 +103,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public String getSystemId()
     {
-        return m_systemId;
+        return systemId;
     }
 
     /* (non-Javadoc)
@@ -110,7 +112,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public String getPath()
     {
-        return m_path;
+        return path;
     }
 
     /* (non-Javadoc)
@@ -119,7 +121,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public String getBaseDir()
     {
-        return m_baseDir;
+        return baseDir;
     }
 
     /* (non-Javadoc)
@@ -128,7 +130,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public String getVersion()
     {
-        return m_version;
+        return version;
     }
 
     /* (non-Javadoc)
@@ -137,7 +139,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public long getTimestamp()
     {
-        return m_timestamp;
+        return timestamp;
     }
 
     /* (non-Javadoc)
@@ -147,7 +149,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<String, IModule> getModules()
     {
         final Map<String, IModule> map = new LinkedHashMap<>();
-        m_modules.values().stream().forEach((final IModule module) -> map.put(module.getName(), module));
+        modules.values().stream().forEach((final IModule module) -> map.put(module.getName(), module));
         return Collections.unmodifiableMap(map);
     }
 
@@ -156,9 +158,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert simpleName != null && simpleName.length() > 0 : "Parameter 'name' of method 'getModule' must not be empty";
         final String key = "Workspace:" + simpleName;
-        if (m_modules.containsKey(key))
+        if (modules.containsKey(key))
         {
-            return Optional.of(m_modules.get(key));
+            return Optional.of(modules.get(key));
         }
 
         return Optional.empty();
@@ -167,7 +169,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addModule(final ModuleImpl module)
     {
         assert module != null : "Parameter 'module' of method 'addModule' must not be null";
-        m_modules.put(module.getFqName(), module);
+        modules.put(module.getFqName(), module);
         module.setMetricsAccess(getMetricsAccess());
         module.setElementRegistry(getElementRegistry());
         module.getElementRegistry().addElement(module);
@@ -177,59 +179,59 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     protected boolean acceptElementKind(final String elementKind)
     {
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'acceptElementKind' must not be empty";
-        return !elementKind.equals("SoftwareSystem");
+        return !SOFTWARE_SYSTEM.equals(elementKind);
     }
 
     public void addIssueProvider(final IIssueProvider provider)
     {
         assert provider != null : "Parameter 'provider' of method 'addIssueProvider' must not be null";
-        assert !m_issueProviders.containsKey(provider.getName()) : "IssueProvider '" + provider.getName() + "' has already been added";
+        assert !issueProviders.containsKey(provider.getName()) : "IssueProvider '" + provider.getName() + "' has already been added";
 
-        m_issueProviders.put(provider.getName(), provider);
+        issueProviders.put(provider.getName(), provider);
     }
 
     public Map<String, IIssueProvider> getIssueProviders()
     {
-        return Collections.unmodifiableMap(m_issueProviders);
+        return Collections.unmodifiableMap(issueProviders);
     }
 
     public Map<String, IIssueType> getIssueTypes()
     {
-        return Collections.unmodifiableMap(m_issueTypes);
+        return Collections.unmodifiableMap(issueTypes);
     }
 
     public void addIssueType(final IIssueType issueType)
     {
         assert issueType != null : "Parameter 'issueType' of method 'addIssueType' must not be null";
-        assert !m_issueTypes.containsKey(issueType.getName()) : "issueType '" + issueType + "has already been added";
+        assert !issueTypes.containsKey(issueType.getName()) : "issueType '" + issueType + "has already been added";
 
-        m_issueTypes.put(issueType.getName(), issueType);
-        m_issueMap.put(issueType, new ArrayList<>());
+        issueTypes.put(issueType.getName(), issueType);
+        issueMap.put(issueType, new ArrayList<>());
     }
 
     public void addIssue(final IIssue issue)
     {
         assert issue != null : "Parameter 'issue' of method 'addIssue' must not be null";
 
-        assert m_issueMap.containsKey(issue.getIssueType()) : "issueType '" + issue.getIssueType() + "' has not beend added";
-        m_issueMap.get(issue.getIssueType()).add(issue);
+        assert issueMap.containsKey(issue.getIssueType()) : "issueType '" + issue.getIssueType() + "' has not beend added";
+        issueMap.get(issue.getIssueType()).add(issue);
     }
 
     public Map<IIssueType, List<IIssue>> getIssues()
     {
-        return Collections.unmodifiableMap(m_issueMap);
+        return Collections.unmodifiableMap(issueMap);
     }
 
     public void setNumberOfIssues(final int numberOfIssues)
     {
         assert numberOfIssues >= 0 : "Parameter 'numberOfIssues' of method 'setNumberOfIssues' must be >= 0";
-        m_numberOfIssues = numberOfIssues;
+        this.numberOfIssues = numberOfIssues;
     }
 
     public int getNumberOfIssues()
     {
-        assert m_numberOfIssues == (m_issueMap.values().stream().mapToInt(i -> i.size()).sum()) : "Number of issues does not match";
-        return m_numberOfIssues;
+        assert numberOfIssues == (issueMap.values().stream().mapToInt(i -> i.size()).sum()) : "Number of issues does not match";
+        return numberOfIssues;
     }
 
     public void addMetricId(final IMetricId metricId)
@@ -247,38 +249,38 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addAnalyzer(final IAnalyzer analyzer)
     {
         assert analyzer != null : "Parameter 'analyzer' of method 'addAnalyzer' must not be null";
-        assert !m_analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has already been added";
+        assert !analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has already been added";
 
-        m_analyzerMap.put(analyzer.getName(), analyzer);
+        analyzerMap.put(analyzer.getName(), analyzer);
     }
 
     public Map<String, IAnalyzer> getAnalyzers()
     {
-        return Collections.unmodifiableMap(m_analyzerMap);
+        return Collections.unmodifiableMap(analyzerMap);
     }
 
     public void addFeature(final IFeature feature)
     {
         assert feature != null : "Parameter 'feature' of method 'addFeature' must not be null";
-        assert !m_featuresMap.containsKey(feature.getName()) : "Feature '" + feature.getName() + "' has already been added";
+        assert !featuresMap.containsKey(feature.getName()) : "Feature '" + feature.getName() + "' has already been added";
 
-        m_featuresMap.put(feature.getName(), feature);
+        featuresMap.put(feature.getName(), feature);
     }
 
     public Map<String, IFeature> getFeatures()
     {
-        return Collections.unmodifiableMap(m_featuresMap);
+        return Collections.unmodifiableMap(featuresMap);
     }
 
     public Map<String, ICycleGroup> getCycleGroups(final String analyzerId)
     {
         assert analyzerId != null && analyzerId.length() > 0 : "Parameter 'analyzerId' of method 'getCycleGroups' must not be empty";
-        assert m_analyzerMap.containsKey(analyzerId) : "analyzerId '" + analyzerId + "' has not been added";
+        assert analyzerMap.containsKey(analyzerId) : "analyzerId '" + analyzerId + "' has not been added";
 
-        final IAnalyzer analyzer = m_analyzerMap.get(analyzerId);
+        final IAnalyzer analyzer = analyzerMap.get(analyzerId);
 
-        assert m_cycleGroups.containsKey(analyzer) : "'" + analyzerId + "' has not been added for cycleGroups";
-        return Collections.unmodifiableMap(m_cycleGroups.get(analyzer));
+        assert cycleGroups.containsKey(analyzer) : "'" + analyzerId + "' has not been added for cycleGroups";
+        return Collections.unmodifiableMap(cycleGroups.get(analyzer));
     }
 
     public void addCycleGroup(final ICycleGroup cycle)
@@ -287,16 +289,16 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
         final Map<String, ICycleGroup> cycleGroupMap;
         final IAnalyzer analyzer = cycle.getAnalyzer();
-        assert m_analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has not been added";
+        assert analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has not been added";
 
-        if (m_cycleGroups.containsKey(analyzer))
+        if (cycleGroups.containsKey(analyzer))
         {
-            cycleGroupMap = m_cycleGroups.get(analyzer);
+            cycleGroupMap = cycleGroups.get(analyzer);
         }
         else
         {
             cycleGroupMap = new HashMap<>();
-            m_cycleGroups.put(analyzer, cycleGroupMap);
+            cycleGroups.put(analyzer, cycleGroupMap);
         }
 
         assert !cycleGroupMap.containsKey(cycle.getName()) : "CycleGroup has already been added!";
@@ -307,9 +309,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addDuplicateCodeBlock(final IDuplicateCodeBlockIssue duplicate)
     {
         assert duplicate != null : "Parameter 'duplicate' of method 'addDuplicateCodeBlock' must not be null";
-        assert !m_duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
+        assert !duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
 
-        m_duplicateCodeBlockIssueMap.put(duplicate.getName(), duplicate);
+        duplicateCodeBlockIssueMap.put(duplicate.getName(), duplicate);
         addIssue(duplicate);
     }
 
@@ -318,14 +320,14 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         assert resolution != null : "Parameter 'resolution' of method 'addResolution' must not be null";
 
         final List<IResolution> resolutions;
-        if (!m_resolutionMap.containsKey(resolution.getType()))
+        if (!resolutionMap.containsKey(resolution.getType()))
         {
             resolutions = new ArrayList<>();
-            m_resolutionMap.put(resolution.getType(), resolutions);
+            resolutionMap.put(resolution.getType(), resolutions);
         }
         else
         {
-            resolutions = m_resolutionMap.get(resolution.getType());
+            resolutions = resolutionMap.get(resolution.getType());
         }
 
         resolutions.add(resolution);
@@ -379,11 +381,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     @Override
     public String getVirtualModel()
     {
-        return m_virtualModel;
+        return virtualModel;
     }
 
     public Map<ResolutionType, List<IResolution>> getResolutions()
     {
-        return Collections.unmodifiableMap(m_resolutionMap);
+        return Collections.unmodifiableMap(resolutionMap);
     }
 }

@@ -57,8 +57,7 @@ public final class XmlExportMetaDataReader
     private JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createJaxbAdapter() throws Exception
     {
         final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
-        final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> jaxbAdapter = new JaxbAdapter<>(METADATA_NAMESPACE, metricsXsd);
-        return jaxbAdapter;
+        return new JaxbAdapter<>(METADATA_NAMESPACE, metricsXsd);
     }
 
     public Optional<SingleExportMetaDataImpl> readMetaDataFromStream(final InputStream input, final String identifier, final OperationResult result)
@@ -105,7 +104,7 @@ public final class XmlExportMetaDataReader
 
     }
 
-    private Optional<SingleExportMetaDataImpl> convertXmlMetricsToPojo(final XsdExportMetaDataRoot xsdMetaData, final String identifier)
+    private static Optional<SingleExportMetaDataImpl> convertXmlMetricsToPojo(final XsdExportMetaDataRoot xsdMetaData, final String identifier)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetrics' of method 'convertXmlMetricsToPojo' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'convertXmlMetricsToPojo' must not be empty";

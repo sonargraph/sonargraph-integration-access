@@ -34,25 +34,25 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 abstract class AbstractExportMetaDataImpl implements IExportMetaData
 {
-    private final Map<String, IIssueCategory> m_issueCategories = new LinkedHashMap<>();
-    private final Map<String, IMetricCategory> m_metricCategories = new HashMap<>();
-    private final Map<String, IMetricProvider> m_metricProviders = new TreeMap<>(new MetricProviderImpl.MetricProviderComparator());
-    private final Map<String, IMetricLevel> m_metricLevels = new LinkedHashMap<>();
-    private final Map<String, IMetricId> m_metricIds = new HashMap<>();
-    private final String m_identifier;
+    private final Map<String, IIssueCategory> issueCategories = new LinkedHashMap<>();
+    private final Map<String, IMetricCategory> metricCategories = new HashMap<>();
+    private final Map<String, IMetricProvider> metricProviders = new TreeMap<>(new MetricProviderImpl.MetricProviderComparator());
+    private final Map<String, IMetricLevel> metricLevels = new LinkedHashMap<>();
+    private final Map<String, IMetricId> metricIds = new HashMap<>();
+    private final String identifier;
 
     protected AbstractExportMetaDataImpl(final String resourceIdentifier)
     {
         assert resourceIdentifier != null && resourceIdentifier.length() > 0 : "Parameter 'resourceIdentifier' of method 'AbstractExportMetaDataImpl' must not be empty";
-        m_identifier = resourceIdentifier;
+        identifier = resourceIdentifier;
     }
 
     public void addIssueCategory(final IIssueCategory category)
     {
         assert category != null : "Parameter 'category' of method 'addIssueCategory' must not be null";
-        assert !m_issueCategories.containsKey(category.getName()) : "issueCategory '" + category.getName() + "' has already been added";
+        assert !issueCategories.containsKey(category.getName()) : "issueCategory '" + category.getName() + "' has already been added";
 
-        m_issueCategories.put(category.getName(), category);
+        issueCategories.put(category.getName(), category);
     }
 
     /* (non-Javadoc)
@@ -61,7 +61,7 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     @Override
     public Map<String, IIssueCategory> getIssueCategories()
     {
-        return Collections.unmodifiableMap(m_issueCategories);
+        return Collections.unmodifiableMap(issueCategories);
     }
 
     /* (non-Javadoc)
@@ -71,37 +71,37 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     public Map<String, IMetricCategory> getMetricCategories()
     {
         final Map<String, IMetricCategory> result = new LinkedHashMap<>();
-        m_metricCategories.values().stream().sorted(new IMetricCategory.MetricCategoryComparator()).forEach(c -> result.put(c.getName(), c));
+        metricCategories.values().stream().sorted(new IMetricCategory.MetricCategoryComparator()).forEach(c -> result.put(c.getName(), c));
         return Collections.unmodifiableMap(result);
     }
 
     public void addMetricCategory(final IMetricCategory category)
     {
         assert category != null : "Parameter 'category' of method 'addMetricCategory' must not be null";
-        assert !m_metricCategories.containsKey(category.getName()) : "category '" + category.getName() + "' has already been added";
+        assert !metricCategories.containsKey(category.getName()) : "category '" + category.getName() + "' has already been added";
 
-        m_metricCategories.put(category.getName(), category);
+        metricCategories.put(category.getName(), category);
     }
 
     public void addMetricLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'addMetricLevel' must not be null";
-        assert !m_metricLevels.containsKey(level.getName()) : "metric level '" + level.getName() + "' has already been added";
+        assert !metricLevels.containsKey(level.getName()) : "metric level '" + level.getName() + "' has already been added";
 
-        m_metricLevels.put(level.getName(), level);
+        metricLevels.put(level.getName(), level);
     }
 
     @Override
     public Map<String, IMetricLevel> getMetricLevels()
     {
-        return Collections.unmodifiableMap(m_metricLevels);
+        return Collections.unmodifiableMap(metricLevels);
     }
 
     @Override
     public List<IMetricId> getMetricIdsForLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'getMetricIdsForLevel' must not be null";
-        final List<IMetricId> metrics = m_metricIds.values().stream().filter((final IMetricId m) -> m.getLevels().contains(level))
+        final List<IMetricId> metrics = metricIds.values().stream().filter((final IMetricId m) -> m.getLevels().contains(level))
                 .collect(Collectors.toList());
         return Collections.unmodifiableList(metrics);
     }
@@ -109,9 +109,9 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     public void addMetricId(final IMetricId metricId)
     {
         assert metricId != null : "Parameter 'metricId' of method 'addMetric' must not be null";
-        assert !m_metricIds.containsKey(metricId.getName()) : "metricId '" + metricId.getName() + "' has already been added";
+        assert !metricIds.containsKey(metricId.getName()) : "metricId '" + metricId.getName() + "' has already been added";
 
-        m_metricIds.put(metricId.getName(), metricId);
+        metricIds.put(metricId.getName(), metricId);
     }
 
     /* (non-Javadoc)
@@ -120,7 +120,7 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     @Override
     public Map<String, IMetricId> getMetricIds()
     {
-        return Collections.unmodifiableMap(m_metricIds);
+        return Collections.unmodifiableMap(metricIds);
     }
 
     /* (non-Javadoc)
@@ -129,20 +129,20 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     @Override
     public Map<String, IMetricProvider> getMetricProviders()
     {
-        return Collections.unmodifiableMap(m_metricProviders);
+        return Collections.unmodifiableMap(metricProviders);
     }
 
     public void addMetricProvider(final IMetricProvider provider)
     {
         assert provider != null : "Parameter 'provider' of method 'addMetricProvider' must not be null";
-        assert !m_metricProviders.containsKey(provider.getName()) : "provider '" + provider.getName() + "' has already been added";
+        assert !metricProviders.containsKey(provider.getName()) : "provider '" + provider.getName() + "' has already been added";
 
-        m_metricProviders.put(provider.getName(), provider);
+        metricProviders.put(provider.getName(), provider);
     }
 
     @Override
     public String getResourceIdentifier()
     {
-        return m_identifier;
+        return identifier;
     }
 }

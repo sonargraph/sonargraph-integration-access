@@ -33,7 +33,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl implements IMergedExportMetaData
 {
-    private final List<IBasicSoftwareSystemInfo> m_systems;
+    private final List<IBasicSoftwareSystemInfo> systems;
 
     public MergedExportMetaDataImpl(final Collection<IBasicSoftwareSystemInfo> systems, final Map<String, IMergedIssueCategory> issueCategories,
             final Map<String, IMetricCategory> metricCategories, final Map<String, IMetricProvider> metricProviders,
@@ -41,7 +41,7 @@ public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl impleme
     {
         super(resourceIdentifier);
         assert systems != null : "Parameter 'systems' of method 'MergedExportMetaDataImpl' must not be null";
-        m_systems = new ArrayList<>(systems);
+        this.systems = new ArrayList<>(systems);
 
         issueCategories.values().forEach(super::addIssueCategory);
         metricCategories.values().forEach(super::addMetricCategory);
@@ -53,6 +53,6 @@ public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl impleme
     @Override
     public List<IBasicSoftwareSystemInfo> getSystems()
     {
-        return Collections.unmodifiableList(m_systems);
+        return Collections.unmodifiableList(systems);
     }
 }

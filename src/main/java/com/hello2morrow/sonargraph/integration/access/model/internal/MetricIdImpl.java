@@ -27,10 +27,10 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 public final class MetricIdImpl extends ElementWithDescriptionImpl implements IMetricId
 {
-    private final List<IMetricCategory> m_categories;
-    private final List<IMetricLevel> m_levels;
-    private final IMetricProvider m_provider;
-    private final boolean m_isFloat;
+    private final List<IMetricCategory> categories;
+    private final List<IMetricLevel> levels;
+    private final IMetricProvider provider;
+    private final boolean isFloat;
 
     public MetricIdImpl(final String name, final String presentationName, final String description, final List<IMetricCategory> categories,
             final List<IMetricLevel> levels, final IMetricProvider provider, final boolean isFloat)
@@ -40,10 +40,10 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         assert levels != null && !levels.isEmpty() : "Parameter 'levels' of method 'MetricIdImpl' must not be empty";
         assert provider != null : "Parameter 'provider' of method 'MetricId' must not be null";
 
-        m_categories = categories;
-        m_levels = levels;
-        m_provider = provider;
-        m_isFloat = isFloat;
+        this.categories = categories;
+        this.levels = levels;
+        this.provider = provider;
+        this.isFloat = isFloat;
     }
 
     /* (non-Javadoc)
@@ -52,7 +52,7 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     @Override
     public List<IMetricCategory> getCategories()
     {
-        return Collections.unmodifiableList(m_categories);
+        return Collections.unmodifiableList(categories);
     }
 
     /* (non-Javadoc)
@@ -61,7 +61,7 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     @Override
     public IMetricProvider getProvider()
     {
-        return m_provider;
+        return provider;
     }
 
     /* (non-Javadoc)
@@ -70,13 +70,13 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     @Override
     public boolean isFloat()
     {
-        return m_isFloat;
+        return isFloat;
     }
 
     @Override
     public List<IMetricLevel> getLevels()
     {
-        return Collections.unmodifiableList(m_levels);
+        return Collections.unmodifiableList(levels);
     }
 
     @Override
@@ -84,9 +84,9 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_categories == null) ? 0 : m_categories.hashCode());
-        result = prime * result + (m_isFloat ? 1231 : 1237);
-        result = prime * result + ((m_provider == null) ? 0 : m_provider.hashCode());
+        result = prime * result + ((categories == null) ? 0 : categories.hashCode());
+        result = prime * result + (isFloat ? 1231 : 1237);
+        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
         return result;
     }
 
@@ -110,33 +110,32 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
             return false;
         }
         final MetricIdImpl other = (MetricIdImpl) obj;
-        if (m_isFloat != other.m_isFloat)
+        if (isFloat != other.isFloat)
         {
             return false;
         }
-        if (m_provider == null)
+        if (provider == null)
         {
-            if (other.m_provider != null)
+            if (other.provider != null)
             {
                 return false;
             }
         }
-        else if (!m_provider.equals(other.m_provider))
+        else if (!provider.equals(other.provider))
         {
             return false;
         }
-        if (m_categories == null)
+        if (categories == null)
         {
-            if (other.m_categories != null)
+            if (other.categories != null)
             {
                 return false;
             }
         }
-        else if (!m_categories.equals(other.m_categories))
+        else if (!categories.equals(other.categories))
         {
             return false;
         }
         return true;
     }
-
 }

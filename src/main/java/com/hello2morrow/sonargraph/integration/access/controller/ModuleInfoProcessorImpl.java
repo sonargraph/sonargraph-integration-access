@@ -40,30 +40,29 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSys
 
 final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
 {
-    private final ModuleImpl m_module;
-    private final ISystemInfoProcessor m_systemInfoProcessor;
+    private final ModuleImpl module;
+    private final ISystemInfoProcessor systemInfoProcessor;
 
     public ModuleInfoProcessorImpl(final SoftwareSystemImpl softwareSystem, final ModuleImpl module)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'ModuleInfoProcessorImpl' must not be null";
         assert module != null : "Parameter 'module' of method 'ModuleInfoProcessorImpl' must not be null";
 
-        m_systemInfoProcessor = new SystemInfoProcessorImpl(softwareSystem);
-        m_module = module;
+        this.systemInfoProcessor = new SystemInfoProcessorImpl(softwareSystem);
+        this.module = module;
     }
 
     @Override
     public String getBaseDirectory()
     {
-        return m_systemInfoProcessor.getBaseDirectory();
+        return systemInfoProcessor.getBaseDirectory();
     }
 
     @Override
     public List<IIssue> getIssues(final Predicate<IIssue> filter)
     {
-        final List<IIssue> systemIssues = m_systemInfoProcessor.getIssues(filter);
-        return Collections.unmodifiableList(systemIssues.stream().filter((final IIssue issue) -> isModuleElementOriginOfIssue(issue))
-                .collect(Collectors.toList()));
+        final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
+        return Collections.unmodifiableList(systemIssues.stream().filter(this::isModuleElementOriginOfIssue).collect(Collectors.toList()));
     }
 
     private boolean isModuleElementOriginOfIssue(final IIssue issue)
@@ -73,7 +72,7 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         if (issue instanceof IElementIssue)
         {
             final List<INamedElement> element = ((IElementIssue) issue).getAffectedElements();
-            return element.stream().anyMatch((final INamedElement e) -> isElementContainedInModule(e));
+            return element.stream().anyMatch(this::isElementContainedInModule);
         }
         if (issue instanceof IDependencyIssue)
         {
@@ -87,18 +86,18 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public boolean isElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'isElementContainedInModule' must not be null";
-        return m_module.hasElement(element);
+        return module.hasElement(element);
     }
 
     @Override
     public List<IResolution> getResolutions(final Predicate<IResolution> filter)
     {
-        final List<IResolution> systemResolutions = m_systemInfoProcessor.getResolutions(filter);
+        final List<IResolution> systemResolutions = systemInfoProcessor.getResolutions(filter);
 
         final List<IResolution> moduleResolutions = new ArrayList<>();
         for (final IResolution next : systemResolutions)
         {
-            if (next.getIssues().stream().filter((final IIssue issue) -> isModuleElementOriginOfIssue(issue)).findAny().isPresent())
+            if (next.getIssues().stream().filter(this::isModuleElementOriginOfIssue).findAny().isPresent())
             {
                 moduleResolutions.add(next);
             }
@@ -109,13 +108,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     @Override
     public Optional<IMetricId> getMetricId(final IMetricLevel level, final String metricId)
     {
-        return m_module.getMetricIdsForLevel(level).stream().filter((final IMetricId id) -> id.getName().equals(metricId)).findAny();
+        return module.getMetricIdsForLevel(level).stream().filter(id -> id.getName().equals(metricId)).findAny();
     }
 
     @Override
     public Optional<IMetricValue> getMetricValueForElement(final IMetricId metricId, final IMetricLevel level, final String fqName)
     {
-        return m_module.getMetricValueForElement(metricId, level, fqName);
+        return module.getMetricValueForElement(metricId, level, fqName);
     }
 
     @Override
@@ -123,13 +122,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     {
         assert level != null : "Parameter 'level' of method 'getMetricIdsForLevel' must not be null";
 
-        return m_module.getMetricIdsForLevel(level);
+        return module.getMetricIdsForLevel(level);
     }
 
     @Override
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(final Predicate<IIssue> filter)
     {
-        final List<IIssue> systemIssues = m_systemInfoProcessor.getIssues(filter);
+        final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
         final Map<ISourceFile, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue issue : systemIssues)
         {
@@ -159,7 +158,7 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
 
         if (isElementContainedInModule(element))
         {
-            final Optional<ISourceFile> source = m_module.getSourceForElement(element);
+            final Optional<ISourceFile> source = module.getSourceForElement(element);
             if (source.isPresent())
             {
                 final ISourceFile sourceFile = source.get();
@@ -176,25 +175,25 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     @Override
     public Map<INamedElement, IMetricValue> getMetricValues(final String levelName, final String metricIdName)
     {
-        return m_module.getMetricValues(levelName, metricIdName);
+        return module.getMetricValues(levelName, metricIdName);
     }
 
     @Override
     public List<IMetricLevel> getMetricLevels()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_module.getMetricLevels().values()));
+        return Collections.unmodifiableList(new ArrayList<>(module.getMetricLevels().values()));
     }
 
     @Override
     public Optional<IMetricLevel> getMetricLevel(final String level)
     {
         assert level != null && level.length() > 0 : "Parameter 'level' of method 'getMetricLevel' must not be empty";
-        return Optional.ofNullable(m_module.getMetricLevels().get(level));
+        return Optional.ofNullable(module.getMetricLevels().get(level));
     }
 
     @Override
     public Optional<IMetricValue> getMetricValue(final String metricName)
     {
-        return Optional.ofNullable(m_module.getMetricValues(IMetricLevel.MODULE, metricName).get(m_module));
+        return Optional.ofNullable(module.getMetricValues(IMetricLevel.MODULE, metricName).get(module));
     }
 }

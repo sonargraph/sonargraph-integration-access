@@ -21,19 +21,59 @@ import com.hello2morrow.sonargraph.integration.access.model.IElementWithDescript
 
 public abstract class ElementWithDescriptionImpl extends ElementImpl implements IElementWithDescription
 {
-    private final String m_description;
+    private final String description;
 
     public ElementWithDescriptionImpl(final String name, final String presentationName, final String description)
     {
         super(name, presentationName);
         assert description != null : "Parameter 'description' of method 'NamedElement' must not be null";
 
-        m_description = description;
+        this.description = description;
     }
 
     @Override
     public final String getDescription()
     {
-        return m_description;
+        return description;
     }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final ElementWithDescriptionImpl other = (ElementWithDescriptionImpl) obj;
+        if (description == null)
+        {
+            if (other.description != null)
+            {
+                return false;
+            }
+        }
+        else if (!description.equals(other.description))
+        {
+            return false;
+        }
+        return true;
+    }
+
 }

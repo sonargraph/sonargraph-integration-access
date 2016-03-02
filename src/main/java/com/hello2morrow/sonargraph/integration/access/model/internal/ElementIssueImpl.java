@@ -28,9 +28,9 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class ElementIssueImpl extends AbstractElementIssueImpl
 {
-    private final INamedElement m_element;
-    private int m_line = -1;
-    private int m_column = -1;
+    private final INamedElement element;
+    private int line = -1;
+    private int column = -1;
 
     public ElementIssueImpl(final IIssueType issueType, final String description, final IIssueProvider issueProvider, final INamedElement element,
             final boolean hasResolution, final int line)
@@ -38,40 +38,40 @@ public final class ElementIssueImpl extends AbstractElementIssueImpl
         super(issueType.getName() + element.toString() + line, issueType.getPresentationName(), description, issueType, issueProvider, hasResolution,
                 line);
         assert element != null : "Parameter 'element' of method 'ElementIssue' must not be null";
-        m_element = element;
+        this.element = element;
     }
 
     public IElement getElement()
     {
-        return m_element;
+        return element;
     }
 
     public int getLine()
     {
-        return m_line;
+        return line;
     }
 
     public void setLine(final int line)
     {
         assert line > 0 : "Parameter 'line' of method setLine() must be > 0";
-        m_line = line;
+        this.line = line;
     }
 
     public int getColumn()
     {
-        return m_column;
+        return column;
     }
 
     public void setColumn(final int column)
     {
         assert column > 0 : "Parameter 'column' of method setColumn() must be > 0";
-        m_column = column;
+        this.column = column;
     }
 
     @Override
     public List<INamedElement> getAffectedElements()
     {
-        return Collections.unmodifiableList(Arrays.asList(m_element));
+        return Collections.unmodifiableList(Arrays.asList(element));
     }
 
     @Override
@@ -79,9 +79,9 @@ public final class ElementIssueImpl extends AbstractElementIssueImpl
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + m_column;
-        result = prime * result + ((m_element == null) ? 0 : m_element.hashCode());
-        result = prime * result + m_line;
+        result = prime * result + column;
+        result = prime * result + ((element == null) ? 0 : element.hashCode());
+        result = prime * result + line;
         return result;
     }
 
@@ -105,22 +105,22 @@ public final class ElementIssueImpl extends AbstractElementIssueImpl
             return false;
         }
         final ElementIssueImpl other = (ElementIssueImpl) obj;
-        if (m_column != other.m_column)
+        if (column != other.column)
         {
             return false;
         }
-        if (m_element == null)
+        if (element == null)
         {
-            if (other.m_element != null)
+            if (other.element != null)
             {
                 return false;
             }
         }
-        else if (!m_element.equals(other.m_element))
+        else if (!element.equals(other.element))
         {
             return false;
         }
-        if (m_line != other.m_line)
+        if (line != other.line)
         {
             return false;
         }

@@ -29,8 +29,8 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class CycleGroupImpl extends AbstractElementIssueImpl implements ICycleGroup
 {
-    private final IAnalyzer m_analyzer;
-    private final List<INamedElement> m_cyclicElements = new ArrayList<>();
+    private final IAnalyzer analyzer;
+    private final List<INamedElement> cyclicElements = new ArrayList<>();
 
     public CycleGroupImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final IAnalyzer analyzer)
@@ -38,20 +38,20 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
         super(name, presentationName, description, issueType, provider, hasResolution, -1);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
 
-        m_analyzer = analyzer;
+        this.analyzer = analyzer;
     }
 
     public void setAffectedElements(final List<INamedElement> elements)
     {
         assert elements != null : "Parameter 'elements' of method 'setCyclicElements' must not be null";
         assert !elements.isEmpty() : "Parameter 'elements' of method 'setCyclicElements' must not be empty";
-        m_cyclicElements.addAll(elements);
+        cyclicElements.addAll(elements);
     }
 
     @Override
     public List<INamedElement> getAffectedElements()
     {
-        return Collections.unmodifiableList(m_cyclicElements);
+        return Collections.unmodifiableList(cyclicElements);
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
     @Override
     public IAnalyzer getAnalyzer()
     {
-        return m_analyzer;
+        return analyzer;
     }
 
     @Override
@@ -71,8 +71,8 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_analyzer == null) ? 0 : m_analyzer.hashCode());
-        result = prime * result + ((m_cyclicElements == null) ? 0 : m_cyclicElements.hashCode());
+        result = prime * result + ((analyzer == null) ? 0 : analyzer.hashCode());
+        result = prime * result + ((cyclicElements == null) ? 0 : cyclicElements.hashCode());
         return result;
     }
 
@@ -96,25 +96,25 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
             return false;
         }
         final CycleGroupImpl other = (CycleGroupImpl) obj;
-        if (m_analyzer == null)
+        if (analyzer == null)
         {
-            if (other.m_analyzer != null)
+            if (other.analyzer != null)
             {
                 return false;
             }
         }
-        else if (!m_analyzer.equals(other.m_analyzer))
+        else if (!analyzer.equals(other.analyzer))
         {
             return false;
         }
-        if (m_cyclicElements == null)
+        if (cyclicElements == null)
         {
-            if (other.m_cyclicElements != null)
+            if (other.cyclicElements != null)
             {
                 return false;
             }
         }
-        else if (!m_cyclicElements.equals(other.m_cyclicElements))
+        else if (!cyclicElements.equals(other.cyclicElements))
         {
             return false;
         }

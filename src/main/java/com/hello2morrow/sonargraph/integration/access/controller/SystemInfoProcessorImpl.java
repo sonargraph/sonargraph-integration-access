@@ -42,18 +42,18 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSys
 
 final class SystemInfoProcessorImpl implements ISystemInfoProcessor
 {
-    private final SoftwareSystemImpl m_softwareSystem;
+    private final SoftwareSystemImpl softwareSystem;
 
     public SystemInfoProcessorImpl(final SoftwareSystemImpl system)
     {
         assert system != null : "Parameter 'system' of method 'SystemInfoProcessorImpl' must not be null";
-        m_softwareSystem = system;
+        softwareSystem = system;
     }
 
     @Override
     public String getBaseDirectory()
     {
-        return m_softwareSystem.getBaseDir();
+        return softwareSystem.getBaseDir();
     }
 
     @Override
@@ -61,11 +61,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections.unmodifiableList(m_softwareSystem.getIssues().values().stream().flatMap(list -> list.stream())
+            return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream())
                     .collect(Collectors.toList()));
         }
 
-        return Collections.unmodifiableList(m_softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter)
+        return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter)
                 .collect(Collectors.toList()));
     }
 
@@ -74,43 +74,43 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections.unmodifiableList(m_softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
+            return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
                     .collect(Collectors.toList()));
         }
 
-        return Collections.unmodifiableList(m_softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
+        return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
                 .filter(filter).collect(Collectors.toList()));
     }
 
     @Override
     public Optional<IMetricId> getMetricId(final IMetricLevel level, final String metricId)
     {
-        return m_softwareSystem.getMetricIdsForLevel(level).stream().filter((final IMetricId id) -> id.getName().equals(metricId)).findAny();
+        return softwareSystem.getMetricIdsForLevel(level).stream().filter(id -> id.getName().equals(metricId)).findAny();
     }
 
     @Override
     public Optional<IMetricValue> getMetricValueForElement(final IMetricId metricId, final IMetricLevel level, final String fqName)
     {
-        return m_softwareSystem.getMetricValueForElement(metricId, level, fqName);
+        return softwareSystem.getMetricValueForElement(metricId, level, fqName);
     }
 
     @Override
     public List<IMetricId> getMetricIdsForLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'getMetricIdsForLevel' must not be null";
-        return m_softwareSystem.getMetricIdsForLevel(level);
+        return softwareSystem.getMetricIdsForLevel(level);
     }
 
     @Override
     public List<IIssueProvider> getIssueProviders()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getIssueProviders().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getIssueProviders().values()));
     }
 
     @Override
     public List<IIssueType> getIssueTypes()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getIssueTypes().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getIssueTypes().values()));
     }
 
     @Override
@@ -125,45 +125,45 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         {
             filter2 = (final ICycleGroup group) -> true;
         }
-        return getIssues((final IIssue issue) -> issue instanceof ICycleGroup).stream().map((final IIssue issue) -> (ICycleGroup) issue)
-                .filter(filter2).collect(Collectors.toList());
+        return getIssues(issue -> issue instanceof ICycleGroup).stream().map(issue -> (ICycleGroup) issue).filter(filter2)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<IAnalyzer> getAnalyzers()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getAnalyzers().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getAnalyzers().values()));
     }
 
     @Override
     public List<IFeature> getFeatures()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getFeatures().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getFeatures().values()));
     }
 
     @Override
     public List<IMetricCategory> getMetricCategories()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getMetricCategories().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getMetricCategories().values()));
     }
 
     @Override
     public List<IMetricProvider> getMetricProviders()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getMetricProviders().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getMetricProviders().values()));
     }
 
     @Override
     public Optional<IMetricId> getMetricId(final String name)
     {
         assert name != null && name.length() > 0 : "Parameter 'name' of method 'getMetricId' must not be empty";
-        return Optional.ofNullable(m_softwareSystem.getMetricIds().get(name));
+        return Optional.ofNullable(softwareSystem.getMetricIds().get(name));
     }
 
     @Override
     public List<IMetricId> getMetricIds()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getMetricIds().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getMetricIds().values()));
     }
 
     @Override
@@ -174,7 +174,7 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         {
             return Optional.empty();
         }
-        return m_softwareSystem.getSystemMetricValue(id.get());
+        return softwareSystem.getSystemMetricValue(id.get());
     }
 
     @Override
@@ -183,18 +183,18 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         assert levelName != null && levelName.length() > 0 : "Parameter 'levelName' of method 'getMetricValues' must not be empty";
         assert metricIdName != null && metricIdName.length() > 0 : "Parameter 'metricIdName' of method 'getMetricValues' must not be empty";
 
-        return m_softwareSystem.getMetricValues(levelName, metricIdName);
+        return softwareSystem.getMetricValues(levelName, metricIdName);
     }
 
     @Override
     public List<IMetricLevel> getMetricLevels()
     {
-        return Collections.unmodifiableList(new ArrayList<>(m_softwareSystem.getAllMetricLevels().values()));
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getAllMetricLevels().values()));
     }
 
     @Override
     public Optional<IMetricLevel> getMetricLevel(final String systemLevel)
     {
-        return Optional.ofNullable(m_softwareSystem.getMetricLevels().get(systemLevel));
+        return Optional.ofNullable(softwareSystem.getMetricLevels().get(systemLevel));
     }
 }

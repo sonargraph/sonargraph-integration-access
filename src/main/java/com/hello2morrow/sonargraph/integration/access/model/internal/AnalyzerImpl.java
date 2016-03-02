@@ -21,17 +21,49 @@ import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 
 public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IAnalyzer
 {
-    private final boolean m_isLicensed;
+    private final boolean isLicensed;
 
     public AnalyzerImpl(final String name, final String presentationName, final String description, final boolean isLicensed)
     {
         super(name, presentationName, description);
-        m_isLicensed = isLicensed;
+        this.isLicensed = isLicensed;
     }
 
     @Override
     public boolean isLicensed()
     {
-        return m_isLicensed;
+        return isLicensed;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (isLicensed ? 1231 : 1237);
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final AnalyzerImpl other = (AnalyzerImpl) obj;
+        if (isLicensed != other.isLicensed)
+        {
+            return false;
+        }
+        return true;
     }
 }

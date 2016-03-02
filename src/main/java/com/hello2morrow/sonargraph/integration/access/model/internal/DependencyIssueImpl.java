@@ -28,8 +28,8 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
 {
-    private final INamedElement m_from;
-    private final INamedElement m_to;
+    private final INamedElement from;
+    private final INamedElement to;
 
     public DependencyIssueImpl(final IIssueType issueType, final String description, final IIssueProvider provider, final boolean hasResolution,
             final INamedElement from, final INamedElement to, final int line)
@@ -39,8 +39,8 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
         assert from != null : "Parameter 'from' of method 'DependencyIssue' must not be null";
         assert to != null : "Parameter 'to' of method 'DependencyIssue' must not be null";
 
-        m_from = from;
-        m_to = to;
+        this.from = from;
+        this.to = to;
     }
 
     /* (non-Javadoc)
@@ -49,7 +49,7 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
     @Override
     public INamedElement getFrom()
     {
-        return m_from;
+        return from;
     }
 
     /* (non-Javadoc)
@@ -58,7 +58,7 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
     @Override
     public INamedElement getTo()
     {
-        return m_to;
+        return to;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_from == null) ? 0 : m_from.hashCode());
-        result = prime * result + ((m_to == null) ? 0 : m_to.hashCode());
+        result = prime * result + ((from == null) ? 0 : from.hashCode());
+        result = prime * result + ((to == null) ? 0 : to.hashCode());
         return result;
     }
 
@@ -99,25 +99,25 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
             return false;
         }
         final DependencyIssueImpl other = (DependencyIssueImpl) obj;
-        if (m_from == null)
+        if (from == null)
         {
-            if (other.m_from != null)
+            if (other.from != null)
             {
                 return false;
             }
         }
-        else if (!m_from.equals(other.m_from))
+        else if (!from.equals(other.from))
         {
             return false;
         }
-        if (m_to == null)
+        if (to == null)
         {
-            if (other.m_to != null)
+            if (other.to != null)
             {
                 return false;
             }
         }
-        else if (!m_to.equals(other.m_to))
+        else if (!to.equals(other.to))
         {
             return false;
         }

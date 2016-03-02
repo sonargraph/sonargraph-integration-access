@@ -32,12 +32,12 @@ public interface IMetricId extends IElementWithDescription
         CORE_VIOLATING_COMPONENTS("Number of Components with Violations"),
         CORE_NCCD("NCCD");
 
-        String m_presentationName;
+        String presentationName;
 
         private StandardName(final String presentationName)
         {
             assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
-            m_presentationName = presentationName;
+            this.presentationName = presentationName;
         }
 
         @Override
@@ -49,7 +49,7 @@ public interface IMetricId extends IElementWithDescription
         @Override
         public String getPresentationName()
         {
-            return m_presentationName;
+            return presentationName;
         }
     }
 

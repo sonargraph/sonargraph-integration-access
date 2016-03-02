@@ -21,10 +21,10 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
-    private final String m_kind;
-    private final String m_presentationKind;
-    private final int m_line;
-    private final String m_fqName;
+    private final String kind;
+    private final String presentationKind;
+    private final int line;
+    private final String fqName;
 
     public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final int line, final String description)
@@ -33,16 +33,16 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 
         assert fqName != null && fqName.length() > 0 : "Parameter 'fqName' of method 'NamedElementImpl' must not be empty";
 
-        m_kind = kind;
-        m_presentationKind = presentationKind;
-        m_line = line;
-        m_fqName = fqName;
+        this.kind = kind;
+        this.presentationKind = presentationKind;
+        this.line = line;
+        this.fqName = fqName;
     }
 
     public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final int line)
     {
-        this(kind, presentationKind, name, presentationName, fqName, -1, "");
+        this(kind, presentationKind, name, presentationName, fqName, line, "");
     }
 
     /* (non-Javadoc)
@@ -51,7 +51,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     @Override
     public final String getKind()
     {
-        return m_kind;
+        return kind;
     }
 
     /* (non-Javadoc)
@@ -60,7 +60,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     @Override
     public final String getFqName()
     {
-        return m_fqName;
+        return fqName;
     }
 
     /* (non-Javadoc)
@@ -69,13 +69,13 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     @Override
     public final String getPresentationKind()
     {
-        return m_presentationKind;
+        return presentationKind;
     }
 
     @Override
     public final int getLineNumber()
     {
-        return m_line;
+        return line;
     }
 
     @Override
@@ -83,10 +83,10 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + m_fqName.hashCode();
-        result = prime * result + ((m_kind == null) ? 0 : m_kind.hashCode());
-        result = prime * result + m_line;
-        result = prime * result + ((m_presentationKind == null) ? 0 : m_presentationKind.hashCode());
+        result = prime * result + fqName.hashCode();
+        result = prime * result + ((kind == null) ? 0 : kind.hashCode());
+        result = prime * result + line;
+        result = prime * result + ((presentationKind == null) ? 0 : presentationKind.hashCode());
         return result;
     }
 
@@ -110,40 +110,40 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
             return false;
         }
         final NamedElementImpl other = (NamedElementImpl) obj;
-        if (m_fqName == null)
+        if (fqName == null)
         {
-            if (other.m_fqName != null)
+            if (other.fqName != null)
             {
                 return false;
             }
         }
-        else if (!m_fqName.equals(other.m_fqName))
+        else if (!fqName.equals(other.fqName))
         {
             return false;
         }
-        if (m_kind == null)
+        if (kind == null)
         {
-            if (other.m_kind != null)
+            if (other.kind != null)
             {
                 return false;
             }
         }
-        else if (!m_kind.equals(other.m_kind))
+        else if (!kind.equals(other.kind))
         {
             return false;
         }
-        if (m_line != other.m_line)
+        if (line != other.line)
         {
             return false;
         }
-        if (m_presentationKind == null)
+        if (presentationKind == null)
         {
-            if (other.m_presentationKind != null)
+            if (other.presentationKind != null)
             {
                 return false;
             }
         }
-        else if (!m_presentationKind.equals(other.m_presentationKind))
+        else if (!presentationKind.equals(other.presentationKind))
         {
             return false;
         }
