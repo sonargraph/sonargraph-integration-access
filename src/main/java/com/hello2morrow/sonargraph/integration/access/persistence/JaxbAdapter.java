@@ -45,7 +45,7 @@ final class JaxbAdapter<T>
         JAXBContext get() throws JAXBException;
     }
 
-    private final Unmarshaller m_reader;
+    private final Unmarshaller reader;
 
     private JaxbAdapter(final JAXBContextCreator creator, final URL... schemaUrl) throws Exception
     {
@@ -60,7 +60,7 @@ final class JaxbAdapter<T>
         final Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
         final JAXBContext jaxbContextProject = creator.get();
 
-        m_reader = createReader(jaxbContextProject, schema);
+        reader = createReader(jaxbContextProject, schema);
     }
 
     public JaxbAdapter(final Class<T> jaxbClass, final URL... schemaUrl) throws Exception
@@ -73,7 +73,7 @@ final class JaxbAdapter<T>
         this(() -> JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader()), schemaUrl);
     }
 
-    private Unmarshaller createReader(final JAXBContext jaxbContext, final Schema schema) throws JAXBException
+    private static Unmarshaller createReader(final JAXBContext jaxbContext, final Schema schema) throws JAXBException
     {
         final Unmarshaller reader = jaxbContext.createUnmarshaller();
         reader.setSchema(schema);
@@ -88,8 +88,8 @@ final class JaxbAdapter<T>
 
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
-            m_reader.setEventHandler(validationHandler);
-            final T jaxbRoot = (T) m_reader.unmarshal(bufferedIn);
+            reader.setEventHandler(validationHandler);
+            final T jaxbRoot = (T) reader.unmarshal(bufferedIn);
             return Optional.of(jaxbRoot);
         }
         catch (final Exception e)

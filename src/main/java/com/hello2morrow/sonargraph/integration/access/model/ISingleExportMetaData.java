@@ -23,9 +23,7 @@ import java.util.Map;
 
 public interface ISingleExportMetaData extends IExportMetaData
 {
-    public IBasicSoftwareSystemInfo getSystemInfo();
-
-    public ISingleExportMetaData EMPTY = new ISingleExportMetaData()
+    public static final class Empty implements ISingleExportMetaData
     {
         @Override
         public Map<String, IMetricProvider> getMetricProviders()
@@ -56,7 +54,6 @@ public interface ISingleExportMetaData extends IExportMetaData
         {
             return new IBasicSoftwareSystemInfo()
             {
-
                 @Override
                 public String getVersion()
                 {
@@ -100,5 +97,9 @@ public interface ISingleExportMetaData extends IExportMetaData
         {
             return Collections.emptyList();
         }
-    };
+    }
+
+    public static final ISingleExportMetaData EMPTY = new Empty();
+
+    public IBasicSoftwareSystemInfo getSystemInfo();
 }

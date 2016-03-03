@@ -29,12 +29,12 @@ public interface IJavaMetricId extends IMetricId
         JAVA_CYCLIC_PACKAGES("Number of Cyclic Packages"),
         JAVA_STRUCTURAL_DEBT_INDEX_PACKAGES("Structural Debt Index (Packages)");
 
-        String m_presentationName;
+        final String presentationName;
 
         private StandardName(final String presentationName)
         {
             assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
-            m_presentationName = presentationName;
+            this.presentationName = presentationName;
         }
 
         @Override
@@ -46,7 +46,7 @@ public interface IJavaMetricId extends IMetricId
         @Override
         public String getPresentationName()
         {
-            return m_presentationName;
+            return presentationName;
         }
     }
 }

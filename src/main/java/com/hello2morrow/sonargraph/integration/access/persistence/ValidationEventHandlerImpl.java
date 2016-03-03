@@ -46,12 +46,12 @@ public final class ValidationEventHandlerImpl implements ValidationEventHandler
         }
     }
 
-    private final OperationResult m_operationResult;
+    private final OperationResult operationResult;
 
     public ValidationEventHandlerImpl(final OperationResult result)
     {
         assert result != null : "Parameter 'result' of method 'ValidationEventHandlerImpl' must not be null";
-        m_operationResult = result;
+        operationResult = result;
     }
 
     @Override
@@ -64,27 +64,27 @@ public final class ValidationEventHandlerImpl implements ValidationEventHandler
 
         if (event.getSeverity() == ValidationEvent.WARNING)
         {
-            m_operationResult.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, event.getMessage() + getLocation(locator));
+            operationResult.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, event.getMessage() + getLocation(locator));
             returnResult = true;
         }
         else
         {
-            m_operationResult.addError(ValidationMessageCauses.XML_VALIDATION_ERROR, event.getMessage() + getLocation(locator));
+            operationResult.addError(ValidationMessageCauses.XML_VALIDATION_ERROR, event.getMessage() + getLocation(locator));
         }
 
         return returnResult;
     }
 
-    private String getLocation(final ValidationEventLocator locator)
+    private static String getLocation(final ValidationEventLocator locator)
     {
         if (locator != null)
         {
-            final StringBuffer buffer = new StringBuffer(" (line:");
-            buffer.append(locator.getLineNumber());
-            buffer.append(" col:");
-            buffer.append(locator.getColumnNumber());
-            buffer.append(")");
-            return buffer.toString();
+            final StringBuilder builder = new StringBuilder(" (line:");
+            builder.append(locator.getLineNumber());
+            builder.append(" col:");
+            builder.append(locator.getColumnNumber());
+            builder.append(")");
+            return builder.toString();
         }
         return "";
     }

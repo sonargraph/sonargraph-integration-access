@@ -21,16 +21,16 @@ import com.hello2morrow.sonargraph.integration.access.model.IElement;
 
 public abstract class ElementImpl implements IElement
 {
-    private final String m_name;
-    private final String m_presentationName;
+    private final String name;
+    private final String presentationName;
 
     public ElementImpl(final String name, final String presentationName)
     {
         assert name != null && name.length() > 0 : "Parameter 'name' of method 'Element' must not be empty";
         assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'Element' must not be empty";
 
-        m_name = name;
-        m_presentationName = presentationName;
+        this.name = name;
+        this.presentationName = presentationName;
     }
 
     /* (non-Javadoc)
@@ -39,7 +39,7 @@ public abstract class ElementImpl implements IElement
     @Override
     public final String getName()
     {
-        return m_name;
+        return name;
     }
 
     /* (non-Javadoc)
@@ -48,7 +48,7 @@ public abstract class ElementImpl implements IElement
     @Override
     public String getPresentationName()
     {
-        return m_presentationName;
+        return presentationName;
     }
 
     @Override
@@ -62,8 +62,8 @@ public abstract class ElementImpl implements IElement
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((m_name == null) ? 0 : m_name.hashCode());
-        result = prime * result + ((m_presentationName == null) ? 0 : m_presentationName.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((presentationName == null) ? 0 : presentationName.hashCode());
         return result;
     }
 
@@ -84,25 +84,25 @@ public abstract class ElementImpl implements IElement
         }
         final ElementImpl other = (ElementImpl) obj;
 
-        if (m_name == null)
+        if (name == null)
         {
-            if (other.m_name != null)
+            if (other.name != null)
             {
                 return false;
             }
         }
-        else if (!m_name.equals(other.m_name))
+        else if (!name.equals(other.name))
         {
             return false;
         }
-        if (m_presentationName == null)
+        if (presentationName == null)
         {
-            if (other.m_presentationName != null)
+            if (other.presentationName != null)
             {
                 return false;
             }
         }
-        else if (!m_presentationName.equals(other.m_presentationName))
+        else if (!presentationName.equals(other.presentationName))
         {
             return false;
         }

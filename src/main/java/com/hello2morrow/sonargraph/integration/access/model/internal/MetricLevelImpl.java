@@ -21,13 +21,13 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 
 public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
 {
-    private final int m_orderNumber;
+    private final int orderNumber;
 
     public MetricLevelImpl(final String name, final String presentationName, final int orderNumber)
     {
         super(name, presentationName);
         assert orderNumber >= 0 : "orderNumber must a >= 0";
-        m_orderNumber = orderNumber;
+        this.orderNumber = orderNumber;
     }
 
     /* (non-Javadoc)
@@ -36,7 +36,7 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
     @Override
     public int getOrderNumber()
     {
-        return m_orderNumber;
+        return orderNumber;
     }
 
     @Override
@@ -44,7 +44,7 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + m_orderNumber;
+        result = prime * result + orderNumber;
         return result;
     }
 
@@ -68,7 +68,7 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
             return false;
         }
         final MetricLevelImpl other = (MetricLevelImpl) obj;
-        if (m_orderNumber != other.m_orderNumber)
+        if (orderNumber != other.orderNumber)
         {
             return false;
         }

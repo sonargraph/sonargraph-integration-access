@@ -37,26 +37,31 @@ public final class Platform
         MAC_64(8, 8),
         UNKNOWN(0, 0);
 
-        private final int m_LongSize;
-        private final int m_PointerSize;
+        private final int longSize;
+        private final int pointerSize;
 
         OperatingSystem(final int longSize, final int pointerSize)
         {
-            m_LongSize = longSize;
-            m_PointerSize = pointerSize;
+            this.longSize = longSize;
+            this.pointerSize = pointerSize;
         }
 
         public int getLongSize()
         {
-            return m_LongSize;
+            return longSize;
         }
 
         public int getPointerSize()
         {
-            return m_PointerSize;
+            return pointerSize;
         }
 
-        public static OperatingSystem fromStandardName(final String standardName) throws IllegalArgumentException
+        /**
+         * @param standardName
+         * @return OperatingSystem matching standardName
+         * @throws IllegalArgumentException if no OS matches standardName
+         */
+        public static OperatingSystem fromStandardName(final String standardName)
         {
             assert standardName != null : "'standardName' must not be null";
             assert standardName.length() > 0 : "'standardName' must not be empty";
@@ -85,7 +90,12 @@ public final class Platform
         APPLE,
         UNKNOWN;
 
-        public static JavaVendor fromStandardName(final String standardName) throws IllegalArgumentException
+        /**
+         * @param standardName
+         * @return JavaVendor matching standardName
+         * @throws IllegalArgumentException if no vendor matches standardName
+         */
+        public static JavaVendor fromStandardName(final String standardName)
         {
             assert standardName != null : "'standardName' must not be null";
             assert standardName.length() > 0 : "'standardName' must not be empty";
@@ -114,7 +124,12 @@ public final class Platform
         JAVA_8,
         UNKNOWN;
 
-        public static JavaVersion fromStandardName(final String standardName) throws IllegalArgumentException
+        /**
+         * @param standardName
+         * @return JavaVersion matching standardName
+         * @throws IllegalArgumentException if no version matches standardName
+         */
+        public static JavaVersion fromStandardName(final String standardName)
         {
             assert standardName != null : "'standardName' must not be null";
             assert standardName.length() > 0 : "'standardName' must not be empty";

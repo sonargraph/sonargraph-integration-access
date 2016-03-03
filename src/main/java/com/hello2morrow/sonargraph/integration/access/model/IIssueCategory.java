@@ -32,13 +32,12 @@ public interface IIssueCategory extends IElement
         CYCLE_GROUP("Cycle Group"),
         REFACTORING("Refactoring");
 
-        private final String m_presentationName;
+        private final String presentationName;
 
         private StandardName(final String presentationName)
         {
-            assert presentationName != null
-                    && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
-            m_presentationName = presentationName;
+            assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
+            this.presentationName = presentationName;
         }
 
         @Override
@@ -50,7 +49,7 @@ public interface IIssueCategory extends IElement
         @Override
         public String getPresentationName()
         {
-            return m_presentationName;
+            return presentationName;
         }
     }
 }

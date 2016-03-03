@@ -34,42 +34,41 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
 {
-    private MetricsAccessImpl m_metricsAccess;
-    private ElementRegistryImpl m_elementRegistry;
-    private final Map<String, Map<String, INamedElement>> m_elementMap = new HashMap<>();
-    private final Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> m_metricValues = new HashMap<>();
+    private MetricsAccessImpl metricsAccess;
+    private ElementRegistryImpl elementRegistry;
+    private final Map<String, Map<String, INamedElement>> elementMap = new HashMap<>();
+    private final Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
     {
         super(kind, presentationKind, name, presentationName, fqName, -1, description);
-
     }
 
     protected final void setMetricsAccess(final MetricsAccessImpl metricsAccess)
     {
         assert metricsAccess != null : "Parameter 'metricsAccess' of method 'setMetricsAccess' must not be null";
-        assert m_metricsAccess == null : "m_metricsAccess must be null!";
-        m_metricsAccess = metricsAccess;
+        assert this.metricsAccess == null : "metricsAccess must be null!";
+        this.metricsAccess = metricsAccess;
     }
 
     protected final MetricsAccessImpl getMetricsAccess()
     {
-        assert m_metricsAccess != null : "'setMetricsAccess() must be called first!";
-        return m_metricsAccess;
+        assert metricsAccess != null : "'setMetricsAccess() must be called first!";
+        return metricsAccess;
     }
 
     protected final void setElementRegistry(final ElementRegistryImpl elementRegistry)
     {
         assert elementRegistry != null : "Parameter 'elementRegistry' of method 'setElementRegistry' must not be null";
-        assert m_elementRegistry == null : "m_elementRegistry must be null!";
-        m_elementRegistry = elementRegistry;
+        assert this.elementRegistry == null : "elementRegistry must be null!";
+        this.elementRegistry = elementRegistry;
     }
 
     protected final ElementRegistryImpl getElementRegistry()
     {
-        assert m_elementRegistry != null : "'setElementRegistry() must be called first!";
-        return m_elementRegistry;
+        assert elementRegistry != null : "'setElementRegistry() must be called first!";
+        return elementRegistry;
     }
 
     public final boolean addElement(final INamedElement element)
@@ -81,14 +80,14 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             return false;
         }
         final Map<String, INamedElement> elementsOfKind;
-        if (!m_elementMap.containsKey(element.getKind()))
+        if (!elementMap.containsKey(element.getKind()))
         {
             elementsOfKind = new HashMap<>();
-            m_elementMap.put(element.getKind(), elementsOfKind);
+            elementMap.put(element.getKind(), elementsOfKind);
         }
         else
         {
-            elementsOfKind = m_elementMap.get(element.getKind());
+            elementsOfKind = elementMap.get(element.getKind());
         }
 
         assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
@@ -110,12 +109,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
 
         final INamedElement fqNamedElement = (INamedElement) element;
 
-        if (!m_elementMap.containsKey(fqNamedElement.getKind()))
+        if (!elementMap.containsKey(fqNamedElement.getKind()))
         {
             return false;
         }
 
-        return m_elementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
+        return elementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
     }
 
     /* (non-Javadoc)
@@ -125,9 +124,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public final Map<String, INamedElement> getElements(final String elementKind)
     {
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'getElements' must not be empty";
-        if (m_elementMap.containsKey(elementKind))
+        if (elementMap.containsKey(elementKind))
         {
-            return Collections.unmodifiableMap(m_elementMap.get(elementKind));
+            return Collections.unmodifiableMap(elementMap.get(elementKind));
         }
 
         return Collections.emptyMap();
@@ -139,28 +138,28 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     @Override
     public final Set<String> getElementKinds()
     {
-        return Collections.unmodifiableSet(m_elementMap.keySet());
+        return Collections.unmodifiableSet(elementMap.keySet());
     }
 
     public final void addMetricValueForElement(final IMetricValue value, final INamedElement element)
     {
         assert value != null : "Parameter 'value' of method 'addMetricValue' must not be null";
         final IMetricId metricId = value.getId();
-        assert m_metricsAccess.getMetricIds().containsKey(metricId.getName()) : "MetricId '" + metricId.getName() + "'has not been added";
+        assert metricsAccess.getMetricIds().containsKey(metricId.getName()) : "MetricId '" + metricId.getName() + "'has not been added";
         assert element != null : "Parameter 'element' of method 'addMetricValueForElement' must not be null";
 
         final IMetricLevel level = value.getLevel();
-        assert m_metricsAccess.getMetricLevels().containsKey(level.getName()) : "Level '" + level.getName() + "' has not been added";
+        assert metricsAccess.getMetricLevels().containsKey(level.getName()) : "Level '" + level.getName() + "' has not been added";
 
         final Map<IMetricId, Map<INamedElement, IMetricValue>> valuesOfLevel;
-        if (!m_metricValues.containsKey(level))
+        if (!metricValues.containsKey(level))
         {
             valuesOfLevel = new HashMap<>();
-            m_metricValues.put(level, valuesOfLevel);
+            metricValues.put(level, valuesOfLevel);
         }
         else
         {
-            valuesOfLevel = m_metricValues.get(level);
+            valuesOfLevel = metricValues.get(level);
         }
 
         final Map<INamedElement, IMetricValue> valuesForMetric;
@@ -182,12 +181,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         assert metricId != null : "Parameter 'metricId' of method 'getMetricValueForElement' must not be null";
         assert elementName != null && elementName.length() > 0 : "Parameter 'elementName' of method 'getMetricValueForElement' must not be empty";
 
-        if (!m_metricValues.containsKey(metricLevel))
+        if (!metricValues.containsKey(metricLevel))
         {
             return Optional.empty();
         }
 
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdsOfLevel = m_metricValues.get(metricLevel);
+        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdsOfLevel = metricValues.get(metricLevel);
         if (!metricIdsOfLevel.containsKey(metricId))
         {
             return Optional.empty();
@@ -212,12 +211,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public final void addMetricLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'addMetricLevel' must not be null";
-        m_metricsAccess.addMetricLevel(level);
+        metricsAccess.addMetricLevel(level);
     }
 
     public final Map<String, IMetricLevel> getAllMetricLevels()
     {
-        return m_metricsAccess.getMetricLevels();
+        return metricsAccess.getMetricLevels();
     }
 
     public abstract Map<String, IMetricLevel> getMetricLevels();
@@ -225,11 +224,11 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public List<IMetricId> getMetricIdsForLevel(final IMetricLevel metricLevel)
     {
         assert metricLevel != null : "Parameter 'metricLevel' of method 'getMetricIdsForLevel' must not be null";
-        if (!m_metricValues.containsKey(metricLevel))
+        if (!metricValues.containsKey(metricLevel))
         {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(new ArrayList<>(m_metricValues.get(metricLevel).keySet()));
+        return Collections.unmodifiableList(new ArrayList<>(metricValues.get(metricLevel).keySet()));
     }
 
     public Map<INamedElement, IMetricValue> getMetricValues(final String metricLevel, final String metricId)
@@ -244,7 +243,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         }
 
         final IMetricLevel level = metricLevels.get(metricLevel);
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = m_metricValues.get(level);
+        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(level);
 
         final Optional<IMetricId> optionalId = metricIdValueMap.keySet().stream().filter((final IMetricId id) -> id.getName().equals(metricId))
                 .findAny();
@@ -262,12 +261,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         assert metricLevel != null : "Parameter 'metricLevel' of method 'getMetricValues' must not be null";
         assert metricId != null : "Parameter 'metricId' of method 'getMetricValues' must not be null";
 
-        if (!m_metricValues.containsKey(metricLevel))
+        if (!metricValues.containsKey(metricLevel))
         {
             return Collections.emptyMap();
         }
 
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = m_metricValues.get(metricLevel);
+        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(metricLevel);
         if (!metricIdValueMap.containsKey(metricId))
         {
             return Collections.emptyMap();
@@ -277,5 +276,4 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     }
 
     protected abstract boolean acceptElementKind(String elementKind);
-
 }

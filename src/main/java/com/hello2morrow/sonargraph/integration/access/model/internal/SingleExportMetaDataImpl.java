@@ -22,18 +22,18 @@ import com.hello2morrow.sonargraph.integration.access.model.ISingleExportMetaDat
 
 public final class SingleExportMetaDataImpl extends AbstractExportMetaDataImpl implements ISingleExportMetaData
 {
-    private final IBasicSoftwareSystemInfo m_systemInfo;
+    private final IBasicSoftwareSystemInfo systemInfo;
 
     public SingleExportMetaDataImpl(final IBasicSoftwareSystemInfo systemInfo, final String resourceIdentifier)
     {
         super(resourceIdentifier);
         assert systemInfo != null : "Parameter 'systemInfo' of method 'SingleExportMetaDataImpl' must not be null";
-        m_systemInfo = systemInfo;
+        this.systemInfo = systemInfo;
     }
 
     @Override
     public IBasicSoftwareSystemInfo getSystemInfo()
     {
-        return m_systemInfo;
+        return systemInfo;
     }
 }

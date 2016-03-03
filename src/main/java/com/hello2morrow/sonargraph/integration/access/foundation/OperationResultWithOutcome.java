@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 public final class OperationResultWithOutcome<T> extends OperationResult
 {
-    private T m_outcome;
+    private T outcome;
 
     public OperationResultWithOutcome(String description)
     {
@@ -28,25 +28,25 @@ public final class OperationResultWithOutcome<T> extends OperationResult
 
     public void setOutcome(T object)
     {
-        m_outcome = object;
+        outcome = object;
     }
 
     public T getOutcome()
     {
-        return m_outcome;
+        return outcome;
     }
 
     @Override
     public String toString()
     {
-        if (m_outcome == null)
+        if (outcome == null)
         {
             return super.toString();
         }
 
         StringBuilder builder = new StringBuilder(super.toString());
         builder.append(StringUtility.LINE_SEPARATOR);
-        builder.append(m_outcome);
+        builder.append(outcome);
         return builder.toString();
     }
 }

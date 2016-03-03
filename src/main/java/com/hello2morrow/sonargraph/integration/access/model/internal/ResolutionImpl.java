@@ -26,11 +26,11 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ResolutionImpl extends ElementImpl implements IResolution
 {
-    private final List<IIssue> m_issues;
-    private final Priority m_priority;
-    private final ResolutionType m_type;
-    private final boolean m_isApplicable;
-    private final int m_numberOfAffectedParserDependencies;
+    private final List<IIssue> issues;
+    private final Priority priority;
+    private final ResolutionType type;
+    private final boolean isApplicable;
+    private final int numberOfAffectedParserDependencies;
 
     //TODO: PresentationName?
     public ResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
@@ -38,11 +38,11 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     {
         super(fqName, type.name());
 
-        m_type = type;
-        m_priority = priority;
-        m_issues = issues;
-        m_isApplicable = isApplicable;
-        m_numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
+        this.type = type;
+        this.priority = priority;
+        this.issues = issues;
+        this.isApplicable = isApplicable;
+        this.numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
     }
 
     /* (non-Javadoc)
@@ -51,7 +51,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public List<IIssue> getIssues()
     {
-        return m_issues;
+        return issues;
     }
 
     /* (non-Javadoc)
@@ -60,7 +60,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public Priority getPriority()
     {
-        return m_priority;
+        return priority;
     }
 
     /* (non-Javadoc)
@@ -69,7 +69,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public ResolutionType getType()
     {
-        return m_type;
+        return type;
     }
 
     @Override
@@ -77,9 +77,9 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((m_issues == null) ? 0 : m_issues.hashCode());
-        result = prime * result + ((m_priority == null) ? 0 : m_priority.hashCode());
-        result = prime * result + ((m_type == null) ? 0 : m_type.hashCode());
+        result = prime * result + ((issues == null) ? 0 : issues.hashCode());
+        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
 
@@ -103,36 +103,36 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
             return false;
         }
         final ResolutionImpl other = (ResolutionImpl) obj;
-        if (m_issues == null)
+        if (issues == null)
         {
-            if (other.m_issues != null)
+            if (other.issues != null)
             {
                 return false;
             }
         }
-        else if (!m_issues.equals(other.m_issues))
+        else if (!issues.equals(other.issues))
         {
             return false;
         }
-        if (m_priority == null)
+        if (priority == null)
         {
-            if (other.m_priority != null)
+            if (other.priority != null)
             {
                 return false;
             }
         }
-        else if (!m_priority.equals(other.m_priority))
+        else if (!priority.equals(other.priority))
         {
             return false;
         }
-        if (m_type == null)
+        if (type == null)
         {
-            if (other.m_type != null)
+            if (other.type != null)
             {
                 return false;
             }
         }
-        else if (!m_type.equals(other.m_type))
+        else if (!type.equals(other.type))
         {
             return false;
         }
@@ -142,18 +142,18 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public boolean isApplicable()
     {
-        return m_isApplicable;
+        return isApplicable;
     }
 
     @Override
     public boolean isTask()
     {
-        return m_type != ResolutionType.IGNORE;
+        return type != ResolutionType.IGNORE;
     }
 
     @Override
     public int getNumberOfAffectedParserDependencies()
     {
-        return m_numberOfAffectedParserDependencies;
+        return numberOfAffectedParserDependencies;
     }
 }

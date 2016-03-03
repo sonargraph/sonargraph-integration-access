@@ -23,9 +23,9 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 
 public class MetricValueImpl implements IMetricValue
 {
-    private final IMetricId m_id;
-    private final IMetricLevel m_level;
-    private final Number m_value;
+    private final IMetricId id;
+    private final IMetricLevel level;
+    private final Number value;
 
     public MetricValueImpl(final IMetricId metricId, final IMetricLevel level, final Number value)
     {
@@ -33,9 +33,9 @@ public class MetricValueImpl implements IMetricValue
         assert level != null : "Parameter 'level' of method 'MetricValue' must not be null";
         assert value != null : "Parameter 'value' of method 'MetricValue' must not be null";
 
-        m_id = metricId;
-        m_level = level;
-        m_value = value;
+        this.id = metricId;
+        this.level = level;
+        this.value = value;
     }
 
     /* (non-Javadoc)
@@ -44,7 +44,7 @@ public class MetricValueImpl implements IMetricValue
     @Override
     public IMetricId getId()
     {
-        return m_id;
+        return id;
     }
 
     /* (non-Javadoc)
@@ -53,7 +53,7 @@ public class MetricValueImpl implements IMetricValue
     @Override
     public IMetricLevel getLevel()
     {
-        return m_level;
+        return level;
     }
 
     /* (non-Javadoc)
@@ -62,7 +62,7 @@ public class MetricValueImpl implements IMetricValue
     @Override
     public Number getValue()
     {
-        return m_value;
+        return value;
     }
 
     /* (non-Javadoc)
@@ -71,6 +71,6 @@ public class MetricValueImpl implements IMetricValue
     @Override
     public boolean isFloat()
     {
-        return m_id.isFloat();
+        return id.isFloat();
     }
 }

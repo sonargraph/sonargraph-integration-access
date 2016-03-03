@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -166,27 +166,27 @@ public final class StringUtility
     }
 
     /**
-     * Concat EnumSet to a single String, with a delimiter between.
+     * Concat Set to a single String, with a delimiter between.
      *
      * @param enumSet EnumSet to be concatenated.
      * @param delimiter The delimiter to be set between Strings.
      *
      * @return Concatenated Strings, with delimiter in between.
      */
-    public static String concat(final EnumSet<?> enumSet, final String delimiter)
+    public static String concat(final Set<?> enumSet, final String delimiter)
     {
         assert enumSet != null : "Parameter 'enumSet' of method 'concat' must not be null";
         assert delimiter != null : "Parameter 'delimiter' of method 'concat' must not be null";
 
         final StringBuilder sb = new StringBuilder("");
         boolean first = true;
-        for (final Enum<?> next : enumSet)
+        for (final Object next : enumSet)
         {
             if (!first)
             {
                 sb.append(delimiter);
             }
-            sb.append(next.name());
+            sb.append(next.toString());
             first = false;
         }
         return sb.toString();
