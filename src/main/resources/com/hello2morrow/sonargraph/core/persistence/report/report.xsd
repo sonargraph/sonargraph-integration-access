@@ -356,6 +356,8 @@
         <xs:attribute name="timestamp" type="xs:dateTime" use="required" />
         <xs:attribute name="currentVirtualModel" type="xs:string" use="required" />
         <xs:attribute name="systemDescription" type="xs:string" use="optional" />
+        <xs:attribute name="workspaceProfile" type="xs:string" use="optional" />
+        <xs:attribute name="qualityModel" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:element name="report" type="xsdSoftwareSystemReport" />
