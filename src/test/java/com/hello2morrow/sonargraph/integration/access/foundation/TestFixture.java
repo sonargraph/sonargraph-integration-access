@@ -21,6 +21,7 @@ public class TestFixture
 {
     /**Report containing all available metric levels */
     public static final String TEST_REPORT = "./src/test/resources/AlarmClock.xml";
+    public static final String TEST_REPORT_NOT_EXISTING_BASE_PATH = "./src/test/resources/AlarmClock_notExistingBaseDir.xml";
     public static final String INVALID_TEST_REPORT = "./src/test/resources/AlarmClock_invalid.xml";
 
     public static final String META_DATA_PATH = "./src/test/resources/ExportMetaData.xml";

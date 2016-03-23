@@ -134,7 +134,7 @@ class MetaDataControllerImpl implements IMetaDataController
 
             if (!file.canRead())
             {
-                result.addWarning(IOMessageCause.NO_PERMISSON, "No permission to read file '" + file.getAbsolutePath() + "'");
+                result.addWarning(IOMessageCause.NO_PERMISSION, "No permission to read file '" + file.getAbsolutePath() + "'");
                 continue;
             }
 

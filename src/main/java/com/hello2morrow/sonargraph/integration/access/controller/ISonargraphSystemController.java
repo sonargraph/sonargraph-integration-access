@@ -27,6 +27,8 @@ public interface ISonargraphSystemController
 {
     public OperationResult loadSystemReport(File systemReportFile);
 
+    public OperationResult loadSystemReport(File systemReportFile, File baseDirectory);
+
     public ISoftwareSystem getSoftwareSystem();
 
     public boolean hasSoftwareSystem();
