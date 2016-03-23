@@ -37,7 +37,7 @@ public enum IOMessageCause implements OperationResult.IMessageCause
     FAILED_TO_MOVE,
     FAILED_TO_DETERMINE_CANONICAL_PATH,
     IO_EXCEPTION,
-    NO_PERMISSON,
+    NO_PERMISSION,
     FILE_SYSTEM_OUT_OF_SYNC;
 
     @Override

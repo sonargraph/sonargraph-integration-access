@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
@@ -42,10 +43,11 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
         {
             result.addError(IOMessageCause.FILE_NOT_FOUND);
         }
-        if (!systemReportFile.canRead())
+        else if (!systemReportFile.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSON);
+            result.addError(IOMessageCause.NO_PERMISSION);
         }
+
         if (result.isFailure())
         {
             return result;
@@ -59,6 +61,38 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
         }
 
         softwareSystem = readResult.get();
+        return result;
+    }
+
+    @Override
+    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
+    {
+        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
+        assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
+
+        final OperationResult result = new OperationResult(String.format("Load data from '%s', using baseDirectory '%s'",
+                systemReportFile.getAbsolutePath(), baseDirectory.getAbsolutePath()));
+        if (!baseDirectory.exists())
+        {
+            result.addError(IOMessageCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
+        }
+        else if (!baseDirectory.canRead())
+        {
+            result.addError(IOMessageCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
+        }
+
+        if (result.isFailure())
+        {
+            return result;
+        }
+
+        result.addMessagesFrom(loadSystemReport(systemReportFile));
+        if (result.isFailure())
+        {
+            return result;
+        }
+        softwareSystem.setBaseDir(Paths.get(baseDirectory.getAbsolutePath()).normalize().toString());
+
         return result;
     }
 

@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,7 @@ public class SystemInfoProcessorTest
     private static final String APPLICATION_MODULE = TestFixture.APPLICATION_MODULE;
     private static final String INVALID_REPORT = TestFixture.INVALID_TEST_REPORT;
     private static final String REPORT_PATH = TestFixture.TEST_REPORT;
+    private static final String REPORT_PATH_NOT_EXISTING_BASE_PATH = TestFixture.TEST_REPORT_NOT_EXISTING_BASE_PATH;
 
     private ISonargraphSystemController m_controller;
 
@@ -92,21 +94,45 @@ public class SystemInfoProcessorTest
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
-        verifySystem(softwareSystem);
+        verifySystem(
+                softwareSystem,
+                "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
         verifyModule(softwareSystem);
         verifyIssues(softwareSystem);
         verifyResolutions(softwareSystem);
         verifyMetrics(softwareSystem);
     }
 
-    private void verifySystem(final ISoftwareSystem softwareSystem)
+    @Test
+    public void testReadValidReportAndOverrideSystemBaseDir()
+    {
+        final String baseDir = "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture";
+        final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
+        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
+
+        assertEquals("Wrong baseDirectory", baseDir, softwareSystem.getBaseDir());
+        final Optional<IModule> module = softwareSystem.getModule(APPLICATION_MODULE);
+        assertTrue("Module not found: " + APPLICATION_MODULE, module.isPresent());
+        final IModuleInfoProcessor moduleProcessor = m_controller.createModuleInfoProcessor(module.get());
+        assertEquals("Wrong baseDirectory", baseDir, moduleProcessor.getBaseDirectory());
+
+        verifySystem(
+                softwareSystem,
+                "D:\\NOT_EXISTING\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
+
+        verifyModule(softwareSystem);
+        verifyIssues(softwareSystem);
+        verifyResolutions(softwareSystem);
+        verifyMetrics(softwareSystem);
+
+    }
+
+    private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)
     {
         assertEquals("Wrong id", "4df288656010188b4d84a2a03bb0ecb9", softwareSystem.getSystemId());
         assertEquals("Wrong system name", "AlarmClock", softwareSystem.getPresentationName());
-        assertEquals(
-                "Wrong path",
-                "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph",
-                softwareSystem.getPath());
+        assertEquals("Wrong path", systemPath, softwareSystem.getPath());
         assertEquals("Wrong version", "8.7.0.0", softwareSystem.getVersion());
         //TODO: Activate this check. De-activated now, because the test file needs to be re-generated too often.
         //assertEquals("Wrong timestamp", 1444285242759L, softwareSystem.getTimestamp());

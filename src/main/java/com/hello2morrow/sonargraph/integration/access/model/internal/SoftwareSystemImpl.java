@@ -50,7 +50,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private static final String SOFTWARE_SYSTEM = "SoftwareSystem";
     private final String systemId;
     private final String path;
-    private final String baseDir;
+    private String baseDir;
     private final String version;
     private final String virtualModel;
     private final long timestamp;
@@ -122,6 +122,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public String getBaseDir()
     {
         return baseDir;
+    }
+
+    public void setBaseDir(final String baseDirectory)
+    {
+        baseDir = baseDirectory;
     }
 
     /* (non-Javadoc)
