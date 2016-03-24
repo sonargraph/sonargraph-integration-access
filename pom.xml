@@ -70,20 +70,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
         <version>1.6.6</version>
@@ -185,7 +171,7 @@
     <name>hello2morrow GmbH, hello2morrow Inc., hello2morrow S.A.S</name>
     <url>https://www.hello2morrow.com</url>
   </organization>
-	<scm>
+  <scm>
     <connection>scm:git:https://github.com/sonargraph/sonargraph-integration-access.git</connection>
     <developerConnection>scm:git:https://github.com/sonargraph/sonargraph-integration-access.git</developerConnection>
     <url>https://github.com/sonargraph/sonargraph-integration-access</url>
@@ -204,4 +190,27 @@
       <name>Andreas Hoyer</name>
     </developer>
   </developers>
+  <profiles>
+    <profile>
+      <id>signing</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
