@@ -17,7 +17,10 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.Optional;
+
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
@@ -25,6 +28,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     private final String presentationKind;
     private final int line;
     private final String fqName;
+    private ISourceFile m_source;
 
     public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final int line, final String description)
@@ -61,6 +65,17 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     public final String getFqName()
     {
         return fqName;
+    }
+
+    public final void setSourceFile(final ISourceFile source)
+    {
+        assert source != null : "Parameter 'source' of method 'setSourceFile' must not be null";
+        m_source = source;
+    }
+
+    public final Optional<ISourceFile> getSourceFile()
+    {
+        return Optional.ofNullable(m_source);
     }
 
     /* (non-Javadoc)
