@@ -26,14 +26,12 @@ import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
  * It runs the Maven goal sonargraph:dynamic-report in version 8.9.0 for the specified projects and extracts only certain metrics from the generated XML reports.<br/>
  * See the blog post for more details.<br/>
  * <br/>
- * Precondition: All projects have been built.<br/>
- * Usage: Executor &lt;activationCode&gt; &lt;qualityModelFilePath&gt; &lt;projectDir1&gt; &lt;projectDir2&gt; &lt;projectDirN&gt;
+ * <strong>Precondition:</strong> All projects have been built.<br/>
+ * <strong>Note:</strong> This has been tested for Maven 3.2.2. If you run it with later versions, you might need to modify the way that Maven is called and use mvn.cmd instead of mvn.bat.<br/><br/>
+ * <strong>Usage:</strong> Executor &lt;version&gt; &lt;activationCode&gt; &lt;qualityModelFilePath&gt; &lt;projectDir1&gt; &lt;projectDir2&gt; &lt;projectDirN&gt;
  */
 public class Executor
 {
-    private static final String PLUGIN_VERSION = "8.9.0";
-    private static final String INSTALLATION_DIRECTORY = "D:/00_repos/00_e4-sgng/com.hello2morrow.sonargraph.build/dist/release/SonargraphBuild";
-
     private static final String CORE_NCCD = "CoreNccd";
     private static final String SUPERTYPE_USES_SUBTYPE = "Supertype uses subtype";
     private static final String ARCHITECTURE_VIOLATION = "ArchitectureViolation";
@@ -44,11 +42,15 @@ public class Executor
     private static final String FILES_WITH_REFERENCES_TO_UNSAFE = "Files With References To Unsafe";
     private static final String MODULES_VIOLATING_NCCD_THRESHOLD = "Modules violating NCCD threshold";
 
+    /**
+     * Usage: Executor &lt;sonargraph-version&gt; &lt;activationCode&gt; &lt;qualityModelFilePath&gt; &lt;projectDir1&gt; &lt;projectDir2&gt; &lt;projectDirN&gt;
+     */
     public static void main(final String[] args)
     {
-        if (args.length < 3)
+        if (args.length < 4)
         {
-            System.err.println("You need to specify at least the activation code, qualityModel path and one path to maven root directory");
+            System.err
+                    .println("You need to specify at least the sonargraph version, activation code, qualityModel path and one path to a Maven project's root directory");
             return;
         }
 
@@ -58,6 +60,7 @@ public class Executor
         reportDirectory.mkdirs();
 
         final List<String> projectPaths = new ArrayList<>(Arrays.asList(args));
+        final String version = projectPaths.remove(0);
         final String activationCode = projectPaths.remove(0);
         final String qualityModelPath = projectPaths.remove(0);
         final File qualityModelFile = new File(qualityModelPath);
@@ -80,7 +83,7 @@ public class Executor
             {
                 final long start = System.currentTimeMillis();
                 final AnalysisResult result;
-                if (executor.runMaven(activationCode, reportDirectory, projectDir, qualityModelFile) == 0)
+                if (executor.runMaven(version, activationCode, reportDirectory, projectDir, qualityModelFile) == 0)
                 {
                     System.out.println(String.format("Executed Maven for '%s' in %d ms.", projectPath, (System.currentTimeMillis() - start)));
                     result = executor.processReport(reportDirectory, projectDir);
@@ -105,9 +108,10 @@ public class Executor
         System.exit(0);
     }
 
-    private int runMaven(final String activationCode, final File reportDirectory, final File projectDir, final File qualityModelFile)
-            throws IOException, InterruptedException
+    private int runMaven(final String version, final String activationCode, final File reportDirectory, final File projectDir,
+            final File qualityModelFile) throws IOException, InterruptedException
     {
+        assert version != null && version.length() > 0 : "Parameter 'version' of method 'runMaven' must not be empty";
         assert activationCode != null && activationCode.length() > 0 : "Parameter 'activationCode' of method 'runMaven' must not be empty";
         assert reportDirectory != null : "Parameter 'reportDirectory' of method 'runMaven' must not be null";
         assert projectDir != null : "Parameter 'projectDir' of method 'runMaven' must not be null";
@@ -123,11 +127,10 @@ public class Executor
             mavenExecutable = mavenHome + "/bin/mvn";
         }
 
-        final String commandLine = new StringBuilder(mavenExecutable).append(" com.hello2morrow:sonargraph-maven-plugin:").append(PLUGIN_VERSION)
+        final String commandLine = new StringBuilder(mavenExecutable).append(" com.hello2morrow:sonargraph-maven-plugin:").append(version)
                 .append(":dynamic-report -Dsonargraph.activationCode=").append(activationCode).append(" -Dsonargraph.qualityModelFile=")
                 .append(qualityModelFile.getAbsolutePath()).append(" -Dsonargraph.reportDirectory=").append(reportDirectory.getAbsolutePath())
-                .append(" -Dsonargraph.reportFileName=").append(projectDir.getName()).append(" -Dsonargraph.reportFormat=xml")
-                .append(" -Dsonargraph.installationDirectory=").append(INSTALLATION_DIRECTORY).toString();
+                .append(" -Dsonargraph.reportFileName=").append(projectDir.getName()).append(" -Dsonargraph.reportFormat=xml").toString();
         System.out.println("Executing: " + commandLine);
         final List<String> command = Arrays.asList(commandLine.split(" "));
 
