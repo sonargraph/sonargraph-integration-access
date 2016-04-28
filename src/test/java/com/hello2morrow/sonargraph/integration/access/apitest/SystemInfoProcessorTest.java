@@ -25,6 +25,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,7 +107,7 @@ public class SystemInfoProcessorTest
     @Test
     public void testReadValidReportAndOverrideSystemBaseDir()
     {
-        final String baseDir = "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture";
+        final String baseDir = Paths.get(".").toAbsolutePath().normalize().toString();
         final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<ns2:softwareSystem xmlns:ns2="http://www.hello2morrow.com/sonargraph/core" id="4f5cf00ec14ad309a283d46e084d18d0" version="8.9.0.0">
+    <description></description>
+    <module xmlns:ns4="http://www.hello2morrow.com/sonargraph/languageprovider/java" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:xsdJavaModule" name="xproject-metric-aggregation" id="6b7aad0ebb4ca3dcd83f2ac8ff6e0770" language="Java">
+        <description></description>
+        <rootPath name="./target/classes"></rootPath>
+        <sourceRootPath name="./src/main/java"></sourceRootPath>
+    </module>
+</ns2:softwareSystem>

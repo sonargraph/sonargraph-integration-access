@@ -17,6 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.util.Optional;
+
 public interface INamedElement extends IElement
 {
     public String getKind();
@@ -26,4 +28,6 @@ public interface INamedElement extends IElement
     public String getFqName();
 
     public int getLineNumber();
+
+    public Optional<ISourceFile> getSourceFile();
 }

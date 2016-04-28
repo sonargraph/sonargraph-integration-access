@@ -9,6 +9,7 @@ For a general overview about the functionality that Sonargraph offers, take a lo
 The variant Sonargraph Explorer is free for Java and C# projects, but only runs a limited number of analysers.
 
 Releases are published on Maven central, so the easiest way to use the plugin is to add a dependency to it in your Maven pom.xml. 
+See /src/test/xproject-metric-aggregation/pom.xml for an example.
 
 # Compatibility Matrix
 

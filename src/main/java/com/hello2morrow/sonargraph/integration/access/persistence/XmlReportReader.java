@@ -181,6 +181,7 @@ public final class XmlReportReader
 
         processSystemElements(softwareSystem, report);
         processModuleElements(softwareSystem, report);
+        addSources(softwareSystem);
 
         processMetrics(softwareSystem, report);
 
@@ -191,6 +192,30 @@ public final class XmlReportReader
         globalXmlIdToIssueMap.clear();
 
         return Optional.of(softwareSystem);
+    }
+
+    private void addSources(final SoftwareSystemImpl softwareSystem)
+    {
+        for (final Map.Entry<Object, IElement> entry : globalXmlToElementMap.entrySet())
+        {
+            if (entry.getKey() instanceof XsdNamedElement)
+            {
+                final XsdNamedElement element = (XsdNamedElement) entry.getKey();
+                final Object source = element.getSource();
+                if (source != null)
+                {
+                    final IElement sourceFile = globalXmlToElementMap.get(source);
+                    if (sourceFile != null)
+                    {
+                        assert sourceFile instanceof ISourceFile : "Unexpected class '" + sourceFile.getClass().getCanonicalName() + "'";
+                        assert entry.getValue() instanceof NamedElementImpl : "Unexpected class '" + entry.getValue().getClass().getCanonicalName()
+                                + "'";
+                        final NamedElementImpl namedElement = (NamedElementImpl) entry.getValue();
+                        namedElement.setSourceFile((ISourceFile) sourceFile);
+                    }
+                }
+            }
+        }
     }
 
     private void processWorkspace(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
@@ -719,7 +744,6 @@ public final class XmlReportReader
         final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
         final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
 
-        return new JaxbAdapter<>(
-                "com.hello2morrow.sonargraph.core.persistence.report", metricsXsd, reportXsd);
+        return new JaxbAdapter<>("com.hello2morrow.sonargraph.core.persistence.report", metricsXsd, reportXsd);
     }
 }
