@@ -39,6 +39,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
@@ -64,6 +65,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
+    private final List<IMetricThreshold> m_thresholds = new ArrayList<>();
     private final Map<IAnalyzer, Map<String, ICycleGroup>> cycleGroups = new HashMap<>();
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, List<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
@@ -392,5 +394,15 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<ResolutionType, List<IResolution>> getResolutions()
     {
         return Collections.unmodifiableMap(resolutionMap);
+    }
+
+    public void addMetricThreshold(final MetricThreshold threshold)
+    {
+        m_thresholds.add(threshold);
+    }
+
+    public List<IMetricThreshold> getMetricThresholds()
+    {
+        return Collections.unmodifiableList(m_thresholds);
     }
 }

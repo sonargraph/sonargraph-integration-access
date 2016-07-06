@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
 public interface IInfoProcessor
 {
@@ -41,6 +42,8 @@ public interface IInfoProcessor
      * @return Unmodifiable list of issues matching the predicate.
      */
     public List<IIssue> getIssues(Predicate<IIssue> filter);
+
+    public List<IThresholdViolationIssue> getThresholdViolationIssues(Predicate<IThresholdViolationIssue> filter);
 
     /**
      * @param filter the predicate used to filter the existing resolutions. If <code>null</code>, then all resolutions are returned.

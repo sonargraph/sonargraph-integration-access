@@ -59,6 +59,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 /**
@@ -79,6 +80,21 @@ public class SystemInfoProcessorTest
     public void before()
     {
         m_controller = new ControllerFactory().createController();
+    }
+
+    @Test
+    public void validateThresholdIssues()
+    {
+        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
+        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
+        final ISystemInfoProcessor processor = m_controller.createSystemInfoProcessor();
+        final List<IThresholdViolationIssue> thresholdIssues = processor.getThresholdViolationIssues(null);
+        assertEquals("Wrong number of issues", 3, thresholdIssues.size());
+
+        final List<IThresholdViolationIssue> unusedTypeThresholds = processor.getThresholdViolationIssues(th -> th.getThreshold().getMetricId()
+                .getName().equals("Unused Types"));
+        assertEquals("Wrong number of metric threshold issue", 1, unusedTypeThresholds.size());
+        assertEquals("Wrong metric value", 4, unusedTypeThresholds.get(0).getMetricValue().intValue());
     }
 
     @Test

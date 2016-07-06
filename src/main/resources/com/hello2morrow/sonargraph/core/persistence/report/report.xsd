@@ -154,14 +154,15 @@
                 <xs:element name="int" type="xsdMetricIntValue" minOccurs="0" maxOccurs="unbounded" />
             </xs:choice>
         </xs:sequence>
-        <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+        <xs:attribute name="id" type="xs:ID" use="optional"/> <!--  optional for backwards compatibility -->
+        <xs:attribute name="ref" type="xs:IDREF" use="required"/><!-- references the metric -->
         <xs:attribute name="debugInfo" type="xs:string"/>
     </xs:complexType>
     
     <xs:complexType name="xsdMetricFloatValue">
         <xs:simpleContent>
             <xs:extension base="xs:float">
-                <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+                <xs:attribute name="ref" type="xs:IDREF" use="required"/> <!--  references the element -->
                 <xs:attribute name="debugInfo" type="xs:string"/>
             </xs:extension>
         </xs:simpleContent>
@@ -170,7 +171,7 @@
     <xs:complexType name="xsdMetricIntValue">
         <xs:simpleContent>
             <xs:extension base="xs:int">
-                <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+                <xs:attribute name="ref" type="xs:IDREF" use="required"/> <!--  references the element -->
                 <xs:attribute name="debugInfo" type="xs:string"/>
             </xs:extension>
         </xs:simpleContent>
@@ -203,6 +204,21 @@
         </xs:complexContent>
     </xs:complexType>
     
+    <xs:complexType name="xsdMetricThresholds">
+        <xs:sequence>
+            <xs:element name="threshold" type="xsdMetricThreshold" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMetricThreshold">
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="metricId" type="xs:IDREF" use="required"/>
+        <xs:attribute name="metricLevel" type="xs:IDREF" use="required"/>
+        <xs:attribute name="lowerThreshold" type="xs:decimal" use="required"/>
+        <xs:attribute name="upperThreshold" type="xs:decimal" use="required"/>
+        <xs:attribute name="debugInfo" type="xs:string" use="optional"/>
+    </xs:complexType>
+    
     <xs:complexType name="xsdIssues">
         <xs:sequence>
             <xs:element name="elementIssues" type="xsdElementIssues" minOccurs="0" maxOccurs="1"/>
@@ -218,6 +234,7 @@
             <xs:element name="issue" type="xsdSimpleElementIssue" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="duplicate" type="xsdDuplicateBlockIssue" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="cycleGroups" type="xsdCycleGroupContainer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="thresholdViolation" type="xsdMetricThresholdViolationIssue" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
@@ -259,6 +276,15 @@
         <xs:complexContent>
             <xs:extension base="xsdAbstractElementIssue">
                 <xs:attribute name="affectedElement" type="xs:IDREF"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMetricThresholdViolationIssue">
+        <xs:complexContent>
+            <xs:extension base="xsdSimpleElementIssue">
+                <xs:attribute name="thresholdRef" type="xs:IDREF" use="required"/>
+                <xs:attribute name="metricValue" type="xs:decimal" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -337,6 +363,7 @@
             <xs:element name="metaData" type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
             <xs:element name="features" type="xsdFeatures" minOccurs="1" maxOccurs="1" />
             <xs:element name="analyzers" type="xsdAnalyzers" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="metricThresholds" type="xsdMetricThresholds" minOccurs="0" maxOccurs="1"/>
             <xs:element name="elementKinds" type="xsdElementKinds" minOccurs="1" maxOccurs="1"/>
             <xs:element name="workspace" type="xsdWorkspace" minOccurs="1" maxOccurs="1"/>
             <xs:element name="systemElements" type="xsdSystemElements" minOccurs="0" maxOccurs="1"/>

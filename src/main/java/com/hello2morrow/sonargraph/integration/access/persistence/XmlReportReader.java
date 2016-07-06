@@ -52,6 +52,9 @@ import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricId;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricIntValue;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricLevel;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricLevelValues;
+import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricThreshold;
+import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricThresholdViolationIssue;
+import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricThresholds;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricValue;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdModule;
 import com.hello2morrow.sonargraph.core.persistence.report.XsdModuleElements;
@@ -76,9 +79,11 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
@@ -97,6 +102,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricCateg
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricIdImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevelImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricProviderImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.MetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricValueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
@@ -105,6 +111,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirecto
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceRootDirectoryImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 
@@ -172,7 +179,6 @@ public final class XmlReportReader
 
         processAnalyzers(softwareSystem, report);
         processFeatures(softwareSystem, report);
-
         processWorkspace(softwareSystem, report, result);
         if (result.isFailure())
         {
@@ -184,6 +190,7 @@ public final class XmlReportReader
         addSources(softwareSystem);
 
         processMetrics(softwareSystem, report);
+        processMetricThresholds(softwareSystem, report);
 
         processIssues(softwareSystem, report, result);
         processResolutions(softwareSystem, report, result);
@@ -360,6 +367,32 @@ public final class XmlReportReader
         }
     }
 
+    private void processMetricThresholds(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processMetricThresholds' must not be null";
+        assert report != null : "Parameter 'report' of method 'processMetricThresholds' must not be null";
+
+        final XsdMetricThresholds metricThresholds = report.getMetricThresholds();
+        if (metricThresholds == null)
+        {
+            return;
+        }
+        for (final XsdMetricThreshold next : metricThresholds.getThreshold())
+        {
+            final Object id = globalXmlToElementMap.get(next.getMetricId());
+            assert id != null : "metric id '" + next.getMetricId() + "' of threshold '" + next.getDebugInfo() + "' must exist";
+            final IMetricId metricId = (IMetricId) id;
+
+            final Object level = globalXmlToElementMap.get(next.getMetricLevel());
+            assert level != null : "metric level '" + next.getMetricLevel() + "' of threshold '" + next.getDebugInfo() + "' must exist";
+            final IMetricLevel metricLevel = (IMetricLevel) level;
+
+            final MetricThreshold threshold = new MetricThreshold(metricId, metricLevel, next.getLowerThreshold(), next.getUpperThreshold());
+            softwareSystem.addMetricThreshold(threshold);
+            globalXmlToElementMap.put(next, threshold);
+        }
+    }
+
     private void processSystemElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addSystemElements' must not be null";
@@ -431,6 +464,7 @@ public final class XmlReportReader
         {
             softwareSystem.addMetricLevel(level);
         }
+        globalXmlToElementMap.putAll(metricLevelXsdToPojoMap);
 
         final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(),
                 categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap);
@@ -558,6 +592,7 @@ public final class XmlReportReader
         {
             processCycleGroupIssues(softwareSystem, report);
             processDuplicateIssues(softwareSystem, report);
+            processThresholdIssues(softwareSystem, report);
         }
 
         if (report.getIssues().getDepencencyIssues() != null)
@@ -644,6 +679,29 @@ public final class XmlReportReader
                 softwareSystem.addCycleGroup(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
             }
+        }
+    }
+
+    private void processThresholdIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        for (final XsdMetricThresholdViolationIssue next : report.getIssues().getElementIssues().getThresholdViolation())
+        {
+            final XsdElement affectedElement = (XsdElement) next.getAffectedElement();
+            final IElement affected = globalXmlToElementMap.get(affectedElement);
+            assert affected != null : "Affected element of issue '" + next + "' has not been processed";
+            assert affected != null && affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
+
+            final IIssueType issueType = getIssueType(softwareSystem, next);
+            final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
+
+            final IElement threshold = globalXmlToElementMap.get(next.getThresholdRef());
+            assert threshold != null : "threshold has not been added to system for '" + next.getDescription() + "'";
+
+            final IMetricThreshold metricThreshold = (IMetricThreshold) threshold;
+            final IThresholdViolationIssue issue = new ThresholdViolationIssue(issueType, next.getDescription() != null ? next.getDescription() : "",
+                    issueProvider, (INamedElement) affected, next.isHasResolution(), next.getLine(), next.getMetricValue(), metricThreshold);
+            softwareSystem.addIssue(issue);
+            globalXmlIdToIssueMap.put(next, issue);
         }
     }
 
