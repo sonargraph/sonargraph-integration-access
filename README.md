@@ -17,5 +17,5 @@ The following lists the compatibility with Sonargraph releases.
 
 | Sonargraph Version | Integration Access Version | 
 |:------------------:|:--------------------------:| 
-| 8.7                |             1.0            | 
-| 8.8.0              |             1.1            |
+| 8.7                | 1.0                        | 
+| 8.8.0 and newer    | 1.1 and newer              |

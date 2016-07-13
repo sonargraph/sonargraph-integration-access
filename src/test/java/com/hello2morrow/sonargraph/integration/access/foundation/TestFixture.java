@@ -24,6 +24,9 @@ public class TestFixture
     public static final String TEST_REPORT_NOT_EXISTING_BASE_PATH = "./src/test/resources/AlarmClock_notExistingBaseDir.xml";
     public static final String INVALID_TEST_REPORT = "./src/test/resources/AlarmClock_invalid.xml";
 
+    public static final String TEST_REPORT_THRESHOLD_VIOLATIONS = "./src/test/resources/AlarmClock_thresholdViolations.xml";
+    public static final String TEST_REPORT_WITH_DUPLICATES = "./src/test/resources/DuplicateInSameFileReport.xml";
+
     public static final String META_DATA_PATH = "./src/test/resources/ExportMetaData.xml";
     public static final String TEST_REPORT_MULTI_MODULE = "./src/test/resources/AlarmClockMain_Ant.xml";
     public static final String APPLICATION_MODULE = "Application";

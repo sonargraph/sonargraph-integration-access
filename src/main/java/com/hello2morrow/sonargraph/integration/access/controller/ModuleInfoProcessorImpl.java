@@ -35,6 +35,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 
@@ -62,6 +63,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public List<IIssue> getIssues(final Predicate<IIssue> filter)
     {
         final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
+        return Collections.unmodifiableList(systemIssues.stream().filter(this::isModuleElementOriginOfIssue).collect(Collectors.toList()));
+    }
+
+    @Override
+    public List<IThresholdViolationIssue> getThresholdViolationIssues(final Predicate<IThresholdViolationIssue> filter)
+    {
+        final List<IThresholdViolationIssue> systemIssues = systemInfoProcessor.getThresholdViolationIssues(filter);
         return Collections.unmodifiableList(systemIssues.stream().filter(this::isModuleElementOriginOfIssue).collect(Collectors.toList()));
     }
 

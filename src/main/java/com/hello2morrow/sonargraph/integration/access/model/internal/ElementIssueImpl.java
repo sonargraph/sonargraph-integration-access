@@ -26,7 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class ElementIssueImpl extends AbstractElementIssueImpl
+public class ElementIssueImpl extends AbstractElementIssueImpl
 {
     private final INamedElement element;
     private int line = -1;
