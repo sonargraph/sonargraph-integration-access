@@ -216,6 +216,6 @@ public class ModuleInfoProcessorTest
         final List<IIssue> duplicatesInModelIssues = sourceFilesWithIssueMap.get(duplicateInModel.get());
         final List<IIssue> duplicates = duplicatesInModelIssues.stream().filter(i -> (i instanceof IDuplicateCodeBlockIssue))
                 .map(i -> ((IDuplicateCodeBlockIssue) i)).collect(Collectors.toList());
-        assertEquals("Wrong number of duplicates", 3, duplicates.size());
+        assertEquals("Wrong number of duplicates", 2, duplicates.size());
     }
 }
