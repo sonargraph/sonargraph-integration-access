@@ -54,7 +54,7 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
     @Override
     public List<INamedElement> getAffectedElements()
     {
-        return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).collect(Collectors.toList()));
+        return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
     }
 
     public void setBlockSize(final int blockSize)
