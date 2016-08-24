@@ -19,7 +19,9 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 public final class OperationResultWithOutcome<T> extends OperationResult
 {
-    private T outcome;
+	private static final long serialVersionUID = -7003717724920078792L;
+	
+	private T outcome;
 
     public OperationResultWithOutcome(String description)
     {

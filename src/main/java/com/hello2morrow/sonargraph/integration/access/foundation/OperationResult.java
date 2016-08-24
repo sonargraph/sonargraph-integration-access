@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
 
 public class OperationResult implements IResult
 {
-    public enum Status implements IStandardEnumeration
+	private static final long serialVersionUID = -6766490149645425638L;
+
+	public enum Status implements IStandardEnumeration
     {
         INFO,
         WARNING,
