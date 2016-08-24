@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-public interface IResult
+import java.io.Serializable;
+
+public interface IResult extends Serializable
 {
     public boolean isSuccess();
 
