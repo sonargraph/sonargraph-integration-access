@@ -57,8 +57,8 @@ final class JaxbAdapter<T>
             sources[i] = new StreamSource(schemaUrl[i].openStream());
         }
 
-        final Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
         final JAXBContext jaxbContextProject = creator.get();
+        final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
 
         reader = createReader(jaxbContextProject, schema);
     }

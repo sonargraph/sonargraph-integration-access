@@ -34,7 +34,7 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
     private SoftwareSystemImpl softwareSystem;
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile)
+    public OperationResult loadSystemReport(final File systemReportFile, final boolean enableSchemaValidation)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
 
@@ -54,7 +54,7 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
         }
 
         final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result);
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, enableSchemaValidation);
         if (!readResult.isPresent() || result.isFailure())
         {
             return result;
@@ -65,7 +65,13 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
     }
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
+    public OperationResult loadSystemReport(final File systemReportFile)
+    {
+        return loadSystemReport(systemReportFile, false);
+    }
+
+    @Override
+    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory, final boolean enableSchemaValidation)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
         assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
@@ -86,7 +92,7 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
             return result;
         }
 
-        result.addMessagesFrom(loadSystemReport(systemReportFile));
+        result.addMessagesFrom(loadSystemReport(systemReportFile, enableSchemaValidation));
         if (result.isFailure())
         {
             return result;
@@ -94,6 +100,12 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
         softwareSystem.setBaseDir(Paths.get(baseDirectory.getAbsolutePath()).normalize().toString());
 
         return result;
+    }
+
+    @Override
+    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
+    {
+        return loadSystemReport(systemReportFile, baseDirectory, false);
     }
 
     @Override

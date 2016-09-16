@@ -117,13 +117,22 @@ import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEven
 
 public final class XmlReportReader
 {
+    private static final String REPORT_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
     private static final String REPORT_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/report.xsd";
     private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
     private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
     private final Map<Object, IIssue> globalXmlIdToIssueMap = new HashMap<>();
 
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
+    /**
+     * Reads an XML report and allows to enable XML schema validation.
+     * For big reports with thousands of elements, issues and resolutions the schema validation should be switched off.
+     *
+     * @param reportFile XML file that is expected to exist and be readable.
+     * @param result Contains info about errors.
+     * @param enableSchemaValidation flag to switch XML validation off.
+     */
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result, final boolean enableSchemaValidation)
     {
         assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
         assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
@@ -135,7 +144,7 @@ public final class XmlReportReader
         JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter;
         try
         {
-            jaxbAdapter = createJaxbAdapter();
+            jaxbAdapter = createJaxbAdapter(enableSchemaValidation);
         }
         catch (final Exception e)
         {
@@ -164,7 +173,17 @@ public final class XmlReportReader
             }
         }
         return Optional.empty();
+    }
 
+    /**
+     * Reads an XML report without schema validation.
+     *
+     * @param reportFile XML file that is expected to exist and be readable.
+     * @param result Contains info about errors.
+     */
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
+    {
+        return readReportFile(reportFile, result, false);
     }
 
     private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final OperationResult result)
@@ -797,11 +816,16 @@ public final class XmlReportReader
         return new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
     }
 
-    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter() throws Exception
+    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter(final boolean enableSchemaValidation) throws Exception
     {
-        final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
-        final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
+        if (enableSchemaValidation)
+        {
+            final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
+            final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
 
-        return new JaxbAdapter<>("com.hello2morrow.sonargraph.core.persistence.report", metricsXsd, reportXsd);
+            return new JaxbAdapter<>(REPORT_NAMESPACE, metricsXsd, reportXsd);
+        }
+
+        return new JaxbAdapter<>(REPORT_NAMESPACE);
     }
 }
