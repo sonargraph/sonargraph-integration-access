@@ -50,6 +50,18 @@ public interface ISingleExportMetaData extends IExportMetaData
         }
 
         @Override
+        public Map<String, IIssueProvider> getIssueProviders()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Override
+        public Map<String, IIssueType> getIssueTypes()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Override
         public IBasicSoftwareSystemInfo getSystemInfo()
         {
             return new IBasicSoftwareSystemInfo()

@@ -31,9 +31,11 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     private final List<IMetricLevel> levels;
     private final IMetricProvider provider;
     private final boolean isFloat;
+    private final double worstValue;
+    private final double bestValue;
 
     public MetricIdImpl(final String name, final String presentationName, final String description, final List<IMetricCategory> categories,
-            final List<IMetricLevel> levels, final IMetricProvider provider, final boolean isFloat)
+            final List<IMetricLevel> levels, final IMetricProvider provider, final boolean isFloat, final double bestValue, final double worstValue)
     {
         super(name, presentationName, description);
         assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'setCategories' must not be empty";
@@ -44,6 +46,8 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         this.levels = levels;
         this.provider = provider;
         this.isFloat = isFloat;
+        this.bestValue = bestValue;
+        this.worstValue = worstValue;
     }
 
     /* (non-Javadoc)
@@ -77,6 +81,18 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     public List<IMetricLevel> getLevels()
     {
         return Collections.unmodifiableList(levels);
+    }
+
+    @Override
+    public Double getBestValue()
+    {
+        return bestValue;
+    }
+
+    @Override
+    public Double getWorstValue()
+    {
+        return worstValue;
     }
 
     @Override

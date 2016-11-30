@@ -98,13 +98,6 @@ public class SystemInfoProcessorTest
     }
 
     @Test
-    public void testReadValidReportForAlarmClockMain_Ant()
-    {
-        final OperationResult result = m_controller.loadSystemReport(new File(ALARM_CLOCK_MAIN_ANT));
-        assertTrue(result.toString(), result.isSuccess());
-    }
-
-    @Test
     public void testReadValidReport()
     {
         final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH));
@@ -150,7 +143,7 @@ public class SystemInfoProcessorTest
         assertEquals("Wrong id", "4df288656010188b4d84a2a03bb0ecb9", softwareSystem.getSystemId());
         assertEquals("Wrong system name", "AlarmClock", softwareSystem.getPresentationName());
         assertEquals("Wrong path", systemPath, softwareSystem.getPath());
-        assertEquals("Wrong version", "8.7.0.0", softwareSystem.getVersion());
+        assertEquals("Wrong version", "9.1.0.100", softwareSystem.getVersion());
         //TODO: Activate this check. De-activated now, because the test file needs to be re-generated too often.
         //assertEquals("Wrong timestamp", 1444285242759L, softwareSystem.getTimestamp());
         assertEquals("Wrong description", "", softwareSystem.getDescription());
@@ -225,7 +218,7 @@ public class SystemInfoProcessorTest
         final Map<IMetricId, Map<String, IMetricValue>> moduleLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels.get("Module"));
 
         //Module Metrics
-        assertEquals("Wrong number of metric ids on module level", 35, moduleLevelMetricValueMap.size());
+        assertEquals("Wrong number of metric ids on module level", 37, moduleLevelMetricValueMap.size());
         final IMetricId coreTotalLines = systemProcessor.getMetricId("CoreTotalLines").get();
         final Map<String, IMetricValue> moduleMetricValueMap = moduleLevelMetricValueMap.get(coreTotalLines);
         assertEquals("Wrong number of metric values", 1, moduleMetricValueMap.size());
@@ -250,7 +243,7 @@ public class SystemInfoProcessorTest
                 "Wrong metric value",
                 0.33,
                 componentMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/target/classes:com:h2m:alarm:presentation:AlarmHandler.java")
+                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java")
                         .getValue().floatValue(), 0.01);
 
         //Source File
@@ -262,7 +255,7 @@ public class SystemInfoProcessorTest
                 "Wrong metric value",
                 13,
                 sourceFileMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/target/classes:com:h2m:alarm:presentation:file:AlarmToFile.java")
+                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java")
                         .getValue().intValue());
 
         //LogicalProgrammingElement
@@ -284,7 +277,7 @@ public class SystemInfoProcessorTest
                 "Wrong metric value",
                 9,
                 typeMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/target/classes:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile")
+                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile")
                         .getValue().intValue());
 
         //Routine
@@ -296,7 +289,7 @@ public class SystemInfoProcessorTest
                 "Wrong metric value",
                 2,
                 routineMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/target/classes:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:handleAlarm()")
+                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:handleAlarm()")
                         .getValue().intValue());
     }
 
@@ -304,12 +297,12 @@ public class SystemInfoProcessorTest
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issue providers", 3, infoProcessor.getIssueProviders().size());
-        assertEquals("Wrong number of issue types", 8, infoProcessor.getIssueTypes().size());
+        assertEquals("Wrong number of issue types", 10, infoProcessor.getIssueTypes().size());
         assertTrue("Script issue type not found",
                 infoProcessor.getIssueTypes().stream().anyMatch((final IIssueType type) -> type.getName().equals("No incoming dependencies")));
 
-        assertEquals("Wrong number of issues", 19, infoProcessor.getIssues(null).size());
-        assertEquals("Wrong number of unresolved issues", 16, infoProcessor.getIssues((final IIssue issue) -> !issue.hasResolution()).size());
+        assertEquals("Wrong number of issues", 22, infoProcessor.getIssues(null).size());
+        assertEquals("Wrong number of unresolved issues", 21, infoProcessor.getIssues((final IIssue issue) -> !issue.hasResolution()).size());
 
         assertEquals("Wrong number of script based issues", 4,
                 infoProcessor.getIssues((final IIssue issue) -> issue.getIssueType().getName().equals("No incoming dependencies")).size());
@@ -332,18 +325,18 @@ public class SystemInfoProcessorTest
 
         assertEquals(
                 "Wrong number of issues matching predicate filter",
-                2,
+                7,
                 infoProcessor.getIssues(
-                        (final IIssue issue) -> issue.hasResolution() && issue.getIssueProvider().getName().equals("./createViolations.arc")).size());
+                        (final IIssue issue) -> !issue.hasResolution() && issue.getIssueProvider().getName().equals("./createViolations.arc")).size());
     }
 
     private void verifyResolutions(final ISoftwareSystem softwareSystem)
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();
-        assertEquals("Wrong number of resolutions", 2, infoProcessor.getResolutions(null).size());
-        assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions((final IResolution r) -> r.getType() == ResolutionType.FIX)
+        assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions(null).size());
+        assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions((final IResolution r) -> r.getType() == ResolutionType.TODO)
                 .size());
-        assertEquals("Wrong number of applicable resolutions", 2, infoProcessor.getResolutions((final IResolution r) -> r.isApplicable()).size());
+        assertEquals("Wrong number of applicable resolutions", 1, infoProcessor.getResolutions((final IResolution r) -> r.isApplicable()).size());
     }
 
     private void verifyMetrics(final ISoftwareSystem softwareSystem)
@@ -364,7 +357,7 @@ public class SystemInfoProcessorTest
                 metricProviders.stream().filter((final IMetricProvider p) -> p.getName().equals("JavaLanguageProvider")).findFirst().get()
                         .getPresentationName());
 
-        assertEquals("Wrong number of metric ids", 72, infoProcessor.getMetricIds().size());
+        assertEquals("Wrong number of metric ids", 76, infoProcessor.getMetricIds().size());
 
         final Map<String, IMetricLevel> allMetricLevels = infoProcessor.getMetricLevels().stream()
                 .collect(Collectors.toMap(IMetricLevel::getName, (final IMetricLevel level) -> level));

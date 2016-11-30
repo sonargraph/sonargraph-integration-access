@@ -50,4 +50,6 @@ public interface IIssueType extends IElement
     public IIssueCategory getCategory();
 
     public Severity getSeverity();
+
+    public String getDescription();
 }

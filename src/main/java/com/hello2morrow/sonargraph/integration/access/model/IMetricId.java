@@ -60,4 +60,8 @@ public interface IMetricId extends IElementWithDescription
     public boolean isFloat();
 
     public List<IMetricLevel> getLevels();
+
+    public Double getBestValue();
+
+    public Double getWorstValue();
 }

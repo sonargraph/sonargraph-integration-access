@@ -385,6 +385,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         getMetricsAccess().addIssueCategory(category);
     }
 
+    public Map<String, IIssueCategory> getIssueCategories()
+    {
+        return getMetricsAccess().getIssueCategories();
+    }
+
     @Override
     public String getVirtualModel()
     {

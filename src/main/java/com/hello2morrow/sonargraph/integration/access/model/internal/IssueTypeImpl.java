@@ -21,12 +21,14 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
-public final class IssueTypeImpl extends ElementImpl implements IIssueType
+public class IssueTypeImpl extends ElementImpl implements IIssueType
 {
     private final IIssueCategory category;
     private final Severity severity;
+    private final String description;
 
-    public IssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category)
+    public IssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category,
+            final String description)
     {
         super(name, presentationName);
         assert severity != null : "Parameter 'severity' of method 'IssueType' must not be null";
@@ -34,24 +36,25 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
 
         this.severity = severity;
         this.category = category;
+        this.description = description != null ? description : "";
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IIssueType#getCategory()
-     */
     @Override
     public IIssueCategory getCategory()
     {
         return category;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IIssueType#getSeverity()
-     */
     @Override
     public Severity getSeverity()
     {
         return severity;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return description;
     }
 
     @Override
@@ -61,6 +64,7 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
         int result = super.hashCode();
         result = prime * result + ((category == null) ? 0 : category.hashCode());
         result = prime * result + ((severity == null) ? 0 : severity.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
         return result;
     }
 
@@ -95,6 +99,19 @@ public final class IssueTypeImpl extends ElementImpl implements IIssueType
         {
             return false;
         }
+
+        if (description == null)
+        {
+            if (other.description != null)
+            {
+                return false;
+            }
+        }
+        else if (!description.equals(other.description))
+        {
+            return false;
+        }
+
         if (severity != other.severity)
         {
             return false;

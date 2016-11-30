@@ -3,6 +3,12 @@
     xmlns="http://www.hello2morrow.com/sonargraph/core/export"
     targetNamespace="http://www.hello2morrow.com/sonargraph/core/export">
 
+    <xs:complexType name="xsdElement">
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="presentationName" type="xs:string" use="required" />
+    </xs:complexType>
+    
     <xs:simpleType name="xsdOrderNumber">
         <xs:restriction base="xs:int">
             <xs:minInclusive value="0"/>
@@ -20,7 +26,37 @@
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="presentationName" type="xs:string" use="required"/>
     </xs:complexType>
-
+   
+    <xs:complexType name="xsdIssueProvider">
+        <xs:complexContent>
+            <xs:extension base="xsdElement"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueProviders">
+        <xs:sequence>
+            <xs:element name="issueProvider" type="xsdIssueProvider" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueTypes">
+        <xs:sequence>
+            <xs:element name="issueType" type="xsdIssueType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueType">
+        <xs:complexContent>
+            <xs:extension base="xsdElement">
+                <xs:attribute name="severity" type="xs:string" use="required"/>
+                <xs:attribute name="category" type="xs:IDREF" use="required"/>
+                <xs:attribute name="description" type="xs:string" use="optional" />
+                <!-- we need to wait for changes in the core to make this required (currently, there is no direct link between issueId and issueProvider-->
+                <xs:attribute name="provider" type="xs:IDREF" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
     <xs:complexType name="xsdMetricCategory">
         <xs:attribute name="id" type="xs:ID" use="required" />
         <xs:attribute name="name" type="xs:string" use="required" />
@@ -68,6 +104,8 @@
         <xs:attribute name="provider" type="xs:IDREF" use="required" />
         <xs:attribute name="isFloat" type="xs:boolean" use="required" />
         <xs:attribute name="levels" type="xs:IDREFS" use="required" />
+        <xs:attribute name="bestValue" type="xs:double" use="required" />
+        <xs:attribute name="worstValue" type="xs:double" use="required" />
     </xs:complexType>
     
     <xs:complexType name="xsdMetricIds">
@@ -78,7 +116,9 @@
     
     <xs:complexType name="xsdExportMetaData">
         <xs:sequence>
+            <xs:element name="issueProviders" type="xsdIssueProviders" minOccurs="1" maxOccurs="1" />
             <xs:element name="issueCategories" type="xsdIssueCategories" minOccurs="1" maxOccurs="1" />
+            <xs:element name="issueTypes" type="xsdIssueTypes" minOccurs="1" maxOccurs="1" />
             <xs:element name="metricProviders" type="xsdMetricProviders" minOccurs="1" maxOccurs="1" />
             <xs:element name="metricCategories" type="xsdMetricCategories" minOccurs="1" maxOccurs="1" />
             <xs:element name="metricLevels" type="xsdMetricLevels" minOccurs="1" maxOccurs="1" />
