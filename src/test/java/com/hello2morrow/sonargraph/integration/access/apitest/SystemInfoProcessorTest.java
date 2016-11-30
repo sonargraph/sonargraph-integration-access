@@ -68,7 +68,6 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
  */
 public class SystemInfoProcessorTest
 {
-    private static final String ALARM_CLOCK_MAIN_ANT = TestFixture.TEST_REPORT_MULTI_MODULE;
     private static final String APPLICATION_MODULE = TestFixture.APPLICATION_MODULE;
     private static final String INVALID_REPORT = TestFixture.INVALID_TEST_REPORT;
     private static final String REPORT_PATH = TestFixture.TEST_REPORT;
