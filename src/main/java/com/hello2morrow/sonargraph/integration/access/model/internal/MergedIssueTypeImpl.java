@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
@@ -31,9 +32,9 @@ public class MergedIssueTypeImpl extends IssueTypeImpl implements IMergedIssueTy
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
 
     public MergedIssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category,
-            final String description, final IBasicSoftwareSystemInfo system)
+            final IIssueProvider provider, final String description, final IBasicSoftwareSystemInfo system)
     {
-        super(name, presentationName, severity, category, description);
+        super(name, presentationName, severity, category, provider, description);
         assert system != null : "Parameter 'system' of method 'MergedIssueCategoryImpl' must not be null";
         systems.add(system);
     }

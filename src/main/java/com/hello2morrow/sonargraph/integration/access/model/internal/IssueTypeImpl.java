@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
@@ -26,9 +27,10 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
     private final IIssueCategory category;
     private final Severity severity;
     private final String description;
+    private final IIssueProvider provider;
 
     public IssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category,
-            final String description)
+            final IIssueProvider provider, final String description)
     {
         super(name, presentationName);
         assert severity != null : "Parameter 'severity' of method 'IssueType' must not be null";
@@ -37,6 +39,7 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
         this.severity = severity;
         this.category = category;
         this.description = description != null ? description : "";
+        this.provider = provider;
     }
 
     @Override
@@ -65,7 +68,14 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
         result = prime * result + ((category == null) ? 0 : category.hashCode());
         result = prime * result + ((severity == null) ? 0 : severity.hashCode());
         result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
         return result;
+    }
+
+    @Override
+    public IIssueProvider getProvider()
+    {
+        return provider;
     }
 
     @Override
@@ -112,11 +122,22 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
             return false;
         }
 
+        if (provider == null)
+        {
+            if (other.provider != null)
+            {
+                return false;
+            }
+        }
+        else if (!provider.equals(other.provider))
+        {
+            return false;
+        }
+
         if (severity != other.severity)
         {
             return false;
         }
         return true;
     }
-
 }

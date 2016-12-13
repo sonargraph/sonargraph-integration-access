@@ -108,7 +108,8 @@ public final class XmlExportMetaDataReader
         {
             if (result.isFailure() || !xmlRoot.isPresent())
             {
-                result.addError(IOMessageCause.WRONG_FORMAT, "Report is corrupt");
+                result.addError(IOMessageCause.WRONG_FORMAT,
+                        "Report is corrupt, please ensure that versions of SonargraphBuild and Sonargraph SonarQube Plugin are compatible");
             }
         }
 
@@ -140,7 +141,7 @@ public final class XmlExportMetaDataReader
         }
 
         final Map<Object, IssueTypeImpl> issueTypeXsdToPojoMap = XmlExportMetaDataReader.processIssueTypes(xsdMetaData, issueCategoryXsdToPojoMap,
-                result);
+                issueProviderXsdToPojoMap, result);
         for (final IssueTypeImpl issueType : issueTypeXsdToPojoMap.values())
         {
             metaData.addIssueType(issueType);
@@ -279,10 +280,11 @@ public final class XmlExportMetaDataReader
     }
 
     private static Map<Object, IssueTypeImpl> processIssueTypes(final XsdExportMetaData xsdMetaData, final Map<Object, IssueCategoryImpl> categories,
-            final OperationResult result)
+            final Map<Object, IssueProviderImpl> providers, final OperationResult result)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetaData' of method 'processIssueTypes' must not be null";
         assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'processIssueTypes' must not be empty";
+        assert providers != null : "Parameter 'providers' of method 'processIssueTypes' must not be null";
         assert result != null : "Parameter 'result' of method 'processIssueTypes' must not be null";
 
         final Map<Object, IssueTypeImpl> issueTypeXsdToPojoMap = new LinkedHashMap<>();
@@ -304,7 +306,8 @@ public final class XmlExportMetaDataReader
                 severity = Severity.ERROR;
             }
 
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category, next.getDescription());
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category, providers.get(next
+                    .getProvider()), next.getDescription());
             issueTypeXsdToPojoMap.put(next, issueType);
         }
         return Collections.unmodifiableMap(issueTypeXsdToPojoMap);

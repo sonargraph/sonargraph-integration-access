@@ -158,7 +158,10 @@ public final class XmlReportReader
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(reportFile)))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+            if (xmlRoot.isPresent())
+            {
+                return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+            }
         }
         catch (final Exception ex)
         {
@@ -589,6 +592,7 @@ public final class XmlReportReader
         {
             final IssueProviderImpl issueProvider = new IssueProviderImpl(next.getName(), next.getPresentationName());
             softwareSystem.addIssueProvider(issueProvider);
+            globalXmlToElementMap.put(next, issueProvider);
         }
 
         final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(report.getMetaData());
@@ -614,8 +618,19 @@ public final class XmlReportReader
             }
             final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
             assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
+
+            final IElement provider;
+            if (next.getProvider() != null)
+            {
+                provider = globalXmlToElementMap.get(next.getProvider());
+            }
+            else
+            {
+                provider = null;
+            }
+
             final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, (IIssueCategory) namedElement,
-                    next.getDescription());
+                    (IIssueProvider) provider, next.getDescription());
             softwareSystem.addIssueType(issueType);
         }
 

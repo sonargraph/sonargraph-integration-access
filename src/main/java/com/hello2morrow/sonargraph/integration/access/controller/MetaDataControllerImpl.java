@@ -232,7 +232,7 @@ class MetaDataControllerImpl implements IMetaDataController
                     issueTypes.put(
                             nextType.getKey(),
                             new MergedIssueTypeImpl(type.getName(), type.getPresentationName(), type.getSeverity(), type.getCategory(), type
-                                    .getDescription(), data.getSystemInfo()));
+                                    .getProvider(), type.getDescription(), data.getSystemInfo()));
                 }
                 else
                 {
