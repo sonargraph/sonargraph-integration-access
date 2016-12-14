@@ -35,13 +35,13 @@
     
     <xs:complexType name="xsdIssueProviders">
         <xs:sequence>
-            <xs:element name="issueProvider" type="xsdIssueProvider" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="issueProvider" type="xsdIssueProvider" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="xsdIssueTypes">
         <xs:sequence>
-            <xs:element name="issueType" type="xsdIssueType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="issueType" type="xsdIssueType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
