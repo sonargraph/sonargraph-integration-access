@@ -22,13 +22,13 @@ import java.util.Collections;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider;
 
-public class MergedIssueCategoryImpl extends IssueCategoryImpl implements IMergedIssueCategory
+public class MergedIssueProviderImpl extends IssueProviderImpl implements IMergedIssueProvider
 {
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
 
-    public MergedIssueCategoryImpl(final String name, final String presentationName, final IBasicSoftwareSystemInfo system)
+    public MergedIssueProviderImpl(final String name, final String presentationName, final IBasicSoftwareSystemInfo system)
     {
         super(name, presentationName);
         assert system != null : "Parameter 'system' of method 'MergedIssueCategoryImpl' must not be null";
@@ -72,7 +72,7 @@ public class MergedIssueCategoryImpl extends IssueCategoryImpl implements IMerge
         {
             return false;
         }
-        final MergedIssueCategoryImpl other = (MergedIssueCategoryImpl) obj;
+        final MergedIssueProviderImpl other = (MergedIssueProviderImpl) obj;
         if (systems == null)
         {
             if (other.systems != null)

@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -35,6 +37,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 abstract class AbstractExportMetaDataImpl implements IExportMetaData
 {
     private final Map<String, IIssueCategory> issueCategories = new LinkedHashMap<>();
+    private final Map<String, IIssueProvider> issueProviders = new LinkedHashMap<>();
+    private final Map<String, IIssueType> issueTypes = new LinkedHashMap<>();
     private final Map<String, IMetricCategory> metricCategories = new HashMap<>();
     private final Map<String, IMetricProvider> metricProviders = new TreeMap<>(new MetricProviderImpl.MetricProviderComparator());
     private final Map<String, IMetricLevel> metricLevels = new LinkedHashMap<>();
@@ -55,6 +59,21 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
         issueCategories.put(category.getName(), category);
     }
 
+    public void addIssueProvider(final IIssueProvider provider)
+    {
+        assert provider != null : "Parameter 'provider' of method 'addIssueProvider' must not be null";
+        assert !issueProviders.containsKey(provider.getName()) : "issueProvider '" + provider.getName() + "' has already been added";
+
+        issueProviders.put(provider.getName(), provider);
+    }
+
+    public void addIssueType(final IIssueType type)
+    {
+        assert type != null : "Parameter 'type' of method 'addIssueType' must not be null";
+        assert !issueTypes.containsKey(type.getName()) : "issueType '" + type.getName() + "' has already been added";
+        issueTypes.put(type.getName(), type);
+    }
+
     /* (non-Javadoc)
      * @see com.hello2morrow.sonargraph.integration.access.model.IExportMetaData#getIssueCategories()
      */
@@ -62,6 +81,18 @@ abstract class AbstractExportMetaDataImpl implements IExportMetaData
     public Map<String, IIssueCategory> getIssueCategories()
     {
         return Collections.unmodifiableMap(issueCategories);
+    }
+
+    @Override
+    public Map<String, IIssueProvider> getIssueProviders()
+    {
+        return Collections.unmodifiableMap(issueProviders);
+    }
+
+    @Override
+    public Map<String, IIssueType> getIssueTypes()
+    {
+        return Collections.unmodifiableMap(issueTypes);
     }
 
     /* (non-Javadoc)

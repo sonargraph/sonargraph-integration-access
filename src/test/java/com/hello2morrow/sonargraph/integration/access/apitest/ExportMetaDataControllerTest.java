@@ -71,6 +71,14 @@ public class ExportMetaDataControllerTest
         final String issueCategory = "ArchitectureViolation";
         assertNotNull("Issue Category '" + issueCategory + "' not found", metaData.getIssueCategories().get(issueCategory));
 
+        assertEquals("Wrong issue providers size", 8, metaData.getIssueProviders().size());
+        final String issueProvider = "./Core/BadSmells/UnusedTypes.scr";
+        assertNotNull("Issue Provier '" + issueProvider + "' not found", metaData.getIssueProviders().get(issueProvider));
+
+        assertEquals("Wrong issue types size", 109, metaData.getIssueTypes().size());
+        final String issueType = "WorkspaceDependencyProblematic";
+        assertNotNull("Issue Type '" + issueType + "' not found", metaData.getIssueTypes().get(issueType));
+
         assertEquals("Wrong metric categories size", 10, metaData.getMetricCategories().size());
         final String architectureCategory = "Architecture";
         assertNotNull("Metric category '" + architectureCategory + "' not found", metaData.getMetricCategories().get(architectureCategory));
@@ -89,7 +97,7 @@ public class ExportMetaDataControllerTest
         assertThat("Wrong number of levels for metric", coreLinesOfCode.getLevels(),
                 hasItems(metricLevelMap.get("System"), metricLevelMap.get("Module"), metricLevelMap.get("SourceFile")));
 
-        assertEquals("Wrong number of metrics", 74, metaData.getMetricIds().size());
+        assertEquals("Wrong number of metrics", 76, metaData.getMetricIds().size());
         final String scriptMetricId = "Unused Types";
         assertEquals("Metric id '" + scriptMetricId + "' has wrong presentation name", "Number of Unused Types",
                 metaData.getMetricIds().get(scriptMetricId).getPresentationName());
@@ -107,6 +115,16 @@ public class ExportMetaDataControllerTest
         assertTrue("Success expected", result.isSuccess());
         final IMergedExportMetaData metaData = result.getOutcome();
         assertEquals("Wrong identifier", files.get(0).getCanonicalPath() + ", " + files.get(1).getCanonicalPath(), metaData.getResourceIdentifier());
+
+        assertNotNull("Common issue category not found", metaData.getIssueCategories().get("ArchitectureViolation"));
+        assertNotNull("Individual issue category not found", metaData.getIssueCategories().get("Workspace2"));
+
+        assertNotNull("Common issue provider not found", metaData.getIssueProviders().get("./createViolations.arc"));
+        assertNotNull("Individual issue provider not found", metaData.getIssueProviders().get("./layers2.arc"));
+
+        assertNotNull("Common issue type not found", metaData.getIssueTypes().get("UnresolvedRequiredArtifact"));
+        assertNotNull("Individual issue type not found", metaData.getIssueTypes().get("WorkspaceDependencyProblematic2"));
+
         assertNotNull("Common metric not found", metaData.getMetricIds().get("CoreLinesOfCode"));
         assertNotNull("Individual metric of first file not found", metaData.getMetricIds().get("Unused Types"));
         assertNotNull("Individual metric of second file not found", metaData.getMetricIds().get("Unused Types2"));

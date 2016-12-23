@@ -36,8 +36,12 @@ import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -45,6 +49,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.ISingleExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MergedExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueCategoryImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueProviderImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueTypeImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SingleExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlExportMetaDataReader;
 
@@ -175,6 +181,9 @@ class MetaDataControllerImpl implements IMetaDataController
         }
 
         final Map<String, IMergedIssueCategory> issueCategories = new LinkedHashMap<>();
+        final Map<String, IMergedIssueProvider> issueProviders = new LinkedHashMap<>();
+        final Map<String, IMergedIssueType> issueTypes = new LinkedHashMap<>();
+
         final Map<String, IMetricCategory> metricCategories = new LinkedHashMap<>();
         final Map<String, IMetricProvider> metricProviders = new LinkedHashMap<>();
         final Map<String, IMetricId> metricIds = new LinkedHashMap<>();
@@ -197,6 +206,38 @@ class MetaDataControllerImpl implements IMetaDataController
                 {
                     final IMergedIssueCategory category = issueCategories.get(nextCat.getKey());
                     category.addSystem(data.getSystemInfo());
+                }
+            }
+
+            for (final Map.Entry<String, IIssueProvider> nextProvider : data.getIssueProviders().entrySet())
+            {
+                if (!issueProviders.containsKey(nextProvider.getKey()))
+                {
+                    final IIssueProvider provider = nextProvider.getValue();
+                    issueProviders.put(nextProvider.getKey(),
+                            new MergedIssueProviderImpl(provider.getName(), provider.getPresentationName(), data.getSystemInfo()));
+                }
+                else
+                {
+                    final IMergedIssueProvider provider = issueProviders.get(nextProvider.getKey());
+                    provider.addSystem(data.getSystemInfo());
+                }
+            }
+
+            for (final Map.Entry<String, IIssueType> nextType : data.getIssueTypes().entrySet())
+            {
+                if (!issueTypes.containsKey(nextType.getKey()))
+                {
+                    final IIssueType type = nextType.getValue();
+                    issueTypes.put(
+                            nextType.getKey(),
+                            new MergedIssueTypeImpl(type.getName(), type.getPresentationName(), type.getSeverity(), type.getCategory(), type
+                                    .getProvider(), type.getDescription(), data.getSystemInfo()));
+                }
+                else
+                {
+                    final IMergedIssueType type = issueTypes.get(nextType.getKey());
+                    type.addSystem(data.getSystemInfo());
                 }
             }
 
@@ -237,8 +278,8 @@ class MetaDataControllerImpl implements IMetaDataController
         final String identifier = exportDataMap.values().stream().map((final ISingleExportMetaData metaData) -> metaData.getResourceIdentifier())
                 .reduce((path1, path2) -> path1 + ", " + path2).get();
 
-        final MergedExportMetaDataImpl mergedExportMetaData = new MergedExportMetaDataImpl(systemMap.values(), issueCategories, metricCategories,
-                metricProviders, metricIds, metricLevels, identifier);
+        final MergedExportMetaDataImpl mergedExportMetaData = new MergedExportMetaDataImpl(systemMap.values(), issueCategories, issueProviders,
+                issueTypes, metricCategories, metricProviders, metricIds, metricLevels, identifier);
         result.setOutcome(mergedExportMetaData);
         return result;
     }

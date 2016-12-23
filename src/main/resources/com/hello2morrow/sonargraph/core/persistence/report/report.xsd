@@ -29,7 +29,7 @@
 
 	<xs:complexType name="xsdAnalyzer">
         <xs:complexContent>
-            <xs:extension base="xsdElement">
+            <xs:extension base="export:xsdElement">
                 <xs:attribute name="description" type="xs:string" use="optional"/>
                 <xs:attribute name="licensed" type="xs:boolean" use="required"/>
             </xs:extension>
@@ -102,16 +102,16 @@
         </xs:sequence>
         <xs:attribute name="ref" type="xs:IDREF" use="required"/>
    </xs:complexType>
-   
+<!--    
    <xs:complexType name="xsdElement">
         <xs:attribute name="id" type="xs:ID" use="required"/>
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="presentationName" type="xs:string" use="required" />
    </xs:complexType>
-   
+-->   
    <xs:complexType name="xsdNamedElement">
         <xs:complexContent>
-            <xs:extension base="xsdElement">
+            <xs:extension base="export:xsdElement">
                 <xs:attribute name="kind" type="xs:IDREF" use="required"/>
                 <xs:attribute name="fqName" type="xs:string" use="required"/>
                 <xs:attribute name="source" type="xs:IDREF" use="optional"/>
@@ -175,33 +175,6 @@
                 <xs:attribute name="debugInfo" type="xs:string"/>
             </xs:extension>
         </xs:simpleContent>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdIssueProvider">
-        <xs:complexContent>
-            <xs:extension base="xsdElement"/>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdIssueProviders">
-        <xs:sequence>
-            <xs:element name="issueProvider" type="xsdIssueProvider" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdIssueTypes">
-        <xs:sequence>
-            <xs:element name="issueType" type="xsdIssueType" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdIssueType">
-        <xs:complexContent>
-            <xs:extension base="xsdElement">
-                <xs:attribute name="severity" type="xs:string" use="required"/>
-                <xs:attribute name="category" type="xs:IDREF" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
     </xs:complexType>
     
     <xs:complexType name="xsdMetricThresholds">
@@ -370,8 +343,6 @@
             <xs:element name="moduleElements" type="xsdModuleElements" minOccurs="1" maxOccurs="unbounded"/>
             <xs:element name="systemMetricValues" type="xsdSystemMetricValues" minOccurs="0" maxOccurs="1" />
             <xs:element name="moduleMetricValues" type="xsdModuleMetricValues" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="issueProviders" type="xsdIssueProviders" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="issueTypes" type="xsdIssueTypes" minOccurs="0" maxOccurs="1" />
             <xs:element name="issues" type="xsdIssues" minOccurs="0" maxOccurs="1"/>
             <xs:element name="resolutions" type="xsdResolutions" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>

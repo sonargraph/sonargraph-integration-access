@@ -50,4 +50,11 @@ public interface IIssueType extends IElement
     public IIssueCategory getCategory();
 
     public Severity getSeverity();
+
+    /**
+     * @return the {@link IIssueProvider} - can be null.
+     */
+    public IIssueProvider getProvider();
+
+    public String getDescription();
 }

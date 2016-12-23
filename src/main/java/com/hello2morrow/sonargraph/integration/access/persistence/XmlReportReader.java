@@ -158,7 +158,10 @@ public final class XmlReportReader
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(reportFile)))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+            if (xmlRoot.isPresent())
+            {
+                return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+            }
         }
         catch (final Exception ex)
         {
@@ -169,7 +172,8 @@ public final class XmlReportReader
         {
             if (result.isFailure() || !xmlRoot.isPresent())
             {
-                result.addError(IOMessageCause.WRONG_FORMAT, "Report is corrupt");
+                result.addError(IOMessageCause.WRONG_FORMAT,
+                        "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
             }
         }
         return Optional.empty();
@@ -457,13 +461,6 @@ public final class XmlReportReader
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processMetrics' must not be null";
         assert xsdReport != null : "Parameter 'xsdReport' of method 'processMetrics' must not be null";
 
-        final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(xsdReport.getMetaData());
-        for (final IssueCategoryImpl category : issueCategoryXsdToPojoMap.values())
-        {
-            softwareSystem.addIssueCategory(category);
-        }
-        globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
-
         final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap = XmlExportMetaDataReader.processMetricCategories(xsdReport.getMetaData());
         for (final MetricCategoryImpl category : categoryXsdToPojoMap.values())
         {
@@ -592,20 +589,53 @@ public final class XmlReportReader
         }
         softwareSystem.setNumberOfIssues(report.getIssues().getNumberOfIssues());
 
-        if (report.getIssueProviders() != null)
+        for (final XsdIssueProvider next : report.getMetaData().getIssueProviders().getIssueProvider())
         {
-            processIssueProviders(softwareSystem, report);
+            final IssueProviderImpl issueProvider = new IssueProviderImpl(next.getName(), next.getPresentationName());
+            softwareSystem.addIssueProvider(issueProvider);
+            globalXmlToElementMap.put(next, issueProvider);
         }
 
-        if (report.getIssueTypes() != null)
+        final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(report.getMetaData());
+        for (final IssueCategoryImpl category : issueCategoryXsdToPojoMap.values())
         {
-            processIssueTypes(softwareSystem, report, result);
+            softwareSystem.addIssueCategory(category);
+        }
+        globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
+
+        for (final XsdIssueType next : report.getMetaData().getIssueTypes().getIssueType())
+        {
+            Severity severity;
+            try
+            {
+                severity = Severity.valueOf(StringUtility.convertStandardNameToConstantName(next.getSeverity()));
+            }
+            catch (final Exception e)
+            {
+                LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
+                        + "' is not supported, setting to '" + Severity.ERROR + "'");
+                severity = Severity.ERROR;
+            }
+            final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
+            assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
+
+            final IElement provider;
+            if (next.getProvider() != null)
+            {
+                provider = globalXmlToElementMap.get(next.getProvider());
+            }
+            else
+            {
+                provider = null;
+            }
+
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, (IIssueCategory) namedElement,
+                    (IIssueProvider) provider, next.getDescription());
+            softwareSystem.addIssueType(issueType);
         }
 
-        if (report.getIssues() != null)
-        {
-            processSimpleElementIssues(softwareSystem, report);
-        }
+        processSimpleElementIssues(softwareSystem, report);
 
         if (report.getIssues().getElementIssues() != null)
         {
@@ -740,39 +770,6 @@ public final class XmlReportReader
                     issueProvider, (INamedElement) affected, next.isHasResolution(), next.getLine());
             softwareSystem.addIssue(issue);
             globalXmlIdToIssueMap.put(next, issue);
-        }
-    }
-
-    private void processIssueTypes(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
-    {
-
-        for (final XsdIssueType next : report.getIssueTypes().getIssueType())
-        {
-            Severity severity;
-            try
-            {
-                severity = Severity.valueOf(StringUtility.convertStandardNameToConstantName(next.getSeverity()));
-            }
-            catch (final Exception e)
-            {
-                LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
-                        + "' is not supported, setting to '" + Severity.ERROR + "'");
-                severity = Severity.ERROR;
-            }
-            final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
-            assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, (IIssueCategory) namedElement);
-            softwareSystem.addIssueType(issueType);
-        }
-    }
-
-    private static void processIssueProviders(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
-    {
-        for (final XsdIssueProvider next : report.getIssueProviders().getIssueProvider())
-        {
-            final IssueProviderImpl issueProvider = new IssueProviderImpl(next.getName(), next.getPresentationName());
-            softwareSystem.addIssueProvider(issueProvider);
         }
     }
 

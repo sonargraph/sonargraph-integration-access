@@ -26,6 +26,8 @@ import java.util.Map;
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -36,6 +38,7 @@ public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl impleme
     private final List<IBasicSoftwareSystemInfo> systems;
 
     public MergedExportMetaDataImpl(final Collection<IBasicSoftwareSystemInfo> systems, final Map<String, IMergedIssueCategory> issueCategories,
+            final Map<String, IMergedIssueProvider> issueProviders, final Map<String, IMergedIssueType> issueTypes,
             final Map<String, IMetricCategory> metricCategories, final Map<String, IMetricProvider> metricProviders,
             final Map<String, IMetricId> metricIds, final Map<String, IMetricLevel> metricLevels, final String resourceIdentifier)
     {
@@ -44,6 +47,8 @@ public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl impleme
         this.systems = new ArrayList<>(systems);
 
         issueCategories.values().forEach(super::addIssueCategory);
+        issueProviders.values().forEach(super::addIssueProvider);
+        issueTypes.values().forEach(super::addIssueType);
         metricCategories.values().forEach(super::addMetricCategory);
         metricProviders.values().forEach(super::addMetricProvider);
         metricIds.values().forEach(super::addMetricId);

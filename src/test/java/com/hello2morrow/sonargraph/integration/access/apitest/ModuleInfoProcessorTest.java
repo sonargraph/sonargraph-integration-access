@@ -109,10 +109,11 @@ public class ModuleInfoProcessorTest
 
         final INamedElement srcRoot = application.getElements(JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(SRC_ROOT);
         assertNotNull("src root not found", srcRoot);
-        final INamedElement srcFile = application.getElements(JAVA_INTERNAL_COMPILATION_UNIT).get(
-                "Workspace:Application:../../smallTestProject/Application/target/classes:com:h2m:alarm:application:Main.java");
-
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcRoot));
+
+        final INamedElement srcFile = application.getElements(JAVA_INTERNAL_COMPILATION_UNIT).get(
+                "Workspace:Application:../../smallTestProject/Application/src/main/java:com:h2m:alarm:application:Main.java");
+        assertNotNull("src file not found", srcFile);
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcFile));
 
         final Optional<IModule> foundationOptional = m_controller.getSoftwareSystem().getModule("Foundation");
@@ -120,9 +121,8 @@ public class ModuleInfoProcessorTest
         final IModule foundation = foundationOptional.get();
         final INamedElement srcRoot2 = foundation.getElements(JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(
                 "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java");
-        final INamedElement srcFile2 = foundation
-                .getElements(JAVA_INTERNAL_COMPILATION_UNIT)
-                .get("Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/target/classes:com:h2m:common:observer:DuplicateInFoundation.java");
+        final INamedElement srcFile2 = foundation.getElements(JAVA_INTERNAL_COMPILATION_UNIT).get(
+                "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java");
         assertFalse("Element must not be contained in module", processor.isElementContainedInModule(srcRoot2));
         assertFalse("Element must not be contained in module", processor.isElementContainedInModule(srcFile2));
     }
@@ -136,7 +136,7 @@ public class ModuleInfoProcessorTest
 
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
         final List<IIssue> unresolvedIssues = processor.getIssues((final IIssue issue) -> !issue.hasResolution());
-        assertEquals("Wrong number of unresolved issues", 7, unresolvedIssues.size());
+        assertEquals("Wrong number of unresolved issues", 9, unresolvedIssues.size());
 
         final IIssueCategory architectureViolation = m_exportMetaData.getIssueCategories().get("ArchitectureViolation");
 
@@ -162,7 +162,7 @@ public class ModuleInfoProcessorTest
         final IModule application = applicationOptional.get();
 
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
-        assertEquals("Wrong number of resolutions for module '" + application.getName() + "'", 2, processor.getResolutions(null).size());
+        assertEquals("Wrong number of resolutions for module '" + application.getName() + "'", 1, processor.getResolutions(null).size());
         assertEquals("Wrong number of resolutions of type 'TODO'", 1,
                 processor.getResolutions((final IResolution r) -> r.getType().equals(ResolutionType.TODO)).size());
         assertEquals("Wrong number of resolutions of type 'Refactoring'", 0,
@@ -193,8 +193,8 @@ public class ModuleInfoProcessorTest
         assertEquals("Wrong absolute system directory",
                 "D:/00_repos/00_e4-sgng/com.hello2morrow.sonargraph.language.provider.java/src/test/architecture/AlarmClockWithArchitecture",
                 m_controller.getSoftwareSystem().getBaseDir());
-        final List<IIssue> issuesForMain = sourceFilesWithIssueMap.get(files.get(0));
-        assertEquals("Wrong number of issues for source file", 6, issuesForMain.size());
+        final List<IIssue> issuesForMain = sourceFilesWithIssueMap.get(main);
+        assertEquals("Wrong number of unresolved issues for source file", 8, issuesForMain.size());
     }
 
     @Test

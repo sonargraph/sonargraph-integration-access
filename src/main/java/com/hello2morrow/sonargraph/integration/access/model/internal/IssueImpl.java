@@ -31,7 +31,7 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
     public IssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final int line)
     {
-        super(name, presentationName, description);
+        super(name, presentationName, description != null ? description : "");
         assert provider != null : "Parameter 'provider' of method 'Issue' must not be null";
 
         this.issueType = issueType;

@@ -43,18 +43,12 @@ public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
         this.to = to;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue#getFrom()
-     */
     @Override
     public INamedElement getFrom()
     {
         return from;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue#getTo()
-     */
     @Override
     public INamedElement getTo()
     {
