@@ -172,7 +172,8 @@ public final class XmlReportReader
         {
             if (result.isFailure() || !xmlRoot.isPresent())
             {
-                result.addError(IOMessageCause.WRONG_FORMAT, "Report is corrupt");
+                result.addError(IOMessageCause.WRONG_FORMAT,
+                        "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
             }
         }
         return Optional.empty();
