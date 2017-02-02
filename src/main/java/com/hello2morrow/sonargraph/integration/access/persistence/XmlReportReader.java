@@ -272,11 +272,10 @@ public final class XmlReportReader
                                 nextRoot.getFqName());
                         break;
                     case "JavaSourceRootDirectoryPath":
+                        //$FALL-THROUGH$
+                    default:
                         rootDirectory = createRootDirectory(module, standardKind, presentationKind, nextRoot.getPresentationName(),
                                 nextRoot.getFqName());
-                        break;
-                    default:
-                        assert false : "Root directory kind '" + standardKind + "' is not supported";
                         break;
                     }
                 }

@@ -180,6 +180,12 @@ class MetaDataControllerImpl implements IMetaDataController
             }
         }
 
+        if (exportDataMap.isEmpty())
+        {
+            result.addError(IOMessageCause.FILE_NOT_FOUND, "No valid meta-data file(s) provided");
+            return result;
+        }
+
         final Map<String, IMergedIssueCategory> issueCategories = new LinkedHashMap<>();
         final Map<String, IMergedIssueProvider> issueProviders = new LinkedHashMap<>();
         final Map<String, IMergedIssueType> issueTypes = new LinkedHashMap<>();
