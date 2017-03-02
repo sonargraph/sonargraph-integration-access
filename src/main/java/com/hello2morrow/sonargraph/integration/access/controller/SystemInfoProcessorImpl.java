@@ -71,6 +71,16 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     }
 
     @Override
+    public boolean hasIssue(final Predicate<IIssue> filter)
+    {
+        if (filter == null)
+        {
+            throw new IllegalArgumentException("Missing mandatory argument 'filter'");
+        }
+        return softwareSystem.getIssues().entrySet().stream().flatMap(entry -> entry.getValue().stream()).anyMatch(filter);
+    }
+
+    @Override
     public List<IThresholdViolationIssue> getThresholdViolationIssues(final Predicate<IThresholdViolationIssue> filter)
     {
         if (filter == null)

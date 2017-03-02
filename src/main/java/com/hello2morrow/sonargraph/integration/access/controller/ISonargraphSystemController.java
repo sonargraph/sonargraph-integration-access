@@ -54,4 +54,6 @@ public interface ISonargraphSystemController
     public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 
     public ISystemInfoProcessor createSystemInfoProcessor();
+
+    public IReportDifferenceProcessor createReportDifferenceProcessor();
 }

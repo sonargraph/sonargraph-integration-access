@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
@@ -49,4 +50,6 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<IMetricProvider> getMetricProviders();
 
     public List<IFeature> getFeatures();
+
+    public boolean hasIssue(Predicate<IIssue> filter);
 }

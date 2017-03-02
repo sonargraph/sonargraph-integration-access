@@ -135,4 +135,12 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
     {
         return softwareSystem != null;
     }
+
+    @Override
+    public IReportDifferenceProcessor createReportDifferenceProcessor()
+    {
+        assert softwareSystem != null : "No software system available";
+
+        return new ReportDifferenceProcessorImpl(new SystemInfoProcessorImpl(softwareSystem));
+    }
 }
