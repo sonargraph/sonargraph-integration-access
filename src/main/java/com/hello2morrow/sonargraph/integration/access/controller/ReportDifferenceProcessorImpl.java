@@ -1,10 +1,12 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -15,8 +17,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 
 class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 {
@@ -54,51 +56,77 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             final IIssue original = originalIssues.get(next);
             if (original != null)
             {
-                if (next instanceof ThresholdViolationIssue)
-                {
-                    if (System.currentTimeMillis() > 0)
-                    {
-                        throw new RuntimeException(
-                                "Implementation needs to be changed by inspecting removed / added to belong to the same element and metric"
-                                        + "\nbecause equals() / hashCode() for threshold violation is checking for exact match");
-                    }
-                    final ThresholdViolationIssue originalTh = (ThresholdViolationIssue) original;
-                    final ThresholdViolationIssue th = (ThresholdViolationIssue) next;
-                    final Diff diff = determineThresholdDiff(originalTh, th);
-                    switch (diff)
-                    {
-                    case EQUAL:
-                        unchanged.add(next);
-                        removed.remove(next);
-                        break;
-                    case IMPROVED:
-                        improved.add(new Pair<IIssue, IIssue>(originalTh, th));
-                        removed.remove(next);
-                        break;
-                    case WORSE:
-                        worse.add(new Pair<IIssue, IIssue>(originalTh, th));
-                        removed.remove(next);
-                        break;
-                    case CHANGED:
-                        added.add(next);
-                        break;
-                    }
-                    continue;
-                }
                 unchanged.add(next);
             }
             else
             {
-
                 added.add(next);
             }
             removed.remove(next);
         }
 
+        processThresholdIssues(unchanged, added, removed, improved, worse);
         processCycleGroups(added, removed, improved, worse);
         processDuplicates(added, removed, improved, worse);
 
         return new IssueDeltaImpl(unchanged, added, new ArrayList<>(removed), improved, worse);
+    }
+
+    private void processThresholdIssues(final List<IIssue> unchanged, final Collection<IIssue> added, final Collection<IIssue> removed,
+            final List<Pair<IIssue, IIssue>> improved, final List<Pair<IIssue, IIssue>> worse)
+    {
+        assert unchanged != null : "Parameter 'unchanged' of method 'processThresholdIssues' must not be null";
+        assert added != null : "Parameter 'added' of method 'processThresholdIssues' must not be null";
+        assert removed != null : "Parameter 'removed' of method 'processThresholdIssues' must not be null";
+        assert improved != null : "Parameter 'improved' of method 'processThresholdIssues' must not be null";
+        assert worse != null : "Parameter 'worse' of method 'processThresholdIssues' must not be null";
+
+        final Predicate<? super IIssue> thresholdFilter = i -> i instanceof IThresholdViolationIssue;
+        final Function<? super IIssue, ? extends IThresholdViolationIssue> mapper = i -> (IThresholdViolationIssue) i;
+
+        final List<IThresholdViolationIssue> addedThresholdIssues = added.stream().filter(thresholdFilter).map(mapper).collect(Collectors.toList());
+        final List<IThresholdViolationIssue> removeThresholdIssues = removed.stream().filter(thresholdFilter).map(mapper)
+                .collect(Collectors.toList());
+        if (addedThresholdIssues.isEmpty() || removeThresholdIssues.isEmpty())
+        {
+            return;
+        }
+
+        final List<Pair<IThresholdViolationIssue, IThresholdViolationIssue>> changed = new ArrayList<>();
+        for (final IThresholdViolationIssue previous : removeThresholdIssues)
+        {
+            addedThresholdIssues.stream().filter(createSameThresholdPredicate(previous)).findAny()
+                    .ifPresent(i -> changed.add(new Pair<>(previous, i)));
+        }
+
+        for (final Pair<IThresholdViolationIssue, IThresholdViolationIssue> next : changed)
+        {
+            final IThresholdViolationIssue originalTh = next.getFirst();
+            final IThresholdViolationIssue th = next.getSecond();
+            final Diff diff = determineThresholdDiff(originalTh, th);
+            switch (diff)
+            {
+            case EQUAL:
+                unchanged.add(th);
+                break;
+            case IMPROVED:
+                improved.add(new Pair<IIssue, IIssue>(originalTh, th));
+                break;
+            case WORSE:
+                worse.add(new Pair<IIssue, IIssue>(originalTh, th));
+                break;
+            case CHANGED:
+                assert false : "Changed threshold violation issue must have been handled previously";
+                break;
+            }
+            removed.remove(originalTh);
+            added.remove(th);
+        }
+    }
+
+    private Predicate<? super IThresholdViolationIssue> createSameThresholdPredicate(final IThresholdViolationIssue thresholdIssue)
+    {
+        return a -> a.getThreshold().equals(thresholdIssue.getThreshold()) && a.getAffectedElements().equals(thresholdIssue.getAffectedElements());
     }
 
     @Override
@@ -145,7 +173,7 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         //also: check if there are probable matches, e.g. where only less than a threshold of elements have been changed.
     }
 
-    private Diff determineThresholdDiff(final ThresholdViolationIssue original, final ThresholdViolationIssue th)
+    private Diff determineThresholdDiff(final IThresholdViolationIssue original, final IThresholdViolationIssue th)
     {
         assert original != null : "Parameter 'original' of method 'determineThresholdDiff' must not be null";
         assert th != null : "Parameter 'th' of method 'determineThresholdDiff' must not be null";
@@ -180,8 +208,6 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         return null;
     }
 
-    //TODO Check
-
     @Override
     public boolean isNewIssue(final IIssue issue)
     {
@@ -192,6 +218,16 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             m_issues = new HashSet<>(baseSystem.getIssues(null));
         }
 
-        return !m_issues.contains(issue);
+        if (m_issues.contains(issue))
+        {
+            return false;
+        }
+
+        if (issue instanceof IThresholdViolationIssue)
+        {
+            return !m_issues.stream().filter(i -> i instanceof IThresholdViolationIssue).map(i -> (IThresholdViolationIssue) i)
+                    .anyMatch(createSameThresholdPredicate((IThresholdViolationIssue) issue));
+        }
+        return true;
     }
 }
