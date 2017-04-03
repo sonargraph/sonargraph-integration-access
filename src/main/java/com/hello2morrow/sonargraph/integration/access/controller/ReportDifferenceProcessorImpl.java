@@ -5,16 +5,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.model.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -106,10 +107,10 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             final Diff diff = determineThresholdDiff(originalTh, th);
             switch (diff)
             {
-            case EQUAL:
+            case UNCHANGED:
                 unchanged.add(th);
                 break;
-            case IMPROVED:
+            case BETTER:
                 improved.add(new Pair<IIssue, IIssue>(originalTh, th));
                 break;
             case WORSE:
@@ -182,7 +183,7 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final Number value = th.getMetricValue();
         if (originalValue.equals(value))
         {
-            return Diff.EQUAL;
+            return Diff.UNCHANGED;
         }
 
         final double lowerThreshold = original.getThreshold().getLowerThreshold().doubleValue();
@@ -196,12 +197,12 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         if (originalDouble < lowerThreshold)
         {
-            return originalDouble < doubleValue ? Diff.IMPROVED : Diff.WORSE;
+            return originalDouble < doubleValue ? Diff.BETTER : Diff.WORSE;
         }
 
         if (originalDouble > upperThreshold)
         {
-            return originalDouble > doubleValue ? Diff.IMPROVED : Diff.WORSE;
+            return originalDouble > doubleValue ? Diff.BETTER : Diff.WORSE;
         }
 
         assert false : "Unprocessed change of threshold violation (original|new): " + original + "|" + th;
@@ -229,5 +230,37 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                     .anyMatch(createSameThresholdPredicate((IThresholdViolationIssue) issue));
         }
         return true;
+    }
+
+    @Override
+    public Diff determineChange(final IIssue issue)
+    {
+        if (m_issues == null)
+        {
+            //since the issue list does not change, we cache them here for later access.
+            m_issues = new HashSet<>(baseSystem.getIssues(null));
+        }
+
+        if (m_issues.contains(issue))
+        {
+            return Diff.UNCHANGED;
+        }
+
+        if (issue instanceof IThresholdViolationIssue)
+        {
+            final IThresholdViolationIssue thresholdIssue = (IThresholdViolationIssue) issue;
+            final Optional<IThresholdViolationIssue> previous = m_issues.stream().filter(i -> i instanceof IThresholdViolationIssue)
+                    .map(i -> (IThresholdViolationIssue) i).filter(createSameThresholdPredicate(thresholdIssue)).findAny();
+            if (previous.isPresent())
+            {
+                return determineThresholdDiff(previous.get(), thresholdIssue);
+            }
+            return Diff.NO_MATCH_FOUND;
+        }
+
+        //TODO: Check duplicate
+        //TODO: Check cycle
+
+        return Diff.NO_MATCH_FOUND;
     }
 }

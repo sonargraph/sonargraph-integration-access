@@ -13,6 +13,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferen
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.model.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -135,6 +136,7 @@ public class ReportDifferenceProcessorTest
         int newIssueCounter = 0;
         for (final IIssue next : info2.getIssues(null))
         {
+            final Diff change = diffProcessor.determineChange(next);
             if (diffProcessor.isNewIssue(next))
             {
                 newIssueCounter++;
