@@ -36,6 +36,7 @@ public class TestFixture
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
     public static final String CSHARP_REPORT = "./src/test/resources/NHibernate_2017-04-03_11-59-50.xml";
     public static final String CPP_REPORT = "./src/test/resources/project_2_2017-04-03_14-54-53.xml";
+    public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
 
     /**
      * Resources to test merge functionality

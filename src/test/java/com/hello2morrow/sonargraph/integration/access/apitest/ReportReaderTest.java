@@ -44,7 +44,6 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public class ReportReaderTest
 {
-
     @Test
     public void processReportWithNoIssues()
     {
@@ -117,6 +116,34 @@ public class ReportReaderTest
         final IMetricValue value = moduleInfoProcessor.getMetricValueForElement(metricId, level, functionFqName).get();
 
         assertEquals("Wrong metric value", 2, value.getValue().intValue());
+    }
+
+    @Test
+    public void processCppReportWithLogicalNamespaces() throws Exception
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.CPP_REPORT_HILO));
+        assertTrue(result.toString(), result.isSuccess());
+        assertEquals("Wrong number of modules", 4, controller.getSoftwareSystem().getModules().size());
+
+        final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
+        assertEquals("Wrong number of duplicates", 4, info.getIssues(createUnresolvedIssueFilter("Duplicate Code")).size());
+        assertEquals("Wrong number of 'no definition found'", 5,
+                info.getIssues((final IIssue i) -> i.getIssueType().getPresentationName().equals("No definition found")).size());
+        assertEquals("Wrong number of workspace issues", 7, info.getIssues(createUnresolvedIssueFilter("Workspace")).size());
+
+        final IModule browser = controller.getSoftwareSystem().getModule("Browser").orElseThrow(() -> new Exception("Module 'Browser' not found"));
+        final Map<String, INamedElement> cppNamespaces = browser.getElements("CPlusPlusLogicalModuleNamespace");
+        assertTrue("no elements found", cppNamespaces.size() > 0);
+
+        //printLogicalElements(cppMemberFunctions);
+
+        final IModuleInfoProcessor moduleInfoProcessor = controller.createModuleInfoProcessor(browser);
+        final IMetricLevel level = moduleInfoProcessor.getMetricLevel("CppNamespace").orElseThrow(() -> new Exception("Metric level not found"));
+        final IMetricId metricId = moduleInfoProcessor.getMetricId(level, "CoreTypesModule").orElseThrow(() -> new Exception("Metric not found"));
+        assertEquals("Wrong number of types for module namespace", 22,
+                moduleInfoProcessor.getMetricValueForElement(metricId, level, "Logical module namespaces:Browser:Hilo:AsyncLoader").get().getValue()
+                        .intValue());
     }
 
     //    private void printLogicalElements(final Map<String, INamedElement> logicalModuleProgrammingElements)
