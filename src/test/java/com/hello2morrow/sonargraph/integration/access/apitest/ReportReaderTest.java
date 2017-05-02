@@ -64,6 +64,15 @@ public class ReportReaderTest
     }
 
     @Test
+    public void processReportCreatedWith9_3()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_9_3));
+        assertTrue(result.toString(), result.isSuccess());
+        assertEquals("Wrong number of modules", 4, controller.getSoftwareSystem().getModules().size());
+    }
+
+    @Test
     public void processCSharpReport() throws Exception
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();

@@ -97,8 +97,11 @@ public final class XmlExportMetaDataReader
         try (BufferedInputStream in = new BufferedInputStream(input))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
-            return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
+            if (xmlRoot.isPresent())
+            {
+                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
+                return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
+            }
         }
         catch (final Exception ex)
         {

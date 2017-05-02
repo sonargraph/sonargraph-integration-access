@@ -32,6 +32,9 @@ public class TestFixture
     public static final String APPLICATION_MODULE = "Application";
     public static final String MODEL_MODULE = "Model";
 
+    public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
+    public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";
+
     public static final String TEST_REPORT_WITHOUT_ISSUES = "./src/test/resources/ReportWithoutIssues.xml";
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
     public static final String CSHARP_REPORT = "./src/test/resources/NHibernate_2017-04-03_11-59-50.xml";
@@ -44,4 +47,5 @@ public class TestFixture
     public static final String META_DATA_PATH1 = "./src/test/resources/mergeMetaData/ExportMetaData1.xml";
     public static final String META_DATA_PATH1_OLD = "./src/test/resources/mergeMetaData/ExportMetaData1_old.xml";
     public static final String META_DATA_PATH2 = "./src/test/resources/mergeMetaData/ExportMetaData2.xml";
+    public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
 }

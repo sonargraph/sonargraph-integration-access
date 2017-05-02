@@ -88,6 +88,11 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     public Optional<ISourceFile> getSourceForElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceForElement' must not be null";
+        if (namedElement.getSourceFile().isPresent())
+        {
+            return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == namedElement.getSourceFile().get())
+                    .findFirst();
+        }
         return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
     }
