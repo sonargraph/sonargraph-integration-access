@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ResolutionImpl extends ElementImpl implements IResolution
 {
+    private static final long serialVersionUID = 6480407569513366548L;
     private final List<IIssue> issues;
     private final Priority priority;
     private final ResolutionType type;

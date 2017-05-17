@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory
 
 public class MergedIssueCategoryImpl extends IssueCategoryImpl implements IMergedIssueCategory
 {
+    private static final long serialVersionUID = -4616035494146560910L;
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
 
     public MergedIssueCategoryImpl(final String name, final String presentationName, final IBasicSoftwareSystemInfo system)

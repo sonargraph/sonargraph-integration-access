@@ -22,6 +22,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public final class SourceFileImpl extends NamedElementImpl implements ISourceFile
 {
+    private static final long serialVersionUID = -2940999235312739954L;
     private final IRootDirectory root;
 
     public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,

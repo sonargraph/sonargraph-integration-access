@@ -24,6 +24,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 
 public final class MetricThreshold implements IMetricThreshold
 {
+    private static final long serialVersionUID = -8392990712415156489L;
     private final Number upperThreshold;
     private final Number lowerThreshold;
     private final IMetricId metricId;

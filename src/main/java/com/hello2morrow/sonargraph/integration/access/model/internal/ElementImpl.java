@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IElement;
 
 public abstract class ElementImpl implements IElement
 {
+    private static final long serialVersionUID = 8912026050040232705L;
     private final String name;
     private final String presentationName;
 

@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IBasicSoftwareSystemInfo
+import java.io.Serializable;
+
+public interface IBasicSoftwareSystemInfo extends Serializable
 {
     public String getSystemId();
 

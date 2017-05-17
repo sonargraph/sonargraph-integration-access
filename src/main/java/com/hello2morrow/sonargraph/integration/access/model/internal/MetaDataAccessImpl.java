@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -28,14 +29,15 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
-//TODO: Rename to MetaDataAccess
-class MetricsAccessImpl
+class MetaDataAccessImpl implements Serializable
 {
+    private static final long serialVersionUID = 5722967552130841881L;
+
     private final SingleExportMetaDataImpl metaData;
 
     private final Map<String, IMetricLevel> metricLevels = new HashMap<>();
 
-    public MetricsAccessImpl(final String path, final String systemId, final String version, final long timestamp)
+    public MetaDataAccessImpl(final String path, final String systemId, final String version, final long timestamp)
     {
         assert version != null : "Parameter 'version' of method 'MetricsAccess' must not be null";
         metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(path, systemId, version, timestamp), path);

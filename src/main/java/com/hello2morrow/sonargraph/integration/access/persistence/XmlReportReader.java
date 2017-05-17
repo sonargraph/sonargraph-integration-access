@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -121,7 +122,7 @@ public final class XmlReportReader
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
     private static final String REPORT_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/report.xsd";
     private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
-    private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
+    private final Map<Object, IElement> globalXmlToElementMap = new LinkedHashMap<>();
     private final Map<Object, IIssue> globalXmlIdToIssueMap = new HashMap<>();
 
     /**
@@ -288,7 +289,6 @@ public final class XmlReportReader
 
                 if (rootDirectory != null)
                 {
-
                     module.addRootDirectory(rootDirectory);
                     globalXmlToElementMap.put(nextRoot, rootDirectory);
 
@@ -450,6 +450,7 @@ public final class XmlReportReader
                 final NamedElementImpl element = new NamedElementImpl(elementKind.getStandardKind(), elementKind.getPresentationKind(),
                         nextElement.getName(), nextElement.getPresentationName(), nextElement.getFqName(), nextElement.getLine());
                 module.addElement(element);
+                assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
                 globalXmlToElementMap.put(nextElement, element);
             }
         }

@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 
 public class FeaturesImpl extends ElementImpl implements IFeature
 {
+    private static final long serialVersionUID = -3224356251801166252L;
     private final boolean isLicensed;
 
     public FeaturesImpl(final String name, final String presentationName, final boolean licensed)

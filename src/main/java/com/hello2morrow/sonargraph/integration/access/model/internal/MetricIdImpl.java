@@ -27,6 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 public final class MetricIdImpl extends ElementWithDescriptionImpl implements IMetricId
 {
+    private static final long serialVersionUID = 6618223791961362393L;
     private final List<IMetricCategory> categories;
     private final List<IMetricLevel> levels;
     private final IMetricProvider provider;

@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
 
 public class OperationResult implements IResult
 {
-	private static final long serialVersionUID = -6766490149645425638L;
+    private static final long serialVersionUID = -6766490149645425638L;
 
-	public enum Status implements IStandardEnumeration
+    public enum Status implements IStandardEnumeration
     {
         INFO,
         WARNING,
@@ -50,8 +51,9 @@ public class OperationResult implements IResult
         //Marker interface
     }
 
-    public static final class Message
+    public static final class Message implements Serializable
     {
+        private static final long serialVersionUID = -7783022002494186583L;
         private final Status status;
         private final IMessageCause cause;
         private final String messageString;

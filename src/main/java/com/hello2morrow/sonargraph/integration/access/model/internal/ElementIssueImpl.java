@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public class ElementIssueImpl extends AbstractElementIssueImpl
 {
+    private static final long serialVersionUID = -3705193284431668430L;
     private final INamedElement element;
     private int line = -1;
     private int column = -1;

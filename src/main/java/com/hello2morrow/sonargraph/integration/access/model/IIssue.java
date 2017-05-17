@@ -17,9 +17,10 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IIssue
+public interface IIssue extends Serializable
 {
     public IIssueProvider getIssueProvider();
 

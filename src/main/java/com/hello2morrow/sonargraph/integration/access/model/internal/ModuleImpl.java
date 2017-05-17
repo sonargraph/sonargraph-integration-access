@@ -32,6 +32,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public final class ModuleImpl extends NamedElementContainerImpl implements IModule
 {
+    private static final long serialVersionUID = -4617725409511641491L;
     private final String language;
     private final List<IRootDirectory> rootDirectories = new ArrayList<>(2);
 

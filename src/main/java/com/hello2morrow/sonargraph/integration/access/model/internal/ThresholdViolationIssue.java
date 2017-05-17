@@ -25,6 +25,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationI
 
 public class ThresholdViolationIssue extends ElementIssueImpl implements IThresholdViolationIssue
 {
+    private static final long serialVersionUID = -1905279510781305516L;
     private final IMetricThreshold threshold;
     private final Number metricValue;
 

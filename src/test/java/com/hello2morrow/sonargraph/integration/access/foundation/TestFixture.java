@@ -41,6 +41,8 @@ public class TestFixture
     public static final String CPP_REPORT = "./src/test/resources/project_2_2017-04-03_14-54-53.xml";
     public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
 
+    public static final String ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT = "./src/test/resources/AlarmClock_ClassFileIssues.xml";
+
     /**
      * Resources to test merge functionality
      */

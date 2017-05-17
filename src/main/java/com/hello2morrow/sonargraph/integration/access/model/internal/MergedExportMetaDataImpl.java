@@ -35,6 +35,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 public class MergedExportMetaDataImpl extends AbstractExportMetaDataImpl implements IMergedExportMetaData
 {
+    private static final long serialVersionUID = 6747407316220337428L;
     private final List<IBasicSoftwareSystemInfo> systems;
 
     public MergedExportMetaDataImpl(final Collection<IBasicSoftwareSystemInfo> systems, final Map<String, IMergedIssueCategory> issueCategories,

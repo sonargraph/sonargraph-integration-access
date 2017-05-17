@@ -25,6 +25,8 @@ public interface ISingleExportMetaData extends IExportMetaData
 {
     public static final class Empty implements ISingleExportMetaData
     {
+        private static final long serialVersionUID = -8405764963352910497L;
+
         @Override
         public Map<String, IMetricProvider> getMetricProviders()
         {
@@ -66,6 +68,8 @@ public interface ISingleExportMetaData extends IExportMetaData
         {
             return new IBasicSoftwareSystemInfo()
             {
+                private static final long serialVersionUID = 1599596216021058066L;
+
                 @Override
                 public String getVersion()
                 {
