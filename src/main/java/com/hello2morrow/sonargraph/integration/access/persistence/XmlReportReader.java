@@ -813,7 +813,7 @@ public final class XmlReportReader
         return new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
     }
 
-    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter(final boolean enableSchemaValidation) throws Exception
+    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter(final boolean enableSchemaValidation) throws XmlProcessingException
     {
         if (enableSchemaValidation)
         {
