@@ -163,6 +163,14 @@ public class ReportReaderTest
     //        }
     //    }
 
+    @Test
+    public void processClassFileIssuesReport()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT));
+        assertTrue(result.toString(), result.isSuccess());
+    }
+
     private Predicate<IIssue> createUnresolvedIssueFilter(final String categoryPresentationName)
     {
         return (final IIssue i) -> !i.hasResolution() && i.getIssueType().getCategory().getPresentationName().equals(categoryPresentationName);
