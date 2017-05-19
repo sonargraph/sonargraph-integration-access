@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportReader;
+import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportWriter;
 
 class SonargraphSystemControllerImpl implements ISonargraphSystemController
 {
@@ -142,5 +143,25 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
         assert softwareSystem != null : "No software system available";
 
         return new ReportDifferenceProcessorImpl(new SystemInfoProcessorImpl(softwareSystem));
+    }
+
+    @Override
+    public OperationResult writeSystemReport(final File file)
+    {
+        assert file != null : "Parameter 'file' of method 'writeSystemReport' must not be null";
+        assert softwareSystem != null : "No software system available";
+
+        final OperationResult result = new OperationResult("Writing XML report");
+        final XmlReportWriter writer = new XmlReportWriter();
+        try
+        {
+            writer.writeReport(softwareSystem, file);
+        }
+        catch (final Exception ex)
+        {
+            result.addError(IOMessageCause.WRITE_ERROR, ex);
+        }
+
+        return result;
     }
 }

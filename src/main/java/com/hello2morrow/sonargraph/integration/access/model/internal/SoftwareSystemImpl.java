@@ -197,11 +197,17 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         issueProviders.put(provider.getName(), provider);
     }
 
+    /**
+     * @return a map with the name of the provider as key and the implementation as value.
+     */
     public Map<String, IIssueProvider> getIssueProviders()
     {
         return Collections.unmodifiableMap(issueProviders);
     }
 
+    /**
+     * @return a map with the name of the issue type as key and the implementation as value.
+     */
     public Map<String, IIssueType> getIssueTypes()
     {
         return Collections.unmodifiableMap(issueTypes);

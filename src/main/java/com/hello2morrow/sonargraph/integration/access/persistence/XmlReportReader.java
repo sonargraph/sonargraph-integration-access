@@ -21,7 +21,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,12 +114,9 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdVi
 import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 
-public final class XmlReportReader
+public final class XmlReportReader extends AbstractXmlReportAccess
 {
-    private static final String REPORT_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
-    private static final String REPORT_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/report.xsd";
-    private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
     private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
     private final Map<Object, IIssue> globalXmlIdToIssueMap = new HashMap<>();
 
@@ -810,18 +806,5 @@ public final class XmlReportReader
         assert fqName != null && fqName.length() > 0 : "Parameter 'fqName' of method 'createJavaClassRootDirectory' must not be empty";
 
         return new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
-    }
-
-    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter(final boolean enableSchemaValidation) throws Exception
-    {
-        if (enableSchemaValidation)
-        {
-            final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
-            final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
-
-            return new JaxbAdapter<>(REPORT_NAMESPACE, metricsXsd, reportXsd);
-        }
-
-        return new JaxbAdapter<>(REPORT_NAMESPACE);
     }
 }

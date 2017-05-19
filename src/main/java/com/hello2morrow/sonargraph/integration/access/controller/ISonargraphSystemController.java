@@ -56,4 +56,6 @@ public interface ISonargraphSystemController
     public ISystemInfoProcessor createSystemInfoProcessor();
 
     public IReportDifferenceProcessor createReportDifferenceProcessor();
+
+    public OperationResult writeSystemReport(File file);
 }
