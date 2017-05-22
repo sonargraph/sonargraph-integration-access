@@ -15,9 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IAnalyzer extends IElementWithDescription
+public enum Diff
 {
-    public boolean isLicensed();
+    BETTER,
+    WORSE,
+    UNCHANGED,
+    CHANGED, //if a lower threshold has been violated and then an upper threshold
+    NO_MATCH_FOUND;
 }

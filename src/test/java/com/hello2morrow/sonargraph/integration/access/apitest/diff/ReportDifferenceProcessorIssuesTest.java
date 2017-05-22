@@ -1,4 +1,21 @@
-package com.hello2morrow.sonargraph.integration.access.apitest;
+/**
+ * Sonargraph Integration Access
+ * Copyright (C) 2016 hello2morrow GmbH
+ * mailto: support AT hello2morrow DOT com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.hello2morrow.sonargraph.integration.access.apitest.diff;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -6,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
@@ -13,15 +31,15 @@ import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferen
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.model.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 
-public class ReportDifferenceProcessorTest
+public class ReportDifferenceProcessorIssuesTest
 {
     private static final String PERCENTAGE_OF_DEAD_CODE = "Percentage of dead code";
     private static final String CORE_TOTAL_LINES = "CoreTotalLines";
@@ -31,9 +49,6 @@ public class ReportDifferenceProcessorTest
 
     private static final String LARGE_REPORT_1 = "./src/test/diff/LargeReport_1.xml";
     private static final String LARGE_REPORT_2 = "./src/test/diff/LargeReport_2.xml";
-
-    private static final String LARGE_FULL_REPORT_1 = "./src/test/diff/LargeReport_with_Metrics_1.xml";
-    private static final String LARGE_FULL_REPORT_2 = "./src/test/diff/LargeReport_with_Metrics_2.xml";
 
     @Test
     public void compareIssuesInSmallReports()
@@ -86,26 +101,14 @@ public class ReportDifferenceProcessorTest
         assertEquals("Wrong improved issue", PERCENTAGE_OF_DEAD_CODE, improved3.getThreshold().getMetricId().getName());
     }
 
+    //This test can be used to test the performance as it compares reports of ~50 MB size.
+    @Ignore
     @Test
     public void compareIssuesOfLargeReports()
     {
         final String largeReport1 = LARGE_REPORT_1;
         final String largeReport2 = LARGE_REPORT_2;
 
-        compareReports(largeReport1, largeReport2);
-    }
-
-    @Test
-    public void compareMetricsOfReports()
-    {
-        final String largeReport1 = LARGE_FULL_REPORT_1;
-        final String largeReport2 = LARGE_FULL_REPORT_2;
-
-        compareReports(largeReport1, largeReport2);
-    }
-
-    private void compareReports(final String largeReport1, final String largeReport2)
-    {
         final long start1 = System.currentTimeMillis();
         final ISonargraphSystemController controller = new ControllerFactory().createController();
         final OperationResult load1 = controller.loadSystemReport(new File(largeReport1));
@@ -126,10 +129,9 @@ public class ReportDifferenceProcessorTest
         final IIssueDelta delta = diffProcessor.getIssueDelta(info2, null);
         System.out.println("Time needed to create delta: " + (System.currentTimeMillis() - start3));
 
-        //TODO:
-        //        assertEquals("Wrong number of unchanged", 70262, delta.getUnchangedIssues().size());
-        //        assertEquals("Wrong number of removed", 10, delta.getRemovedIssues().size());
-        //        assertEquals("Wrong number of added", 10, delta.getAddedIssues().size());
+        assertEquals("Wrong number of unchanged", 70262, delta.getUnchanged().size());
+        assertEquals("Wrong number of removed", 10, delta.getRemoved().size());
+        assertEquals("Wrong number of added", 10, delta.getAdded().size());
 
         final long start4 = System.currentTimeMillis();
 
@@ -137,14 +139,13 @@ public class ReportDifferenceProcessorTest
         for (final IIssue next : info2.getIssues(null))
         {
             final Diff change = diffProcessor.determineChange(next);
-            if (diffProcessor.isNewIssue(next))
+            if (change == Diff.NO_MATCH_FOUND)
             {
                 newIssueCounter++;
             }
         }
         System.out.println("Time needed to check issues individually: " + (System.currentTimeMillis() - start4));
-        //TODO
-        //        assertEquals("Wrong number of new issues", 10, newIssueCounter);
+        assertEquals("Wrong number of new issues", 10, newIssueCounter);
 
         System.out.println("\nTime needed for test execution:" + (System.currentTimeMillis() - start1));
     }
@@ -166,12 +167,12 @@ public class ReportDifferenceProcessorTest
         {
             if (next instanceof IDependencyIssue)
             {
-                assertTrue("Issue must be new: " + next, diffProcessor.isNewIssue(next));
+                assertEquals("Issue must be new: " + next, Diff.NO_MATCH_FOUND, diffProcessor.determineChange(next));
                 newIssueCounter++;
             }
             else if (next instanceof ThresholdViolationIssue || next instanceof ICycleGroup)
             {
-                assertFalse("Issue must not be new: " + next, diffProcessor.isNewIssue(next));
+                assertFalse("Issue must not be new: " + next, Diff.NO_MATCH_FOUND == diffProcessor.determineChange(next));
             }
         }
         assertEquals("Wrong number of new issues", 6, newIssueCounter);

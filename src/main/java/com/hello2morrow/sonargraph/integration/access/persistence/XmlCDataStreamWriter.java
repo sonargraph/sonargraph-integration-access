@@ -1,3 +1,20 @@
+/**
+ * Sonargraph Integration Access
+ * Copyright (C) 2016 hello2morrow GmbH
+ * mailto: support AT hello2morrow DOT com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.util.regex.Pattern;
@@ -8,7 +25,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 /**
  * Implementation which is able to decide to use a CDATA section for a string.
- * @See http://stackoverflow.com/questions/3136375/how-to-generate-cdata-block-using-jaxb
+ * @see http://stackoverflow.com/questions/3136375/how-to-generate-cdata-block-using-jaxb
  */
 public class XmlCDataStreamWriter implements XMLStreamWriter
 {
@@ -32,7 +49,7 @@ public class XmlCDataStreamWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final String text) throws XMLStreamException
     {
-        boolean useCData = XML_CHARS.matcher(text).find();
+        final boolean useCData = XML_CHARS.matcher(text).find();
         if (useCData)
         {
             m_xmlStreamWriter.writeCData(text.replaceAll(CDATA_END, CDATA_END_ENCODED));

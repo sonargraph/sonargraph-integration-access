@@ -24,6 +24,7 @@ import java.util.Optional;
 import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
@@ -56,6 +57,38 @@ class SonargraphSystemControllerImpl implements ISonargraphSystemController
 
         final XmlReportReader persistence = new XmlReportReader();
         final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, enableSchemaValidation);
+        if (!readResult.isPresent() || result.isFailure())
+        {
+            return result;
+        }
+
+        softwareSystem = readResult.get();
+        return result;
+    }
+
+    @Override
+    public OperationResult loadSystemReport(final File systemReportFile, final INamedElementAdjuster adjuster)
+    {
+        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
+        assert adjuster != null : "Parameter 'adjuster' of method 'loadSystemReport' must not be null";
+
+        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
+        if (!systemReportFile.exists())
+        {
+            result.addError(IOMessageCause.FILE_NOT_FOUND);
+        }
+        else if (!systemReportFile.canRead())
+        {
+            result.addError(IOMessageCause.NO_PERMISSION);
+        }
+
+        if (result.isFailure())
+        {
+            return result;
+        }
+
+        final XmlReportReader persistence = new XmlReportReader();
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, adjuster);
         if (!readResult.isPresent() || result.isFailure())
         {
             return result;

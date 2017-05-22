@@ -36,6 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
+import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -221,5 +222,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public Optional<IMetricLevel> getMetricLevel(final String systemLevel)
     {
         return Optional.ofNullable(softwareSystem.getMetricLevels().get(systemLevel));
+    }
+
+    @Override
+    public Map<String, IModule> getModules()
+    {
+        return softwareSystem.getModules();
     }
 }

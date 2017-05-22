@@ -32,8 +32,13 @@ public class TestFixture
     public static final String APPLICATION_MODULE = "Application";
     public static final String MODEL_MODULE = "Model";
 
+    /** Reports for testing diff functionality */
     public static final String TEST_REPORT_WITHOUT_ISSUES = "./src/test/resources/ReportWithoutIssues.xml";
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
+
+    public static final String TEST_REPORT_WORKSPACE_1 = "./src/test/diff/Workspace_AlarmClockMain_01.xml";
+    public static final String TEST_REPORT_WORKSPACE_2 = "./src/test/diff/Workspace_AlarmClockMain_02.xml";
+    public static final String TEST_REPORT_WORKSPACE_2_ADJUSTED = "./src/test/diff/WorkspaceMoved_AlarmClockMain_02.xml";
 
     /**
      * Resources to test merge functionality

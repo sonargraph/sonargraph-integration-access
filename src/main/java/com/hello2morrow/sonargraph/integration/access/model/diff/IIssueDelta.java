@@ -15,9 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IAnalyzer extends IElementWithDescription
+import java.util.List;
+
+import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+
+public interface IIssueDelta
 {
-    public boolean isLicensed();
+    List<IIssue> getRemoved();
+
+    List<IIssue> getUnchanged();
+
+    List<IIssue> getAdded();
+
+    List<Pair<IIssue, IIssue>> getWorse();
+
+    List<Pair<IIssue, IIssue>> getImproved();
 }

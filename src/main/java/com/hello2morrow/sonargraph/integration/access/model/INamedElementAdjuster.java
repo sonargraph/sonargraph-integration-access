@@ -17,7 +17,14 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IAnalyzer extends IElementWithDescription
+/**
+ * Useful if you want to replace patterns in paths to make reports look-alike that come from different locations representing the same system.
+ */
+public interface INamedElementAdjuster
 {
-    public boolean isLicensed();
+    String adjustFqName(String standardKind, String fqName);
+
+    String adjustName(String standardKind, String name);
+
+    String adjustPresentationName(String standardKind, String presentationName);
 }

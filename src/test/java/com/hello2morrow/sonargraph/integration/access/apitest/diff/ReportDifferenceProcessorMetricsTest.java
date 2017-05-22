@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.apitest.diff;
 
-public interface IAnalyzer extends IElementWithDescription
+
+public class ReportDifferenceProcessorMetricsTest
 {
-    public boolean isLicensed();
 }

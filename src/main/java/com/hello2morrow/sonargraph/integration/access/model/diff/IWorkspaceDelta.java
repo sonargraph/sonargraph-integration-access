@@ -15,9 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IAnalyzer extends IElementWithDescription
+import java.util.List;
+
+import com.hello2morrow.sonargraph.integration.access.model.IModule;
+
+/**
+ *  Currently reports added, removed modules and added, removed root directories.
+ *  Order of modules or root directories is currently not supported.
+ *
+ *  This delta focuses on structural changes, thus the modules' descriptions are ignored.
+ */
+public interface IWorkspaceDelta
 {
-    public boolean isLicensed();
+    List<IModule> getUnchangedModules();
+
+    List<IModule> getAddedModules();
+
+    List<IModule> getRemovedModules();
+
+    List<IModuleDelta> getChangedModules();
+
+    boolean isEmpty();
 }
