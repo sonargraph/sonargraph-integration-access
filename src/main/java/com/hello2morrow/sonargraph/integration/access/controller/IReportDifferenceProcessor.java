@@ -23,12 +23,19 @@ import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
+import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
 public interface IReportDifferenceProcessor
 {
+    /**
+     * Create a delta using the specified issue predicate.
+     * @param infoProcessor
+     * @param filter - if null, all issues are returned.
+     * @return
+     */
     IIssueDelta getIssueDelta(ISystemInfoProcessor infoProcessor, Predicate<IIssue> filter);
 
     IMetricDelta getMetricDelta(ISystemInfoProcessor infoProcessor, Predicate<IMetricId> metricFilter, Predicate<IElement> elementFilter);
@@ -38,5 +45,7 @@ public interface IReportDifferenceProcessor
     /**
      * Compares the modules and their root directories
      */
-    IWorkspaceDelta getWorkspaceDelta(ISystemInfoProcessor systemProcessor2);
+    IWorkspaceDelta getWorkspaceDelta(ISystemInfoProcessor infoProcessor);
+
+    ICoreSystemDataDelta getCoreSystemDataDelta(ISystemInfoProcessor infoProcessor);
 }

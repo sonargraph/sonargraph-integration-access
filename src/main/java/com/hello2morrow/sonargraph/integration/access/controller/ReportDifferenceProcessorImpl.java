@@ -31,20 +31,35 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
+import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
+import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.internal.CoreSystemDataDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.IssueDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricThresholdDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ModuleDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.diff.internal.StandardDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.WorkspaceDeltaImpl;
 
 class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
@@ -359,4 +374,96 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         return new ModuleDeltaImpl(module1, unchanged, added, removed);
     }
+
+    @Override
+    public ICoreSystemDataDelta getCoreSystemDataDelta(final ISystemInfoProcessor infoProcessor)
+    {
+        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'getMetaDataDelta' must not be null";
+        final CoreSystemDataDeltaImpl delta = new CoreSystemDataDeltaImpl();
+
+        final IStandardDelta<IIssueProvider> issueProviderDelta = StandardDeltaImpl.<IIssueProvider> computeDelta(baseSystem.getIssueProviders(),
+                infoProcessor.getIssueProviders());
+        delta.setIssueProviderDelta(issueProviderDelta);
+
+        final IStandardDelta<IIssueCategory> issueCategoryDelta = StandardDeltaImpl.<IIssueCategory> computeDelta(baseSystem.getIssueCategories(),
+                infoProcessor.getIssueCategories());
+        delta.setIssueCategoryDelta(issueCategoryDelta);
+
+        final IStandardDelta<IIssueType> issueTypeDelta = StandardDeltaImpl.<IIssueType> computeDelta(baseSystem.getIssueTypes(),
+                infoProcessor.getIssueTypes());
+        delta.setIssueTypeDelta(issueTypeDelta);
+
+        final IStandardDelta<IMetricProvider> metricProviderDelta = StandardDeltaImpl.<IMetricProvider> computeDelta(baseSystem.getMetricProviders(),
+                infoProcessor.getMetricProviders());
+        delta.setMetricProviderDelta(metricProviderDelta);
+
+        final IStandardDelta<IMetricCategory> metricCategoryDelta = StandardDeltaImpl.<IMetricCategory> computeDelta(
+                baseSystem.getMetricCategories(), infoProcessor.getMetricCategories());
+        delta.setMetricCategoryDelta(metricCategoryDelta);
+
+        final IStandardDelta<IMetricLevel> metricLevelDelta = StandardDeltaImpl.<IMetricLevel> computeDelta(baseSystem.getMetricLevels(),
+                infoProcessor.getMetricLevels());
+        delta.setMetricLevelDelta(metricLevelDelta);
+
+        final IStandardDelta<IMetricId> metricIdDelta = StandardDeltaImpl.<IMetricId> computeDelta(baseSystem.getMetricIds(),
+                infoProcessor.getMetricIds());
+        delta.setMetricIdDelta(metricIdDelta);
+
+        final IStandardDelta<IFeature> featureDelta = StandardDeltaImpl
+                .<IFeature> computeDelta(baseSystem.getFeatures(), infoProcessor.getFeatures());
+        delta.setFeatureDelta(featureDelta);
+
+        final IStandardDelta<IAnalyzer> analyzerDelta = StandardDeltaImpl.<IAnalyzer> computeDelta(baseSystem.getAnalyzers(),
+                infoProcessor.getAnalyzers());
+        delta.setAnalyzerDelta(analyzerDelta);
+
+        delta.setMetricThresholdDelta(computeMetricThresholdDelta(baseSystem.getMetricThresholds(), infoProcessor.getMetricThresholds()));
+
+        final IStandardDelta<String> elementKindDelta = StandardDeltaImpl.<String> computeDelta(baseSystem.getElementKinds(),
+                infoProcessor.getElementKinds());
+        delta.setElementKindDelta(elementKindDelta);
+
+        return delta;
+    }
+
+    private IMetricThresholdDelta computeMetricThresholdDelta(final List<IMetricThreshold> thresholds1, final List<IMetricThreshold> thresholds2)
+    {
+        assert thresholds1 != null : "Parameter 'thresholds1' of method 'computeMetricThresholdDelta' must not be null";
+        assert thresholds2 != null : "Parameter 'thresholds2' of method 'computeMetricThresholdDelta' must not be null";
+
+        final List<IMetricThreshold> removed = new ArrayList<>();
+        final List<IMetricThreshold> unchanged = new ArrayList<>();
+        final List<Pair<IMetricThreshold, IMetricThreshold>> changed = new ArrayList<>();
+
+        final List<IMetricThreshold> first = new ArrayList<>(thresholds1);
+        final List<IMetricThreshold> second = new ArrayList<>(thresholds2);
+
+        for (final IMetricThreshold next : first)
+        {
+            if (second.remove(next))
+            {
+                unchanged.add(next);
+            }
+            else
+            {
+                final Optional<IMetricThreshold> changedOpt = second.stream()
+                        .filter(th -> th.getMetricId().equals(next.getMetricId()) && th.getMetricLevel().equals(next.getMetricLevel())).findFirst();
+                if (changedOpt.isPresent())
+                {
+                    final IMetricThreshold changedTh = changedOpt.get();
+                    changed.add(new Pair<IMetricThreshold, IMetricThreshold>(next, changedTh));
+                    second.remove(changedTh);
+                }
+                else
+                {
+                    removed.add(next);
+                }
+            }
+        }
+
+        final MetricThresholdDeltaImpl delta = new MetricThresholdDeltaImpl(second /* added */, removed, unchanged, changed);
+
+        return delta;
+    }
+
 }

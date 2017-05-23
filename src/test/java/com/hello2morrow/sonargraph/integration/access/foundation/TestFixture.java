@@ -40,6 +40,9 @@ public class TestFixture
     public static final String TEST_REPORT_WORKSPACE_2 = "./src/test/diff/Workspace_AlarmClockMain_02.xml";
     public static final String TEST_REPORT_WORKSPACE_2_ADJUSTED = "./src/test/diff/WorkspaceMoved_AlarmClockMain_02.xml";
 
+    public static final String TEST_REPORT_META_DATA_1 = "./src/test/diff/MetaData_AlarmClockMain_01.xml";
+    public static final String TEST_REPORT_META_DATA_2 = "./src/test/diff/MetaData_AlarmClockMain_02.xml";
+
     /**
      * Resources to test merge functionality
      */

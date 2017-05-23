@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IResolutionDeltaImpl
+public interface IResolutionDelta
 {
 
 }

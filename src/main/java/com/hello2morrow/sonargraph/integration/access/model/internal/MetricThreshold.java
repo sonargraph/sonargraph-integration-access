@@ -109,17 +109,6 @@ public final class MetricThreshold implements IMetricThreshold
             return false;
         }
         final MetricThreshold other = (MetricThreshold) obj;
-        if (lowerThreshold == null)
-        {
-            if (other.lowerThreshold != null)
-            {
-                return false;
-            }
-        }
-        else if (!lowerThreshold.equals(other.lowerThreshold))
-        {
-            return false;
-        }
         if (metricId == null)
         {
             if (other.metricId != null)
@@ -139,6 +128,17 @@ public final class MetricThreshold implements IMetricThreshold
             }
         }
         else if (!metricLevel.equals(other.metricLevel))
+        {
+            return false;
+        }
+        if (lowerThreshold == null)
+        {
+            if (other.lowerThreshold != null)
+            {
+                return false;
+            }
+        }
+        else if (!lowerThreshold.equals(other.lowerThreshold))
         {
             return false;
         }

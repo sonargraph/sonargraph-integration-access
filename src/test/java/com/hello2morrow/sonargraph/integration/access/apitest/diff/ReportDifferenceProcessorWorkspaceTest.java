@@ -124,7 +124,7 @@ public class ReportDifferenceProcessorWorkspaceTest
     }
 
     @Test
-    public void testAdjustingRootPaths()
+    public void compareWithAdjustingRootPaths()
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
         final OperationResult load1 = controller.loadSystemReport(new File(REPORT_1));

@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -138,7 +139,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     @Override
     public final Set<String> getElementKinds()
     {
-        return Collections.unmodifiableSet(elementMap.keySet());
+        final Set<String> kinds = new HashSet<>(elementMap.keySet());
+        kinds.add(this.getKind());
+        return Collections.unmodifiableSet(kinds);
     }
 
     public final void addMetricValueForElement(final IMetricValue value, final INamedElement element)

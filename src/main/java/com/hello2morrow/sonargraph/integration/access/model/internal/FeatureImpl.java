@@ -19,11 +19,11 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 
-public class FeaturesImpl extends ElementImpl implements IFeature
+public class FeatureImpl extends ElementImpl implements IFeature
 {
     private final boolean isLicensed;
 
-    public FeaturesImpl(final String name, final String presentationName, final boolean licensed)
+    public FeatureImpl(final String name, final String presentationName, final boolean licensed)
     {
         super(name, presentationName);
         this.isLicensed = licensed;
@@ -59,7 +59,7 @@ public class FeaturesImpl extends ElementImpl implements IFeature
         {
             return false;
         }
-        final FeaturesImpl other = (FeaturesImpl) obj;
+        final FeatureImpl other = (FeatureImpl) obj;
         if (isLicensed != other.isLicensed)
         {
             return false;

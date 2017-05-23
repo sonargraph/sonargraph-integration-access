@@ -94,7 +94,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyI
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ElementIssueImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.FeaturesImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
@@ -420,7 +420,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
         for (final XsdFeature next : report.getFeatures().getFeature())
         {
-            softwareSystem.addFeature(new FeaturesImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
+            softwareSystem.addFeature(new FeatureImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
         }
     }
 
@@ -803,6 +803,11 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
     private void processSimpleElementIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
+        if (report.getIssues() == null || report.getIssues().getElementIssues() == null || report.getIssues().getElementIssues() == null)
+        {
+            return;
+        }
+
         for (final XsdSimpleElementIssue next : report.getIssues().getElementIssues().getIssue())
         {
             final XsdElement affectedElement = (XsdElement) next.getAffectedElement();

@@ -19,9 +19,11 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,12 +31,14 @@ import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
@@ -140,6 +144,12 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     }
 
     @Override
+    public List<IIssueCategory> getIssueCategories()
+    {
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getIssueCategories().values()));
+    }
+
+    @Override
     public List<ICycleGroup> getCycleGroups(final Predicate<ICycleGroup> filter)
     {
         final Predicate<ICycleGroup> filter2;
@@ -228,5 +238,22 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public Map<String, IModule> getModules()
     {
         return softwareSystem.getModules();
+    }
+
+    @Override
+    public List<IMetricThreshold> getMetricThresholds()
+    {
+        return softwareSystem.getMetricThresholds();
+    }
+
+    @Override
+    public List<String> getElementKinds()
+    {
+        final Set<String> elementKinds = new HashSet<>(softwareSystem.getElementKinds());
+        for (final IModule next : softwareSystem.getModules().values())
+        {
+            elementKinds.addAll(next.getElementKinds());
+        }
+        return new ArrayList<>(elementKinds);
     }
 }
