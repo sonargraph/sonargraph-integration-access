@@ -1,3 +1,20 @@
+/**
+ * Sonargraph Integration Access
+ * Copyright (C) 2016 hello2morrow GmbH
+ * mailto: support AT hello2morrow DOT com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
@@ -10,6 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 
@@ -25,7 +43,7 @@ public class CoreSystemDataDeltaImpl implements ICoreSystemDataDelta
     private IStandardDelta<IFeature> featureDelta;
     private IStandardDelta<IAnalyzer> analyzerDelta;
     private IMetricThresholdDelta thresholdDelta;
-    private IStandardDelta<String> elementKindDelta;
+    private IElementKindDelta elementKindDelta;
 
     @Override
     public IStandardDelta<IIssueProvider> getIssueProviderDelta()
@@ -88,7 +106,7 @@ public class CoreSystemDataDeltaImpl implements ICoreSystemDataDelta
     }
 
     @Override
-    public IStandardDelta<String> getElementKindDelta()
+    public IElementKindDelta getElementKindDelta()
     {
         return elementKindDelta;
     }
@@ -153,9 +171,29 @@ public class CoreSystemDataDeltaImpl implements ICoreSystemDataDelta
         thresholdDelta = delta;
     }
 
-    public void setElementKindDelta(final IStandardDelta<String> delta)
+    public void setElementKindDelta(final IElementKindDelta delta)
     {
         assert delta != null : "Parameter 'delta' of method 'setElementKindDelta' must not be null";
         elementKindDelta = delta;
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder("Core Sytem Data Delta:");
+
+        builder.append("\n--").append(issueProviderDelta.toString());
+        builder.append("\n--").append(issueCategoryDelta.toString());
+        builder.append("\n--").append(issueTypeDelta.toString());
+        builder.append("\n--").append(metricProviderDelta.toString());
+        builder.append("\n--").append(metricCategoryDelta.toString());
+        builder.append("\n--").append(metricLevelDelta.toString());
+        builder.append("\n--").append(metricIdDelta.toString());
+        builder.append("\n--").append(featureDelta.toString());
+        builder.append("\n--").append(analyzerDelta.toString());
+        builder.append("\n--").append(thresholdDelta.toString());
+        builder.append("\n--").append(elementKindDelta.toString());
+
+        return builder.toString();
     }
 }

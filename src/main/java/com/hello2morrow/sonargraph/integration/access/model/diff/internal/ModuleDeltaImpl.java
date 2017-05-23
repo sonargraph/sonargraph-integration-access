@@ -26,7 +26,6 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
 
 public class ModuleDeltaImpl implements IModuleDelta
 {
-    private static final String INDENTATION = "   ";
     private final IModule module;
     private final List<IRootDirectory> unchanged;
     private final List<IRootDirectory> added;
@@ -76,22 +75,22 @@ public class ModuleDeltaImpl implements IModuleDelta
         final StringBuilder builder = new StringBuilder("  Delta of module ");
         builder.append(module.getName());
 
-        builder.append("\n").append(INDENTATION).append("Removed roots [").append(removed.size()).append("]:");
+        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Removed roots [").append(removed.size()).append("]:");
         for (final IRootDirectory next : removed)
         {
-            builder.append("\n").append(INDENTATION).append(INDENTATION).append(next);
+            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
         }
 
-        builder.append("\n").append(INDENTATION).append("Added roots [").append(added.size()).append("]:");
+        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Added roots [").append(added.size()).append("]:");
         for (final IRootDirectory next : added)
         {
-            builder.append("\n").append(INDENTATION).append(INDENTATION).append(next);
+            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
         }
 
-        builder.append("\n").append(INDENTATION).append("Unchanged roots [").append(unchanged.size()).append("]:");
+        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Unchanged roots [").append(unchanged.size()).append("]:");
         for (final IRootDirectory next : unchanged)
         {
-            builder.append("\n").append(INDENTATION).append(INDENTATION).append(next);
+            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
         }
 
         return builder.toString();

@@ -42,13 +42,14 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 
-public class ReportDifferenceProcessorMetaDataTest
+public class ReportDifferenceProcessorCoreInfoTest
 {
     @Test
-    public void compareMetaDataInfo()
+    public void compareCoreSystemInfo()
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
         final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
@@ -150,7 +151,7 @@ public class ReportDifferenceProcessorMetaDataTest
             assertEquals("Wrong new upper threshold", 46, updated.getUpperThreshold().intValue());
         }
         {
-            final IStandardDelta<String> elementKindDelta = metaDataDelta.getElementKindDelta();
+            final IElementKindDelta elementKindDelta = metaDataDelta.getElementKindDelta();
             assertEquals("Wrong number of added element kinds", 1, elementKindDelta.getAdded().size());
             assertEquals("Wrong added element kind", "JavaLogicalModuleNamespaceY", elementKindDelta.getAdded().get(0));
             assertEquals("Wrong number of removed element kinds", 1, elementKindDelta.getRemoved().size());

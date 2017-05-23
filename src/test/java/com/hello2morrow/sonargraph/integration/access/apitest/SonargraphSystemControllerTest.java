@@ -149,8 +149,8 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong virtual model", "Modifiable.vm", softwareSystem.getVirtualModel());
         assertEquals("Wrong number of modules", 4, softwareSystem.getModules().size());
 
-        final Set<String> expectedSystemElementKinds = new HashSet<>(Arrays.asList(/* Excluded! "System", */"GroovyScript",
-                "JavaLogicalSystemNamespace", "LogicalSystemProgrammingElement"));
+        final Set<String> expectedSystemElementKinds = new HashSet<>(Arrays.asList("GroovyScript", "JavaLogicalSystemNamespace",
+                "LogicalSystemProgrammingElement", "SoftwareSystem"));
         Assert.assertThat("Wrong system element kinds", softwareSystem.getElementKinds(), is(equalTo(expectedSystemElementKinds)));
     }
 
@@ -163,7 +163,7 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong description", "Main Project", moduleApplication.getDescription());
         assertEquals("Wrong number of root directories", 2, moduleApplication.getRootDirectories().size());
 
-        final Set<String> expectedModuleElementKinds = new HashSet<>(Arrays.asList(/*Excluded! "Java Module", */"JavaLogicalModuleNamespace",
+        final Set<String> expectedModuleElementKinds = new HashSet<>(Arrays.asList("JavaModule", "JavaLogicalModuleNamespace",
                 "LogicalModuleProgrammingElement", "JavaClassRootDirectoryPath", "JavaSourceRootDirectoryPath", "JavaInternalCompilationUnit",
                 "JavaType", "JavaMethod", "JavaConstructor", "JavaStaticBlock"));
         assertThat("Wrong module element kinds", moduleApplication.getElementKinds(), is(equalTo(expectedModuleElementKinds)));

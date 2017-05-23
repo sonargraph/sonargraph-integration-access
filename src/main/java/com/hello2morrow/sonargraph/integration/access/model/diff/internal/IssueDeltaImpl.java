@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -84,10 +85,18 @@ public class IssueDeltaImpl implements IIssueDelta
     {
         final StringBuilder builder = new StringBuilder("Issue delta:");
         builder.append(INDENTATION).append("\nRemoved issues [").append(removed.size()).append("]:");
+        final Consumer<? super IIssue> action = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append(i.toString());
+        removed.forEach(action);
         builder.append(INDENTATION).append("\nImproved issues [").append(improved.size()).append("]:");
+        final Consumer<? super Pair<IIssue, IIssue>> action2 = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append("Previous: ")
+                .append(i.toString()).append(", now: ").append(i.toString());
+        improved.forEach(action2);
         builder.append(INDENTATION).append("\nWorsened issues [").append(worse.size()).append("]:");
+        worse.forEach(action2);
         builder.append(INDENTATION).append("\nAdded issues [").append(added.size()).append("]:");
+        added.forEach(action);
         builder.append(INDENTATION).append("\nUnchanged issues [").append(unchanged.size()).append("]:");
+        unchanged.forEach(action);
         return builder.toString();
     }
 }
