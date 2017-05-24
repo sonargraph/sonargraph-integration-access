@@ -27,7 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
-public interface ICoreSystemDataDelta
+public interface ICoreSystemDataDelta extends IDelta
 {
     IStandardDelta<IIssueProvider> getIssueProviderDelta();
 

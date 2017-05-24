@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
 
-public interface IStandardDelta<T extends IElement>
+public interface IStandardDelta<T extends IElement> extends IDelta
 {
     public List<T> getAdded();
 

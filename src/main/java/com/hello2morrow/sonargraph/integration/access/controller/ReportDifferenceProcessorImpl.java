@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -44,23 +43,24 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.CoreSystemDataDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ElementKindDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.IssueDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricThresholdDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ModuleDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ResolutionDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.StandardDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.WorkspaceDeltaImpl;
 
@@ -175,30 +175,30 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         return a -> a.getThreshold().equals(thresholdIssue.getThreshold()) && a.getAffectedElements().equals(thresholdIssue.getAffectedElements());
     }
 
-    @Override
-    public IMetricDelta getMetricDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IMetricId> metricFilter,
-            final Predicate<IElement> elementFilter)
-    {
-        //TODO
-        //      final IMetricId metricId = original.getThreshold().getMetricId();
-        //        final Double bestValue = metricId.getBestValue();
-        //        if (bestValue.equals(Double.POSITIVE_INFINITY))
-        //        {
-        //            return originalDouble < doubleValue ? Diff.IMPROVED : Diff.WORSE;
-        //        }
-        //        if (bestValue.equals(Double.NEGATIVE_INFINITY))
-        //        {
-        //            return originalDouble > doubleValue ? Diff.IMPROVED : Diff.WORSE;
-        //        }
-        //
-        //        if (!bestValue.equals(Double.NaN))
-        //        {
-        //            final double diff1 = Math.abs(bestValue.doubleValue() - originalDouble);
-        //            final double diff2 = Math.abs(bestValue.doubleValue() - doubleValue);
-        //            return diff1 > diff2 ? Diff.IMPROVED : Diff.WORSE;
-        //        }
-        return new MetricDeltaImpl();
-    }
+    //    @Override
+    //    public IMetricDelta getMetricDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IMetricId> metricFilter,
+    //            final Predicate<IElement> elementFilter)
+    //    {
+    //TODO
+    //      final IMetricId metricId = original.getThreshold().getMetricId();
+    //        final Double bestValue = metricId.getBestValue();
+    //        if (bestValue.equals(Double.POSITIVE_INFINITY))
+    //        {
+    //            return originalDouble < doubleValue ? Diff.IMPROVED : Diff.WORSE;
+    //        }
+    //        if (bestValue.equals(Double.NEGATIVE_INFINITY))
+    //        {
+    //            return originalDouble > doubleValue ? Diff.IMPROVED : Diff.WORSE;
+    //        }
+    //
+    //        if (!bestValue.equals(Double.NaN))
+    //        {
+    //            final double diff1 = Math.abs(bestValue.doubleValue() - originalDouble);
+    //            final double diff2 = Math.abs(bestValue.doubleValue() - doubleValue);
+    //            return diff1 > diff2 ? Diff.IMPROVED : Diff.WORSE;
+    //        }
+    //return new MetricDeltaImpl();
+    //    }
 
     //Check in removed if there are any cycle groups that match more or less any in added.
     private void processCycleGroups(final List<IIssue> added, final Set<IIssue> removed, final List<Pair<IIssue, IIssue>> improved,
@@ -459,25 +459,23 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final List<IMetricThreshold> removed = new ArrayList<>();
         final List<IMetricThreshold> unchanged = new ArrayList<>();
         final List<Pair<IMetricThreshold, IMetricThreshold>> changed = new ArrayList<>();
+        final List<IMetricThreshold> added = new ArrayList<>(thresholds2);
 
-        final List<IMetricThreshold> first = new ArrayList<>(thresholds1);
-        final List<IMetricThreshold> second = new ArrayList<>(thresholds2);
-
-        for (final IMetricThreshold next : first)
+        for (final IMetricThreshold next : new ArrayList<>(thresholds1))
         {
-            if (second.remove(next))
+            if (added.remove(next))
             {
                 unchanged.add(next);
             }
             else
             {
-                final Optional<IMetricThreshold> changedOpt = second.stream()
+                final Optional<IMetricThreshold> changedOpt = added.stream()
                         .filter(th -> th.getMetricId().equals(next.getMetricId()) && th.getMetricLevel().equals(next.getMetricLevel())).findFirst();
                 if (changedOpt.isPresent())
                 {
                     final IMetricThreshold changedTh = changedOpt.get();
                     changed.add(new Pair<IMetricThreshold, IMetricThreshold>(next, changedTh));
-                    second.remove(changedTh);
+                    added.remove(changedTh);
                 }
                 else
                 {
@@ -486,9 +484,40 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             }
         }
 
-        final MetricThresholdDeltaImpl delta = new MetricThresholdDeltaImpl(second /* added */, removed, unchanged, changed);
-
-        return delta;
+        return new MetricThresholdDeltaImpl(added, removed, unchanged, changed);
     }
 
+    @Override
+    public IResolutionDelta getResolutionDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IResolution> predicate)
+    {
+        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'getResolutionDelta' must not be null";
+
+        final List<IResolution> removed = new ArrayList<>();
+        final List<IResolution> unchanged = new ArrayList<>();
+        final List<Pair<IResolution, IResolution>> changed = new ArrayList<>();
+        final List<IResolution> added = new ArrayList<>(infoProcessor.getResolutions(predicate));
+
+        for (final IResolution next : new ArrayList<>(baseSystem.getResolutions(predicate)))
+        {
+            if (added.remove(next))
+            {
+                unchanged.add(next);
+            }
+            else
+            {
+                final Optional<IResolution> matchOpt = added.stream().filter(r -> r.getName().equals(next.getName())).findFirst();
+                if (matchOpt.isPresent())
+                {
+                    changed.add(new Pair<>(next, matchOpt.get()));
+                    added.remove(matchOpt.get());
+                }
+                else
+                {
+                    removed.add(next);
+                }
+            }
+        }
+
+        return new ResolutionDeltaImpl(added, removed, changed, unchanged);
+    }
 }

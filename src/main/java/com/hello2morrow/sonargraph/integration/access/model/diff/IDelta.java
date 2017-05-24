@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IElementDelta
+public interface IDelta
 {
+    public String print(boolean includeUnchanged);
 
+    public boolean containsChanges();
 }

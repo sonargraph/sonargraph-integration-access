@@ -51,6 +51,7 @@ public final class StringUtility
     public static final String OPEN_CURLY_BRACE = "{";
     public static final String CLOSE_CURLY_BRACE = "}";
     public static final char CSV_SEPARATOR = ';';
+    public static final String INDENTATION = "   ";
 
     private StringUtility()
     {

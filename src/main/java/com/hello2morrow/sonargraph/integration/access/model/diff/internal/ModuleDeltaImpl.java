@@ -19,7 +19,9 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
@@ -72,27 +74,27 @@ public class ModuleDeltaImpl implements IModuleDelta
     @Override
     public String toString()
     {
+        return print(true);
+    }
+
+    public String print(final boolean includeUnchanged)
+    {
         final StringBuilder builder = new StringBuilder("  Delta of module ");
         builder.append(module.getName());
 
-        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Removed roots [").append(removed.size()).append("]:");
-        for (final IRootDirectory next : removed)
-        {
-            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
-        }
+        builder.append("\n").append(StringUtility.INDENTATION).append("Removed roots (").append(removed.size()).append("):");
+        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(StringUtility.INDENTATION)
+                .append(StringUtility.INDENTATION).append(r);
+        removed.forEach(action);
 
-        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Added roots [").append(added.size()).append("]:");
-        for (final IRootDirectory next : added)
-        {
-            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
-        }
+        builder.append("\n").append(StringUtility.INDENTATION).append("Added roots (").append(added.size()).append("):");
+        added.forEach(action);
 
-        builder.append("\n").append(StandardDeltaImpl.INDENTATION).append("Unchanged roots [").append(unchanged.size()).append("]:");
-        for (final IRootDirectory next : unchanged)
+        if (includeUnchanged)
         {
-            builder.append("\n").append(StandardDeltaImpl.INDENTATION).append(StandardDeltaImpl.INDENTATION).append(next);
+            builder.append("\n").append(StringUtility.INDENTATION).append("Unchanged roots (").append(unchanged.size()).append("):");
+            unchanged.forEach(action);
         }
-
         return builder.toString();
     }
 }

@@ -15,9 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.apitest.diff;
+package com.hello2morrow.sonargraph.integration.access.model.diff;
 
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
-public class ReportDifferenceProcessorMetricsTest
+public interface IReportDelta extends IDelta
 {
+    ISoftwareSystem getSystem2();
+
+    ISoftwareSystem getSystem1();
 }

@@ -17,28 +17,29 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
+import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 
-public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
+public class ResolutionDeltaImpl implements IResolutionDelta
 {
-    private final List<IMetricThreshold> added;
-    private final List<IMetricThreshold> removed;
-    private final List<Pair<IMetricThreshold, IMetricThreshold>> changed;
-    private final List<IMetricThreshold> unchanged;
+    private final List<IResolution> added;
+    private final List<IResolution> removed;
+    private final List<IResolution> unchanged;
+    private final List<Pair<IResolution, IResolution>> changed;
 
-    public MetricThresholdDeltaImpl(final List<IMetricThreshold> added, final List<IMetricThreshold> removed, final List<IMetricThreshold> unchanged,
-            final List<Pair<IMetricThreshold, IMetricThreshold>> changed)
+    public ResolutionDeltaImpl(final List<IResolution> added, final List<IResolution> removed, final List<Pair<IResolution, IResolution>> changed,
+            final List<IResolution> unchanged)
     {
-        assert added != null : "Parameter 'added' of method 'MetricThresholdDeltaImpl' must not be null";
-        assert removed != null : "Parameter 'removed' of method 'MetricThresholdDeltaImpl' must not be null";
-        assert changed != null : "Parameter 'changed' of method 'MetricThresholdDeltaImpl' must not be null";
-        assert unchanged != null : "Parameter 'unchanged' of method 'MetricThresholdDeltaImpl' must not be null";
+        assert added != null : "Parameter 'added' of method 'ResolutionDeltaImpl' must not be null";
+        assert removed != null : "Parameter 'removed' of method 'ResolutionDeltaImpl' must not be null";
+        assert changed != null : "Parameter 'changed' of method 'ResolutionDeltaImpl' must not be null";
+        assert unchanged != null : "Parameter 'unchanged' of method 'ResolutionDeltaImpl' must not be null";
 
         this.added = added;
         this.removed = removed;
@@ -47,27 +48,27 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     }
 
     @Override
-    public List<IMetricThreshold> getAdded()
+    public List<IResolution> getAdded()
     {
-        return added;
+        return Collections.unmodifiableList(added);
     }
 
     @Override
-    public List<IMetricThreshold> getRemoved()
+    public List<IResolution> getRemoved()
     {
-        return removed;
+        return Collections.unmodifiableList(removed);
     }
 
     @Override
-    public List<IMetricThreshold> getUnchanged()
+    public List<Pair<IResolution, IResolution>> getChanged()
     {
-        return unchanged;
+        return Collections.unmodifiableList(changed);
     }
 
     @Override
-    public List<Pair<IMetricThreshold, IMetricThreshold>> getChanged()
+    public List<IResolution> getUnchanged()
     {
-        return changed;
+        return Collections.unmodifiableList(unchanged);
     }
 
     @Override
@@ -85,10 +86,10 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     @Override
     public String print(final boolean includeUnchanged)
     {
-        final StringBuilder builder = new StringBuilder("Delta of Metric Thresholds");
-        builder.append("\n").append(StringUtility.INDENTATION).append("Removed: (").append(removed.size()).append("):");
-        final Consumer<? super IMetricThreshold> action = th -> builder.append("\n").append(StringUtility.INDENTATION)
-                .append(StringUtility.INDENTATION).append(th.toString());
+        final StringBuilder builder = new StringBuilder("Resolution Delta:");
+        builder.append("\n").append(StringUtility.INDENTATION).append("Removed (").append(removed.size()).append("):");
+        final Consumer<? super IResolution> action = r -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
+                .append(r.toString());
         removed.forEach(action);
         builder.append("\n").append(StringUtility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);

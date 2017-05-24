@@ -43,6 +43,9 @@ public class TestFixture
     public static final String TEST_REPORT_META_DATA_1 = "./src/test/diff/MetaData_AlarmClockMain_01.xml";
     public static final String TEST_REPORT_META_DATA_2 = "./src/test/diff/MetaData_AlarmClockMain_02.xml";
 
+    public static final String TEST_REPORT_RESOLUTIONS_1 = "./src/test/diff/AlarmClockMain_Resolutions_01.xml";
+    public static final String TEST_REPORT_RESOLUTIONS_2 = "./src/test/diff/AlarmClockMain_Resolutions_02.xml";
+
     /**
      * Resources to test merge functionality
      */

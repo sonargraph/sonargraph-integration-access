@@ -90,21 +90,36 @@ public class WorkspaceDeltaImpl implements IWorkspaceDelta
     @Override
     public String toString()
     {
+        return print(true);
+    }
+
+    @Override
+    public boolean containsChanges()
+    {
+        return !removedModules.isEmpty() || !addedModules.isEmpty() || !changedModules.isEmpty();
+    }
+
+    @Override
+    public String print(final boolean includeUnchanged)
+    {
         final StringBuilder builder = new StringBuilder("WorkspaceDelta:");
-        builder.append("\n").append(INDENTATION).append("Changed Modules [").append(changedModules.size()).append("]:");
+        builder.append("\n").append(INDENTATION).append("Changed Modules (").append(changedModules.size()).append("):");
         for (final IModuleDelta delta : changedModules)
         {
-            builder.append("\n").append(delta.toString());
+            builder.append("\n--").append(delta.toString());
         }
 
-        builder.append("\n").append(INDENTATION).append("Removed Modules [").append(removedModules.size()).append("]:");
+        builder.append("\n").append(INDENTATION).append("Removed Modules (").append(removedModules.size()).append("):");
         builder.append(printModuleList(removedModules));
 
-        builder.append("\n").append(INDENTATION).append("Added Modules [").append(addedModules.size()).append("]:");
+        builder.append("\n").append(INDENTATION).append("Added Modules (").append(addedModules.size()).append("):");
         builder.append(printModuleList(addedModules));
 
-        builder.append("\n").append(INDENTATION).append("Unchanged Modules [").append(unchangedModules.size()).append("]:");
-        builder.append(printModuleList(unchangedModules));
+        if (includeUnchanged)
+        {
+            builder.append("\n").append(INDENTATION).append("Unchanged Modules (").append(unchangedModules.size()).append("):");
+            builder.append(printModuleList(unchangedModules));
+        }
 
         return builder.toString();
     }

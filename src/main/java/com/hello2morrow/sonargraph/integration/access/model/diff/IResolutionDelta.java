@@ -17,7 +17,18 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IResolutionDelta
-{
+import java.util.List;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+
+public interface IResolutionDelta extends IDelta
+{
+    List<IResolution> getAdded();
+
+    List<IResolution> getRemoved();
+
+    List<Pair<IResolution, IResolution>> getChanged();
+
+    List<IResolution> getUnchanged();
 }

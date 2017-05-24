@@ -29,7 +29,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
  * API to get differences in metric values.
  * Added and removed values are not considered as they indicate either a change in config or addition/removal of elements.
  */
-public interface IMetricDelta
+public interface IMetricDelta extends IDelta
 {
     Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> getUnchangedValues();
 

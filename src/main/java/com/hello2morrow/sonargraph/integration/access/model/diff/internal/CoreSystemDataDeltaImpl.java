@@ -17,6 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -27,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
@@ -180,20 +184,32 @@ public class CoreSystemDataDeltaImpl implements ICoreSystemDataDelta
     @Override
     public String toString()
     {
+        return print(true);
+    }
+
+    @Override
+    public boolean containsChanges()
+    {
+        return Arrays
+                .asList(issueProviderDelta, issueCategoryDelta, issueTypeDelta, metricProviderDelta, metricCategoryDelta, metricLevelDelta,
+                        metricIdDelta, featureDelta, analyzerDelta, thresholdDelta, elementKindDelta).stream().anyMatch(d -> d.containsChanges());
+    }
+
+    @Override
+    public String print(final boolean includeUnchanged)
+    {
+        final List<IDelta> deltas = Arrays.asList(issueProviderDelta, issueCategoryDelta, issueTypeDelta, metricProviderDelta, metricCategoryDelta,
+                metricLevelDelta, metricIdDelta, featureDelta, analyzerDelta, thresholdDelta, elementKindDelta);
+
         final StringBuilder builder = new StringBuilder("Core Sytem Data Delta:");
 
-        builder.append("\n--").append(issueProviderDelta.toString());
-        builder.append("\n--").append(issueCategoryDelta.toString());
-        builder.append("\n--").append(issueTypeDelta.toString());
-        builder.append("\n--").append(metricProviderDelta.toString());
-        builder.append("\n--").append(metricCategoryDelta.toString());
-        builder.append("\n--").append(metricLevelDelta.toString());
-        builder.append("\n--").append(metricIdDelta.toString());
-        builder.append("\n--").append(featureDelta.toString());
-        builder.append("\n--").append(analyzerDelta.toString());
-        builder.append("\n--").append(thresholdDelta.toString());
-        builder.append("\n--").append(elementKindDelta.toString());
-
+        deltas.forEach(delta ->
+        {
+            if (delta.containsChanges() || includeUnchanged)
+            {
+                builder.append("\n -- ").append(delta.print(includeUnchanged));
+            }
+        });
         return builder.toString();
     }
 }

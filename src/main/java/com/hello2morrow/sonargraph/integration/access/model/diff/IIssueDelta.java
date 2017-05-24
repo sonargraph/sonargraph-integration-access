@@ -22,7 +22,7 @@ import java.util.List;
 import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
-public interface IIssueDelta
+public interface IIssueDelta extends IDelta
 {
     List<IIssue> getRemoved();
 

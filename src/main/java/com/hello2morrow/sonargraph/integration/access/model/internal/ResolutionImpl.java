@@ -84,6 +84,18 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(type.name());
+        builder.append(", priority=").append(priority);
+        builder.append(", applicable=").append(isApplicable ? "yes" : "no");
+        builder.append(", number of issues=").append(issues.size());
+        builder.append(", number of affected parser dependencies=").append(numberOfAffectedParserDependencies);
+        builder.append(", name=").append(getName());
+        return builder.toString();
+    }
+
+    @Override
     public boolean equals(final Object obj)
     {
         if (this == obj)

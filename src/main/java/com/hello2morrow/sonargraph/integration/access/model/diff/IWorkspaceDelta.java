@@ -27,7 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IModule;
  *
  *  This delta focuses on structural changes, thus the modules' descriptions are ignored.
  */
-public interface IWorkspaceDelta
+public interface IWorkspaceDelta extends IDelta
 {
     List<IModule> getUnchangedModules();
 

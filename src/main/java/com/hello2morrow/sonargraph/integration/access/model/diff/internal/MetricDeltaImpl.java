@@ -32,22 +32,31 @@ public class MetricDeltaImpl implements IMetricDelta
     @Override
     public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> getUnchangedValues()
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }
 
     @Override
     public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getWorseValues()
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }
 
     @Override
     public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getImprovedValues()
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
+    }
+
+    @Override
+    public String print(final boolean includeUnchanged)
+    {
+        throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean containsChanges()
+    {
+        return false;
     }
 
 }

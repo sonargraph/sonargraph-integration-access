@@ -83,20 +83,35 @@ public class IssueDeltaImpl implements IIssueDelta
     @Override
     public String toString()
     {
+        return print(true);
+    }
+
+    @Override
+    public boolean containsChanges()
+    {
+        return !added.isEmpty() || !removed.isEmpty() || !improved.isEmpty() || !worse.isEmpty();
+    }
+
+    @Override
+    public String print(final boolean includeUnchanged)
+    {
         final StringBuilder builder = new StringBuilder("Issue delta:");
-        builder.append(INDENTATION).append("\nRemoved issues [").append(removed.size()).append("]:");
+        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Removed (").append(removed.size()).append("):");
         final Consumer<? super IIssue> action = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append(i.toString());
         removed.forEach(action);
-        builder.append(INDENTATION).append("\nImproved issues [").append(improved.size()).append("]:");
+        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Improved (").append(improved.size()).append("):");
         final Consumer<? super Pair<IIssue, IIssue>> action2 = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append("Previous: ")
-                .append(i.toString()).append(", now: ").append(i.toString());
+                .append(i.getFirst().toString()).append("; Now: ").append(i.getSecond().toString());
         improved.forEach(action2);
-        builder.append(INDENTATION).append("\nWorsened issues [").append(worse.size()).append("]:");
+        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Worsened (").append(worse.size()).append("):");
         worse.forEach(action2);
-        builder.append(INDENTATION).append("\nAdded issues [").append(added.size()).append("]:");
+        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
-        builder.append(INDENTATION).append("\nUnchanged issues [").append(unchanged.size()).append("]:");
-        unchanged.forEach(action);
+        if (includeUnchanged)
+        {
+            builder.append(INDENTATION).append("\n").append(INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
+            unchanged.forEach(action);
+        }
         return builder.toString();
     }
 }

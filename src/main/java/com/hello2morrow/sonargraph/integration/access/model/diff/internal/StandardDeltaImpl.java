@@ -22,12 +22,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 
 public final class StandardDeltaImpl<T extends IElement> implements IStandardDelta<T>
 {
-    static final String INDENTATION = "   ";
     private final String name;
     private final List<T> added;
     private final List<T> unchanged;
@@ -52,15 +52,13 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
         assert elements1 != null : "Parameter 'elements1' of method 'computeDelta' must not be null";
         assert elements2 != null : "Parameter 'elements2' of method 'computeDelta' must not be null";
 
-        final List<T> first = new ArrayList<>(elements1);
-        final List<T> second = new ArrayList<>(elements2);
-
+        final List<T> added = new ArrayList<>(elements2);
         final List<T> unchanged = new ArrayList<>();
         final List<T> removed = new ArrayList<>();
 
-        for (final T next : first)
+        for (final T next : new ArrayList<>(elements1))
         {
-            if (second.remove(next))
+            if (added.remove(next))
             {
                 unchanged.add(next);
             }
@@ -70,7 +68,7 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
             }
         }
 
-        return new StandardDeltaImpl<>(name, second, removed, unchanged);
+        return new StandardDeltaImpl<>(name, added, removed, unchanged);
     }
 
     @Override
@@ -94,15 +92,31 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
     @Override
     public String toString()
     {
+        return print(true);
+    }
+
+    @Override
+    public boolean containsChanges()
+    {
+        return !added.isEmpty() || !removed.isEmpty();
+    }
+
+    @Override
+    public String print(final boolean includeUnchanged)
+    {
         final StringBuilder builder = new StringBuilder(name);
         builder.append(" Delta");
-        builder.append("\n").append(INDENTATION).append("Removed:");
-        final Consumer<? super T> action = r -> builder.append("\n").append(INDENTATION).append(INDENTATION).append(r.getName());
+        builder.append("\n").append(StringUtility.INDENTATION).append("Removed (").append(removed.size()).append("):");
+        final Consumer<? super T> action = r -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
+                .append(r.getName());
         removed.forEach(action);
-        builder.append("\n").append(INDENTATION).append("Added:");
+        builder.append("\n").append(StringUtility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
-        builder.append("\n").append(INDENTATION).append("Unchanged:");
-        unchanged.forEach(action);
+        if (includeUnchanged)
+        {
+            builder.append("\n").append(StringUtility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
+            unchanged.forEach(action);
+        }
         return builder.toString();
     }
 }

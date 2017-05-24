@@ -148,4 +148,74 @@ public class ReportDifferenceProcessorCoreInfoTest
         assertEquals("Wrong removed element kind", "JavaLogicalModuleNamespaceX", elementKindDelta.getRemoved().get(0));
         assertEquals("Wrong number of unchanged element kinds", 14, elementKindDelta.getUnchanged().size());
     }
+
+    @Test
+    public void checkEqualSystems()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
+        assertTrue(load1.toString(), load1.isSuccess());
+        final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
+
+        final OperationResult load2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
+        assertTrue(load2.toString(), load2.isSuccess());
+        final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
+
+        final ICoreSystemDataDelta metaDataDelta = diffProcessor.getCoreSystemDataDelta(infoProcessor2);
+
+        final IStandardDelta<IIssueProvider> issueProviderDelta = metaDataDelta.getIssueProviderDelta();
+        assertEquals("Wrong number of added providers", 0, issueProviderDelta.getAdded().size());
+        assertEquals("Wrong number of removed providers", 0, issueProviderDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged providers", 4, issueProviderDelta.getUnchanged().size());
+
+        final IStandardDelta<IIssueCategory> issueCategoryDelta = metaDataDelta.getIssueCategoryDelta();
+        assertEquals("Wrong number of added cateogries", 0, issueCategoryDelta.getAdded().size());
+        assertEquals("Wrong number of removed categories", 0, issueCategoryDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged categories", 12, issueCategoryDelta.getUnchanged().size());
+
+        final IStandardDelta<IIssueType> issueTypeDelta = metaDataDelta.getIssueTypeDelta();
+        assertEquals("Wrong number of added types", 0, issueTypeDelta.getAdded().size());
+        assertEquals("Wrong number of removed types", 0, issueTypeDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged types", 10, issueTypeDelta.getUnchanged().size());
+
+        final IStandardDelta<IMetricProvider> metricProviderDelta = metaDataDelta.getMetricProviderDelta();
+        assertEquals("Wrong number of added metric providers", 0, metricProviderDelta.getAdded().size());
+        assertEquals("Wrong number of removed metric providers", 0, metricProviderDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged metric providers", 4, metricProviderDelta.getUnchanged().size());
+
+        final IStandardDelta<IMetricCategory> metricCategoryDelta = metaDataDelta.getMetricCategoryDelta();
+        assertEquals("Wrong number of added metric categories", 0, metricCategoryDelta.getAdded().size());
+        assertEquals("Wrong number of removed metric categories", 0, metricCategoryDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged metric categories", 11, metricCategoryDelta.getUnchanged().size());
+
+        final IStandardDelta<IMetricLevel> metricLevelDelta = metaDataDelta.getMetricLevelDelta();
+        assertEquals("Wrong number of added metric levels", 0, metricLevelDelta.getAdded().size());
+        assertEquals("Wrong number of removed metric levels", 0, metricLevelDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged metric levels", 9, metricLevelDelta.getUnchanged().size());
+
+        final IStandardDelta<IMetricId> metricIdDelta = metaDataDelta.getMetricIdDelta();
+        assertEquals("Wrong number of added metric ids", 0, metricIdDelta.getAdded().size());
+        assertEquals("Wrong number of removed metric ids", 0, metricIdDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged metric ids", 77, metricIdDelta.getUnchanged().size());
+
+        final IStandardDelta<IFeature> featureDelta = metaDataDelta.getFeatureDelta();
+        assertEquals("Wrong number of added features", 0, featureDelta.getAdded().size());
+        assertEquals("Wrong number of removed features", 0, featureDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged features", 12, featureDelta.getUnchanged().size());
+
+        final IStandardDelta<IAnalyzer> analyzerDelta = metaDataDelta.getAnalyzerDelta();
+        assertEquals("Wrong number of added analyzers", 0, analyzerDelta.getAdded().size());
+        assertEquals("Wrong number of removed analyzers", 0, analyzerDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged analyzers", 20, analyzerDelta.getUnchanged().size());
+
+        final IMetricThresholdDelta thresholdDelta = metaDataDelta.getMetricThresholdDelta();
+        assertEquals("Wrong number of added metric thresholds", 0, thresholdDelta.getAdded().size());
+        assertEquals("Wrong number of removed metric thresholds", 0, thresholdDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged metric threshold", 6, thresholdDelta.getUnchanged().size());
+
+        final IElementKindDelta elementKindDelta = metaDataDelta.getElementKindDelta();
+        assertEquals("Wrong number of added element kinds", 0, elementKindDelta.getAdded().size());
+        assertEquals("Wrong number of removed element kinds", 0, elementKindDelta.getRemoved().size());
+        assertEquals("Wrong number of unchanged element kinds", 15, elementKindDelta.getUnchanged().size());
+    }
 }

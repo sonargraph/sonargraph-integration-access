@@ -51,6 +51,26 @@ public class ReportDifferenceProcessorIssuesTest
     private static final String LARGE_REPORT_2 = "./src/test/diff/LargeReport_2.xml";
 
     @Test
+    public void compareEqualReports()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult load1 = controller.loadSystemReport(new File(SYSTEM_REPORT));
+        assertTrue(load1.toString(), load1.isSuccess());
+        final IReportDifferenceProcessor diffProcessor1 = controller.createReportDifferenceProcessor();
+
+        final OperationResult load2 = controller.loadSystemReport(new File(SYSTEM_REPORT));
+        assertTrue(load2.toString(), load2.isSuccess());
+        final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
+
+        final IIssueDelta delta = diffProcessor1.getIssueDelta(infoProcessor2, null);
+        assertEquals("Wrong number of added issues", 0, delta.getAdded().size());
+        assertEquals("Wrong number of removed issues", 0, delta.getRemoved().size());
+        assertEquals("Wrong number of unchanged issues", 25, delta.getUnchanged().size());
+        assertEquals("Wrong number of worsened issues", 0, delta.getWorse().size());
+        assertEquals("Wrong number of improved issues", 0, delta.getImproved().size());
+    }
+
+    @Test
     public void compareIssuesInSmallReports()
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
