@@ -99,8 +99,8 @@ public class ReportDifferenceProcessorIssuesTest
         final ISystemInfoProcessor infoProcessor3 = controller.createSystemInfoProcessor();
         final IIssueDelta delta2 = diffProcessor1.getIssueDelta(infoProcessor3, null);
         assertEquals("Wrong number of added issues", 0, delta2.getAdded().size());
-        assertEquals("Wrong number of removed issues", 13, delta2.getRemoved().size());
-        assertEquals("Wrong number of unchanged issues", 11, delta2.getUnchanged().size());
+        assertEquals("Wrong number of removed issues", 14, delta2.getRemoved().size());
+        assertEquals("Wrong number of unchanged issues", 10, delta2.getUnchanged().size());
         assertEquals("Wrong number of worsened issues", 1, delta2.getWorse().size());
         final IThresholdViolationIssue worse2 = (IThresholdViolationIssue) delta2.getWorse().get(0).getFirst();
         assertEquals("Wrong worse issue", CORE_TOTAL_LINES, worse2.getThreshold().getMetricId().getName());
@@ -111,8 +111,8 @@ public class ReportDifferenceProcessorIssuesTest
         final IReportDifferenceProcessor diffProcessor2 = controller.createReportDifferenceProcessor();
         final IIssueDelta delta3 = diffProcessor2.getIssueDelta(infoProcessor3, null);
         assertEquals("Wrong number of added issues", 6, delta3.getAdded().size());
-        assertEquals("Wrong number of removed issues", 13, delta3.getRemoved().size());
-        assertEquals("Wrong number of unchanged issues", 4, delta3.getUnchanged().size());
+        assertEquals("Wrong number of removed issues", 14, delta3.getRemoved().size());
+        assertEquals("Wrong number of unchanged issues", 3, delta3.getUnchanged().size());
         assertEquals("Wrong number of worsened issues", 1, delta3.getWorse().size());
         final IThresholdViolationIssue worse3 = (IThresholdViolationIssue) delta3.getWorse().get(0).getFirst();
         assertEquals("Wrong worse issue", CORE_TOTAL_LINES, worse3.getThreshold().getMetricId().getName());

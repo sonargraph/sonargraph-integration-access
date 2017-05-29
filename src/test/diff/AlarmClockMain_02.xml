@@ -1335,10 +1335,12 @@
                     <element ref="_bb" debugInfo="Logical module namespaces:AlarmClock:com:h2m:alarm:model"></element>
                     <element ref="_be" debugInfo="Logical module namespaces:AlarmClock:com:h2m:alarm:presentation"></element>
                 </cycleGroup>
+                <!-- 
                 <cycleGroup numberOfCyclicElements="2" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:./Modifiable.vm:8d3e3156e95aa0da423e7e2780f9310e|0172d9f95147f107cc6097aede702832" id="_10e" type="_29" provider="_24" description="2 cyclic packages" hasResolution="false">
                     <element ref="_bc" debugInfo="Logical module namespaces:AlarmClock:com:h2m:alarm:p1"></element>
                     <element ref="_bd" debugInfo="Logical module namespaces:AlarmClock:com:h2m:alarm:p2"></element>
                 </cycleGroup>
+                 -->
             </cycleGroups>
             <cycleGroups analyzerRef="_4">
                 <cycleGroup numberOfCyclicElements="2" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:a4a1a06738acd30fe9b50b95f6d5010a|2259183e90b0f35a0f6a57c8978f778e" id="_10f" type="_28" provider="_24" description="2 cyclic components" hasResolution="false">
