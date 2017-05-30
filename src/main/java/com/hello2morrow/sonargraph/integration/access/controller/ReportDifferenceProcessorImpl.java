@@ -77,7 +77,6 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         this.baseSystem = baseSystem;
     }
 
-    //TODO Check if issues with resolutions must be filtered
     @Override
     public IIssueDelta getIssueDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IIssue> filter)
     {
