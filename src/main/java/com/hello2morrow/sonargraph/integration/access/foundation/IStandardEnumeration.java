@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-public interface IStandardEnumeration
+import java.io.Serializable;
+
+public interface IStandardEnumeration extends Serializable
 {
     public default boolean isUnspecifiedValue()
     {

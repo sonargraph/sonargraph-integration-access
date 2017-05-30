@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 
 public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IAnalyzer
 {
+    private static final long serialVersionUID = 2339900670007779070L;
     private final boolean isLicensed;
 
     public AnalyzerImpl(final String name, final String presentationName, final String description, final boolean isLicensed)

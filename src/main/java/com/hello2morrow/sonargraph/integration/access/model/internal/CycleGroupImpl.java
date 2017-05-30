@@ -30,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class CycleGroupImpl extends AbstractElementIssueImpl implements ICycleGroup
 {
+    private static final long serialVersionUID = 3306324924477805018L;
     private final IAnalyzer analyzer;
     private final List<INamedElement> cyclicElements = new ArrayList<>();
 

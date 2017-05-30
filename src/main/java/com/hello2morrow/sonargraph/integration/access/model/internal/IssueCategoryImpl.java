@@ -21,6 +21,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 
 public class IssueCategoryImpl extends ElementImpl implements IIssueCategory
 {
+    private static final long serialVersionUID = -1296849010183717478L;
+
     public IssueCategoryImpl(final String name, final String presentationName)
     {
         super(name, presentationName);

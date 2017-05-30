@@ -36,6 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 abstract class AbstractExportMetaDataImpl implements IExportMetaData
 {
+    private static final long serialVersionUID = 1934927330602066004L;
     private final Map<String, IIssueCategory> issueCategories = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new LinkedHashMap<>();
     private final Map<String, IIssueType> issueTypes = new LinkedHashMap<>();

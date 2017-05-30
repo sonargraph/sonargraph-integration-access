@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -323,7 +324,6 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
                 if (rootDirectory != null)
                 {
-
                     module.addRootDirectory(rootDirectory);
                     globalXmlToElementMap.put(nextRoot, rootDirectory);
 
@@ -485,6 +485,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 final XsdElementKind elementKind = (XsdElementKind) nextElement.getKind();
                 final NamedElementImpl element = createNamedElement(adjuster, nextElement, elementKind);
                 module.addElement(element);
+                assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
                 globalXmlToElementMap.put(nextElement, element);
             }
         }

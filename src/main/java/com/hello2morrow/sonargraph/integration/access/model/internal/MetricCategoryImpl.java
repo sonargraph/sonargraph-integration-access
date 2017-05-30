@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 
 public final class MetricCategoryImpl extends ElementImpl implements IMetricCategory
 {
+    private static final long serialVersionUID = -1327869798712256446L;
     private final int orderNumber;
 
     public MetricCategoryImpl(final String name, final String presentationName, final int orderNumber)

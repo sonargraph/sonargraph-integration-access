@@ -47,6 +47,7 @@ import javax.xml.validation.SchemaFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
 
@@ -64,29 +65,37 @@ final class JaxbAdapter<T>
     private final Marshaller writer;
     private Listener marshallListener;
 
-    private JaxbAdapter(final JAXBContextCreator creator, final URL... schemaUrl) throws Exception
+    private JaxbAdapter(final JAXBContextCreator creator, final URL... schemaUrl) throws XmlProcessingException
     {
         assert schemaUrl != null : "Parameter 'schemaUrl' of method 'JaxbAdapter' must not be null";
 
         final Source[] sources = new Source[schemaUrl.length];
-        for (int i = 0; i < schemaUrl.length; i++)
+        try
         {
-            sources[i] = new StreamSource(schemaUrl[i].openStream());
-        }
+            for (int i = 0; i < schemaUrl.length; i++)
+            {
+                sources[i] = new StreamSource(schemaUrl[i].openStream());
+            }
 
-        final JAXBContext jaxbContextProject = creator.get();
-        final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
+            final JAXBContext jaxbContextProject = creator.get();
+            final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
 
         reader = createReader(jaxbContextProject, schema);
         writer = createWriter(jaxbContextProject);
+
+        }
+        catch (final SAXException | IOException | JAXBException ex)
+        {
+            throw new XmlProcessingException("Failed to initialize JaxbAdapter", ex);
+        }
     }
 
-    public JaxbAdapter(final Class<T> jaxbClass, final URL... schemaUrl) throws Exception
+    public JaxbAdapter(final Class<T> jaxbClass, final URL... schemaUrl) throws XmlProcessingException
     {
         this(() -> JAXBContext.newInstance(jaxbClass), schemaUrl);
     }
 
-    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws Exception
+    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws XmlProcessingException
     {
         this(() -> JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader()), schemaUrl);
     }
@@ -99,7 +108,7 @@ final class JaxbAdapter<T>
     }
 
     @SuppressWarnings("unchecked")
-    public final Optional<T> load(final InputStream from, final ValidationEventHandler validationHandler) throws Exception
+    public final Optional<T> load(final InputStream from, final ValidationEventHandler validationHandler)
     {
         assert from != null : "'from' must not be null";
         assert validationHandler != null : "'validationHandler' must not be null";
@@ -110,7 +119,7 @@ final class JaxbAdapter<T>
             final T jaxbRoot = (T) reader.unmarshal(bufferedIn);
             return Optional.of(jaxbRoot);
         }
-        catch (final Exception e)
+        catch (final IOException | JAXBException e)
         {
             LOGGER.error("Failed to load xml file", e);
             return Optional.empty();

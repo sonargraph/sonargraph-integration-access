@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -47,7 +48,10 @@ public class ExportMetaDataControllerTest
     private static final String META_DATA_PATH = TestFixture.META_DATA_PATH;
     private static final String META_DATA_PATH1 = TestFixture.META_DATA_PATH1;
     private static final String META_DATA_PATH2 = TestFixture.META_DATA_PATH2;
+
     private static final String META_DATA_PATH_OUTDATED = TestFixture.META_DATA_PATH1_OLD;
+
+    private static final String WRONG_ENCODING = TestFixture.META_DATA_PATH_WRONG_ENCODING;
 
     private IMetaDataController m_controller;
 
@@ -110,6 +114,7 @@ public class ExportMetaDataControllerTest
         files.add(new File(META_DATA_PATH1));
         files.add(new File(META_DATA_PATH2));
         files.add(new File(META_DATA_PATH_OUTDATED));
+
         final OperationResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
 
         assertTrue("Success expected", result.isSuccess());
@@ -129,5 +134,25 @@ public class ExportMetaDataControllerTest
         assertNotNull("Individual metric of first file not found", metaData.getMetricIds().get("Unused Types"));
         assertNotNull("Individual metric of second file not found", metaData.getMetricIds().get("Unused Types2"));
         assertNull("Individual metric of outdated file must be omitted", metaData.getMetricIds().get("Unused Types3"));
+    }
+
+    @Test
+    public void testWrongEncoding()
+    {
+        final File exportMetaDataFile = new File(WRONG_ENCODING);
+        final OperationResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
+        assertFalse("Failure expected: " + result.toString(), result.isSuccess());
+    }
+
+    @Test
+    public void testMergeFilesWithOneWrongFile()
+    {
+        final List<File> files = new ArrayList<>();
+        files.add(new File(META_DATA_PATH1));
+        files.add(new File(WRONG_ENCODING));
+
+        final OperationResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
+
+        assertEquals("Warning expected: " + result.toString(), 1, result.getWarningMessages().size());
     }
 }

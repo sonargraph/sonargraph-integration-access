@@ -17,18 +17,20 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-public final class OperationResultWithOutcome<T> extends OperationResult
-{
-	private static final long serialVersionUID = -7003717724920078792L;
-	
-	private T outcome;
+import java.io.Serializable;
 
-    public OperationResultWithOutcome(String description)
+public final class OperationResultWithOutcome<T extends Serializable> extends OperationResult
+{
+    private static final long serialVersionUID = -7003717724920078792L;
+
+    private T outcome;
+
+    public OperationResultWithOutcome(final String description)
     {
         super(description);
     }
 
-    public void setOutcome(T object)
+    public void setOutcome(final T object)
     {
         outcome = object;
     }
@@ -46,7 +48,7 @@ public final class OperationResultWithOutcome<T> extends OperationResult
             return super.toString();
         }
 
-        StringBuilder builder = new StringBuilder(super.toString());
+        final StringBuilder builder = new StringBuilder(super.toString());
         builder.append(StringUtility.LINE_SEPARATOR);
         builder.append(outcome);
         return builder.toString();

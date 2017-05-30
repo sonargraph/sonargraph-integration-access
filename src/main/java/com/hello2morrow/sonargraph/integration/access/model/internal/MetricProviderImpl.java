@@ -24,6 +24,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
 public final class MetricProviderImpl extends ElementImpl implements IMetricProvider
 {
+    private static final long serialVersionUID = 615452015644502490L;
+
     public static class MetricProviderComparator implements Comparator<String>
     {
         @Override

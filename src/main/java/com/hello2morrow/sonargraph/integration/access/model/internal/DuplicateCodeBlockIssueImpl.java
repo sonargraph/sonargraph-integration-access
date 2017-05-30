@@ -30,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
 {
+    private static final long serialVersionUID = 3572308291532903170L;
     private final String presentationName;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;

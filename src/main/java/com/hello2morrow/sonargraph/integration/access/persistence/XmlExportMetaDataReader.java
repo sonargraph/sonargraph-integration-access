@@ -66,7 +66,7 @@ public final class XmlExportMetaDataReader
     private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
     private static final String METADATA_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
 
-    private JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createJaxbAdapter() throws Exception
+    private JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createJaxbAdapter() throws XmlProcessingException
     {
         final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
         return new JaxbAdapter<>(METADATA_NAMESPACE, metricsXsd);
@@ -97,8 +97,11 @@ public final class XmlExportMetaDataReader
         try (BufferedInputStream in = new BufferedInputStream(input))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
-            return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
+            if (xmlRoot.isPresent())
+            {
+                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
+                return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
+            }
         }
         catch (final Exception ex)
         {

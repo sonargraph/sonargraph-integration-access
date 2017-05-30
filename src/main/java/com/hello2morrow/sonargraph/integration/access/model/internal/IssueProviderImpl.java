@@ -21,6 +21,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 
 public class IssueProviderImpl extends ElementImpl implements IIssueProvider
 {
+    private static final long serialVersionUID = 5105889748502867507L;
+
     public IssueProviderImpl(final String name, final String presentationName)
     {
         super(name, presentationName);

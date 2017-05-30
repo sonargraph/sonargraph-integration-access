@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IElement
+import java.io.Serializable;
+
+public interface IElement extends Serializable
 {
     public String getName();
 

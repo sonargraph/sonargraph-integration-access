@@ -24,14 +24,15 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
+    private static final long serialVersionUID = 7897215356427497745L;
     private final String kind;
     private final String presentationKind;
     private final int line;
     private final String fqName;
     private ISourceFile m_source;
 
-    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final int line, final String description)
+    protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
+            final String fqName, final int line, final String description)
     {
         super(name, presentationName, description);
 
@@ -73,6 +74,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         m_source = source;
     }
 
+    @Override
     public final Optional<ISourceFile> getSourceFile()
     {
         return Optional.ofNullable(m_source);

@@ -26,6 +26,8 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public abstract class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
 {
+    private static final long serialVersionUID = -5510302644511647715L;
+
     private final Set<ISourceFile> sourceFiles = new TreeSet<>((s1, s2) -> s1.getFqName().compareTo(s2.getFqName()));
 
     private final NamedElementContainerImpl module;

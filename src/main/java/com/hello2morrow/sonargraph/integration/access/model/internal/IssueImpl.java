@@ -23,6 +23,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 
 public abstract class IssueImpl extends ElementWithDescriptionImpl implements IIssue
 {
+    private static final long serialVersionUID = -693212815143740221L;
     private final IIssueType issueType;
     private final IIssueProvider issueProvider;
     private final boolean hasResolution;

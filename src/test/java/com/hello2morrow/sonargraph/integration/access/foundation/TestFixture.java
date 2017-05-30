@@ -33,8 +33,16 @@ public class TestFixture
     public static final String MODEL_MODULE = "Model";
 
     /** Reports for testing diff functionality */
+    public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
+    public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";
+
     public static final String TEST_REPORT_WITHOUT_ISSUES = "./src/test/resources/ReportWithoutIssues.xml";
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
+    public static final String CSHARP_REPORT = "./src/test/resources/NHibernate_2017-04-03_11-59-50.xml";
+    public static final String CPP_REPORT = "./src/test/resources/project_2_2017-04-03_14-54-53.xml";
+    public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
+
+    public static final String ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT = "./src/test/resources/AlarmClock_ClassFileIssues.xml";
 
     public static final String TEST_REPORT_WORKSPACE_1 = "./src/test/diff/Workspace_AlarmClockMain_01.xml";
     public static final String TEST_REPORT_WORKSPACE_2 = "./src/test/diff/Workspace_AlarmClockMain_02.xml";
@@ -52,4 +60,5 @@ public class TestFixture
     public static final String META_DATA_PATH1 = "./src/test/resources/mergeMetaData/ExportMetaData1.xml";
     public static final String META_DATA_PATH1_OLD = "./src/test/resources/mergeMetaData/ExportMetaData1_old.xml";
     public static final String META_DATA_PATH2 = "./src/test/resources/mergeMetaData/ExportMetaData2.xml";
+    public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
 }

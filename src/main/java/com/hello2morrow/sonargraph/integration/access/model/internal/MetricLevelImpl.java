@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 
 public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
 {
+    private static final long serialVersionUID = -1495880029918751555L;
     private final int orderNumber;
 
     public MetricLevelImpl(final String name, final String presentationName, final int orderNumber)
