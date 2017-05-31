@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public interface IDelta
+import java.io.Serializable;
+
+public interface IDelta extends Serializable
 {
     public String print(boolean includeUnchanged);
 

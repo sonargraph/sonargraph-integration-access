@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 
 public final class StandardDeltaImpl<T extends IElement> implements IStandardDelta<T>
 {
+    private static final long serialVersionUID = -7912469796001338998L;
     private final String name;
     private final List<T> added;
     private final List<T> unchanged;

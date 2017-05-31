@@ -37,6 +37,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 
 public class CoreSystemDataDeltaImpl implements ICoreSystemDataDelta
 {
+    private static final long serialVersionUID = -1903934468806268019L;
     private IStandardDelta<IIssueProvider> issueProviderDelta;
     private IStandardDelta<IIssueCategory> issueCategoryDelta;
     private IStandardDelta<IIssueType> issueTypeDelta;

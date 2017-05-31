@@ -27,6 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThreshol
 
 public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
 {
+    private static final long serialVersionUID = 173829836484799550L;
     private final List<IMetricThreshold> added;
     private final List<IMetricThreshold> removed;
     private final List<Pair<IMetricThreshold, IMetricThreshold>> changed;

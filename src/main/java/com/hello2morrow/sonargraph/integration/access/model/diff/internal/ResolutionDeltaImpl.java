@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelt
 
 public class ResolutionDeltaImpl implements IResolutionDelta
 {
+    private static final long serialVersionUID = -2495005110387354288L;
     private final List<IResolution> added;
     private final List<IResolution> removed;
     private final List<IResolution> unchanged;

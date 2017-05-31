@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDel
 
 public class ElementKindDeltaImpl implements IElementKindDelta
 {
+    private static final long serialVersionUID = -5424079080974769404L;
     private final List<String> added;
     private final List<String> removed;
     private final List<String> unchanged;

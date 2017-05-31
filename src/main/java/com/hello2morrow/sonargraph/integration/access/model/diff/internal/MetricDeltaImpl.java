@@ -29,6 +29,8 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricDelta;
 public class MetricDeltaImpl implements IMetricDelta
 {
 
+    private static final long serialVersionUID = -282217692085478033L;
+
     @Override
     public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> getUnchangedValues()
     {

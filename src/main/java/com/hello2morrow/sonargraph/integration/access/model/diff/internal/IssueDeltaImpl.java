@@ -27,6 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 
 public class IssueDeltaImpl implements IIssueDelta
 {
+    private static final long serialVersionUID = -3056194877234260699L;
     private static final String INDENTATION = "    ";
     private final List<IIssue> unchanged;
     private final List<IIssue> added;

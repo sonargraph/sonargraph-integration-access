@@ -27,6 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta
 
 public class WorkspaceDeltaImpl implements IWorkspaceDelta
 {
+    private static final long serialVersionUID = 412462604753552482L;
     private final List<IModule> unchangedModules = new ArrayList<>();
     private final List<IModuleDelta> changedModules = new ArrayList<>();
     private final List<IModule> removedModules = new ArrayList<>();
