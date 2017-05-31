@@ -48,4 +48,56 @@ public class ThresholdViolationIssue extends ElementIssueImpl implements IThresh
     {
         return threshold;
     }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((metricValue == null) ? 0 : metricValue.hashCode());
+        result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final ThresholdViolationIssue other = (ThresholdViolationIssue) obj;
+        if (metricValue == null)
+        {
+            if (other.metricValue != null)
+            {
+                return false;
+            }
+        }
+        else if (!metricValue.equals(other.metricValue))
+        {
+            return false;
+        }
+        if (threshold == null)
+        {
+            if (other.threshold != null)
+            {
+                return false;
+            }
+        }
+        else if (!threshold.equals(other.threshold))
+        {
+            return false;
+        }
+        return true;
+    }
+
 }

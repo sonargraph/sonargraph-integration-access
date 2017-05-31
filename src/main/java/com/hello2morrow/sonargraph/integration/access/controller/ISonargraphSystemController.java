@@ -21,6 +21,7 @@ import java.io.File;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface ISonargraphSystemController
@@ -33,6 +34,8 @@ public interface ISonargraphSystemController
      * @return {@link OperationResult} containing info about any errors.
      */
     public OperationResult loadSystemReport(File systemReportFile);
+
+    public OperationResult loadSystemReport(File systemReportFile, INamedElementAdjuster adjuster);
 
     /**
      * Loads an XML report file without validation, generated on a different machine.
@@ -54,4 +57,15 @@ public interface ISonargraphSystemController
     public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 
     public ISystemInfoProcessor createSystemInfoProcessor();
+
+    /**
+     * Creates a difference processor based on the software system previously loaded by the controller.
+     */
+    public IReportDifferenceProcessor createReportDifferenceProcessor();
+
+    /**
+     * Writes a system report and can be used to reduce the size of huge XML report files.
+     * NOTE: This is currently not completed and only includes meta-data and workspace info of a SoftwareSystem.
+     */
+    public OperationResult writeSystemReport(File file);
 }

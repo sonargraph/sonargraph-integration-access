@@ -32,6 +32,7 @@ public class TestFixture
     public static final String APPLICATION_MODULE = "Application";
     public static final String MODEL_MODULE = "Model";
 
+    /** Reports for testing diff functionality */
     public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
     public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";
 
@@ -42,6 +43,16 @@ public class TestFixture
     public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
 
     public static final String ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT = "./src/test/resources/AlarmClock_ClassFileIssues.xml";
+
+    public static final String TEST_REPORT_WORKSPACE_1 = "./src/test/diff/Workspace_AlarmClockMain_01.xml";
+    public static final String TEST_REPORT_WORKSPACE_2 = "./src/test/diff/Workspace_AlarmClockMain_02.xml";
+    public static final String TEST_REPORT_WORKSPACE_2_ADJUSTED = "./src/test/diff/WorkspaceMoved_AlarmClockMain_02.xml";
+
+    public static final String TEST_REPORT_META_DATA_1 = "./src/test/diff/MetaData_AlarmClockMain_01.xml";
+    public static final String TEST_REPORT_META_DATA_2 = "./src/test/diff/MetaData_AlarmClockMain_02.xml";
+
+    public static final String TEST_REPORT_RESOLUTIONS_1 = "./src/test/diff/AlarmClockMain_Resolutions_01.xml";
+    public static final String TEST_REPORT_RESOLUTIONS_2 = "./src/test/diff/AlarmClockMain_Resolutions_02.xml";
 
     /**
      * Resources to test merge functionality
