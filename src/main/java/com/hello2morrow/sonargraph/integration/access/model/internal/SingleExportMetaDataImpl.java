@@ -22,6 +22,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISingleExportMetaDat
 
 public final class SingleExportMetaDataImpl extends AbstractExportMetaDataImpl implements ISingleExportMetaData
 {
+    private static final long serialVersionUID = 6408655245013480722L;
     private final IBasicSoftwareSystemInfo systemInfo;
 
     public SingleExportMetaDataImpl(final IBasicSoftwareSystemInfo systemInfo, final String resourceIdentifier)

@@ -22,6 +22,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlockOccurrence
 {
+    private static final long serialVersionUID = -5679562127595114393L;
     private final ISourceFile sourceFile;
     private final int blockSize;
     private final int startLine;

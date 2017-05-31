@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ResolutionImpl extends ElementImpl implements IResolution
 {
+    private static final long serialVersionUID = 6480407569513366548L;
     private final List<IIssue> issues;
     private final Priority priority;
     private final ResolutionType type;
@@ -81,6 +82,18 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(type.name());
+        builder.append(", priority=").append(priority);
+        builder.append(", applicable=").append(isApplicable ? "yes" : "no");
+        builder.append(", number of issues=").append(issues.size());
+        builder.append(", number of affected parser dependencies=").append(numberOfAffectedParserDependencies);
+        builder.append(", name=").append(getName());
+        return builder.toString();
     }
 
     @Override

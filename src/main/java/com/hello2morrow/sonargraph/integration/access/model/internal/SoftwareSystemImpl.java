@@ -48,6 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
+    private static final long serialVersionUID = -4666348701032432246L;
     private static final String SOFTWARE_SYSTEM = "SoftwareSystem";
     private final String systemId;
     private final String path;
@@ -62,13 +63,13 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IModule> modules = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
-    private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
+    private final Map<IIssueType, ArrayList<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
     private final List<IMetricThreshold> m_thresholds = new ArrayList<>();
-    private final Map<IAnalyzer, Map<String, ICycleGroup>> cycleGroups = new HashMap<>();
+    private final Map<IAnalyzer, HashMap<String, ICycleGroup>> cycleGroups = new HashMap<>();
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
-    private final Map<ResolutionType, List<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
+    private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
@@ -94,7 +95,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         this.timestamp = timestamp;
         this.virtualModel = virtualModel;
 
-        setMetricsAccess(new MetricsAccessImpl(path, systemId, version, timestamp));
+        setMetricsAccess(new MetaDataAccessImpl(path, systemId, version, timestamp));
         setElementRegistry(new ElementRegistryImpl());
         getElementRegistry().addElement(this);
     }
@@ -197,11 +198,17 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         issueProviders.put(provider.getName(), provider);
     }
 
+    /**
+     * @return a map with the name of the provider as key and the implementation as value.
+     */
     public Map<String, IIssueProvider> getIssueProviders()
     {
         return Collections.unmodifiableMap(issueProviders);
     }
 
+    /**
+     * @return a map with the name of the issue type as key and the implementation as value.
+     */
     public Map<String, IIssueType> getIssueTypes()
     {
         return Collections.unmodifiableMap(issueTypes);
@@ -294,7 +301,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert cycle != null : "Parameter 'cycle' of method 'addCycleGroup' must not be null";
 
-        final Map<String, ICycleGroup> cycleGroupMap;
+        final HashMap<String, ICycleGroup> cycleGroupMap;
         final IAnalyzer analyzer = cycle.getAnalyzer();
         assert analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has not been added";
 
@@ -326,7 +333,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert resolution != null : "Parameter 'resolution' of method 'addResolution' must not be null";
 
-        final List<IResolution> resolutions;
+        final ArrayList<IResolution> resolutions;
         if (!resolutionMap.containsKey(resolution.getType()))
         {
             resolutions = new ArrayList<>();

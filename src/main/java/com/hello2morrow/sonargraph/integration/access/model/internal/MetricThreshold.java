@@ -24,6 +24,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 
 public final class MetricThreshold implements IMetricThreshold
 {
+    private static final long serialVersionUID = -8392990712415156489L;
     private final Number upperThreshold;
     private final Number lowerThreshold;
     private final IMetricId metricId;
@@ -79,6 +80,81 @@ public final class MetricThreshold implements IMetricThreshold
         return new StringBuilder("threshold [metricId=").append(metricId.getPresentationName()).append(", metricLevel=")
                 .append(metricLevel.getPresentationName()).append(", lowerThreshold=").append(lowerThreshold).append(", upperThreshold=")
                 .append(upperThreshold).append("]").toString();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((lowerThreshold == null) ? 0 : lowerThreshold.hashCode());
+        result = prime * result + ((metricId == null) ? 0 : metricId.hashCode());
+        result = prime * result + ((metricLevel == null) ? 0 : metricLevel.hashCode());
+        result = prime * result + ((upperThreshold == null) ? 0 : upperThreshold.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final MetricThreshold other = (MetricThreshold) obj;
+        if (metricId == null)
+        {
+            if (other.metricId != null)
+            {
+                return false;
+            }
+        }
+        else if (!metricId.equals(other.metricId))
+        {
+            return false;
+        }
+        if (metricLevel == null)
+        {
+            if (other.metricLevel != null)
+            {
+                return false;
+            }
+        }
+        else if (!metricLevel.equals(other.metricLevel))
+        {
+            return false;
+        }
+        if (lowerThreshold == null)
+        {
+            if (other.lowerThreshold != null)
+            {
+                return false;
+            }
+        }
+        else if (!lowerThreshold.equals(other.lowerThreshold))
+        {
+            return false;
+        }
+        if (upperThreshold == null)
+        {
+            if (other.upperThreshold != null)
+            {
+                return false;
+            }
+        }
+        else if (!upperThreshold.equals(other.upperThreshold))
+        {
+            return false;
+        }
+        return true;
     }
 
     @Override

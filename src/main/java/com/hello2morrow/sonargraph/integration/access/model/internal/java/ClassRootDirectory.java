@@ -22,6 +22,8 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirecto
 
 public final class ClassRootDirectory extends RootDirectoryImpl
 {
+    private static final long serialVersionUID = -3779253759133898436L;
+
     public ClassRootDirectory(final NamedElementContainerImpl module, final String kind, final String presentationKind, final String absolutePath,
             final String fqName)
     {

@@ -17,14 +17,16 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-class ElementRegistryImpl
+class ElementRegistryImpl implements Serializable
 {
+    private static final long serialVersionUID = -947650961500421692L;
     private final Map<String, INamedElement> fqNameToElementMap = new HashMap<>();
 
     void addElement(final INamedElement namedElement)

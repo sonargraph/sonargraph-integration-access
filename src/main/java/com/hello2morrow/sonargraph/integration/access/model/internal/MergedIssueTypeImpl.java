@@ -29,6 +29,7 @@ import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public class MergedIssueTypeImpl extends IssueTypeImpl implements IMergedIssueType
 {
+    private static final long serialVersionUID = -1042056968763573015L;
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
 
     public MergedIssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category,

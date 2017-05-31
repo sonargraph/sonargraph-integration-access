@@ -19,9 +19,11 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,13 +31,16 @@ import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
+import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -68,6 +73,16 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
 
         return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter)
                 .collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean hasIssue(final Predicate<IIssue> filter)
+    {
+        if (filter == null)
+        {
+            throw new IllegalArgumentException("Missing mandatory argument 'filter'");
+        }
+        return softwareSystem.getIssues().entrySet().stream().flatMap(entry -> entry.getValue().stream()).anyMatch(filter);
     }
 
     @Override
@@ -126,6 +141,12 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public List<IIssueType> getIssueTypes()
     {
         return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getIssueTypes().values()));
+    }
+
+    @Override
+    public List<IIssueCategory> getIssueCategories()
+    {
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getIssueCategories().values()));
     }
 
     @Override
@@ -211,5 +232,28 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public Optional<IMetricLevel> getMetricLevel(final String systemLevel)
     {
         return Optional.ofNullable(softwareSystem.getMetricLevels().get(systemLevel));
+    }
+
+    @Override
+    public Map<String, IModule> getModules()
+    {
+        return softwareSystem.getModules();
+    }
+
+    @Override
+    public List<IMetricThreshold> getMetricThresholds()
+    {
+        return softwareSystem.getMetricThresholds();
+    }
+
+    @Override
+    public List<String> getElementKinds()
+    {
+        final Set<String> elementKinds = new HashSet<>(softwareSystem.getElementKinds());
+        for (final IModule next : softwareSystem.getModules().values())
+        {
+            elementKinds.addAll(next.getElementKinds());
+        }
+        return new ArrayList<>(elementKinds);
     }
 }

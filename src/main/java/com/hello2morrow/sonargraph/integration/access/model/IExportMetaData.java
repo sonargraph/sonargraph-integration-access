@@ -17,10 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public interface IExportMetaData
+public interface IExportMetaData extends Serializable
 {
     public Map<String, IIssueCategory> getIssueCategories();
 

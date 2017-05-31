@@ -18,17 +18,22 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
+import com.hello2morrow.sonargraph.integration.access.model.IModule;
 
 public interface ISystemInfoProcessor extends IInfoProcessor
 {
@@ -49,4 +54,14 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<IMetricProvider> getMetricProviders();
 
     public List<IFeature> getFeatures();
+
+    public boolean hasIssue(Predicate<IIssue> filter);
+
+    public Map<String, IModule> getModules();
+
+    public List<IIssueCategory> getIssueCategories();
+
+    public List<IMetricThreshold> getMetricThresholds();
+
+    public List<String> getElementKinds();
 }

@@ -21,6 +21,8 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceRootDirectory
 
 public final class SourceRootDirectoryImpl extends RootDirectoryImpl implements ISourceRootDirectory
 {
+    private static final long serialVersionUID = -3672496297719678922L;
+
     public SourceRootDirectoryImpl(final NamedElementContainerImpl module, final String kind, final String presentationKind,
             final String relativePath, final String fqName)
     {

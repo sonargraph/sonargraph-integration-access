@@ -23,6 +23,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 
 public class MetricValueImpl implements IMetricValue
 {
+    private static final long serialVersionUID = -4110580470334138407L;
     private final IMetricId id;
     private final IMetricLevel level;
     private final Number value;

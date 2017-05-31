@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IMetricValue
+import java.io.Serializable;
+
+public interface IMetricValue extends Serializable
 {
     public IMetricId getId();
 

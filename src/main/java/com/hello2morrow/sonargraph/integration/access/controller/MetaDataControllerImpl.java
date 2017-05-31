@@ -172,6 +172,12 @@ class MetaDataControllerImpl implements IMetaDataController
                         }
                     }
                 }
+                else
+                {
+                    LOGGER.warn("Failed to process file: {}", file.getAbsolutePath());
+                    result.addWarning(IOMessageCause.READ_ERROR, "Failed to process file '" + file.getAbsolutePath()
+                            + "'. Check the log file for details.");
+                }
             }
             catch (final IOException e)
             {

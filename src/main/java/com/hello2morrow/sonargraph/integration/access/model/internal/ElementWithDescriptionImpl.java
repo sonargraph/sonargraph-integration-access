@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IElementWithDescript
 
 public abstract class ElementWithDescriptionImpl extends ElementImpl implements IElementWithDescription
 {
+    private static final long serialVersionUID = -6970888192952043004L;
     private final String description;
 
     public ElementWithDescriptionImpl(final String name, final String presentationName, final String description)

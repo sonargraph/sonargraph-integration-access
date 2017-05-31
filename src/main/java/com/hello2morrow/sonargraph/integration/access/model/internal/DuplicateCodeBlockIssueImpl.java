@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
@@ -29,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
 {
+    private static final long serialVersionUID = 3572308291532903170L;
     private final String presentationName;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;
@@ -55,6 +57,19 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
     public List<INamedElement> getAffectedElements()
     {
         return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder("Duplicate Code Block with ");
+        builder.append(occurrences.size()).append(" occurrences, block size '").append(blockSize).append("', resolved '").append(hasResolution())
+                .append("'");
+        occurrences.forEach(occ -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
+                .append(StringUtility.INDENTATION).append("Occurrence in ").append(occ.getSourceFile().getPresentationName()).append(", start '")
+                .append(occ.getStartLine()).append("', block size '").append(occ.getBlockSize()).append("', tolerance '").append(occ.getTolerance())
+                .append("'"));
+        return builder.toString();
     }
 
     public void setBlockSize(final int blockSize)

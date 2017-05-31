@@ -26,6 +26,8 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public abstract class AbstractElementIssueImpl extends IssueImpl implements IElementIssue
 {
+    private static final long serialVersionUID = 859591960187662102L;
+
     public AbstractElementIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final int line)
     {

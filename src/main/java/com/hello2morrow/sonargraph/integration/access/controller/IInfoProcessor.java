@@ -51,6 +51,11 @@ public interface IInfoProcessor
      */
     public List<IResolution> getResolutions(Predicate<IResolution> filter);
 
+    /**
+     * @param level
+     * @param metricId the metric's 'standard' name, e.g. 'CoreParameter'
+     * @return
+     */
     public Optional<IMetricId> getMetricId(IMetricLevel level, String metricId);
 
     public Optional<IMetricValue> getMetricValueForElement(IMetricId metricId, IMetricLevel level, String fqName);
@@ -59,6 +64,10 @@ public interface IInfoProcessor
 
     public List<IMetricLevel> getMetricLevels();
 
+    /**
+     * @param levelName The level's 'standard' name, e.g. 'SourceFile'
+     * @return
+     */
     public Optional<IMetricLevel> getMetricLevel(String levelName);
 
     public Map<INamedElement, IMetricValue> getMetricValues(String levelName, String metricIdName);

@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,10 +35,11 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
 {
-    private MetricsAccessImpl metricsAccess;
+    private static final long serialVersionUID = 995206422502257231L;
+    private MetaDataAccessImpl metricsAccess;
     private ElementRegistryImpl elementRegistry;
-    private final Map<String, Map<String, INamedElement>> elementMap = new HashMap<>();
-    private final Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
+    private final Map<String, HashMap<String, INamedElement>> elementMap = new HashMap<>();
+    private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
@@ -45,14 +47,14 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         super(kind, presentationKind, name, presentationName, fqName, -1, description);
     }
 
-    protected final void setMetricsAccess(final MetricsAccessImpl metricsAccess)
+    protected final void setMetricsAccess(final MetaDataAccessImpl metricsAccess)
     {
         assert metricsAccess != null : "Parameter 'metricsAccess' of method 'setMetricsAccess' must not be null";
         assert this.metricsAccess == null : "metricsAccess must be null!";
         this.metricsAccess = metricsAccess;
     }
 
-    protected final MetricsAccessImpl getMetricsAccess()
+    protected final MetaDataAccessImpl getMetricsAccess()
     {
         assert metricsAccess != null : "'setMetricsAccess() must be called first!";
         return metricsAccess;
@@ -79,7 +81,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         {
             return false;
         }
-        final Map<String, INamedElement> elementsOfKind;
+        final HashMap<String, INamedElement> elementsOfKind;
         if (!elementMap.containsKey(element.getKind()))
         {
             elementsOfKind = new HashMap<>();
@@ -138,7 +140,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     @Override
     public final Set<String> getElementKinds()
     {
-        return Collections.unmodifiableSet(elementMap.keySet());
+        final Set<String> kinds = new HashSet<>(elementMap.keySet());
+        kinds.add(this.getKind());
+        return Collections.unmodifiableSet(kinds);
     }
 
     public final void addMetricValueForElement(final IMetricValue value, final INamedElement element)
@@ -151,7 +155,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         final IMetricLevel level = value.getLevel();
         assert metricsAccess.getMetricLevels().containsKey(level.getName()) : "Level '" + level.getName() + "' has not been added";
 
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> valuesOfLevel;
+        final HashMap<IMetricId, HashMap<INamedElement, IMetricValue>> valuesOfLevel;
         if (!metricValues.containsKey(level))
         {
             valuesOfLevel = new HashMap<>();
@@ -162,7 +166,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             valuesOfLevel = metricValues.get(level);
         }
 
-        final Map<INamedElement, IMetricValue> valuesForMetric;
+        final HashMap<INamedElement, IMetricValue> valuesForMetric;
         if (!valuesOfLevel.containsKey(metricId))
         {
             valuesForMetric = new HashMap<>();
@@ -186,7 +190,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             return Optional.empty();
         }
 
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdsOfLevel = metricValues.get(metricLevel);
+        final HashMap<IMetricId, HashMap<INamedElement, IMetricValue>> metricIdsOfLevel = metricValues.get(metricLevel);
         if (!metricIdsOfLevel.containsKey(metricId))
         {
             return Optional.empty();
@@ -243,7 +247,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         }
 
         final IMetricLevel level = metricLevels.get(metricLevel);
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(level);
+        final HashMap<IMetricId, HashMap<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(level);
 
         final Optional<IMetricId> optionalId = metricIdValueMap.keySet().stream().filter((final IMetricId id) -> id.getName().equals(metricId))
                 .findAny();
@@ -266,7 +270,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             return Collections.emptyMap();
         }
 
-        final Map<IMetricId, Map<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(metricLevel);
+        final HashMap<IMetricId, HashMap<INamedElement, IMetricValue>> metricIdValueMap = metricValues.get(metricLevel);
         if (!metricIdValueMap.containsKey(metricId))
         {
             return Collections.emptyMap();

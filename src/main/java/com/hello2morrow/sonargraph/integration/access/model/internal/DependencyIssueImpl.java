@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 public class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
 {
+    private static final long serialVersionUID = 2039911860451849412L;
     private final INamedElement from;
     private final INamedElement to;
 

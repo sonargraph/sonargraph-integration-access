@@ -21,7 +21,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +81,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
@@ -94,7 +94,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyI
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ElementIssueImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.FeaturesImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
@@ -115,12 +115,30 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdVi
 import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 
-public final class XmlReportReader
+public final class XmlReportReader extends AbstractXmlReportAccess
 {
-    private static final String REPORT_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
+    private static class NoOpAdjuster implements INamedElementAdjuster
+    {
+        @Override
+        public String adjustFqName(final String standardKind, final String fqName)
+        {
+            return fqName;
+        }
+
+        @Override
+        public String adjustName(final String standardKind, final String name)
+        {
+            return name;
+        }
+
+        @Override
+        public String adjustPresentationName(final String standardKind, final String presentationName)
+        {
+            return presentationName;
+        }
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
-    private static final String REPORT_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/report.xsd";
-    private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
     private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
     private final Map<Object, IIssue> globalXmlIdToIssueMap = new HashMap<>();
 
@@ -139,7 +157,33 @@ public final class XmlReportReader
         assert reportFile.canRead() : "Parameter 'reportFile' of method 'readReportFile' must be a file with read access";
         assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
 
-        //TODO: Check for version in report
+        return internReadReportFile(reportFile, result, enableSchemaValidation, new NoOpAdjuster());
+    }
+
+    /**
+     * Reads an XML report without schema validation.
+     *
+     * @param reportFile XML file that is expected to exist and be readable.
+     * @param result Contains info about errors.
+     */
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
+    {
+        return internReadReportFile(reportFile, result, false, new NoOpAdjuster());
+    }
+
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result, final INamedElementAdjuster adjuster)
+    {
+        return internReadReportFile(reportFile, result, false, adjuster);
+    }
+
+    private Optional<SoftwareSystemImpl> internReadReportFile(final File reportFile, final OperationResult result,
+            final boolean enableSchemaValidation, final INamedElementAdjuster adjuster)
+    {
+        assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
+        assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
+        assert reportFile.canRead() : "Parameter 'reportFile' of method 'readReportFile' must be a file with read access";
+        assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
+        assert adjuster != null : "Parameter 'adjuster' of method 'internReadReportFile' must not be null";
 
         JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter;
         try
@@ -160,7 +204,7 @@ public final class XmlReportReader
             xmlRoot = jaxbAdapter.load(in, eventHandler);
             if (xmlRoot.isPresent())
             {
-                return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+                return convertXmlReportToPojo(xmlRoot.get().getValue(), adjuster, result);
             }
         }
         catch (final Exception ex)
@@ -179,18 +223,8 @@ public final class XmlReportReader
         return Optional.empty();
     }
 
-    /**
-     * Reads an XML report without schema validation.
-     *
-     * @param reportFile XML file that is expected to exist and be readable.
-     * @param result Contains info about errors.
-     */
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
-    {
-        return readReportFile(reportFile, result, false);
-    }
-
-    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final OperationResult result)
+    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final INamedElementAdjuster adjuster,
+            final OperationResult result)
     {
         assert report != null : "Parameter 'report' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
@@ -202,15 +236,15 @@ public final class XmlReportReader
 
         processAnalyzers(softwareSystem, report);
         processFeatures(softwareSystem, report);
-        processWorkspace(softwareSystem, report, result);
+        processWorkspace(softwareSystem, report, result, adjuster);
         if (result.isFailure())
         {
             return Optional.empty();
         }
 
-        processSystemElements(softwareSystem, report);
-        processModuleElements(softwareSystem, report);
-        addSources(softwareSystem);
+        processSystemElements(softwareSystem, report, adjuster);
+        processModuleElements(softwareSystem, report, adjuster);
+        addSources();
 
         processMetrics(softwareSystem, report);
         processMetricThresholds(softwareSystem, report);
@@ -224,7 +258,7 @@ public final class XmlReportReader
         return Optional.of(softwareSystem);
     }
 
-    private void addSources(final SoftwareSystemImpl softwareSystem)
+    private void addSources()
     {
         for (final Map.Entry<Object, IElement> entry : globalXmlToElementMap.entrySet())
         {
@@ -248,7 +282,8 @@ public final class XmlReportReader
         }
     }
 
-    private void processWorkspace(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
+    private void processWorkspace(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result,
+            final INamedElementAdjuster adjuster)
     {
         for (final XsdModule xsdModule : report.getWorkspace().getModule())
         {
@@ -265,17 +300,17 @@ public final class XmlReportReader
                 final String standardKind = elementKind.getStandardKind();
                 try
                 {
+                    final String fqName = adjuster.adjustFqName(standardKind, nextRoot.getFqName());
+                    final String presentationName = adjuster.adjustPresentationName(standardKind, nextRoot.getPresentationName());
                     switch (standardKind)
                     {
                     case "JavaClassRootDirectoryPath":
-                        rootDirectory = createJavaClassRootDirectory(module, standardKind, presentationKind, nextRoot.getPresentationName(),
-                                nextRoot.getFqName());
+                        rootDirectory = createJavaClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
                         break;
                     case "JavaSourceRootDirectoryPath":
                         //$FALL-THROUGH$
                     default:
-                        rootDirectory = createRootDirectory(module, standardKind, presentationKind, nextRoot.getPresentationName(),
-                                nextRoot.getFqName());
+                        rootDirectory = createRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
                         break;
                     }
                 }
@@ -288,7 +323,6 @@ public final class XmlReportReader
 
                 if (rootDirectory != null)
                 {
-
                     module.addRootDirectory(rootDirectory);
                     globalXmlToElementMap.put(nextRoot, rootDirectory);
 
@@ -385,7 +419,7 @@ public final class XmlReportReader
 
         for (final XsdFeature next : report.getFeatures().getFeature())
         {
-            softwareSystem.addFeature(new FeaturesImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
+            softwareSystem.addFeature(new FeatureImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
         }
     }
 
@@ -415,7 +449,8 @@ public final class XmlReportReader
         }
     }
 
-    private void processSystemElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processSystemElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
+            final INamedElementAdjuster adjuster)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addSystemElements' must not be null";
         assert report != null : "Parameter 'report' of method 'addSystemElements' must not be null";
@@ -426,14 +461,14 @@ public final class XmlReportReader
         for (final XsdNamedElement nextElement : report.getSystemElements().getElement())
         {
             final XsdElementKind elementKind = (XsdElementKind) nextElement.getKind();
-            final NamedElementImpl element = new NamedElementImpl(elementKind.getStandardKind(), elementKind.getPresentationKind(),
-                    nextElement.getName(), nextElement.getPresentationName(), nextElement.getFqName(), nextElement.getLine());
+            final NamedElementImpl element = createNamedElement(adjuster, nextElement, elementKind);
             softwareSystem.addElement(element);
             globalXmlToElementMap.put(nextElement, element);
         }
     }
 
-    private void processModuleElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processModuleElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
+            final INamedElementAdjuster adjuster)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addModuleElements' must not be null";
         assert report != null : "Parameter 'report' of method 'addModuleElements' must not be null";
@@ -447,12 +482,25 @@ public final class XmlReportReader
             for (final XsdNamedElement nextElement : nextModuleElements.getElement())
             {
                 final XsdElementKind elementKind = (XsdElementKind) nextElement.getKind();
-                final NamedElementImpl element = new NamedElementImpl(elementKind.getStandardKind(), elementKind.getPresentationKind(),
-                        nextElement.getName(), nextElement.getPresentationName(), nextElement.getFqName(), nextElement.getLine());
+                final NamedElementImpl element = createNamedElement(adjuster, nextElement, elementKind);
                 module.addElement(element);
+                assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
                 globalXmlToElementMap.put(nextElement, element);
             }
         }
+    }
+
+    private NamedElementImpl createNamedElement(final INamedElementAdjuster adjuster, final XsdNamedElement nextElement,
+            final XsdElementKind elementKind)
+    {
+        final String standardKind = elementKind.getStandardKind();
+
+        final String name = adjuster.adjustName(standardKind, nextElement.getName());
+        final String presentationName = adjuster.adjustPresentationName(standardKind, nextElement.getPresentationName());
+        final String fqName = adjuster.adjustFqName(standardKind, nextElement.getFqName());
+        final NamedElementImpl element = new NamedElementImpl(standardKind, elementKind.getPresentationKind(), name, presentationName, fqName,
+                nextElement.getLine());
+        return element;
     }
 
     private void processMetrics(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport xsdReport)
@@ -755,6 +803,11 @@ public final class XmlReportReader
 
     private void processSimpleElementIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
+        if (report.getIssues() == null || report.getIssues().getElementIssues() == null)
+        {
+            return;
+        }
+
         for (final XsdSimpleElementIssue next : report.getIssues().getElementIssues().getIssue())
         {
             final XsdElement affectedElement = (XsdElement) next.getAffectedElement();
@@ -810,18 +863,5 @@ public final class XmlReportReader
         assert fqName != null && fqName.length() > 0 : "Parameter 'fqName' of method 'createJavaClassRootDirectory' must not be empty";
 
         return new ClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
-    }
-
-    private JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createJaxbAdapter(final boolean enableSchemaValidation) throws Exception
-    {
-        if (enableSchemaValidation)
-        {
-            final URL reportXsd = getClass().getClassLoader().getResource(REPORT_SCHEMA);
-            final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
-
-            return new JaxbAdapter<>(REPORT_NAMESPACE, metricsXsd, reportXsd);
-        }
-
-        return new JaxbAdapter<>(REPORT_NAMESPACE);
     }
 }

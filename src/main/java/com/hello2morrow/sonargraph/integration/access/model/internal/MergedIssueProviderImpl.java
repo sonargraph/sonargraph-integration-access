@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider
 
 public class MergedIssueProviderImpl extends IssueProviderImpl implements IMergedIssueProvider
 {
+    private static final long serialVersionUID = -4879664023613931247L;
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
 
     public MergedIssueProviderImpl(final String name, final String presentationName, final IBasicSoftwareSystemInfo system)

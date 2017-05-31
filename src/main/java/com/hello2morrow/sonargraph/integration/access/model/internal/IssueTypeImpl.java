@@ -24,6 +24,7 @@ import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public class IssueTypeImpl extends ElementImpl implements IIssueType
 {
+    private static final long serialVersionUID = -8081570866899153886L;
     private final IIssueCategory category;
     private final Severity severity;
     private final String description;
