@@ -12,7 +12,7 @@ The variant Sonargraph Explorer is free for Java and C# projects, but only runs 
 Releases are published on Maven central, so the easiest way to use the plugin is to add a dependency to it in your Maven pom.xml. 
 See /src/test/xproject-metric-aggregation/pom.xml for an example.
 
-Since version 3.0 the functionality exists to generate a delta between two XML reports. More details can be found in the documentation of Sonargraph Architect at 
+Since version 3.0 the functionality exists to generate a delta between two XML reports. More details can be found in the Wiki and the documentation of Sonargraph Architect at 
 <a href="http://eclipse.hello2morrow.com/doc/standalone/content/reporting_changes.html">http://eclipse.hello2morrow.com/doc/standalone/content/reporting_changes.html</a>. 
 
 
