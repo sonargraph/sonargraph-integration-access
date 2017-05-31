@@ -251,11 +251,11 @@ public class XmlPrettyPrintWriter implements XMLStreamWriter
         return m_writer.getProperty(name);
     }
 
-    private String repeat(int d, final char s)
+    private String repeat(final int d, final char s)
     {
         final StringBuilder builder = new StringBuilder();
-
-        while (d-- > 0)
+        int count = d;
+        while (count-- > 0)
         {
             builder.append(s);
         }

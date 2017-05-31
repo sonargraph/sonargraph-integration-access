@@ -244,7 +244,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
         processSystemElements(softwareSystem, report, adjuster);
         processModuleElements(softwareSystem, report, adjuster);
-        addSources(softwareSystem);
+        addSources();
 
         processMetrics(softwareSystem, report);
         processMetricThresholds(softwareSystem, report);
@@ -258,7 +258,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         return Optional.of(softwareSystem);
     }
 
-    private void addSources(final SoftwareSystemImpl softwareSystem)
+    private void addSources()
     {
         for (final Map.Entry<Object, IElement> entry : globalXmlToElementMap.entrySet())
         {
@@ -803,7 +803,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
     private void processSimpleElementIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
-        if (report.getIssues() == null || report.getIssues().getElementIssues() == null || report.getIssues().getElementIssues() == null)
+        if (report.getIssues() == null || report.getIssues().getElementIssues() == null)
         {
             return;
         }

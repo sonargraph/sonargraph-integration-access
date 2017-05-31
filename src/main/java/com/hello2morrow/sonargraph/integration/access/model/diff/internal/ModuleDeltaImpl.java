@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
 
 public class ModuleDeltaImpl implements IModuleDelta
 {
+    private static final long serialVersionUID = 1127361649841021407L;
     private final IModule module;
     private final List<IRootDirectory> unchanged;
     private final List<IRootDirectory> added;
@@ -83,8 +84,8 @@ public class ModuleDeltaImpl implements IModuleDelta
         builder.append(module.getName());
 
         builder.append("\n").append(StringUtility.INDENTATION).append("Removed roots (").append(removed.size()).append("):");
-        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(StringUtility.INDENTATION)
-                .append(StringUtility.INDENTATION).append(r);
+        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
+                .append(r);
         removed.forEach(action);
 
         builder.append("\n").append(StringUtility.INDENTATION).append("Added roots (").append(added.size()).append("):");

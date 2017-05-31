@@ -17,8 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-public class Pair<T1, T2>
+import java.io.Serializable;
+
+public class Pair<T1 extends Serializable, T2 extends Serializable> implements Serializable
 {
+    private static final long serialVersionUID = 7247108645914680029L;
     private final T1 t1;
     private final T2 t2;
 

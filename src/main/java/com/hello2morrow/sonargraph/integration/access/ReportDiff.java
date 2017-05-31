@@ -96,7 +96,7 @@ public class ReportDiff
         final OperationResult result = new OperationResult("Printing delta of reports");
         if (outputPath == null)
         {
-            System.out.println(createPreamble(delta));
+            System.out.println(createPreamble());
             System.out.println(delta.print(false));
             return result;
         }
@@ -113,7 +113,7 @@ public class ReportDiff
 
         try (PrintWriter out = new PrintWriter(file))
         {
-            out.println(createPreamble(delta));
+            out.println(createPreamble());
             out.println(delta.print(false));
         }
         catch (final IOException ex)
@@ -123,7 +123,7 @@ public class ReportDiff
         return result;
     }
 
-    private String createPreamble(final IReportDelta delta)
+    private String createPreamble()
     {
         final StringBuilder builder = new StringBuilder();
         builder.append("Delta of System Reports:");

@@ -159,10 +159,13 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 worse.add(new Pair<IIssue, IIssue>(originalTh, th));
                 break;
             case CHANGED:
-                assert false : "Changed threshold violation issue must have been handled previously";
+                //handled by removing the previous and adding the new
                 break;
             case NO_MATCH_FOUND:
                 assert false : "Unmatched threshold violation issue must have been handled previously";
+                break;
+            default:
+                assert false : "unhandled diff '" + diff.name() + "'";
             }
             removed.remove(originalTh);
             added.remove(th);
