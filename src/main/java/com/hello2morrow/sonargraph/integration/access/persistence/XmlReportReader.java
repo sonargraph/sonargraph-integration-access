@@ -396,7 +396,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             }
 
             final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isIsApplicable(),
-                    nextResolution.getNumberOfAffectedParserDependencies());
+                    nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(), nextResolution.getAssignee(),
+                    nextResolution.getDate().toString());
             softwareSystem.addResolution(resolution);
         }
     }

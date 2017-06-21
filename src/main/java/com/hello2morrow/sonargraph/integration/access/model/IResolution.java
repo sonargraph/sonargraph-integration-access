@@ -32,4 +32,10 @@ public interface IResolution extends IElement
     public boolean isTask();
 
     public int getNumberOfAffectedParserDependencies();
+
+    public String getDescription();
+
+    public String getAssignee();
+
+    public String getDate();
 }

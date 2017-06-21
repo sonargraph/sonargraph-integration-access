@@ -134,9 +134,36 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     }
 
     @Override
+    public Map<ISourceFile, Map<IResolution, List<IIssue>>> getIssuesForResolutionsForSourceFiles(final Predicate<IResolution> filter)
+    {
+        final Map<ISourceFile, Map<IResolution, List<IIssue>>> sourceFileToResolutionMap = new HashMap<>();
+        for (final IResolution resolution : systemInfoProcessor.getResolutions(filter))
+        {
+            final Map<ISourceFile, List<IIssue>> issuesToSourceFiles = mapIssuesToSourceFiles(resolution.getIssues());
+            for (final Map.Entry<ISourceFile, List<IIssue>> next : issuesToSourceFiles.entrySet())
+            {
+                final ISourceFile sourceFile = next.getKey();
+                Map<IResolution, List<IIssue>> resolutionToIssues = sourceFileToResolutionMap.get(sourceFile);
+                if (resolutionToIssues == null)
+                {
+                    resolutionToIssues = new HashMap<>();
+                    sourceFileToResolutionMap.put(sourceFile, resolutionToIssues);
+                }
+                resolutionToIssues.put(resolution, next.getValue());
+            }
+        }
+        return sourceFileToResolutionMap;
+    }
+
+    @Override
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(final Predicate<IIssue> filter)
     {
         final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
+        return mapIssuesToSourceFiles(systemIssues);
+    }
+
+    private Map<ISourceFile, List<IIssue>> mapIssuesToSourceFiles(final List<IIssue> systemIssues)
+    {
         final Map<ISourceFile, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue issue : systemIssues)
         {

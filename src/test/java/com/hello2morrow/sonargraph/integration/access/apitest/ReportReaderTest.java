@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -52,6 +53,17 @@ public class ReportReaderTest
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issues", 0, info.getIssues(null).size());
+    }
+
+    @Test
+    public void processReportWithUnknownElements()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final OperationResult result2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES), true);
+        assertFalse(result2.toString(), result2.isSuccess());
     }
 
     @Test
