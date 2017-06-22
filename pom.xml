@@ -189,6 +189,10 @@
       <id>andreashoyerh2m</id>
       <name>Andreas Hoyer</name>
     </developer>
+    <developer>
+      <id>dietmarmenges</id>
+      <name>Dietmar Menges</name>
+    </developer>
   </developers>
   <profiles>
     <profile>
