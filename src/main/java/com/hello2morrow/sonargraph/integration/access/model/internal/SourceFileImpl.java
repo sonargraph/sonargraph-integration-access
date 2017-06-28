@@ -23,27 +23,39 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 public final class SourceFileImpl extends NamedElementImpl implements ISourceFile
 {
     private static final long serialVersionUID = -2940999235312739954L;
-    private final IRootDirectory root;
+    private final IRootDirectory rootDirectory;
+    private ISourceFile original = null;
 
     public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
             final String presentationName, final String fqName)
     {
         super(kind, presentationKind, name, presentationName, fqName, -1);
         assert rootDirectory != null : "Parameter 'rootDirectory' of method 'SourceFileImpl' must not be null";
-        root = rootDirectory;
+        this.rootDirectory = rootDirectory;
+        setSourceFile(this);
     }
 
     @Override
     public String getRelativeRootDirectoryPath()
     {
-        return root.getRelativePath();
+        return rootDirectory.getRelativePath();
     }
 
     @Override
     public String getRelativePath()
     {
-        //TODO [Dietmar] Strange mix up - why not rel. path?
         return getPresentationName();
+    }
+
+    @Override
+    public ISourceFile getOriginal()
+    {
+        return original;
+    }
+
+    public void setOriginal(final ISourceFile original)
+    {
+        this.original = original;
     }
 
     @Override
@@ -51,7 +63,8 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((root == null) ? 0 : root.hashCode());
+        result = prime * result + ((original == null) ? 0 : original.hashCode());
+        result = prime * result + ((rootDirectory == null) ? 0 : rootDirectory.hashCode());
         return result;
     }
 
@@ -71,14 +84,25 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
             return false;
         }
         final SourceFileImpl other = (SourceFileImpl) obj;
-        if (root == null)
+        if (original == null)
         {
-            if (other.root != null)
+            if (other.original != null)
             {
                 return false;
             }
         }
-        else if (!root.equals(other.root))
+        else if (!original.equals(other.original))
+        {
+            return false;
+        }
+        if (rootDirectory == null)
+        {
+            if (other.rootDirectory != null)
+            {
+                return false;
+            }
+        }
+        else if (!rootDirectory.equals(other.rootDirectory))
         {
             return false;
         }

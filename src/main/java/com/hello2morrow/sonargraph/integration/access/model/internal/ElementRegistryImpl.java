@@ -24,6 +24,10 @@ import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
+/**
+ * Global map of elements of a Software system.
+ */
+//FIXME [IK, DM] Add support for clones and originals
 class ElementRegistryImpl implements Serializable
 {
     private static final long serialVersionUID = -947650961500421692L;

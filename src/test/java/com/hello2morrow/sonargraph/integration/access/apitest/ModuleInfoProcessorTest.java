@@ -188,7 +188,7 @@ public class ModuleInfoProcessorTest
         assertEquals("Wrong number of files with issues (without resolution)", 1, files.size());
 
         final ISourceFile main = files.get(0);
-        assertEquals("Wrong relatve source file path", "./com/h2m/alarm/application/Main.java", main.getRelativePath());
+        assertEquals("Wrong relative source file path", "./com/h2m/alarm/application/Main.java", main.getPresentationName());
         assertEquals("Wrong relative root directory", "../../smallTestProject/Application/src/main/java", main.getRelativeRootDirectoryPath());
         assertEquals("Wrong absolute system directory",
                 "D:/00_repos/00_e4-sgng/com.hello2morrow.sonargraph.language.provider.java/src/test/architecture/AlarmClockWithArchitecture",

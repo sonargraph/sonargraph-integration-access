@@ -94,6 +94,18 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public boolean isElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'isElementContainedInModule' must not be null";
+        final Optional<ISourceFile> sourceOpt = element.getSourceFile();
+        if (sourceOpt.isPresent())
+        {
+            final ISourceFile source = sourceOpt.get();
+            final ISourceFile original = source.getOriginal();
+            if (original != null)
+            {
+                return module.hasElement(original);
+            }
+
+            return module.hasElement(source);
+        }
         return module.hasElement(element);
     }
 

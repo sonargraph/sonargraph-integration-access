@@ -241,6 +241,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         {
             return Optional.empty();
         }
+        connectOriginals(softwareSystem, report, result);
 
         processSystemElements(softwareSystem, report, adjuster);
         processModuleElements(softwareSystem, report, adjuster);
@@ -338,6 +339,58 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 }
             }
         }
+    }
+
+    private void connectOriginals(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
+    {
+        for (final XsdModule xsdModule : report.getWorkspace().getModule())
+        {
+            for (final XsdRootDirectory nextRoot : xsdModule.getRootDirectory())
+            {
+                for (final XsdSourceFile nextSourceFile : nextRoot.getSourceElement())
+                {
+                    final SourceFileImpl sourceFile = getSourceFile(nextSourceFile);
+                    if (sourceFile == null)
+                    {
+                        continue;
+                    }
+
+                    final Object xsdOriginal = nextSourceFile.getOriginal();
+                    if (xsdOriginal != null)
+                    {
+                        if (xsdOriginal instanceof XsdSourceFile)
+                        {
+                            final SourceFileImpl original = getSourceFile((XsdSourceFile) xsdOriginal);
+                            if (original != null)
+                            {
+                                sourceFile.setOriginal(original);
+                            }
+                        }
+                        else
+                        {
+                            LOGGER.error("Unexpected class '{}' as original source file.", xsdOriginal.getClass().getCanonicalName());
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private SourceFileImpl getSourceFile(final XsdSourceFile nextSourceFile)
+    {
+        final Object source = globalXmlToElementMap.get(nextSourceFile);
+        if (source == null)
+        {
+            LOGGER.error("Source file '{}' must have been created before.", nextSourceFile.getFqName());
+            return null;
+        }
+        else if (!(source instanceof SourceFileImpl))
+        {
+            LOGGER.error("Unexpected class '{}'", source.getClass().getCanonicalName());
+            return null;
+        }
+        return (SourceFileImpl) source;
     }
 
     private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)

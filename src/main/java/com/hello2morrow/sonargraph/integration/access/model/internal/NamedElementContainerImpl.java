@@ -37,8 +37,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
 {
     private static final long serialVersionUID = 995206422502257231L;
     private MetaDataAccessImpl metricsAccess;
+
+    //global registry for elements
     private ElementRegistryImpl elementRegistry;
-    private final Map<String, HashMap<String, INamedElement>> elementMap = new HashMap<>();
+
+    //TODO [IK, DM] Check if we need two different maps, one for the original elements, one for the refactored elements
+    private final Map<String, HashMap<String, INamedElement>> kindToFqNameToElementMap = new HashMap<>();
     private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
@@ -82,14 +86,14 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             return false;
         }
         final HashMap<String, INamedElement> elementsOfKind;
-        if (!elementMap.containsKey(element.getKind()))
+        if (!kindToFqNameToElementMap.containsKey(element.getKind()))
         {
             elementsOfKind = new HashMap<>();
-            elementMap.put(element.getKind(), elementsOfKind);
+            kindToFqNameToElementMap.put(element.getKind(), elementsOfKind);
         }
         else
         {
-            elementsOfKind = elementMap.get(element.getKind());
+            elementsOfKind = kindToFqNameToElementMap.get(element.getKind());
         }
 
         assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
@@ -111,12 +115,12 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
 
         final INamedElement fqNamedElement = (INamedElement) element;
 
-        if (!elementMap.containsKey(fqNamedElement.getKind()))
+        if (!kindToFqNameToElementMap.containsKey(fqNamedElement.getKind()))
         {
             return false;
         }
 
-        return elementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
+        return kindToFqNameToElementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
     }
 
     /* (non-Javadoc)
@@ -126,9 +130,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public final Map<String, INamedElement> getElements(final String elementKind)
     {
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'getElements' must not be empty";
-        if (elementMap.containsKey(elementKind))
+        if (kindToFqNameToElementMap.containsKey(elementKind))
         {
-            return Collections.unmodifiableMap(elementMap.get(elementKind));
+            return Collections.unmodifiableMap(kindToFqNameToElementMap.get(elementKind));
         }
 
         return Collections.emptyMap();
@@ -140,7 +144,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     @Override
     public final Set<String> getElementKinds()
     {
-        final Set<String> kinds = new HashSet<>(elementMap.keySet());
+        final Set<String> kinds = new HashSet<>(kindToFqNameToElementMap.keySet());
         kinds.add(this.getKind());
         return Collections.unmodifiableSet(kinds);
     }

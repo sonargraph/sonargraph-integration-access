@@ -117,6 +117,7 @@
                 <xs:attribute name="source" type="xs:IDREF" use="optional"/>
                 <xs:attribute name="line" type="xs:int" default="-1" use="optional"/>
                 <xs:attribute name="primaryElement" type="xs:IDREF" use="optional"/>
+                <xs:attribute name="original" type="xs:IDREF" use="optional"/>
             </xs:extension>
         </xs:complexContent>   
    </xs:complexType>

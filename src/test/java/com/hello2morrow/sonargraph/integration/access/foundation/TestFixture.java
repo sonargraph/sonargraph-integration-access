@@ -56,6 +56,9 @@ public class TestFixture
     public static final String TEST_REPORT_RESOLUTIONS_1 = "./src/test/diff/AlarmClockMain_Resolutions_01.xml";
     public static final String TEST_REPORT_RESOLUTIONS_2 = "./src/test/diff/AlarmClockMain_Resolutions_02.xml";
 
+    public static final String TEST_REPORT_REFACTORINGS = "./src/test/resources/AlarmClockMain_Refactorings.xml";
+    public static final String TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES = "./src/test/resources/AlarmClockMain_Refactorings_DuplicateFqName.xml";
+
     /**
      * Resources to test merge functionality
      */
