@@ -32,18 +32,16 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
 {
     private static final long serialVersionUID = 995206422502257231L;
-    private MetaDataAccessImpl metricsAccess;
-
-    //global registry for elements
-    private ElementRegistryImpl elementRegistry;
-
-    //TODO [IK, DM] Check if we need two different maps, one for the original elements, one for the refactored elements
     private final Map<String, HashMap<String, INamedElement>> kindToFqNameToElementMap = new HashMap<>();
     private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
+    private final Set<ISourceFile> originalSourceFiles = new HashSet<>();
+    private MetaDataAccessImpl metricsAccess;
+    private ElementRegistryImpl elementRegistry;
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
@@ -77,49 +75,47 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         return elementRegistry;
     }
 
-    public final boolean addElement(final INamedElement element)
+    public final void addElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'addElement' must not be null";
 
-        if (!acceptElementKind(element.getKind()))
+        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
         {
-            return false;
+            originalSourceFiles.add((ISourceFile) element);
         }
-        final HashMap<String, INamedElement> elementsOfKind;
-        if (!kindToFqNameToElementMap.containsKey(element.getKind()))
+        else if (acceptElementKind(element.getKind()))
         {
-            elementsOfKind = new HashMap<>();
-            kindToFqNameToElementMap.put(element.getKind(), elementsOfKind);
-        }
-        else
-        {
-            elementsOfKind = kindToFqNameToElementMap.get(element.getKind());
-        }
+            final HashMap<String, INamedElement> elementsOfKind;
+            if (!kindToFqNameToElementMap.containsKey(element.getKind()))
+            {
+                elementsOfKind = new HashMap<>();
+                kindToFqNameToElementMap.put(element.getKind(), elementsOfKind);
+            }
+            else
+            {
+                elementsOfKind = kindToFqNameToElementMap.get(element.getKind());
+            }
 
-        assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
-        elementsOfKind.put(element.getFqName(), element);
-
-        getElementRegistry().addElement(element);
-        return true;
+            assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
+            elementsOfKind.put(element.getFqName(), element);
+            getElementRegistry().addElement(element);
+        }
     }
 
-    public boolean hasElement(final IElement element)
+    public boolean hasElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'hasElement' must not be null";
 
-        //TODO: remove this check and the cast, once the type hierarchy is refactored.
-        if (!(element instanceof INamedElement))
+        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
         {
-            return false;
+            return originalSourceFiles.contains(element);
         }
 
-        final INamedElement fqNamedElement = (INamedElement) element;
-
+        final INamedElement fqNamedElement = element;
         if (!kindToFqNameToElementMap.containsKey(fqNamedElement.getKind()))
         {
             return false;
         }
-
         return kindToFqNameToElementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
     }
 

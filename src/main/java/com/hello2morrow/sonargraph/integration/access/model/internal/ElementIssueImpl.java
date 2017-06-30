@@ -127,5 +127,4 @@ public class ElementIssueImpl extends AbstractElementIssueImpl
         }
         return true;
     }
-
 }

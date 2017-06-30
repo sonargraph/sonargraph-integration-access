@@ -112,16 +112,20 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong number of originals", 1, refactoredElements.size());
         assertEquals("Wrong refactored element", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java",
                 refactoredElements.get(0).getFqName());
-        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java",
-                refactoredElements.get(0).getOriginal().getFqName());
+        final Optional<ISourceFile> originalSourceFileOpt = refactoredElements.get(0).getOriginal();
+        assertTrue("Original source file expected '" + refactoredElements.get(0).getFqName() + "'", originalSourceFileOpt.isPresent());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java", originalSourceFileOpt
+                .get().getFqName());
 
         final IModule foundation = systemProcessor.getModules().get("Foundation");
         final List<ISourceFile> refactoredElements2 = getRefactoredSourceElements(foundation);
         assertEquals("Wrong number of originals", 1, refactoredElements2.size());
         assertEquals("Wrong refactored element", "Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java", refactoredElements2
                 .get(0).getFqName());
-        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java", refactoredElements2.get(0)
-                .getOriginal().getFqName());
+        final Optional<ISourceFile> originalSourceFileOpt2 = refactoredElements2.get(0).getOriginal();
+        assertTrue("Original source file expected for '" + refactoredElements2.get(0).getFqName() + "'", originalSourceFileOpt2.isPresent());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java", originalSourceFileOpt2.get()
+                .getFqName());
     }
 
     private List<ISourceFile> getRefactoredSourceElements(final IModule module)
@@ -133,11 +137,9 @@ public class SonargraphSystemControllerTest
         {
             assertTrue("Unexpected class '" + next.getClass().getCanonicalName() + "' for element: " + next.toString(), next instanceof ISourceFile);
             final ISourceFile sourceFile = (ISourceFile) next;
-            final ISourceFile original = sourceFile.getOriginal();
-            if (original != null)
+            final Optional<ISourceFile> originalOpt = sourceFile.getOriginal();
+            if (originalOpt.isPresent())
             {
-                assertTrue("Unexpected class '" + original.getClass().getCanonicalName() + "' for element: " + original.toString(),
-                        original instanceof ISourceFile);
                 refactoredElements.add(sourceFile);
             }
         }

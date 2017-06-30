@@ -64,7 +64,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.internal.Resolu
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.StandardDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.WorkspaceDeltaImpl;
 
-class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
+final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 {
     private final ISystemInfoProcessor baseSystem;
     //initialized on first request
@@ -72,8 +72,7 @@ class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
     public ReportDifferenceProcessorImpl(final ISystemInfoProcessor baseSystem)
     {
-        assert baseSystem != null : "Parameter 'systemInfoProcessor1' of method 'ReportDifferenceProcessorImpl' must not be null";
-
+        assert baseSystem != null : "Parameter 'baseSystem' of method 'ReportDifferenceProcessorImpl' must not be null";
         this.baseSystem = baseSystem;
     }
 

@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
-public class ControllerFactory
+public final class ControllerFactory
 {
     public ISonargraphSystemController createController()
     {

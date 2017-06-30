@@ -17,9 +17,13 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.util.Optional;
+
 public interface ISourceFile extends IFilePathElement
 {
     public String getRelativeRootDirectoryPath();
 
-    public ISourceFile getOriginal();
+    public Optional<ISourceFile> getOriginal();
+
+    public boolean isOriginal();
 }

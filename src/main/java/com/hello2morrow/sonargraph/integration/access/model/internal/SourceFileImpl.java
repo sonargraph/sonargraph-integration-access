@@ -17,6 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.Optional;
+
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
@@ -24,6 +26,7 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
 {
     private static final long serialVersionUID = -2940999235312739954L;
     private final IRootDirectory rootDirectory;
+    private boolean isOriginal;
     private ISourceFile original = null;
 
     public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
@@ -41,6 +44,11 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         return rootDirectory.getRelativePath();
     }
 
+    public IRootDirectory getRootDirectory()
+    {
+        return rootDirectory;
+    }
+
     @Override
     public String getRelativePath()
     {
@@ -48,14 +56,25 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     }
 
     @Override
-    public ISourceFile getOriginal()
+    public Optional<ISourceFile> getOriginal()
     {
-        return original;
+        return Optional.ofNullable(original);
     }
 
     public void setOriginal(final ISourceFile original)
     {
         this.original = original;
+    }
+
+    public void setIsOriginal(final boolean isOriginal)
+    {
+        this.isOriginal = isOriginal;
+    }
+
+    @Override
+    public boolean isOriginal()
+    {
+        return isOriginal;
     }
 
     @Override
@@ -64,7 +83,7 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((original == null) ? 0 : original.hashCode());
-        result = prime * result + ((rootDirectory == null) ? 0 : rootDirectory.hashCode());
+        result = prime * result + rootDirectory.hashCode();
         return result;
     }
 
@@ -79,10 +98,7 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
+
         final SourceFileImpl other = (SourceFileImpl) obj;
         if (original == null)
         {
@@ -95,17 +111,26 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         {
             return false;
         }
-        if (rootDirectory == null)
+
+        return rootDirectory.equals(other.rootDirectory);
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append("\n");
+        builder.append("In root directory: ").append(rootDirectory.getRelativePath());
+        if (original != null)
         {
-            if (other.rootDirectory != null)
-            {
-                return false;
-            }
+            builder.append("\n");
+            builder.append("Has original with fq name: ").append(original.getFqName());
         }
-        else if (!rootDirectory.equals(other.rootDirectory))
+        if (isOriginal)
         {
-            return false;
+            builder.append("\n");
+            builder.append("Is Original");
         }
-        return true;
+        return builder.toString();
     }
 }

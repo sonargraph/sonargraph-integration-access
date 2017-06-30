@@ -31,7 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSys
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportReader;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportWriter;
 
-class SonargraphSystemControllerImpl implements ISonargraphSystemController
+final class SonargraphSystemControllerImpl implements ISonargraphSystemController
 {
     private SoftwareSystemImpl softwareSystem;
 

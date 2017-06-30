@@ -54,7 +54,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssue
 import com.hello2morrow.sonargraph.integration.access.model.internal.SingleExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlExportMetaDataReader;
 
-class MetaDataControllerImpl implements IMetaDataController
+final class MetaDataControllerImpl implements IMetaDataController
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataControllerImpl.class);
 

@@ -31,7 +31,6 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
 {
     private static final long serialVersionUID = 3572308291532903170L;
-    private final String presentationName;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;
 
@@ -39,18 +38,7 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
             final IIssueProvider provider, final boolean hasResolution, final List<IDuplicateCodeBlockOccurrence> occurrences)
     {
         super(name, presentationName, description, issueType, provider, hasResolution, -1);
-        assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'DuplicateCodeBlockIssue' must not be empty";
-        this.presentationName = presentationName;
         this.occurrences = occurrences;
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue#getPresentationName()
-     */
-    @Override
-    public String getPresentationName()
-    {
-        return presentationName;
     }
 
     @Override
@@ -100,7 +88,6 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         int result = super.hashCode();
         result = prime * result + blockSize;
         result = prime * result + ((occurrences == null) ? 0 : occurrences.hashCode());
-        result = prime * result + ((presentationName == null) ? 0 : presentationName.hashCode());
         return result;
     }
 
@@ -136,17 +123,6 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
             }
         }
         else if (!occurrences.equals(other.occurrences))
-        {
-            return false;
-        }
-        if (presentationName == null)
-        {
-            if (other.presentationName != null)
-            {
-                return false;
-            }
-        }
-        else if (!presentationName.equals(other.presentationName))
         {
             return false;
         }

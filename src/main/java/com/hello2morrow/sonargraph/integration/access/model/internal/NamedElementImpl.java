@@ -114,27 +114,13 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
+
         final NamedElementImpl other = (NamedElementImpl) obj;
-        if (fqName == null)
-        {
-            if (other.fqName != null)
-            {
-                return false;
-            }
-        }
-        else if (!fqName.equals(other.fqName))
+        if (!fqName.equals(other.fqName))
         {
             return false;
         }
@@ -165,5 +151,14 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append("\n");
+        builder.append("Fq name: ").append(fqName);
+        return builder.toString();
     }
 }

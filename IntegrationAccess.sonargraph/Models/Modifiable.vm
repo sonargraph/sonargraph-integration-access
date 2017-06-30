@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<virtualModel version="9.1.1.100">
+<virtualModel version="9.4.2.100">
     <resolutions>
         <ignore date="2016-12-29T16:05:10.475Z" description="Tolerated">
             <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
@@ -8,59 +8,6 @@
                 <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:IFilePathElement.java</elementPattern>
                 <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java</elementPattern>
                 <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:06:48.997Z" description="Generated code">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:aa8702654299fb168accb0310b80eef7|fc6eacd9cb3b991e2885d48a0295e424</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 8 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdAnalyzer.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdElement.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdIssueProvider.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdIssueType.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdModule.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdNamedElement.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdRootDirectory.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdSourceFile.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:06:48.997Z" description="Generated code">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:4bf8c94002d08b3eb686141e67e2c614|019e07e64626f71bdd0838f5c0396fc4</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 7 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdAbstractElementIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdCycleIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdDependencyIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdDuplicateBlockIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdMetricThresholdViolationIssue.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdSimpleElementIssue.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:06:48.997Z" description="Generated code">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:bdbe46de7c9508a68734e3fdedc90194|5007ed1d7733dadbdbcc42fc6393f166</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 3 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdMetricLevelContainer.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdModuleMetricValues.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdSystemMetricValues.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:06:48.997Z" description="Generated code">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:532efd98ac2ac16a5e9b4b267c2ffb1e|42d8df7aec170ce712492c1b30b49920</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 3 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdElements.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdModuleElements.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdSystemElements.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:06:48.997Z" description="Generated code">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:e1e357cd318ba76cc9c857647b74559f|95f4ecd01091f0598c8df276992d68f7</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 2 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdExportMetaData.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdExportMetaDataRoot.java</elementPattern>
             </matching>
         </ignore>
         <ignore date="2016-12-29T16:08:03.492Z" description="Tolerated">
@@ -80,13 +27,13 @@
                 <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueTypeImpl.java</elementPattern>
             </matching>
         </ignore>
-        <ignore date="2016-12-29T16:08:12.174Z" description="Generated code.">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:./Modifiable.vm:ed1e65b66fa92747a44ba16def1eeb87|231995c2aefb1423fcfa8c358330823a</elementPattern>
-            <matching info="2 occurrences with 98 line(s) found in 2 file(s)">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdMetricCategory.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./target/generated-sources/xjc:com:hello2morrow:sonargraph:core:persistence:report:XsdMetricLevel.java</elementPattern>
-            </matching>
+        <ignore date="2017-06-30T11:55:07.724Z" description="The sub type is used as a reference in the API. This is ok.">
+            <type class="Script" name="Supertype uses subtype" descriptor="./Core/SuperTypeUsesSubType.xml:Warning"></type>
+            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java:INamedElement:getSourceFile()" to="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java:ISourceFile"></dependencyPattern>
+        </ignore>
+        <ignore date="2017-06-30T11:58:14.440Z" description="Pretty sequential logic - not a problem.">
+            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ThresholdViolation" descriptor="ThresholdViolation:CoreModifiedCcn:Routine"></type>
+            <elementPattern type="Wildcard"><![CDATA[Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:controller:MetaDataControllerImpl.java:MetaDataControllerImpl:mergeExportMetaDataFiles(java.util.List<java.io.File>)]]></elementPattern>
         </ignore>
     </resolutions>
 </virtualModel>

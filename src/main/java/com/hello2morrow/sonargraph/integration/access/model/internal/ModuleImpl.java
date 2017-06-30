@@ -33,13 +33,14 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 public final class ModuleImpl extends NamedElementContainerImpl implements IModule
 {
     private static final long serialVersionUID = -4617725409511641491L;
-    private final String language;
     private final List<IRootDirectory> rootDirectories = new ArrayList<>(2);
+    private final String language;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final String language)
     {
         super(kind, presentationKind, name, presentationName, fqName, description);
+        assert language != null : "Parameter 'language' of method 'ModuleImpl' must not be null";
         this.language = language;
     }
 
@@ -93,10 +94,11 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
         if (sourceFileOpt.isPresent())
         {
             final ISourceFile sourceFile = sourceFileOpt.get();
-            final ISourceFile original = sourceFile.getOriginal();
-            if (original != null)
+            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginal();
+            if (originalSourceFileOpt.isPresent())
             {
-                return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == original).findFirst();
+                final ISourceFile originalSourceFile = originalSourceFileOpt.get();
+                return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == originalSourceFile).findFirst();
             }
 
             return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == sourceFile).findFirst();
@@ -110,41 +112,23 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((language == null) ? 0 : language.hashCode());
+        result = prime * result + language.hashCode();
         return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this == obj)
         {
-            return false;
+            return true;
         }
+
         final ModuleImpl other = (ModuleImpl) obj;
-        if (language == null)
-        {
-            if (other.language != null)
-            {
-                return false;
-            }
-        }
-        else if (!language.equals(other.language))
-        {
-            return false;
-        }
-        return true;
+        return language.equals(other.language);
     }
 }

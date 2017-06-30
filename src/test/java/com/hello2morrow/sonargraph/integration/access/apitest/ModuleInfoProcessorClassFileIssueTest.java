@@ -54,6 +54,6 @@ public class ModuleInfoProcessorClassFileIssueTest
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(m1);
         final Map<ISourceFile, List<IIssue>> issueMap = processor.getIssuesForSourceFiles(null);
         assertEquals("Wrong number of issues", 1, issueMap.size());
-        assertEquals("Wrong file name", "Simple.java", issueMap.keySet().toArray()[0].toString());
+        assertEquals("Wrong file name", "Simple.java", issueMap.keySet().iterator().next().getName());
     }
 }

@@ -20,7 +20,6 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +81,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
+import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
@@ -223,6 +223,57 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         return Optional.empty();
     }
 
+    private void connectOriginals(final List<XsdSourceFile> xsdSourceFiles)
+    {
+        assert xsdSourceFiles != null : "Parameter 'xsdSourceFiles' of method 'connectOriginals' must not be null";
+
+        for (final XsdSourceFile nextXsdSourceFile : xsdSourceFiles)
+        {
+            final SourceFileImpl nextSourceFile = getSourceFile(nextXsdSourceFile);
+            if (nextSourceFile == null)
+            {
+                LOGGER.error("No source file impl found for xsd source file '{}'.", nextXsdSourceFile.getFqName());
+                continue;
+            }
+
+            final Object nextXsdOriginal = nextXsdSourceFile.getOriginal();
+            if (nextXsdOriginal != null)
+            {
+                if (nextXsdOriginal instanceof XsdSourceFile)
+                {
+                    final SourceFileImpl original = getSourceFile((XsdSourceFile) nextXsdOriginal);
+                    if (original != null)
+                    {
+                        nextSourceFile.setOriginal(original);
+                        original.setIsOriginal(true);
+                    }
+                    else
+                    {
+                        LOGGER.error("No source file impl found for original xsd source file '{}'.", ((XsdSourceFile) nextXsdOriginal).getFqName());
+                    }
+                }
+                else
+                {
+                    LOGGER.error("Unexpected class '{}' as original source file.", nextXsdOriginal.getClass().getCanonicalName());
+                    continue;
+                }
+            }
+        }
+
+        //First we need the correct isOriginal() state
+        for (final XsdSourceFile nextXsdSourceFile : xsdSourceFiles)
+        {
+            final SourceFileImpl nextSourceFile = getSourceFile(nextXsdSourceFile);
+            if (nextSourceFile != null)
+            {
+                final IRootDirectory nextRootDirectory = nextSourceFile.getRootDirectory();
+                assert nextRootDirectory != null && nextRootDirectory instanceof RootDirectoryImpl : "Unexpected class in method 'connectOriginals': "
+                        + nextRootDirectory;
+                ((RootDirectoryImpl) nextRootDirectory).addSourceFile(nextSourceFile);
+            }
+        }
+    }
+
     private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final INamedElementAdjuster adjuster,
             final OperationResult result)
     {
@@ -236,12 +287,12 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
         processAnalyzers(softwareSystem, report);
         processFeatures(softwareSystem, report);
-        processWorkspace(softwareSystem, report, result, adjuster);
+        final List<XsdSourceFile> xsdSourceFiles = processWorkspace(softwareSystem, report, result, adjuster);
         if (result.isFailure())
         {
             return Optional.empty();
         }
-        connectOriginals(softwareSystem, report, result);
+        connectOriginals(xsdSourceFiles);
 
         processSystemElements(softwareSystem, report, adjuster);
         processModuleElements(softwareSystem, report, adjuster);
@@ -283,9 +334,11 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private void processWorkspace(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result,
-            final INamedElementAdjuster adjuster)
+    private List<XsdSourceFile> processWorkspace(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
+            final OperationResult result, final INamedElementAdjuster adjuster)
     {
+        final List<XsdSourceFile> xsdSourceFiles = new ArrayList<>();
+
         for (final XsdModule xsdModule : report.getWorkspace().getModule())
         {
             final XsdElementKind moduleKind = (XsdElementKind) xsdModule.getKind();
@@ -295,31 +348,24 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             globalXmlToElementMap.put(xsdModule, module);
             for (final XsdRootDirectory nextRoot : xsdModule.getRootDirectory())
             {
-                final XsdElementKind elementKind = (XsdElementKind) nextRoot.getKind();
                 RootDirectoryImpl rootDirectory = null;
+
+                final XsdElementKind elementKind = (XsdElementKind) nextRoot.getKind();
                 final String presentationKind = elementKind.getPresentationKind();
                 final String standardKind = elementKind.getStandardKind();
-                try
+                final String fqName = adjuster.adjustFqName(standardKind, nextRoot.getFqName());
+                final String presentationName = adjuster.adjustPresentationName(standardKind, nextRoot.getPresentationName());
+
+                switch (standardKind)
                 {
-                    final String fqName = adjuster.adjustFqName(standardKind, nextRoot.getFqName());
-                    final String presentationName = adjuster.adjustPresentationName(standardKind, nextRoot.getPresentationName());
-                    switch (standardKind)
-                    {
-                    case "JavaClassRootDirectoryPath":
-                        rootDirectory = createJavaClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
-                        break;
-                    case "JavaSourceRootDirectoryPath":
-                        //$FALL-THROUGH$
-                    default:
-                        rootDirectory = createRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
-                        break;
-                    }
-                }
-                catch (final IOException e)
-                {
-                    result.addError(IOMessageCause.IO_EXCEPTION, "Failed to process workspace info of report for module '" + module.getName() + "'",
-                            e);
-                    return;
+                case "JavaClassRootDirectoryPath":
+                    rootDirectory = createJavaClassRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
+                    break;
+                case "JavaSourceRootDirectoryPath":
+                    //$FALL-THROUGH$
+                default:
+                    rootDirectory = createRootDirectory(module, standardKind, presentationKind, presentationName, fqName);
+                    break;
                 }
 
                 if (rootDirectory != null)
@@ -334,47 +380,13 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                                 sourceKind.getPresentationKind(), nextSourceFile.getName(), nextSourceFile.getPresentationName(),
                                 nextSourceFile.getFqName());
                         globalXmlToElementMap.put(nextSourceFile, sourceFile);
-                        rootDirectory.addSourceFile(sourceFile);
+                        xsdSourceFiles.add(nextSourceFile);
                     }
                 }
             }
         }
-    }
 
-    private void connectOriginals(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
-    {
-        for (final XsdModule xsdModule : report.getWorkspace().getModule())
-        {
-            for (final XsdRootDirectory nextRoot : xsdModule.getRootDirectory())
-            {
-                for (final XsdSourceFile nextSourceFile : nextRoot.getSourceElement())
-                {
-                    final SourceFileImpl sourceFile = getSourceFile(nextSourceFile);
-                    if (sourceFile == null)
-                    {
-                        continue;
-                    }
-
-                    final Object xsdOriginal = nextSourceFile.getOriginal();
-                    if (xsdOriginal != null)
-                    {
-                        if (xsdOriginal instanceof XsdSourceFile)
-                        {
-                            final SourceFileImpl original = getSourceFile((XsdSourceFile) xsdOriginal);
-                            if (original != null)
-                            {
-                                sourceFile.setOriginal(original);
-                            }
-                        }
-                        else
-                        {
-                            LOGGER.error("Unexpected class '{}' as original source file.", xsdOriginal.getClass().getCanonicalName());
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
+        return xsdSourceFiles;
     }
 
     private SourceFileImpl getSourceFile(final XsdSourceFile nextSourceFile)
@@ -857,6 +869,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
     private void processSimpleElementIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
+        assert report != null : "Parameter 'report' of method 'processSimpleElementIssues' must not be null";
+
         if (report.getIssues() == null || report.getIssues().getElementIssues() == null)
         {
             return;
@@ -896,7 +910,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
     }
 
     private static RootDirectoryImpl createRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
-            final String presentationName, final String fqName) throws IOException
+            final String presentationName, final String fqName)
     {
         assert module != null : "Parameter 'module' of method 'createRootDirectory' must not be null";
         assert standardKind != null && standardKind.length() > 0 : "Parameter 'standardKind' of method 'createRootDirectory' must not be empty";
@@ -908,7 +922,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
     }
 
     private static ClassRootDirectory createJavaClassRootDirectory(final ModuleImpl module, final String standardKind, final String presentationKind,
-            final String presentationName, final String fqName) throws IOException
+            final String presentationName, final String fqName)
     {
         assert module != null : "Parameter 'module' of method 'createJavaClassRootDirectory' must not be null";
         assert standardKind != null && standardKind.length() > 0 : "Parameter 'standardKind' of method 'createRootDirectory' must not be empty";
