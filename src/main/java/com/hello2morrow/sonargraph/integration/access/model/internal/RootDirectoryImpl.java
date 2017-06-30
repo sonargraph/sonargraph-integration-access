@@ -83,7 +83,6 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
     public final void addSourceFile(final ISourceFile sourceFile)
     {
         assert sourceFile != null : "Parameter 'sourceFile' of method 'addSourceFile' must not be null";
-        System.out.println(sourceFile);
         assert !sourceFiles.contains(sourceFile) : "sourceFile '" + sourceFile.getFqName() + "' has already been added";
         sourceFiles.add(sourceFile);
         module.addElement(sourceFile);
