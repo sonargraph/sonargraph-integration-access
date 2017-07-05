@@ -826,8 +826,11 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 final IIssueType issueType = getIssueType(softwareSystem, nextCycle);
                 final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextCycle);
 
-                final CycleGroupImpl cycleGroup = new CycleGroupImpl(nextCycle.getFqName(), issueProvider.getPresentationName(),
-                        nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(), analyzer);
+                final String name = nextCycle.getName();
+                //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
+                final CycleGroupImpl cycleGroup = new CycleGroupImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
+                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(),
+                        analyzer);
 
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
