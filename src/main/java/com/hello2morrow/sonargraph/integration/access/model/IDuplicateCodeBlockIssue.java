@@ -21,8 +21,6 @@ import java.util.List;
 
 public interface IDuplicateCodeBlockIssue extends IElementIssue
 {
-    public String getPresentationName();
-
     public int getBlockSize();
 
     public List<IDuplicateCodeBlockOccurrence> getOccurrences();
