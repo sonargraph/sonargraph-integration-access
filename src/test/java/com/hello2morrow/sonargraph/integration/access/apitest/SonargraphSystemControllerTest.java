@@ -48,7 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSyst
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
@@ -365,9 +365,9 @@ public class SonargraphSystemControllerTest
         }).size());
 
         assertEquals("Wrong number of component cycle groups", 1,
-                infoProcessor.getCycleGroups((final ICycleGroup group) -> group.getAnalyzer().getName().equals("ComponentCyclesModule")).size());
+                infoProcessor.getCycleGroups((final ICycleGroupIssue group) -> group.getAnalyzer().getName().equals("ComponentCyclesModule")).size());
         assertEquals("Wrong number of package cycle groups", 1,
-                infoProcessor.getCycleGroups((final ICycleGroup group) -> group.getAnalyzer().getName().equals("PackageCyclesModule")).size());
+                infoProcessor.getCycleGroups((final ICycleGroupIssue group) -> group.getAnalyzer().getName().equals("PackageCyclesModule")).size());
 
         assertEquals("Wrong number of duplicate blocks", 3,
                 infoProcessor.getIssues((final IIssue issue) -> issue.getIssueType().getCategory().getName().equals("DuplicateCode")).size());

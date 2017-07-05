@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -41,7 +41,7 @@ public interface ISystemInfoProcessor extends IInfoProcessor
 
     public List<IIssueType> getIssueTypes();
 
-    public List<ICycleGroup> getCycleGroups(Predicate<ICycleGroup> filter);
+    public List<ICycleGroupIssue> getCycleGroups(Predicate<ICycleGroupIssue> filter);
 
     public Optional<IMetricId> getMetricId(String name);
 

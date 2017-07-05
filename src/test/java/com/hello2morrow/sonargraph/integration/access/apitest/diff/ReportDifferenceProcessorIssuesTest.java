@@ -31,7 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferen
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -190,7 +190,7 @@ public class ReportDifferenceProcessorIssuesTest
                 assertEquals("Issue must be new: " + next, Diff.NO_MATCH_FOUND, diffProcessor.determineChange(next));
                 newIssueCounter++;
             }
-            else if (next instanceof ThresholdViolationIssue || next instanceof ICycleGroup)
+            else if (next instanceof ThresholdViolationIssue || next instanceof ICycleGroupIssue)
             {
                 assertFalse("Issue must not be new: " + next, Diff.NO_MATCH_FOUND == diffProcessor.determineChange(next));
             }

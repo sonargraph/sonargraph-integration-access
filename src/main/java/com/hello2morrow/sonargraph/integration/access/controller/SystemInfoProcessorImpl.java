@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -150,18 +150,18 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     }
 
     @Override
-    public List<ICycleGroup> getCycleGroups(final Predicate<ICycleGroup> filter)
+    public List<ICycleGroupIssue> getCycleGroups(final Predicate<ICycleGroupIssue> filter)
     {
-        final Predicate<ICycleGroup> filter2;
+        final Predicate<ICycleGroupIssue> filter2;
         if (filter != null)
         {
             filter2 = filter;
         }
         else
         {
-            filter2 = (final ICycleGroup group) -> true;
+            filter2 = (final ICycleGroupIssue group) -> true;
         }
-        return getIssues(issue -> issue instanceof ICycleGroup).stream().map(issue -> (ICycleGroup) issue).filter(filter2)
+        return getIssues(issue -> issue instanceof ICycleGroupIssue).stream().map(issue -> (ICycleGroupIssue) issue).filter(filter2)
                 .collect(Collectors.toList());
     }
 

@@ -89,7 +89,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
@@ -828,7 +828,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
-                final CycleGroupImpl cycleGroup = new CycleGroupImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
                         : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(),
                         analyzer);
 

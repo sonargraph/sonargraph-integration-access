@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -67,7 +67,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
     private final List<IMetricThreshold> m_thresholds = new ArrayList<>();
-    private final Map<IAnalyzer, HashMap<String, ICycleGroup>> cycleGroups = new HashMap<>();
+    private final Map<IAnalyzer, HashMap<String, ICycleGroupIssue>> cycleGroups = new HashMap<>();
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
 
@@ -286,7 +286,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Collections.unmodifiableMap(featuresMap);
     }
 
-    public Map<String, ICycleGroup> getCycleGroups(final String analyzerId)
+    public Map<String, ICycleGroupIssue> getCycleGroups(final String analyzerId)
     {
         assert analyzerId != null && analyzerId.length() > 0 : "Parameter 'analyzerId' of method 'getCycleGroups' must not be empty";
         assert analyzerMap.containsKey(analyzerId) : "analyzerId '" + analyzerId + "' has not been added";
@@ -297,11 +297,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Collections.unmodifiableMap(cycleGroups.get(analyzer));
     }
 
-    public void addCycleGroup(final ICycleGroup cycle)
+    public void addCycleGroup(final ICycleGroupIssue cycle)
     {
         assert cycle != null : "Parameter 'cycle' of method 'addCycleGroup' must not be null";
 
-        final HashMap<String, ICycleGroup> cycleGroupMap;
+        final HashMap<String, ICycleGroupIssue> cycleGroupMap;
         final IAnalyzer analyzer = cycle.getAnalyzer();
         assert analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has not been added";
 
