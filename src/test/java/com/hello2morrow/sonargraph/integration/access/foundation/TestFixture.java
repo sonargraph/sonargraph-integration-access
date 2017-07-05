@@ -42,6 +42,8 @@ public class TestFixture
     public static final String CPP_REPORT = "./src/test/resources/project_2_2017-04-03_14-54-53.xml";
     public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
 
+    public static final String TEST_REPORT_INTEGRATION_ACCESS_WITH_CYCLE_GROUP = "./src/test/resources/IntegrationAccess_WithCycleGroup.xml";
+
     public static final String ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT = "./src/test/resources/AlarmClock_ClassFileIssues.xml";
 
     public static final String TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES = "./src/test/resources/AlarmClock_unknownAttributes.xml";

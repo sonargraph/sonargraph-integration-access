@@ -46,6 +46,16 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 public class ReportReaderTest
 {
     @Test
+    public void processReportWithCycleGroup()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_INTEGRATION_ACCESS_WITH_CYCLE_GROUP));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
+        assertEquals("Wrong number of issues", 11, info.getIssues(null).size());
+    }
+
+    @Test
     public void processReportWithNoIssues()
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
