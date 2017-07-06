@@ -15,6 +15,9 @@ See /src/test/xproject-metric-aggregation/pom.xml for an example.
 Since version 3.0 the functionality exists to generate a delta between two XML reports. More details can be found in the Wiki and the documentation of Sonargraph Architect at 
 <a href="http://eclipse.hello2morrow.com/doc/standalone/content/reporting_changes.html">http://eclipse.hello2morrow.com/doc/standalone/content/reporting_changes.html</a>. 
 
+With version 3.1 we improved the support for refactored elements (i.e. the 'original' physical location info of an element affected by a refactoring is also added).
+Furthermore cycle groups may now be identified by their generated id and resolutions contain more information.
+
 
 # Compatibility Matrix
 
@@ -25,3 +28,4 @@ The following lists the compatibility with Sonargraph releases.
 | 8.7                | 1.0                        | 
 | 8.8.0 and newer    | 1.1 and newer              |
 | 9.1.1 and newer    | 2.0 and newer              |
+| 9.4.3 and newer    | 3.1 and newer              |

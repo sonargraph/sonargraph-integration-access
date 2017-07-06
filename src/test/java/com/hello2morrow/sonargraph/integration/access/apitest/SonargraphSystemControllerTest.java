@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,7 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSyst
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
@@ -59,6 +60,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
@@ -94,6 +96,54 @@ public class SonargraphSystemControllerTest
                 .getName().equals("Unused Types"));
         assertEquals("Wrong number of metric threshold issue", 1, unusedTypeThresholds.size());
         assertEquals("Wrong metric value", 4, unusedTypeThresholds.get(0).getMetricValue().intValue());
+    }
+
+    @Test
+    public void validateRefactorings()
+    {
+        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
+        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
+        final ISystemInfoProcessor systemProcessor = m_controller.createSystemInfoProcessor();
+        final List<IIssue> issues = systemProcessor.getIssues(i -> i.getIssueType().getCategory().getName().equals("Refactoring"));
+        assertEquals("Wrong number of refactorings", 3, issues.size());
+
+        final IModule alarmClock = systemProcessor.getModules().get("AlarmClock");
+        final List<ISourceFile> refactoredElements = getRefactoredSourceElements(alarmClock);
+        assertEquals("Wrong number of originals", 1, refactoredElements.size());
+        assertEquals("Wrong refactored element", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java",
+                refactoredElements.get(0).getFqName());
+        final Optional<ISourceFile> originalSourceFileOpt = refactoredElements.get(0).getOriginal();
+        assertTrue("Original source file expected '" + refactoredElements.get(0).getFqName() + "'", originalSourceFileOpt.isPresent());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java", originalSourceFileOpt
+                .get().getFqName());
+
+        final IModule foundation = systemProcessor.getModules().get("Foundation");
+        final List<ISourceFile> refactoredElements2 = getRefactoredSourceElements(foundation);
+        assertEquals("Wrong number of originals", 1, refactoredElements2.size());
+        assertEquals("Wrong refactored element", "Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java", refactoredElements2
+                .get(0).getFqName());
+        final Optional<ISourceFile> originalSourceFileOpt2 = refactoredElements2.get(0).getOriginal();
+        assertTrue("Original source file expected for '" + refactoredElements2.get(0).getFqName() + "'", originalSourceFileOpt2.isPresent());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java", originalSourceFileOpt2.get()
+                .getFqName());
+    }
+
+    private List<ISourceFile> getRefactoredSourceElements(final IModule module)
+    {
+        final Map<String, INamedElement> sourceFiles = new HashMap<>(module.getElements("JavaSourceFile"));
+        sourceFiles.putAll(module.getElements("JavaInternalCompilationUnit"));
+        final List<ISourceFile> refactoredElements = new ArrayList<>();
+        for (final INamedElement next : sourceFiles.values())
+        {
+            assertTrue("Unexpected class '" + next.getClass().getCanonicalName() + "' for element: " + next.toString(), next instanceof ISourceFile);
+            final ISourceFile sourceFile = (ISourceFile) next;
+            final Optional<ISourceFile> originalOpt = sourceFile.getOriginal();
+            if (originalOpt.isPresent())
+            {
+                refactoredElements.add(sourceFile);
+            }
+        }
+        return refactoredElements;
     }
 
     @Test
@@ -315,9 +365,9 @@ public class SonargraphSystemControllerTest
         }).size());
 
         assertEquals("Wrong number of component cycle groups", 1,
-                infoProcessor.getCycleGroups((final ICycleGroup group) -> group.getAnalyzer().getName().equals("ComponentCyclesModule")).size());
+                infoProcessor.getCycleGroups((final ICycleGroupIssue group) -> group.getAnalyzer().getName().equals("ComponentCyclesModule")).size());
         assertEquals("Wrong number of package cycle groups", 1,
-                infoProcessor.getCycleGroups((final ICycleGroup group) -> group.getAnalyzer().getName().equals("PackageCyclesModule")).size());
+                infoProcessor.getCycleGroups((final ICycleGroupIssue group) -> group.getAnalyzer().getName().equals("PackageCyclesModule")).size());
 
         assertEquals("Wrong number of duplicate blocks", 3,
                 infoProcessor.getIssues((final IIssue issue) -> issue.getIssueType().getCategory().getName().equals("DuplicateCode")).size());

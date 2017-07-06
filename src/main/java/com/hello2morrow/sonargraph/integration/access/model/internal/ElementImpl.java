@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ public abstract class ElementImpl implements IElement
     {
         assert name != null && name.length() > 0 : "Parameter 'name' of method 'Element' must not be empty";
         assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'Element' must not be empty";
-
         this.name = name;
         this.presentationName = presentationName;
     }
@@ -47,15 +46,9 @@ public abstract class ElementImpl implements IElement
      * @see com.hello2morrow.sonargraph.integration.access.model.INamedElement#getPresentationName()
      */
     @Override
-    public String getPresentationName()
+    public final String getPresentationName()
     {
         return presentationName;
-    }
-
-    @Override
-    public String toString()
-    {
-        return getName();
     }
 
     @Override
@@ -63,8 +56,8 @@ public abstract class ElementImpl implements IElement
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((presentationName == null) ? 0 : presentationName.hashCode());
+        result = prime * result + name.hashCode();
+        result = prime * result + presentationName.hashCode();
         return result;
     }
 
@@ -75,38 +68,21 @@ public abstract class ElementImpl implements IElement
         {
             return true;
         }
-        if (obj == null)
+        if (obj == null || getClass() != obj.getClass())
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final ElementImpl other = (ElementImpl) obj;
 
-        if (name == null)
-        {
-            if (other.name != null)
-            {
-                return false;
-            }
-        }
-        else if (!name.equals(other.name))
-        {
-            return false;
-        }
-        if (presentationName == null)
-        {
-            if (other.presentationName != null)
-            {
-                return false;
-            }
-        }
-        else if (!presentationName.equals(other.presentationName))
-        {
-            return false;
-        }
-        return true;
+        final ElementImpl other = (ElementImpl) obj;
+        return name.equals(other.name) && presentationName.equals(other.presentationName);
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Name: ").append(name).append("\n");
+        builder.append("Presentation name:").append(presentationName);
+        return builder.toString();
     }
 }
