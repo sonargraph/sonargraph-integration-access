@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,14 +32,16 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
 {
     private static final long serialVersionUID = 995206422502257231L;
+    private final Map<String, HashMap<String, INamedElement>> kindToFqNameToElementMap = new HashMap<>();
+    private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
+    private final Set<ISourceFile> originalSourceFiles = new HashSet<>();
     private MetaDataAccessImpl metricsAccess;
     private ElementRegistryImpl elementRegistry;
-    private final Map<String, HashMap<String, INamedElement>> elementMap = new HashMap<>();
-    private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
@@ -73,50 +75,48 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         return elementRegistry;
     }
 
-    public final boolean addElement(final INamedElement element)
+    public final void addElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'addElement' must not be null";
 
-        if (!acceptElementKind(element.getKind()))
+        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
         {
-            return false;
+            originalSourceFiles.add((ISourceFile) element);
         }
-        final HashMap<String, INamedElement> elementsOfKind;
-        if (!elementMap.containsKey(element.getKind()))
+        else if (acceptElementKind(element.getKind()))
         {
-            elementsOfKind = new HashMap<>();
-            elementMap.put(element.getKind(), elementsOfKind);
-        }
-        else
-        {
-            elementsOfKind = elementMap.get(element.getKind());
-        }
+            final HashMap<String, INamedElement> elementsOfKind;
+            if (!kindToFqNameToElementMap.containsKey(element.getKind()))
+            {
+                elementsOfKind = new HashMap<>();
+                kindToFqNameToElementMap.put(element.getKind(), elementsOfKind);
+            }
+            else
+            {
+                elementsOfKind = kindToFqNameToElementMap.get(element.getKind());
+            }
 
-        assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
-        elementsOfKind.put(element.getFqName(), element);
-
-        getElementRegistry().addElement(element);
-        return true;
+            assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
+            elementsOfKind.put(element.getFqName(), element);
+            getElementRegistry().addElement(element);
+        }
     }
 
-    public boolean hasElement(final IElement element)
+    public boolean hasElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'hasElement' must not be null";
 
-        //TODO: remove this check and the cast, once the type hierarchy is refactored.
-        if (!(element instanceof INamedElement))
+        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
+        {
+            return originalSourceFiles.contains(element);
+        }
+
+        final INamedElement fqNamedElement = element;
+        if (!kindToFqNameToElementMap.containsKey(fqNamedElement.getKind()))
         {
             return false;
         }
-
-        final INamedElement fqNamedElement = (INamedElement) element;
-
-        if (!elementMap.containsKey(fqNamedElement.getKind()))
-        {
-            return false;
-        }
-
-        return elementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
+        return kindToFqNameToElementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
     }
 
     /* (non-Javadoc)
@@ -126,9 +126,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public final Map<String, INamedElement> getElements(final String elementKind)
     {
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'getElements' must not be empty";
-        if (elementMap.containsKey(elementKind))
+        if (kindToFqNameToElementMap.containsKey(elementKind))
         {
-            return Collections.unmodifiableMap(elementMap.get(elementKind));
+            return Collections.unmodifiableMap(kindToFqNameToElementMap.get(elementKind));
         }
 
         return Collections.emptyMap();
@@ -140,7 +140,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     @Override
     public final Set<String> getElementKinds()
     {
-        final Set<String> kinds = new HashSet<>(elementMap.keySet());
+        final Set<String> kinds = new HashSet<>(kindToFqNameToElementMap.keySet());
         kinds.add(this.getKind());
         return Collections.unmodifiableSet(kinds);
     }

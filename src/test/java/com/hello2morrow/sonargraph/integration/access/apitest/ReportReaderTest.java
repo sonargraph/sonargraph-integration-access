@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,6 +46,16 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 public class ReportReaderTest
 {
     @Test
+    public void processReportWithCycleGroup()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_INTEGRATION_ACCESS_WITH_CYCLE_GROUP));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
+        assertEquals("Wrong number of issues", 11, info.getIssues(null).size());
+    }
+
+    @Test
     public void processReportWithNoIssues()
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
@@ -52,6 +63,17 @@ public class ReportReaderTest
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issues", 0, info.getIssues(null).size());
+    }
+
+    @Test
+    public void processReportWithUnknownElements()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final OperationResult result2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES), true);
+        assertFalse(result2.toString(), result2.isSuccess());
     }
 
     @Test

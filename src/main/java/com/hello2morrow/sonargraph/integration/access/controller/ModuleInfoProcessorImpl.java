@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,6 +94,17 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public boolean isElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'isElementContainedInModule' must not be null";
+        final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
+        if (sourceFileOpt.isPresent())
+        {
+            final ISourceFile sourceFile = sourceFileOpt.get();
+            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginal();
+            if (originalSourceFileOpt.isPresent())
+            {
+                return module.hasElement(originalSourceFileOpt.get());
+            }
+            return module.hasElement(sourceFile);
+        }
         return module.hasElement(element);
     }
 
@@ -134,9 +145,36 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     }
 
     @Override
+    public Map<ISourceFile, Map<IResolution, List<IIssue>>> getIssuesForResolutionsForSourceFiles(final Predicate<IResolution> filter)
+    {
+        final Map<ISourceFile, Map<IResolution, List<IIssue>>> sourceFileToResolutionMap = new HashMap<>();
+        for (final IResolution resolution : systemInfoProcessor.getResolutions(filter))
+        {
+            final Map<ISourceFile, List<IIssue>> issuesToSourceFiles = mapIssuesToSourceFiles(resolution.getIssues());
+            for (final Map.Entry<ISourceFile, List<IIssue>> next : issuesToSourceFiles.entrySet())
+            {
+                final ISourceFile sourceFile = next.getKey();
+                Map<IResolution, List<IIssue>> resolutionToIssues = sourceFileToResolutionMap.get(sourceFile);
+                if (resolutionToIssues == null)
+                {
+                    resolutionToIssues = new HashMap<>();
+                    sourceFileToResolutionMap.put(sourceFile, resolutionToIssues);
+                }
+                resolutionToIssues.put(resolution, next.getValue());
+            }
+        }
+        return sourceFileToResolutionMap;
+    }
+
+    @Override
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(final Predicate<IIssue> filter)
     {
         final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
+        return mapIssuesToSourceFiles(systemIssues);
+    }
+
+    private Map<ISourceFile, List<IIssue>> mapIssuesToSourceFiles(final List<IIssue> systemIssues)
+    {
         final Map<ISourceFile, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue issue : systemIssues)
         {

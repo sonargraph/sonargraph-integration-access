@@ -1,3 +1,7 @@
+/.scannerwork/
+/.settings/
+/sonargraph-build/
+/sonargraph/
 /build.eclipse/
 /src/generated/
 /classes/

@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,18 +23,18 @@ import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroup;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class CycleGroupImpl extends AbstractElementIssueImpl implements ICycleGroup
+public final class CycleGroupIssueImpl extends AbstractElementIssueImpl implements ICycleGroupIssue
 {
     private static final long serialVersionUID = 3306324924477805018L;
     private final IAnalyzer analyzer;
     private final List<INamedElement> cyclicElements = new ArrayList<>();
 
-    public CycleGroupImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
+    public CycleGroupIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final IAnalyzer analyzer)
     {
         super(name, presentationName, description, issueType, provider, hasResolution, -1);
@@ -108,7 +108,7 @@ public final class CycleGroupImpl extends AbstractElementIssueImpl implements IC
         {
             return false;
         }
-        final CycleGroupImpl other = (CycleGroupImpl) obj;
+        final CycleGroupIssueImpl other = (CycleGroupIssueImpl) obj;
         if (analyzer == null)
         {
             if (other.analyzer != null)

@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,10 +32,14 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     private final ResolutionType type;
     private final boolean isApplicable;
     private final int numberOfAffectedParserDependencies;
+    private final String dateTime;
+    private final String assignee;
+    private final String description;
 
     //TODO: PresentationName?
     public ResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
-            final boolean isApplicable, final int numberOfAffectedParserDependencies)
+            final boolean isApplicable, final int numberOfAffectedParserDependencies, final String description, final String assignee,
+            final String dateTime)
     {
         super(fqName, type.name());
 
@@ -44,6 +48,10 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.issues = issues;
         this.isApplicable = isApplicable;
         this.numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
+
+        this.description = description;
+        this.assignee = assignee;
+        this.dateTime = dateTime;
     }
 
     /* (non-Javadoc)
@@ -74,21 +82,13 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((issues == null) ? 0 : issues.hashCode());
-        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
-    }
-
-    @Override
     public String toString()
     {
         final StringBuilder builder = new StringBuilder(type.name());
         builder.append(", priority=").append(priority);
+        builder.append(", description=").append(description);
+        builder.append(", assignee=").append(assignee);
+        builder.append(", date=").append(dateTime);
         builder.append(", applicable=").append(isApplicable ? "yes" : "no");
         builder.append(", number of issues=").append(issues.size());
         builder.append(", number of affected parser dependencies=").append(numberOfAffectedParserDependencies);
@@ -97,15 +97,27 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((assignee == null) ? 0 : assignee.hashCode());
+        result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + (isApplicable ? 1231 : 1237);
+        result = prime * result + ((issues == null) ? 0 : issues.hashCode());
+        result = prime * result + numberOfAffectedParserDependencies;
+        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj)
     {
         if (this == obj)
         {
             return true;
-        }
-        if (obj == null)
-        {
-            return false;
         }
         if (!super.equals(obj))
         {
@@ -116,6 +128,43 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
             return false;
         }
         final ResolutionImpl other = (ResolutionImpl) obj;
+        if (assignee == null)
+        {
+            if (other.assignee != null)
+            {
+                return false;
+            }
+        }
+        else if (!assignee.equals(other.assignee))
+        {
+            return false;
+        }
+        if (dateTime == null)
+        {
+            if (other.dateTime != null)
+            {
+                return false;
+            }
+        }
+        else if (!dateTime.equals(other.dateTime))
+        {
+            return false;
+        }
+        if (description == null)
+        {
+            if (other.description != null)
+            {
+                return false;
+            }
+        }
+        else if (!description.equals(other.description))
+        {
+            return false;
+        }
+        if (isApplicable != other.isApplicable)
+        {
+            return false;
+        }
         if (issues == null)
         {
             if (other.issues != null)
@@ -127,25 +176,15 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         {
             return false;
         }
-        if (priority == null)
-        {
-            if (other.priority != null)
-            {
-                return false;
-            }
-        }
-        else if (!priority.equals(other.priority))
+        if (numberOfAffectedParserDependencies != other.numberOfAffectedParserDependencies)
         {
             return false;
         }
-        if (type == null)
+        if (priority != other.priority)
         {
-            if (other.type != null)
-            {
-                return false;
-            }
+            return false;
         }
-        else if (!type.equals(other.type))
+        if (type != other.type)
         {
             return false;
         }
@@ -168,5 +207,23 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     public int getNumberOfAffectedParserDependencies()
     {
         return numberOfAffectedParserDependencies;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return description;
+    }
+
+    @Override
+    public String getAssignee()
+    {
+        return assignee;
+    }
+
+    @Override
+    public String getDate()
+    {
+        return dateTime;
     }
 }

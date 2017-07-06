@@ -117,6 +117,7 @@
                 <xs:attribute name="source" type="xs:IDREF" use="optional"/>
                 <xs:attribute name="line" type="xs:int" default="-1" use="optional"/>
                 <xs:attribute name="primaryElement" type="xs:IDREF" use="optional"/>
+                <xs:attribute name="original" type="xs:IDREF" use="optional"/>
             </xs:extension>
         </xs:complexContent>   
    </xs:complexType>
@@ -298,6 +299,7 @@
                     <xs:element name="element" type="xsdCycleElement" minOccurs="2" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="numberOfCyclicElements" type="xs:int" use="required"/>
+                <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="fqName" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>

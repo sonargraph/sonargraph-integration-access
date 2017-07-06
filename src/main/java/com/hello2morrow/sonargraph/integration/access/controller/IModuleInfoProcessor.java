@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public interface IModuleInfoProcessor extends IInfoProcessor
@@ -30,4 +31,6 @@ public interface IModuleInfoProcessor extends IInfoProcessor
     public boolean isElementContainedInModule(INamedElement element);
 
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(Predicate<IIssue> filter);
+
+    public Map<ISourceFile, Map<IResolution, List<IIssue>>> getIssuesForResolutionsForSourceFiles(Predicate<IResolution> filter);
 }

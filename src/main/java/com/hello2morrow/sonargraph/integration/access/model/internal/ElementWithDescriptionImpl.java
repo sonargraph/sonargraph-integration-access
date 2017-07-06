@@ -1,6 +1,6 @@
 /**
  * Sonargraph Integration Access
- * Copyright (C) 2016 hello2morrow GmbH
+ * Copyright (C) 2016-2017 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ public abstract class ElementWithDescriptionImpl extends ElementImpl implements 
     {
         super(name, presentationName);
         assert description != null : "Parameter 'description' of method 'NamedElement' must not be null";
-
         this.description = description;
     }
 
@@ -43,7 +42,7 @@ public abstract class ElementWithDescriptionImpl extends ElementImpl implements 
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + description.hashCode();
         return result;
     }
 
@@ -58,23 +57,8 @@ public abstract class ElementWithDescriptionImpl extends ElementImpl implements 
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final ElementWithDescriptionImpl other = (ElementWithDescriptionImpl) obj;
-        if (description == null)
-        {
-            if (other.description != null)
-            {
-                return false;
-            }
-        }
-        else if (!description.equals(other.description))
-        {
-            return false;
-        }
-        return true;
-    }
 
+        final ElementWithDescriptionImpl other = (ElementWithDescriptionImpl) obj;
+        return description.equals(other.description);
+    }
 }
