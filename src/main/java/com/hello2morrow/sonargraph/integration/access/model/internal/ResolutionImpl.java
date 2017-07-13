@@ -46,6 +46,9 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.type = type;
         this.priority = priority;
         this.issues = issues;
+        for (IIssue nextIssue : issues) {
+            nextIssue.setResolution(this);
+        }
         this.isApplicable = isApplicable;
         this.numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
 

@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
+import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 
 public abstract class IssueImpl extends ElementWithDescriptionImpl implements IIssue
 {
@@ -28,6 +29,7 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
     private final IIssueProvider issueProvider;
     private final boolean hasResolution;
     private final int lineNumber;
+    private IResolution resolution;
 
     public IssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final boolean hasResolution, final int line)
@@ -59,13 +61,40 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         return issueType;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#setResolution()
+     */
+    @Override
+    public void setResolution(IResolution resolution) {
+
+        this.resolution = resolution;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
      * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#hasResolution()
      */
     @Override
     public final boolean hasResolution()
     {
         return hasResolution;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        String description = super.getDescription();
+        if (resolution != null && resolution.getDescription() != null && !resolution.getDescription().isEmpty()) {
+            description += " (" + resolution.getDescription() + ")";
+        }
+        return description;
     }
 
     @Override

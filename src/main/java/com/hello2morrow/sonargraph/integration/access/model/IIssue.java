@@ -33,4 +33,6 @@ public interface IIssue extends Serializable
     public List<INamedElement> getOrigins();
 
     public int getLineNumber();
+
+    public void setResolution(IResolution resolution);
 }
