@@ -32,7 +32,7 @@ public abstract class ElementWithDescriptionImpl extends ElementImpl implements 
     }
 
     @Override
-    public final String getDescription()
+    public String getDescription()
     {
         return description;
     }
