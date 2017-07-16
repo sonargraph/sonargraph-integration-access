@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -36,12 +37,15 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     private final String assignee;
     private final String description;
 
-    //TODO: PresentationName?
     public ResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
             final boolean isApplicable, final int numberOfAffectedParserDependencies, final String description, final String assignee,
             final String dateTime)
     {
         super(fqName, type.name());
+
+        assert type != null : "Parameter 'type' of method 'ResolutionImpl' must not be null";
+        assert priority != null : "Parameter 'priority' of method 'ResolutionImpl' must not be null";
+        assert issues != null : "Parameter 'issues' of method 'ResolutionImpl' must not be null";
 
         this.type = type;
         this.priority = priority;
@@ -49,9 +53,9 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.isApplicable = isApplicable;
         this.numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
 
-        this.description = description;
-        this.assignee = assignee;
-        this.dateTime = dateTime;
+        this.description = description != null ? description : "";
+        this.assignee = assignee != null ? assignee : "";
+        this.dateTime = dateTime != null ? dateTime : "";
     }
 
     /* (non-Javadoc)
@@ -60,7 +64,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public List<IIssue> getIssues()
     {
-        return issues;
+        return Collections.unmodifiableList(issues);
     }
 
     /* (non-Javadoc)
