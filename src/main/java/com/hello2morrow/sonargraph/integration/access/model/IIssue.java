@@ -28,6 +28,8 @@ public interface IIssue extends Serializable
 
     public boolean hasResolution();
 
+    public boolean isIgnored();
+
     public String getDescription();
 
     public List<INamedElement> getOrigins();
