@@ -256,4 +256,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         }
         return new ArrayList<>(elementKinds);
     }
+
+    @Override
+    public IResolution getResolution(final IIssue issue)
+    {
+        assert issue != null : "Parameter 'issue' of method 'getResolution' must not be null";
+        return softwareSystem.getResolution(issue);
+    }
 }

@@ -125,6 +125,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     }
 
     @Override
+    public IResolution getResolution(final IIssue issue)
+    {
+        assert issue != null : "Parameter 'issue' of method 'getResolution' must not be null";
+        return systemInfoProcessor.getResolution(issue);
+    }
+
+    @Override
     public Optional<IMetricId> getMetricId(final IMetricLevel level, final String metricId)
     {
         return module.getMetricIdsForLevel(level).stream().filter(id -> id.getName().equals(metricId)).findAny();
