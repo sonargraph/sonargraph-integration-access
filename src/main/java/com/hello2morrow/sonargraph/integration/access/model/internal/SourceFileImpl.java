@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.Optional;
 
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
@@ -26,8 +27,6 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
 {
     private static final long serialVersionUID = -2940999235312739954L;
     private final IRootDirectory rootDirectory;
-    private boolean isOriginal;
-    private ISourceFile original = null;
 
     public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
             final String presentationName, final String fqName)
@@ -58,23 +57,21 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     @Override
     public Optional<ISourceFile> getOriginal()
     {
-        return Optional.ofNullable(original);
-    }
-
-    public void setOriginal(final ISourceFile original)
-    {
-        this.original = original;
-    }
-
-    public void setIsOriginal(final boolean isOriginal)
-    {
-        this.isOriginal = isOriginal;
+        final Optional<? extends INamedElement> optOriginal = super.getOriginal();
+        if (optOriginal.isPresent())
+        {
+            final INamedElement original = optOriginal.get();
+            assert original != null && original instanceof ISourceFile : "Unexpected class in method 'getOriginal': " + original;
+            return Optional.ofNullable((ISourceFile) original);
+        }
+        return Optional.empty();
     }
 
     @Override
-    public boolean isOriginal()
+    public void setOriginal(final NamedElementImpl original)
     {
-        return isOriginal;
+        assert original != null && original instanceof SourceFileImpl : "Unexpected class in method 'setOriginal': " + original;
+        super.setOriginal(original);
     }
 
     @Override
@@ -82,7 +79,6 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((original == null) ? 0 : original.hashCode());
         result = prime * result + rootDirectory.hashCode();
         return result;
     }
@@ -100,18 +96,6 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         }
 
         final SourceFileImpl other = (SourceFileImpl) obj;
-        if (original == null)
-        {
-            if (other.original != null)
-            {
-                return false;
-            }
-        }
-        else if (!original.equals(other.original))
-        {
-            return false;
-        }
-
         return rootDirectory.equals(other.rootDirectory);
     }
 
@@ -121,16 +105,6 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("\n");
         builder.append("In root directory: ").append(rootDirectory.getRelativePath());
-        if (original != null)
-        {
-            builder.append("\n");
-            builder.append("Has original with fq name: ").append(original.getFqName());
-        }
-        if (isOriginal)
-        {
-            builder.append("\n");
-            builder.append("Is Original");
-        }
         return builder.toString();
     }
 }

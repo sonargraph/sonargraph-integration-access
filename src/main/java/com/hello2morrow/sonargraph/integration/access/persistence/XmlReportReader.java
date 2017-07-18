@@ -222,14 +222,87 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         return Optional.empty();
     }
 
-    private void connectOriginals(final List<XsdSourceFile> xsdSourceFiles)
+    private NamedElementImpl getNamedElementImpl(final XsdNamedElement xsdNamedElement)
     {
-        assert xsdSourceFiles != null : "Parameter 'xsdSourceFiles' of method 'connectOriginals' must not be null";
+        assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'getNamedElementImpl' must not be null";
+        final Object namedElemenetImpl = globalXmlToElementMap.get(xsdNamedElement);
+        if (namedElemenetImpl == null)
+        {
+            LOGGER.error("Named element '{}' must have been created before.", xsdNamedElement.getFqName());
+            return null;
+        }
+        else if (!(namedElemenetImpl instanceof NamedElementImpl))
+        {
+            LOGGER.error("Unexpected class '{}'", namedElemenetImpl.getClass().getCanonicalName());
+            return null;
+        }
+        return (NamedElementImpl) namedElemenetImpl;
+    }
+
+    private void connectModuleNamedElementOriginals(final List<XsdNamedElement> xsdNamedElements)
+    {
+        assert xsdNamedElements != null : "Parameter 'xsdNamedElements' of method 'connectModuleNamedElementOriginals' must not be null";
+
+        for (final XsdNamedElement nextXsdNamedElement : xsdNamedElements)
+        {
+            final NamedElementImpl nextNamedElementImpl = getNamedElementImpl(nextXsdNamedElement);
+            if (nextNamedElementImpl == null)
+            {
+                LOGGER.error("No named element impl found for xsd named element '{}'.", nextXsdNamedElement.getFqName());
+                continue;
+            }
+
+            final Object nextXsdOriginal = nextXsdNamedElement.getOriginal();
+            if (nextXsdOriginal != null)
+            {
+                if (nextXsdOriginal instanceof XsdNamedElement)
+                {
+                    final NamedElementImpl original = getNamedElementImpl((XsdNamedElement) nextXsdOriginal);
+                    if (original != null)
+                    {
+                        nextNamedElementImpl.setOriginal(original);
+                        original.setIsOriginal(true);
+                    }
+                    else
+                    {
+                        LOGGER.error("No named element impl found for original xsd named element '{}'.",
+                                ((XsdSourceFile) nextXsdOriginal).getFqName());
+                    }
+                }
+                else
+                {
+                    LOGGER.error("Unexpected class '{}' as original named element impl.", nextXsdOriginal.getClass().getCanonicalName());
+                    continue;
+                }
+            }
+        }
+    }
+
+    private SourceFileImpl getSourceFileImpl(final XsdSourceFile xsdSourceFile)
+    {
+        assert xsdSourceFile != null : "Parameter 'xsdSourceFile' of method 'getSourceFile' must not be null";
+        final Object sourceFileImpl = globalXmlToElementMap.get(xsdSourceFile);
+        if (sourceFileImpl == null)
+        {
+            LOGGER.error("Source file '{}' must have been created before.", xsdSourceFile.getFqName());
+            return null;
+        }
+        else if (!(sourceFileImpl instanceof SourceFileImpl))
+        {
+            LOGGER.error("Unexpected class '{}'", sourceFileImpl.getClass().getCanonicalName());
+            return null;
+        }
+        return (SourceFileImpl) sourceFileImpl;
+    }
+
+    private void connectSourceFileOriginals(final List<XsdSourceFile> xsdSourceFiles)
+    {
+        assert xsdSourceFiles != null : "Parameter 'xsdSourceFiles' of method 'connectSourceFileOriginals' must not be null";
 
         for (final XsdSourceFile nextXsdSourceFile : xsdSourceFiles)
         {
-            final SourceFileImpl nextSourceFile = getSourceFile(nextXsdSourceFile);
-            if (nextSourceFile == null)
+            final SourceFileImpl nextSourceFileImpl = getSourceFileImpl(nextXsdSourceFile);
+            if (nextSourceFileImpl == null)
             {
                 LOGGER.error("No source file impl found for xsd source file '{}'.", nextXsdSourceFile.getFqName());
                 continue;
@@ -240,10 +313,10 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             {
                 if (nextXsdOriginal instanceof XsdSourceFile)
                 {
-                    final SourceFileImpl original = getSourceFile((XsdSourceFile) nextXsdOriginal);
+                    final SourceFileImpl original = getSourceFileImpl((XsdSourceFile) nextXsdOriginal);
                     if (original != null)
                     {
-                        nextSourceFile.setOriginal(original);
+                        nextSourceFileImpl.setOriginal(original);
                         original.setIsOriginal(true);
                     }
                     else
@@ -262,13 +335,13 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         //First we need the correct isOriginal() state
         for (final XsdSourceFile nextXsdSourceFile : xsdSourceFiles)
         {
-            final SourceFileImpl nextSourceFile = getSourceFile(nextXsdSourceFile);
-            if (nextSourceFile != null)
+            final SourceFileImpl nextSourceFileImpl = getSourceFileImpl(nextXsdSourceFile);
+            if (nextSourceFileImpl != null)
             {
-                final IRootDirectory nextRootDirectory = nextSourceFile.getRootDirectory();
+                final IRootDirectory nextRootDirectory = nextSourceFileImpl.getRootDirectory();
                 assert nextRootDirectory != null && nextRootDirectory instanceof RootDirectoryImpl : "Unexpected class in method 'connectOriginals': "
                         + nextRootDirectory;
-                ((RootDirectoryImpl) nextRootDirectory).addSourceFile(nextSourceFile);
+                ((RootDirectoryImpl) nextRootDirectory).addSourceFile(nextSourceFileImpl);
             }
         }
     }
@@ -292,10 +365,12 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         {
             return Optional.empty();
         }
-        connectOriginals(xsdSourceFiles);
+        connectSourceFileOriginals(xsdSourceFiles);
 
         processSystemElements(softwareSystem, report, adjuster);
-        processModuleElements(softwareSystem, report, adjuster);
+        final List<XsdNamedElement> xsdModuleNamedElements = processModuleElements(softwareSystem, report, adjuster);
+        connectModuleNamedElementOriginals(xsdModuleNamedElements);
+
         addSources();
 
         processMetrics(softwareSystem, report);
@@ -391,22 +466,6 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
 
         return xsdSourceFiles;
-    }
-
-    private SourceFileImpl getSourceFile(final XsdSourceFile nextSourceFile)
-    {
-        final Object source = globalXmlToElementMap.get(nextSourceFile);
-        if (source == null)
-        {
-            LOGGER.error("Source file '{}' must have been created before.", nextSourceFile.getFqName());
-            return null;
-        }
-        else if (!(source instanceof SourceFileImpl))
-        {
-            LOGGER.error("Unexpected class '{}'", source.getClass().getCanonicalName());
-            return null;
-        }
-        return (SourceFileImpl) source;
     }
 
     private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
@@ -541,12 +600,13 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private void processModuleElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
+    private List<XsdNamedElement> processModuleElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
             final INamedElementAdjuster adjuster)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addModuleElements' must not be null";
         assert report != null : "Parameter 'report' of method 'addModuleElements' must not be null";
 
+        final List<XsdNamedElement> xsdNamedElements = new ArrayList<>();
         for (final XsdModuleElements nextModuleElements : report.getModuleElements())
         {
             final IElement moduleElement = globalXmlToElementMap.get(nextModuleElements.getRef());
@@ -560,8 +620,10 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 module.addElement(element);
                 assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
                 globalXmlToElementMap.put(nextElement, element);
+                xsdNamedElements.add(nextElement);
             }
         }
+        return xsdNamedElements;
     }
 
     private NamedElementImpl createNamedElement(final INamedElementAdjuster adjuster, final XsdNamedElement nextElement,

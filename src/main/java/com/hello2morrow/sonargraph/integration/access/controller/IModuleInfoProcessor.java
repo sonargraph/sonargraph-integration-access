@@ -32,5 +32,11 @@ public interface IModuleInfoProcessor extends IInfoProcessor
 
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(Predicate<IIssue> filter);
 
+    /**
+     * @param filter the filter might be <code>null</code>
+     * @return the result map named element (without attached source file) to issues 
+     */
+    public Map<INamedElement, List<IIssue>> getIssuesForModuleElements(Predicate<IIssue> filter);
+
     public Map<ISourceFile, Map<IResolution, List<IIssue>>> getIssuesForResolutionsForSourceFiles(Predicate<IResolution> filter);
 }

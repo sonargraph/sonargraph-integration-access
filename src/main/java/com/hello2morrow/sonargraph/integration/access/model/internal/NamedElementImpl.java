@@ -30,6 +30,8 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     private final int line;
     private final String fqName;
     private ISourceFile m_source;
+    private boolean isOriginal;
+    private NamedElementImpl original;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final int line, final String description)
@@ -96,6 +98,28 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     }
 
     @Override
+    public Optional<? extends INamedElement> getOriginal()
+    {
+        return Optional.ofNullable(original);
+    }
+
+    public void setOriginal(final NamedElementImpl original)
+    {
+        this.original = original;
+    }
+
+    public final void setIsOriginal(final boolean isOriginal)
+    {
+        this.isOriginal = isOriginal;
+    }
+
+    @Override
+    public final boolean isOriginal()
+    {
+        return isOriginal;
+    }
+
+    @Override
     public int hashCode()
     {
         final int prime = 31;
@@ -104,6 +128,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         result = prime * result + ((kind == null) ? 0 : kind.hashCode());
         result = prime * result + line;
         result = prime * result + ((presentationKind == null) ? 0 : presentationKind.hashCode());
+        result = prime * result + ((original == null) ? 0 : original.hashCode());
         return result;
     }
 
@@ -150,6 +175,17 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         {
             return false;
         }
+        if (original == null)
+        {
+            if (other.original != null)
+            {
+                return false;
+            }
+        }
+        else if (!original.equals(other.original))
+        {
+            return false;
+        }
         return true;
     }
 
@@ -159,6 +195,16 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("\n");
         builder.append("Fq name: ").append(fqName);
+        if (original != null)
+        {
+            builder.append("\n");
+            builder.append("Has original with fq name: ").append(original.getFqName());
+        }
+        if (isOriginal)
+        {
+            builder.append("\n");
+            builder.append("Is Original");
+        }
         return builder.toString();
     }
 }
