@@ -105,6 +105,12 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
             }
             return module.hasElement(sourceFile);
         }
+
+        final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+        if (namedElementOpt.isPresent())
+        {
+            return module.hasElement(namedElementOpt.get());
+        }
         return module.hasElement(element);
     }
 
@@ -122,6 +128,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
             }
         }
         return Collections.unmodifiableList(moduleResolutions);
+    }
+
+    @Override
+    public IResolution getResolution(final IIssue issue)
+    {
+        assert issue != null : "Parameter 'issue' of method 'getResolution' must not be null";
+        return systemInfoProcessor.getResolution(issue);
     }
 
     @Override
@@ -166,15 +179,90 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         return sourceFileToResolutionMap;
     }
 
+    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
+    {
+        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
+        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
+
+        if (isElementContainedInModule(element))
+        {
+            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
+            if (!sourceFileOpt.isPresent())
+            {
+                INamedElement add = element;
+                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+                if (namedElementOpt.isPresent())
+                {
+                    add = namedElementOpt.get();
+                }
+                List<IIssue> issues = resultMap.get(add);
+                if (issues == null)
+                {
+                    issues = new ArrayList<>();
+                    resultMap.put(add, issues);
+                }
+                issues.add(issue);
+            }
+        }
+    }
+
+    @Override
+    public Map<INamedElement, List<IIssue>> getIssuesForModuleElements(final Predicate<IIssue> filter)
+    {
+        final Map<INamedElement, List<IIssue>> resultMap = new HashMap<>();
+        for (final IIssue issue : systemInfoProcessor.getIssues(filter))
+        {
+            if (issue instanceof IElementIssue)
+            {
+                final List<INamedElement> elements = ((IElementIssue) issue).getAffectedElements();
+                for (final INamedElement next : elements)
+                {
+                    addNamedElementForIssue(resultMap, issue, next);
+                }
+            }
+            if (issue instanceof IDependencyIssue)
+            {
+                final INamedElement from = ((IDependencyIssue) issue).getFrom();
+                addNamedElementForIssue(resultMap, issue, from);
+            }
+        }
+        return Collections.unmodifiableMap(resultMap);
+    }
+
     @Override
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(final Predicate<IIssue> filter)
     {
-        final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
-        return mapIssuesToSourceFiles(systemIssues);
+        return mapIssuesToSourceFiles(systemInfoProcessor.getIssues(filter));
+    }
+
+    private void addSourceForIssue(final Map<ISourceFile, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
+    {
+        assert resultMap != null : "Parameter 'resultMap' of method 'addSourceForIssue' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'addSourceForIssue' must not be null";
+        assert element != null : "Parameter 'element' of method 'addSourceForIssue' must not be null";
+
+        if (isElementContainedInModule(element))
+        {
+            final Optional<ISourceFile> source = module.getSourceForElement(element);
+            if (source.isPresent())
+            {
+                final ISourceFile sourceFile = source.get();
+                List<IIssue> issues = resultMap.get(sourceFile);
+                if (issues == null)
+                {
+                    issues = new ArrayList<>();
+                    resultMap.put(sourceFile, issues);
+                }
+                issues.add(issue);
+            }
+        }
     }
 
     private Map<ISourceFile, List<IIssue>> mapIssuesToSourceFiles(final List<IIssue> systemIssues)
     {
+        assert systemIssues != null : "Parameter 'systemIssues' of method 'mapIssuesToSourceFiles' must not be null";
+
         final Map<ISourceFile, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue issue : systemIssues)
         {
@@ -194,28 +282,6 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         }
 
         return Collections.unmodifiableMap(resultMap);
-    }
-
-    private void addSourceForIssue(final Map<ISourceFile, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
-    {
-        assert resultMap != null : "Parameter 'resultMap' of method 'addSourceForIssue' must not be null";
-        assert issue != null : "Parameter 'issue' of method 'addSourceForIssue' must not be null";
-        assert element != null : "Parameter 'element' of method 'addSourceForIssue' must not be null";
-
-        if (isElementContainedInModule(element))
-        {
-            final Optional<ISourceFile> source = module.getSourceForElement(element);
-            if (source.isPresent())
-            {
-                final ISourceFile sourceFile = source.get();
-                if (!resultMap.containsKey(sourceFile))
-                {
-                    resultMap.put(sourceFile, new ArrayList<IIssue>());
-                }
-
-                resultMap.get(sourceFile).add(issue);
-            }
-        }
     }
 
     @Override

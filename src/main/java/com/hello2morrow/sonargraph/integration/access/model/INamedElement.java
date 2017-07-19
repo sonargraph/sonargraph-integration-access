@@ -29,5 +29,9 @@ public interface INamedElement extends IElement
 
     public int getLineNumber();
 
+    public boolean isOriginal();
+
+    public Optional<? extends INamedElement> getOriginal();
+
     public Optional<ISourceFile> getSourceFile();
 }

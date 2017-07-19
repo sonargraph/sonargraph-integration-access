@@ -22,11 +22,15 @@ import java.util.List;
 
 public interface IIssue extends Serializable
 {
+    public String getPresentationName();
+
     public IIssueProvider getIssueProvider();
 
     public IIssueType getIssueType();
 
     public boolean hasResolution();
+
+    public boolean isIgnored();
 
     public String getDescription();
 

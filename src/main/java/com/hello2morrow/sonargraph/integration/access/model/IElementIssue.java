@@ -23,7 +23,5 @@ public interface IElementIssue extends IIssue
 {
     public String getName();
 
-    public String getPresentationName();
-
     public List<INamedElement> getAffectedElements();
 }

@@ -21,21 +21,39 @@ import java.util.List;
 
 public interface IResolution extends IElement
 {
-    public List<IIssue> getIssues();
+    /**
+     * @return the type - never <code>null</code>
+     */
+    public ResolutionType getType();
 
+    /**
+     * @return the priority - never <code>null</code>
+     */
     public Priority getPriority();
 
-    public ResolutionType getType();
+    /**
+     * @return the assignee - never <code>null</code>
+     */
+    public String getAssignee();
+
+    /**
+     * @return the description - never <code>null</code>
+     */
+    public String getDescription();
+
+    /**
+     * @return the date - never <code>null</code>
+     */
+    public String getDate();
+
+    /**
+     * @return the issue - never <code>null</code>
+     */
+    public List<IIssue> getIssues();
 
     public boolean isApplicable();
 
     public boolean isTask();
 
     public int getNumberOfAffectedParserDependencies();
-
-    public String getDescription();
-
-    public String getAssignee();
-
-    public String getDate();
 }

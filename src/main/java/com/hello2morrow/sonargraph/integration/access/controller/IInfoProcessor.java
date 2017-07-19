@@ -52,6 +52,12 @@ public interface IInfoProcessor
     public List<IResolution> getResolutions(Predicate<IResolution> filter);
 
     /**
+     * @param issue the issue - must not be 'null'
+     * @return the resolution or 'null' if the issue has no resolution
+     */
+    public IResolution getResolution(IIssue issue);
+
+    /**
      * @param level
      * @param metricId the metric's 'standard' name, e.g. 'CoreParameter'
      * @return

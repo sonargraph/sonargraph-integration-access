@@ -58,8 +58,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final long timestamp;
     private int numberOfIssues = 0;
 
-    //TODO: Decide if the order of elements in the report is important for us.
-    //Do we want to impose some default ordering / sorting?
     private final Map<String, IModule> modules = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
@@ -70,6 +68,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<IAnalyzer, HashMap<String, ICycleGroupIssue>> cycleGroups = new HashMap<>();
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
+    private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
@@ -194,7 +193,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert provider != null : "Parameter 'provider' of method 'addIssueProvider' must not be null";
         assert !issueProviders.containsKey(provider.getName()) : "IssueProvider '" + provider.getName() + "' has already been added";
-
         issueProviders.put(provider.getName(), provider);
     }
 
@@ -218,7 +216,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert issueType != null : "Parameter 'issueType' of method 'addIssueType' must not be null";
         assert !issueTypes.containsKey(issueType.getName()) : "issueType '" + issueType + "has already been added";
-
         issueTypes.put(issueType.getName(), issueType);
         issueMap.put(issueType, new ArrayList<>());
     }
@@ -226,7 +223,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addIssue(final IIssue issue)
     {
         assert issue != null : "Parameter 'issue' of method 'addIssue' must not be null";
-
         assert issueMap.containsKey(issue.getIssueType()) : "issueType '" + issue.getIssueType() + "' has not beend added";
         issueMap.get(issue.getIssueType()).add(issue);
     }
@@ -251,7 +247,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addMetricId(final IMetricId metricId)
     {
         assert metricId != null : "Parameter 'metricId' of method 'addMetricId' must not be null";
-
         getMetricsAccess().addMetricId(metricId);
     }
 
@@ -264,7 +259,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert analyzer != null : "Parameter 'analyzer' of method 'addAnalyzer' must not be null";
         assert !analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has already been added";
-
         analyzerMap.put(analyzer.getName(), analyzer);
     }
 
@@ -277,7 +271,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert feature != null : "Parameter 'feature' of method 'addFeature' must not be null";
         assert !featuresMap.containsKey(feature.getName()) : "Feature '" + feature.getName() + "' has already been added";
-
         featuresMap.put(feature.getName(), feature);
     }
 
@@ -290,9 +283,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert analyzerId != null && analyzerId.length() > 0 : "Parameter 'analyzerId' of method 'getCycleGroups' must not be empty";
         assert analyzerMap.containsKey(analyzerId) : "analyzerId '" + analyzerId + "' has not been added";
-
         final IAnalyzer analyzer = analyzerMap.get(analyzerId);
-
         assert cycleGroups.containsKey(analyzer) : "'" + analyzerId + "' has not been added for cycleGroups";
         return Collections.unmodifiableMap(cycleGroups.get(analyzer));
     }
@@ -324,7 +315,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert duplicate != null : "Parameter 'duplicate' of method 'addDuplicateCodeBlock' must not be null";
         assert !duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
-
         duplicateCodeBlockIssueMap.put(duplicate.getName(), duplicate);
         addIssue(duplicate);
     }
@@ -345,6 +335,21 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         }
 
         resolutions.add(resolution);
+
+        for (final IIssue nextIssue : resolution.getIssues())
+        {
+            issueToResolution.put(nextIssue, resolution);
+        }
+    }
+
+    /**
+     * @param issue the issue - must not be 'null'
+     * @return the resolution or 'null' if the issue has no resolution
+     */
+    public IResolution getResolution(final IIssue issue)
+    {
+        assert issue != null : "Parameter 'issue' of method 'getResolution' must not be null";
+        return issueToResolution.get(issue);
     }
 
     public final Optional<IMetricValue> getSystemMetricValue(final IMetricId metricId)

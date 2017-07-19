@@ -22,9 +22,9 @@ package com.hello2morrow.sonargraph.integration.access.model;
  */
 public interface INamedElementAdjuster
 {
-    String adjustFqName(String standardKind, String fqName);
+    public String adjustFqName(String standardKind, String fqName);
 
-    String adjustName(String standardKind, String name);
+    public String adjustName(String standardKind, String name);
 
-    String adjustPresentationName(String standardKind, String presentationName);
+    public String adjustPresentationName(String standardKind, String presentationName);
 }
