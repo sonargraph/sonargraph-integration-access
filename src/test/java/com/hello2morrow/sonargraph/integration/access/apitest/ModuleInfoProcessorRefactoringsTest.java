@@ -91,6 +91,5 @@ public class ModuleInfoProcessorRefactoringsTest
         //TODO:
         //Check for AlarmToConsole. It is present as original in rename refactoring AlarmToConsole -> AlarmToConsole2
         // It is also present as target of rename refactoring: AlarmToFile -> AlarmToConsole
-
     }
 }

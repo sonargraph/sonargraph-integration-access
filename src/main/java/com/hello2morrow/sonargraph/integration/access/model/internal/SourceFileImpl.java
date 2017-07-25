@@ -20,32 +20,17 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public final class SourceFileImpl extends NamedElementImpl implements ISourceFile
+public final class SourceFileImpl extends PhysicalElementImpl implements ISourceFile
 {
     private static final long serialVersionUID = -2940999235312739954L;
-    private final IRootDirectory rootDirectory;
 
-    public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
-            final String presentationName, final String fqName)
+    public SourceFileImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
+            final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, -1);
-        assert rootDirectory != null : "Parameter 'rootDirectory' of method 'SourceFileImpl' must not be null";
-        this.rootDirectory = rootDirectory;
+        super(kind, presentationKind, name, presentationName, fqName, -1, relativeRootDirectory);
         setSourceFile(this);
-    }
-
-    @Override
-    public String getRelativeRootDirectoryPath()
-    {
-        return rootDirectory.getRelativePath();
-    }
-
-    public IRootDirectory getRootDirectory()
-    {
-        return rootDirectory;
     }
 
     @Override
@@ -72,39 +57,5 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     {
         assert original != null && original instanceof SourceFileImpl : "Unexpected class in method 'setOriginal': " + original;
         super.setOriginal(original);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + rootDirectory.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-
-        final SourceFileImpl other = (SourceFileImpl) obj;
-        return rootDirectory.equals(other.rootDirectory);
-    }
-
-    @Override
-    public String toString()
-    {
-        final StringBuilder builder = new StringBuilder(super.toString());
-        builder.append("\n");
-        builder.append("In root directory: ").append(rootDirectory.getRelativePath());
-        return builder.toString();
     }
 }

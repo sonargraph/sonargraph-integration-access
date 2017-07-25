@@ -179,57 +179,6 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         return sourceFileToResolutionMap;
     }
 
-    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
-    {
-        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
-        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
-        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
-
-        if (isElementContainedInModule(element))
-        {
-            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
-            if (!sourceFileOpt.isPresent())
-            {
-                INamedElement add = element;
-                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
-                if (namedElementOpt.isPresent())
-                {
-                    add = namedElementOpt.get();
-                }
-                List<IIssue> issues = resultMap.get(add);
-                if (issues == null)
-                {
-                    issues = new ArrayList<>();
-                    resultMap.put(add, issues);
-                }
-                issues.add(issue);
-            }
-        }
-    }
-
-    @Override
-    public Map<INamedElement, List<IIssue>> getIssuesForModuleElements(final Predicate<IIssue> filter)
-    {
-        final Map<INamedElement, List<IIssue>> resultMap = new HashMap<>();
-        for (final IIssue issue : systemInfoProcessor.getIssues(filter))
-        {
-            if (issue instanceof IElementIssue)
-            {
-                final List<INamedElement> elements = ((IElementIssue) issue).getAffectedElements();
-                for (final INamedElement next : elements)
-                {
-                    addNamedElementForIssue(resultMap, issue, next);
-                }
-            }
-            if (issue instanceof IDependencyIssue)
-            {
-                final INamedElement from = ((IDependencyIssue) issue).getFrom();
-                addNamedElementForIssue(resultMap, issue, from);
-            }
-        }
-        return Collections.unmodifiableMap(resultMap);
-    }
-
     @Override
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(final Predicate<IIssue> filter)
     {
@@ -281,6 +230,57 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
             }
         }
 
+        return Collections.unmodifiableMap(resultMap);
+    }
+
+    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
+    {
+        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
+        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
+
+        if (isElementContainedInModule(element))
+        {
+            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
+            if (!sourceFileOpt.isPresent())
+            {
+                INamedElement add = element;
+                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+                if (namedElementOpt.isPresent())
+                {
+                    add = namedElementOpt.get();
+                }
+                List<IIssue> issues = resultMap.get(add);
+                if (issues == null)
+                {
+                    issues = new ArrayList<>();
+                    resultMap.put(add, issues);
+                }
+                issues.add(issue);
+            }
+        }
+    }
+
+    @Override
+    public Map<INamedElement, List<IIssue>> getIssuesForNamedElements(final Predicate<IIssue> filter)
+    {
+        final Map<INamedElement, List<IIssue>> resultMap = new HashMap<>();
+        for (final IIssue issue : systemInfoProcessor.getIssues(filter))
+        {
+            if (issue instanceof IElementIssue)
+            {
+                final List<INamedElement> elements = ((IElementIssue) issue).getAffectedElements();
+                for (final INamedElement next : elements)
+                {
+                    addNamedElementForIssue(resultMap, issue, next);
+                }
+            }
+            if (issue instanceof IDependencyIssue)
+            {
+                final INamedElement from = ((IDependencyIssue) issue).getFrom();
+                addNamedElementForIssue(resultMap, issue, from);
+            }
+        }
         return Collections.unmodifiableMap(resultMap);
     }
 

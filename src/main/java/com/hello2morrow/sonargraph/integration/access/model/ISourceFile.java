@@ -21,9 +21,8 @@ import java.util.Optional;
 
 public interface ISourceFile extends IFilePathElement
 {
-    public String getRelativeRootDirectoryPath();
+    public String getRelativeRootDirectory();
 
+    @Override
     public Optional<ISourceFile> getOriginal();
-
-    public boolean isOriginal();
 }

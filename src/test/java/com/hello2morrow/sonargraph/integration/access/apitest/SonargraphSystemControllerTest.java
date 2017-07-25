@@ -48,6 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSyst
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
+import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -130,8 +131,8 @@ public class SonargraphSystemControllerTest
 
     private List<ISourceFile> getRefactoredSourceElements(final IModule module)
     {
-        final Map<String, INamedElement> sourceFiles = new HashMap<>(module.getElements("JavaSourceFile"));
-        sourceFiles.putAll(module.getElements("JavaInternalCompilationUnit"));
+        final Map<String, INamedElement> sourceFiles = new HashMap<>(TestUtility.getFqNameToNamedElement(module, "JavaSourceFile"));
+        sourceFiles.putAll(TestUtility.getFqNameToNamedElement(module, "JavaInternalCompilationUnit"));
         final List<ISourceFile> refactoredElements = new ArrayList<>();
         for (final INamedElement next : sourceFiles.values())
         {

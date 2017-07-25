@@ -61,4 +61,14 @@ public abstract class ElementWithDescriptionImpl extends ElementImpl implements 
         final ElementWithDescriptionImpl other = (ElementWithDescriptionImpl) obj;
         return description.equals(other.description);
     }
+
+    @Override
+    public String toString()
+    {
+        if (description.isEmpty())
+        {
+            return super.toString();
+        }
+        return super.toString() + "\ndescription:" + description;
+    }
 }

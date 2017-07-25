@@ -21,5 +21,7 @@ import java.util.Set;
 
 public interface IRootDirectory extends IFilePathElement
 {
+    public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements();
+
     public Set<ISourceFile> getSourceFiles();
 }

@@ -23,7 +23,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
-public class ThresholdViolationIssue extends ElementIssueImpl implements IThresholdViolationIssue
+public final class ThresholdViolationIssue extends ElementIssueImpl implements IThresholdViolationIssue
 {
     private static final long serialVersionUID = -1905279510781305516L;
     private final IMetricThreshold threshold;
@@ -99,5 +99,4 @@ public class ThresholdViolationIssue extends ElementIssueImpl implements IThresh
         }
         return true;
     }
-
 }

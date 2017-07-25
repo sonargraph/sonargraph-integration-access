@@ -33,13 +33,14 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 public final class ModuleImpl extends NamedElementContainerImpl implements IModule
 {
     private static final long serialVersionUID = -4617725409511641491L;
-    private final List<IRootDirectory> rootDirectories = new ArrayList<>(2);
+    private final List<RootDirectoryImpl> rootDirectories = new ArrayList<>(2);
     private final String language;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final String language)
+            final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl,
+            final String language)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description);
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl);
         assert language != null : "Parameter 'language' of method 'ModuleImpl' must not be null";
         this.language = language;
     }
@@ -53,12 +54,11 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
         return language;
     }
 
-    public void addRootDirectory(final RootDirectoryImpl root)
+    public void addRootDirectory(final RootDirectoryImpl rootDirectory)
     {
-        assert root != null : "Parameter 'root' of method 'addRootDirectory' must not be null";
-        assert !rootDirectories.contains(root) : "root '" + root.getName() + "' has already been added";
-        rootDirectories.add(root);
-        addElement(root);
+        assert rootDirectory != null : "Parameter 'rootDirectory' of method 'addRootDirectory' must not be null";
+        assert !rootDirectories.contains(rootDirectory) : "Root directory'" + rootDirectory.getFqName() + "' has already been added";
+        rootDirectories.add(rootDirectory);
     }
 
     /* (non-Javadoc)
@@ -68,13 +68,6 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     public List<IRootDirectory> getRootDirectories()
     {
         return Collections.unmodifiableList(rootDirectories);
-    }
-
-    @Override
-    protected boolean acceptElementKind(final String elementKind)
-    {
-        assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'acceptElementKind' must not be empty";
-        return !elementKind.endsWith("Module");
     }
 
     @Override
@@ -105,30 +98,5 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
         }
         return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + language.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (this == obj)
-        {
-            return true;
-        }
-
-        final ModuleImpl other = (ModuleImpl) obj;
-        return language.equals(other.language);
     }
 }

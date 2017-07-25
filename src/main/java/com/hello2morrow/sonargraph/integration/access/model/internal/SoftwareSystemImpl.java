@@ -49,7 +49,6 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
     private static final long serialVersionUID = -4666348701032432246L;
-    private static final String SOFTWARE_SYSTEM = "SoftwareSystem";
     private final String systemId;
     private final String path;
     private String baseDir;
@@ -58,10 +57,10 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final long timestamp;
     private int numberOfIssues = 0;
 
-    private final Map<String, IModule> modules = new LinkedHashMap<>();
+    private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
-    private final Map<IIssueType, ArrayList<IIssue>> issueMap = new HashMap<>();
+    private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
     private final List<IMetricThreshold> m_thresholds = new ArrayList<>();
@@ -73,7 +72,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
     {
-        super(kind, presentationKind, name, name, name, description);
+        super(kind, presentationKind, name, name, name, description, new MetaDataAccessImpl(path, systemId, version, timestamp),
+                new ElementRegistryImpl());
+
         assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'SoftwareSystem' must not be empty";
         assert path != null && path.length() > 0 : "Parameter 'path' of method 'SoftwareSystem' must not be empty";
         assert version != null && version.length() > 0 : "Parameter 'version' of method 'SoftwareSystem' must not be empty";
@@ -93,10 +94,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         this.version = version;
         this.timestamp = timestamp;
         this.virtualModel = virtualModel;
-
-        setMetricsAccess(new MetaDataAccessImpl(path, systemId, version, timestamp));
-        setElementRegistry(new ElementRegistryImpl());
-        getElementRegistry().addElement(this);
     }
 
     /* (non-Javadoc)
@@ -177,16 +174,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert module != null : "Parameter 'module' of method 'addModule' must not be null";
         modules.put(module.getFqName(), module);
-        module.setMetricsAccess(getMetricsAccess());
-        module.setElementRegistry(getElementRegistry());
-        module.getElementRegistry().addElement(module);
-    }
-
-    @Override
-    protected boolean acceptElementKind(final String elementKind)
-    {
-        assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'acceptElementKind' must not be empty";
-        return !SOFTWARE_SYSTEM.equals(elementKind);
     }
 
     public void addIssueProvider(final IIssueProvider provider)
@@ -224,7 +211,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert issue != null : "Parameter 'issue' of method 'addIssue' must not be null";
         assert issueMap.containsKey(issue.getIssueType()) : "issueType '" + issue.getIssueType() + "' has not beend added";
-        issueMap.get(issue.getIssueType()).add(issue);
+        final List<IIssue> issues = issueMap.get(issue.getIssueType());
+        assert issues != null : "'issues' of method 'addIssue' must not be null";
+        issues.add(issue);
     }
 
     public Map<IIssueType, List<IIssue>> getIssues()
@@ -247,12 +236,12 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public void addMetricId(final IMetricId metricId)
     {
         assert metricId != null : "Parameter 'metricId' of method 'addMetricId' must not be null";
-        getMetricsAccess().addMetricId(metricId);
+        getMetaDataAccess().addMetricId(metricId);
     }
 
     public Map<String, IMetricId> getMetricIds()
     {
-        return getMetricsAccess().getMetricIds();
+        return getMetaDataAccess().getMetricIds();
     }
 
     public void addAnalyzer(final IAnalyzer analyzer)
@@ -355,18 +344,18 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public final Optional<IMetricValue> getSystemMetricValue(final IMetricId metricId)
     {
         assert metricId != null : "Parameter 'metricId' of method 'getSystemMetricValue' must not be null";
-        return super.getMetricValueForElement(metricId, getMetricsAccess().getMetricLevels().get(IMetricLevel.SYSTEM), this.getName());
+        return super.getMetricValueForElement(metricId, getMetaDataAccess().getMetricLevels().get(IMetricLevel.SYSTEM), this.getName());
     }
 
     public void addMetricCategory(final IMetricCategory metricCategory)
     {
         assert metricCategory != null : "Parameter 'metricCategory' of method 'addMetricCategory' must not be null";
-        getMetricsAccess().addMetricCategory(metricCategory);
+        getMetaDataAccess().addMetricCategory(metricCategory);
     }
 
     public Map<String, IMetricCategory> getMetricCategories()
     {
-        return getMetricsAccess().getMetricCategories();
+        return getMetaDataAccess().getMetricCategories();
     }
 
     /* (non-Javadoc)
@@ -376,30 +365,30 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<String, IMetricLevel> getMetricLevels()
     {
         final Map<String, IMetricLevel> systemMetricLevel = new HashMap<>();
-        systemMetricLevel.put(IMetricLevel.SYSTEM, getMetricsAccess().getMetricLevel(IMetricLevel.SYSTEM));
+        systemMetricLevel.put(IMetricLevel.SYSTEM, getMetaDataAccess().getMetricLevel(IMetricLevel.SYSTEM));
         return Collections.unmodifiableMap(systemMetricLevel);
     }
 
     public void addMetricProvider(final IMetricProvider provider)
     {
         assert provider != null : "Parameter 'provider' of method 'addMetricProvider' must not be null";
-        getMetricsAccess().addMetricProvider(provider);
+        getMetaDataAccess().addMetricProvider(provider);
     }
 
     public Map<String, IMetricProvider> getMetricProviders()
     {
-        return getMetricsAccess().getMetricProviders();
+        return getMetaDataAccess().getMetricProviders();
     }
 
     public void addIssueCategory(final IIssueCategory category)
     {
         assert category != null : "Parameter 'category' of method 'addIssueCategory' must not be null";
-        getMetricsAccess().addIssueCategory(category);
+        getMetaDataAccess().addIssueCategory(category);
     }
 
     public Map<String, IIssueCategory> getIssueCategories()
     {
-        return getMetricsAccess().getIssueCategories();
+        return getMetaDataAccess().getIssueCategories();
     }
 
     @Override

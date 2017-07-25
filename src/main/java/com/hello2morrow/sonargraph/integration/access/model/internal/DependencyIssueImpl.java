@@ -62,15 +62,13 @@ public final class DependencyIssueImpl extends IssueImpl implements IDependencyI
         return Collections.unmodifiableList(Arrays.asList(getFrom()));
     }
 
-    //TODO: Add further info
-
     @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((from == null) ? 0 : from.hashCode());
-        result = prime * result + ((to == null) ? 0 : to.hashCode());
+        result = prime * result + from.hashCode();
+        result = prime * result + to.hashCode();
         return result;
     }
 
@@ -81,41 +79,22 @@ public final class DependencyIssueImpl extends IssueImpl implements IDependencyI
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
         final DependencyIssueImpl other = (DependencyIssueImpl) obj;
-        if (from == null)
-        {
-            if (other.from != null)
-            {
-                return false;
-            }
-        }
-        else if (!from.equals(other.from))
-        {
-            return false;
-        }
-        if (to == null)
-        {
-            if (other.to != null)
-            {
-                return false;
-            }
-        }
-        else if (!to.equals(other.to))
-        {
-            return false;
-        }
-        return true;
+        return from.equals(other.from) && to.equals(other.to);
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append("\n");
+        builder.append("from:").append(from.getFqName());
+        builder.append("\n");
+        builder.append("to:").append(to.getFqName());
+        return builder.toString();
     }
 }

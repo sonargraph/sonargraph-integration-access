@@ -17,7 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface ISourceRootDirectory extends IRootDirectory
+import java.util.Optional;
+
+public interface IPhysicalRecursiveElement extends INamedElement
 {
-    //Marker
+    public String getRelativeRootDirectory();
+
+    public Optional<String> getRelativeDirectory();
 }

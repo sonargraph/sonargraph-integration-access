@@ -52,7 +52,7 @@
                 <xs:attribute name="description" type="xs:string" use="required" />
                 <xs:attribute name="language" type="xs:string" use="required" />
                 <xs:attribute name="debugInfo" type="xs:string"/>
-                </xs:extension>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     
@@ -61,6 +61,7 @@
             <xs:extension base="xsdNamedElement">
                 <xs:sequence>
                     <xs:element name="sourceElement" type="xsdSourceFile" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="physicalRecursiveElement" type="xsdPhysicalRecursiveElement" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>     
@@ -71,6 +72,15 @@
             <xs:extension base="xsdNamedElement"/>
         </xs:complexContent>
     </xs:complexType>
+
+    <xs:complexType name="xsdPhysicalRecursiveElement">
+        <xs:complexContent>
+            <xs:extension base="xsdNamedElement">
+                 <!-- Either the  'relativeDirectoryPath' or the 'source' (xsdNamedElement) is present -->
+                 <xs:attribute name="relativeDirectoryPath" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+     </xs:complexType>
    
    <xs:complexType name="xsdSystemElements">
         <xs:complexContent>
@@ -102,13 +112,7 @@
         </xs:sequence>
         <xs:attribute name="ref" type="xs:IDREF" use="required"/>
    </xs:complexType>
-<!--    
-   <xs:complexType name="xsdElement">
-        <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="presentationName" type="xs:string" use="required" />
-   </xs:complexType>
--->   
+
    <xs:complexType name="xsdNamedElement">
         <xs:complexContent>
             <xs:extension base="export:xsdElement">
@@ -118,6 +122,7 @@
                 <xs:attribute name="line" type="xs:int" default="-1" use="optional"/>
                 <xs:attribute name="primaryElement" type="xs:IDREF" use="optional"/>
                 <xs:attribute name="original" type="xs:IDREF" use="optional"/>
+                <xs:attribute name="recursiveElements" type="xs:IDREFS" use="optional"/>
             </xs:extension>
         </xs:complexContent>   
    </xs:complexType>

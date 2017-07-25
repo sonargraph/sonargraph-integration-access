@@ -38,6 +38,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSyst
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
+import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -47,9 +48,8 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
-import com.hello2morrow.sonargraph.integration.access.model.ISourceRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
-import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectory;
+import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectoryImpl;
 
 public class ModuleInfoProcessorTest
 {
@@ -84,18 +84,18 @@ public class ModuleInfoProcessorTest
         final List<IRootDirectory> roots = application.getRootDirectories();
         assertEquals("Wrong number of root directories", 2, roots.size());
 
-        final Map<String, INamedElement> classRoots = application.getElements("JavaClassRootDirectoryPath");
+        final Map<String, INamedElement> classRoots = TestUtility.getFqNameToNamedElement(application, "JavaClassRootDirectoryPath");
         assertFalse("No class roots found", classRoots.isEmpty());
         final INamedElement clsRoot = classRoots.get("Workspace:Application:../../smallTestProject/Application/target/classes");
         assertNotNull("Class root not found", clsRoot);
-        final ClassRootDirectory classes = (ClassRootDirectory) clsRoot;
+        final ClassRootDirectoryImpl classes = (ClassRootDirectoryImpl) clsRoot;
         assertEquals("Wrong number of source files", 0, classes.getSourceFiles().size());
 
-        final Map<String, INamedElement> srcRoots = application.getElements(JAVA_SOURCE_ROOT_DIRECTORY_PATH);
+        final Map<String, INamedElement> srcRoots = TestUtility.getFqNameToNamedElement(application, JAVA_SOURCE_ROOT_DIRECTORY_PATH);
         assertFalse("No src roots found", srcRoots.isEmpty());
         final INamedElement srcRoot = srcRoots.get(SRC_ROOT);
         assertNotNull("Src root not found", srcRoot);
-        final ISourceRootDirectory src = (ISourceRootDirectory) srcRoot;
+        final IRootDirectory src = (IRootDirectory) srcRoot;
         assertEquals("Wrong number of source files", 2, src.getSourceFiles().size());
     }
 
@@ -107,11 +107,11 @@ public class ModuleInfoProcessorTest
         final IModule application = applicationOptional.get();
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
 
-        final INamedElement srcRoot = application.getElements(JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(SRC_ROOT);
+        final INamedElement srcRoot = TestUtility.getFqNameToNamedElement(application, JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(SRC_ROOT);
         assertNotNull("src root not found", srcRoot);
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcRoot));
 
-        final INamedElement srcFile = application.getElements(JAVA_INTERNAL_COMPILATION_UNIT).get(
+        final INamedElement srcFile = TestUtility.getFqNameToNamedElement(application, JAVA_INTERNAL_COMPILATION_UNIT).get(
                 "Workspace:Application:../../smallTestProject/Application/src/main/java:com:h2m:alarm:application:Main.java");
         assertNotNull("src file not found", srcFile);
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcFile));
@@ -119,9 +119,9 @@ public class ModuleInfoProcessorTest
         final Optional<IModule> foundationOptional = m_controller.getSoftwareSystem().getModule("Foundation");
         assertTrue("Module not found", foundationOptional.isPresent());
         final IModule foundation = foundationOptional.get();
-        final INamedElement srcRoot2 = foundation.getElements(JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(
+        final INamedElement srcRoot2 = TestUtility.getFqNameToNamedElement(foundation, JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(
                 "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java");
-        final INamedElement srcFile2 = foundation.getElements(JAVA_INTERNAL_COMPILATION_UNIT).get(
+        final INamedElement srcFile2 = TestUtility.getFqNameToNamedElement(foundation, JAVA_INTERNAL_COMPILATION_UNIT).get(
                 "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java");
         assertFalse("Element must not be contained in module", processor.isElementContainedInModule(srcRoot2));
         assertFalse("Element must not be contained in module", processor.isElementContainedInModule(srcFile2));
@@ -136,7 +136,7 @@ public class ModuleInfoProcessorTest
 
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
         final List<IIssue> unresolvedIssues = processor.getIssues((final IIssue issue) -> !issue.hasResolution());
-        assertEquals("Wrong number of unresolved issues", 9, unresolvedIssues.size());
+        assertEquals("Wrong number of unresolved issues", 11, unresolvedIssues.size());
 
         final IIssueCategory architectureViolation = m_exportMetaData.getIssueCategories().get("ArchitectureViolation");
 
@@ -189,7 +189,7 @@ public class ModuleInfoProcessorTest
 
         final ISourceFile main = files.get(0);
         assertEquals("Wrong relative source file path", "./com/h2m/alarm/application/Main.java", main.getPresentationName());
-        assertEquals("Wrong relative root directory", "../../smallTestProject/Application/src/main/java", main.getRelativeRootDirectoryPath());
+        assertEquals("Wrong relative root directory", "../../smallTestProject/Application/src/main/java", main.getRelativeRootDirectory());
         assertEquals("Wrong absolute system directory",
                 "D:/00_repos/00_e4-sgng/com.hello2morrow.sonargraph.language.provider.java/src/test/architecture/AlarmClockWithArchitecture",
                 m_controller.getSoftwareSystem().getBaseDir());

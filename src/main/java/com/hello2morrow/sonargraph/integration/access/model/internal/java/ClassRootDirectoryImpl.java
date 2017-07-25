@@ -17,16 +17,14 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal.java;
 
-import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementContainerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 
-public final class ClassRootDirectory extends RootDirectoryImpl
+public final class ClassRootDirectoryImpl extends RootDirectoryImpl
 {
     private static final long serialVersionUID = -3779253759133898436L;
 
-    public ClassRootDirectory(final NamedElementContainerImpl module, final String kind, final String presentationKind, final String absolutePath,
-            final String fqName)
+    public ClassRootDirectoryImpl(final String kind, final String presentationKind, final String absolutePath, final String fqName)
     {
-        super(module, kind, presentationKind, absolutePath, fqName);
+        super(kind, presentationKind, absolutePath, fqName);
     }
 }

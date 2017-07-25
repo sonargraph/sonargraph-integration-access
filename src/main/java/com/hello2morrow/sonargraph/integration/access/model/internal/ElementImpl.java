@@ -80,9 +80,6 @@ public abstract class ElementImpl implements IElement
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Name: ").append(name).append("\n");
-        builder.append("Presentation name:").append(presentationName);
-        return builder.toString();
+        return "[" + getClass().getName() + "]\nname:" + name + "\npresentation name:" + presentationName;
     }
 }

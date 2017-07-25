@@ -32,6 +32,11 @@ final class ElementRegistryImpl implements Serializable
     private static final long serialVersionUID = -947650961500421692L;
     private final Map<String, INamedElement> fqNameToElementMap = new HashMap<>();
 
+    ElementRegistryImpl()
+    {
+        super();
+    }
+
     void addElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'addElement' must not be null";

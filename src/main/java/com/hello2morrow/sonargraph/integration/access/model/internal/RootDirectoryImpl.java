@@ -22,33 +22,35 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public abstract class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
 {
-    static final class SourceFileComparator implements Comparator<ISourceFile>
+    static final class NamedElementComparator implements Comparator<INamedElement>
     {
         @Override
-        public int compare(final ISourceFile s1, final ISourceFile s2)
+        public int compare(final INamedElement e1, final INamedElement e2)
         {
-            assert s1 != null : "Parameter 's1' of method 'compare' must not be null";
-            assert s2 != null : "Parameter 's2' of method 'compare' must not be null";
+            assert e1 != null : "Parameter 'e1' of method 'compare' must not be null";
+            assert e2 != null : "Parameter 'e2' of method 'compare' must not be null";
 
-            if (s1 == s2)
+            if (e1 == e2)
             {
                 return 0;
             }
 
-            int compared = s1.getFqName().compareTo(s2.getFqName());
+            int compared = e1.getFqName().compareTo(e2.getFqName());
             if (compared == 0)
             {
-                if (s1.getOriginal().isPresent())
+                if (e1.getOriginal().isPresent())
                 {
-                    assert !s2.getOriginal().isPresent() : "No original expected for: " + s2;
+                    assert !e2.getOriginal().isPresent() : "No original expected for: " + e2;
                     compared = 1;
                 }
-                assert !s1.getOriginal().isPresent() : "No original expected for: " + s1;
+                assert !e1.getOriginal().isPresent() : "No original expected for: " + e1;
                 compared = -1;
             }
 
@@ -57,18 +59,12 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
     }
 
     private static final long serialVersionUID = -5510302644511647715L;
-    private final Set<ISourceFile> sourceFiles = new TreeSet<>(new SourceFileComparator());
-    private final NamedElementContainerImpl module;
-    private final String relativePath;
+    private final Set<SourceFileImpl> sourceFiles = new TreeSet<>(new NamedElementComparator());
+    private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElements = new TreeSet<>(new NamedElementComparator());
 
-    public RootDirectoryImpl(final NamedElementContainerImpl module, final String kind, final String presentationKind, final String relativePath,
-            final String fqName)
+    public RootDirectoryImpl(final String kind, final String presentationKind, final String relativePath, final String fqName)
     {
-        super(kind, presentationKind, fqName, relativePath, fqName, -1);
-        assert module != null : "Parameter 'module' of method 'RootDirectoryImpl' must not be null";
-        assert relativePath != null && relativePath.length() > 0 : "Parameter 'relativePath' of method 'RootDirectoryImpl' must not be empty";
-        this.module = module;
-        this.relativePath = relativePath;
+        super(kind, presentationKind, relativePath, relativePath, fqName, -1);
     }
 
     /* (non-Javadoc)
@@ -77,15 +73,14 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
     @Override
     public final String getRelativePath()
     {
-        return relativePath;
+        return getPresentationName();
     }
 
-    public final void addSourceFile(final ISourceFile sourceFile)
+    public final void addSourceFile(final SourceFileImpl sourceFile)
     {
         assert sourceFile != null : "Parameter 'sourceFile' of method 'addSourceFile' must not be null";
         assert !sourceFiles.contains(sourceFile) : "sourceFile '" + sourceFile.getFqName() + "' has already been added";
         sourceFiles.add(sourceFile);
-        module.addElement(sourceFile);
     }
 
     @Override
@@ -94,29 +89,17 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
         return Collections.unmodifiableSet(sourceFiles);
     }
 
-    @Override
-    public int hashCode()
+    public final void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElement)
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + module.hashCode();
-        result = prime * result + relativePath.hashCode();
-        return result;
+        assert physicalRecursiveElement != null : "Parameter 'physicalRecursiveElement' of method 'addPhysicalRecursiveElement' must not be null";
+        assert !physicalRecursiveElements.contains(physicalRecursiveElement) : "Already added physical recursive element: "
+                + physicalRecursiveElement.getFqName();
+        physicalRecursiveElements.add(physicalRecursiveElement);
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements()
     {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-
-        final RootDirectoryImpl other = (RootDirectoryImpl) obj;
-        return module.equals(other.module) && relativePath.equals(other.relativePath);
+        return Collections.unmodifiableSet(physicalRecursiveElements);
     }
 }

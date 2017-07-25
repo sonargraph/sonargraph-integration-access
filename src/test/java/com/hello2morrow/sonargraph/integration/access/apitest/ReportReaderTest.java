@@ -23,7 +23,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.junit.Test;
@@ -34,7 +37,9 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSyst
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
+import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
@@ -134,7 +139,7 @@ public class ReportReaderTest
         assertEquals("Wrong number of workspace issues", 22, info.getIssues(createUnresolvedIssueFilter("Workspace")).size());
 
         final IModule generic = controller.getSoftwareSystem().getModule("Generic").orElseThrow(() -> new Exception("Module 'Generic' not found"));
-        final Map<String, INamedElement> cppMemberFunctions = generic.getElements("CppMemberFunction");
+        final Map<String, INamedElement> cppMemberFunctions = TestUtility.getFqNameToNamedElement(generic, "CppMemberFunction");
         assertTrue("no elements found", cppMemberFunctions.size() > 0);
 
         //printLogicalElements(cppMemberFunctions);
@@ -150,6 +155,7 @@ public class ReportReaderTest
     }
 
     @Test
+    //HUHU
     public void processCppReportWithLogicalNamespaces() throws Exception
     {
         final ISonargraphSystemController controller = new ControllerFactory().createController();
@@ -164,7 +170,7 @@ public class ReportReaderTest
         assertEquals("Wrong number of workspace issues", 7, info.getIssues(createUnresolvedIssueFilter("Workspace")).size());
 
         final IModule browser = controller.getSoftwareSystem().getModule("Browser").orElseThrow(() -> new Exception("Module 'Browser' not found"));
-        final Map<String, INamedElement> cppNamespaces = browser.getElements("CPlusPlusLogicalModuleNamespace");
+        final Map<String, INamedElement> cppNamespaces = TestUtility.getFqNameToNamedElement(browser, "CPlusPlusLogicalModuleNamespace");
         assertTrue("no elements found", cppNamespaces.size() > 0);
 
         //printLogicalElements(cppMemberFunctions);
@@ -196,5 +202,78 @@ public class ReportReaderTest
     private Predicate<IIssue> createUnresolvedIssueFilter(final String categoryPresentationName)
     {
         return (final IIssue i) -> !i.hasResolution() && i.getIssueType().getCategory().getPresentationName().equals(categoryPresentationName);
+    }
+
+    static final class NamedElementEntry
+    {
+        private final INamedElement m_namedElement;
+        private final List<IIssue> m_issues;
+
+        NamedElementEntry(final INamedElement namedElement, final List<IIssue> issues)
+        {
+            assert namedElement != null : "Parameter 'namedElement' of method 'NamedElementEntry' must not be null";
+            assert issues != null : "Parameter 'issues' of method 'NamedElementEntry' must not be null";
+            m_namedElement = namedElement;
+            m_issues = issues;
+        }
+
+        INamedElement getNamedElement()
+        {
+            return m_namedElement;
+        }
+
+        List<IIssue> getIssues()
+        {
+            return m_issues;
+        }
+    }
+
+    @Test
+    public void testNonSourceFileIssues()
+    {
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORED_CYCLIC_JAVA_PACKAGE));
+        assertTrue(result.toString(), result.isSuccess());
+        assertEquals("Wrong number of modules", 1, controller.getSoftwareSystem().getModules().size());
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        for (final IModule nextModule : systemInfoProcessor.getModules().values())
+        {
+            final IModuleInfoProcessor nextModuleInfoProcessor = controller.createModuleInfoProcessor(nextModule);
+            final Map<INamedElement, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForNamedElements(issue -> !issue.isIgnored()
+                    && !IIssueCategory.StandardName.WORKSPACE.getStandardName().equals(issue.getIssueType().getCategory().getName()));
+
+            final Map<String, NamedElementEntry> fqNameToNamedElementIssues = new HashMap<>();
+            for (final Entry<INamedElement, List<IIssue>> nextEntry : issueMap.entrySet())
+            {
+                fqNameToNamedElementIssues.put(nextEntry.getKey().getFqName(), new NamedElementEntry(nextEntry.getKey(), nextEntry.getValue()));
+            }
+
+            assertEquals("3 elements with issues expected", 3, fqNameToNamedElementIssues.size());
+
+            //Workspace:M1:./src:com:h2m
+            //Logical module namespaces:M1:com:h3m
+            //Logical module namespaces:M1:com:deeper:h2m
+
+            //TODO
+            /*
+            final String first = "Workspace:M1:./src:h2m";
+            NamedElementEntry nextNamedElementEntry = fqNameToNamedElementIssues.remove(first);
+            assertNotNull("Element not found:" + first, nextNamedElementEntry);
+            assertEquals("2 issues expected", 2, nextNamedElementEntry.getIssues().size());
+
+            final String second = "Logical module namespaces:M1:h2m:p1";
+            nextNamedElementEntry = fqNameToNamedElementIssues.remove(second);
+            assertNotNull("Element not found:" + second, nextNamedElementEntry);
+
+            //            final String kind = nextNamedElementEntry.getNamedElement().getKind();
+            //            final String presentationName = nextNamedElementEntry.getNamedElement().getPresentationName();
+            //            System.out.println(kind + ": " + presentationName);
+
+            final String third = "Logical module namespaces:M1:h2m:p2";
+            nextNamedElementEntry = fqNameToNamedElementIssues.remove(third);
+            assertNotNull("Element not found:" + third, nextNamedElementEntry);
+            */
+        }
     }
 }

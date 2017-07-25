@@ -29,17 +29,18 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 
-class MetaDataAccessImpl implements Serializable
+final class MetaDataAccessImpl implements Serializable
 {
     private static final long serialVersionUID = 5722967552130841881L;
-
-    private final SingleExportMetaDataImpl metaData;
-
     private final Map<String, IMetricLevel> metricLevels = new HashMap<>();
+    private final SingleExportMetaDataImpl metaData;
 
     public MetaDataAccessImpl(final String path, final String systemId, final String version, final long timestamp)
     {
-        assert version != null : "Parameter 'version' of method 'MetricsAccess' must not be null";
+        assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'MetaDataAccessImpl' must not be empty";
+        assert path != null && path.length() > 0 : "Parameter 'path' of method 'MetaDataAccessImpl' must not be empty";
+        assert version != null && version.length() > 0 : "Parameter 'version' of method 'MetaDataAccessImpl' must not be empty";
+        assert timestamp > 0 : "Parameter 'timestamp' of method 'MetaDataAccessImpl' must be > 0";
         metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(path, systemId, version, timestamp), path);
     }
 

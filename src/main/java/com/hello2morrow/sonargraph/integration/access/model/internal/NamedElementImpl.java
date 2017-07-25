@@ -120,20 +120,17 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + fqName.hashCode();
-        result = prime * result + ((kind == null) ? 0 : kind.hashCode());
-        result = prime * result + line;
-        result = prime * result + ((presentationKind == null) ? 0 : presentationKind.hashCode());
         result = prime * result + ((original == null) ? 0 : original.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -146,32 +143,6 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 
         final NamedElementImpl other = (NamedElementImpl) obj;
         if (!fqName.equals(other.fqName))
-        {
-            return false;
-        }
-        if (kind == null)
-        {
-            if (other.kind != null)
-            {
-                return false;
-            }
-        }
-        else if (!kind.equals(other.kind))
-        {
-            return false;
-        }
-        if (line != other.line)
-        {
-            return false;
-        }
-        if (presentationKind == null)
-        {
-            if (other.presentationKind != null)
-            {
-                return false;
-            }
-        }
-        else if (!presentationKind.equals(other.presentationKind))
         {
             return false;
         }
@@ -194,17 +165,16 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     {
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("\n");
-        builder.append("Fq name: ").append(fqName);
+        builder.append("kind:").append(kind);
+        builder.append("\n");
+        builder.append("fqName:").append(fqName);
         if (original != null)
         {
             builder.append("\n");
-            builder.append("Has original with fq name: ").append(original.getFqName());
+            builder.append("originalFqName:").append(original.getFqName());
         }
-        if (isOriginal)
-        {
-            builder.append("\n");
-            builder.append("Is Original");
-        }
+        builder.append("\n");
+        builder.append("isOriginal:").append(isOriginal);
         return builder.toString();
     }
 }
