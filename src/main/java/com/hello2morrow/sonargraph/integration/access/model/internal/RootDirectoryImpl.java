@@ -27,7 +27,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveEl
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public abstract class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
+public final class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
 {
     static final class NamedElementComparator implements Comparator<INamedElement>
     {
@@ -71,12 +71,12 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
      * @see com.hello2morrow.sonargraph.integration.access.model.IRootDirectory#getAbsolutePath()
      */
     @Override
-    public final String getRelativePath()
+    public String getRelativePath()
     {
         return getPresentationName();
     }
 
-    public final void addSourceFile(final SourceFileImpl sourceFile)
+    public void addSourceFile(final SourceFileImpl sourceFile)
     {
         assert sourceFile != null : "Parameter 'sourceFile' of method 'addSourceFile' must not be null";
         assert !sourceFiles.contains(sourceFile) : "sourceFile '" + sourceFile.getFqName() + "' has already been added";
@@ -84,12 +84,12 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
     }
 
     @Override
-    public final Set<ISourceFile> getSourceFiles()
+    public Set<ISourceFile> getSourceFiles()
     {
         return Collections.unmodifiableSet(sourceFiles);
     }
 
-    public final void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElement)
+    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElement)
     {
         assert physicalRecursiveElement != null : "Parameter 'physicalRecursiveElement' of method 'addPhysicalRecursiveElement' must not be null";
         assert !physicalRecursiveElements.contains(physicalRecursiveElement) : "Already added physical recursive element: "
@@ -98,7 +98,7 @@ public abstract class RootDirectoryImpl extends NamedElementImpl implements IRoo
     }
 
     @Override
-    public final Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements()
+    public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements()
     {
         return Collections.unmodifiableSet(physicalRecursiveElements);
     }

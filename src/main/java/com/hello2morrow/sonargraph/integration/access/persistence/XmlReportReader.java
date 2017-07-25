@@ -111,9 +111,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionI
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.SourceRootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
-import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 
 public final class XmlReportReader extends AbstractXmlReportAccess
@@ -408,25 +406,13 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             globalXmlToElementMap.put(xsdModule, module);
             for (final XsdRootDirectory nextXsdRootDirectory : xsdModule.getRootDirectory())
             {
-                RootDirectoryImpl nextRootDirectoryImpl = null;
-
                 final XsdElementKind elementKind = (XsdElementKind) nextXsdRootDirectory.getKind();
                 final String presentationKind = elementKind.getPresentationKind();
                 final String standardKind = elementKind.getStandardKind();
                 final String fqName = adjuster.adjustFqName(standardKind, nextXsdRootDirectory.getFqName());
                 final String presentationName = adjuster.adjustPresentationName(standardKind, nextXsdRootDirectory.getPresentationName());
 
-                switch (standardKind)
-                {
-                case "JavaClassRootDirectoryPath":
-                    nextRootDirectoryImpl = new ClassRootDirectoryImpl(standardKind, presentationKind, presentationName, fqName);
-                    break;
-                case "JavaSourceRootDirectoryPath":
-                    //$FALL-THROUGH$
-                default:
-                    nextRootDirectoryImpl = new SourceRootDirectoryImpl(standardKind, presentationKind, presentationName, fqName);
-                    break;
-                }
+                final RootDirectoryImpl nextRootDirectoryImpl = new RootDirectoryImpl(standardKind, presentationKind, presentationName, fqName);
 
                 module.addRootDirectory(nextRootDirectoryImpl);
                 module.addElement(nextRootDirectoryImpl);

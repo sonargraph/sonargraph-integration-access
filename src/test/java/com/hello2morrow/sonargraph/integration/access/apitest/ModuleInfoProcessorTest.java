@@ -49,7 +49,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
-import com.hello2morrow.sonargraph.integration.access.model.internal.java.ClassRootDirectoryImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 
 public class ModuleInfoProcessorTest
 {
@@ -88,7 +88,7 @@ public class ModuleInfoProcessorTest
         assertFalse("No class roots found", classRoots.isEmpty());
         final INamedElement clsRoot = classRoots.get("Workspace:Application:../../smallTestProject/Application/target/classes");
         assertNotNull("Class root not found", clsRoot);
-        final ClassRootDirectoryImpl classes = (ClassRootDirectoryImpl) clsRoot;
+        final RootDirectoryImpl classes = (RootDirectoryImpl) clsRoot;
         assertEquals("Wrong number of source files", 0, classes.getSourceFiles().size());
 
         final Map<String, INamedElement> srcRoots = TestUtility.getFqNameToNamedElement(application, JAVA_SOURCE_ROOT_DIRECTORY_PATH);
