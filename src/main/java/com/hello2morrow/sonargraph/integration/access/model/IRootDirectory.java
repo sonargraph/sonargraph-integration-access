@@ -24,4 +24,6 @@ public interface IRootDirectory extends IFilePathElement
     public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements();
 
     public Set<ISourceFile> getSourceFiles();
+
+    public Set<IProgrammingElement> getProgrammingElements();
 }

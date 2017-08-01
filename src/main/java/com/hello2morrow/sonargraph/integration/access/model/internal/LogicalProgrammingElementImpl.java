@@ -15,21 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.Optional;
-
-public interface INamedElement extends IElement
+public final class LogicalProgrammingElementImpl extends LogicalElementImpl
 {
-    public String getKind();
+    private static final long serialVersionUID = -1327978719883213140L;
 
-    public String getPresentationKind();
-
-    public String getFqName();
-
-    public boolean isOriginal();
-
-    public Optional<? extends INamedElement> getOriginal();
-
-    public Optional<ISourceFile> getSourceFile();
+    public LogicalProgrammingElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
+            final String fqName)
+    {
+        super(kind, presentationKind, name, presentationName, fqName);
+    }
 }

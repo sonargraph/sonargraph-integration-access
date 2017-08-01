@@ -29,7 +29,7 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
     public PhysicalRecursiveElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, -1, relativeRootDirectory);
+        super(kind, presentationKind, name, presentationName, fqName, relativeRootDirectory);
     }
 
     public void setRelativeDirectory(final String relativeDirectory)

@@ -23,9 +23,9 @@ public abstract class PhysicalElementImpl extends NamedElementImpl
     private final String relativeRootDirectory;
 
     public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final int line, final String relativeRootDirectory)
+            final String fqName, final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, line);
+        super(kind, presentationKind, name, presentationName, fqName);
         assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'PhysicalElementImpl' must not be empty";
         this.relativeRootDirectory = relativeRootDirectory;
     }

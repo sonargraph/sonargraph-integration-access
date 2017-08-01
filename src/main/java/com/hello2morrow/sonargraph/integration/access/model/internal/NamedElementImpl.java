@@ -25,16 +25,16 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
     private static final long serialVersionUID = 7897215356427497745L;
+
     private final String kind;
     private final String presentationKind;
-    private final int line;
     private final String fqName;
     private ISourceFile m_source;
     private boolean isOriginal;
     private NamedElementImpl original;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final int line, final String description)
+            final String fqName, final String description)
     {
         super(name, presentationName, description);
 
@@ -42,14 +42,12 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 
         this.kind = kind;
         this.presentationKind = presentationKind;
-        this.line = line;
         this.fqName = fqName;
     }
 
-    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final int line)
+    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
     {
-        this(kind, presentationKind, name, presentationName, fqName, line, "");
+        this(kind, presentationKind, name, presentationName, fqName, "");
     }
 
     /* (non-Javadoc)
@@ -89,12 +87,6 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     public final String getPresentationKind()
     {
         return presentationKind;
-    }
-
-    @Override
-    public final int getLineNumber()
-    {
-        return line;
     }
 
     @Override

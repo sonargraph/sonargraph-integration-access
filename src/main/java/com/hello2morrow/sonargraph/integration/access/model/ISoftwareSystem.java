@@ -38,7 +38,11 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, IElementConta
 
     public String getBaseDir();
 
+    public Map<String, IMetricLevel> getMetricLevels();
+
     public Map<String, IModule> getModules();
 
     public Optional<IModule> getModule(String simpleName);
+
+    public Map<String, IExternal> getExternals();
 }

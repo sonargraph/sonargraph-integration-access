@@ -1,0 +1,182 @@
+<?xml version="1.0" ?>
+<ns2:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/export" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/report" id="_0" systemId="12e517db0ad9967b199391d0da1a91bd" name="Test" version="9.4.4.100" systemPath="/Users/Dietmar/Documents/Workspaces/sgng-e4/Test/Test.sonargraph" timestamp="2017-08-01T07:27:31.504-05:00" currentVirtualModel="Modifiable.vm">
+    <metaData>
+        <issueProviders>
+            <issueProvider id="_29" name="Core" presentationName="Core"></issueProvider>
+        </issueProviders>
+        <issueCategories>
+            <category id="_1c" name="ArchitectureConsistency" presentationName="Architecture Consistency"></category>
+            <category id="_1d" name="ArchitectureDefinition" presentationName="Architecture Definition"></category>
+            <category id="_1e" name="ArchitectureViolation" presentationName="Architecture Violation"></category>
+            <category id="_1f" name="CycleGroup" presentationName="Cycle Group"></category>
+            <category id="_20" name="DuplicateCode" presentationName="Duplicate Code"></category>
+            <category id="_21" name="InstallationConfiguration" presentationName="Installation Configuration"></category>
+            <category id="_22" name="Refactoring" presentationName="Refactoring"></category>
+            <category id="_23" name="ScriptBased" presentationName="Script Based"></category>
+            <category id="_24" name="ScriptDefinition" presentationName="Script Definition"></category>
+            <category id="_25" name="SystemConfiguration" presentationName="System Configuration"></category>
+            <category id="_26" name="ThresholdViolation" presentationName="Threshold Violation"></category>
+            <category id="_27" name="Todo" presentationName="Todo"></category>
+            <category id="_28" name="Workspace" presentationName="Workspace"></category>
+        </issueCategories>
+        <issueTypes>
+            <issueType severity="Warning" category="_1f" id="_2a" name="NamespaceCycleGroup" presentationName="Namespace Cycle Group"></issueType>
+            <issueType severity="None" category="_22" id="_2b" name="MoveRenameRefactoring" presentationName="Move/rename Refactoring"></issueType>
+            <issueType severity="None" category="_27" id="_2c" name="Todo" presentationName="Todo"></issueType>
+        </issueTypes>
+        <metricProviders></metricProviders>
+        <metricCategories></metricCategories>
+        <metricLevels></metricLevels>
+        <metricIds></metricIds>
+    </metaData>
+    <features>
+        <feature name="Architecture" presentationName="Architecture" licensed="true"></feature>
+        <feature name="CohesionAndCouplingMetrics" presentationName="Cohesion And Coupling Metrics" licensed="true"></feature>
+        <feature name="CycleBreakUp" presentationName="Cycle Break Up" licensed="true"></feature>
+        <feature name="DuplicateCode" presentationName="Duplicate Code" licensed="true"></feature>
+        <feature name="Platform" presentationName="Platform" licensed="true"></feature>
+        <feature name="Refactorings" presentationName="Refactorings" licensed="true"></feature>
+        <feature name="Reporting" presentationName="Reporting" licensed="true"></feature>
+        <feature name="Scripts" presentationName="Scripts" licensed="true"></feature>
+        <feature name="ScriptsAutomated" presentationName="Scripts Automated" licensed="true"></feature>
+        <feature name="Snapshots" presentationName="Snapshots" licensed="true"></feature>
+        <feature name="Systems" presentationName="Systems" licensed="true"></feature>
+        <feature name="VirtualModels" presentationName="Virtual Models" licensed="true"></feature>
+    </features>
+    <analyzers>
+        <analyzer description="Checks for architecture violations" licensed="true" id="_1" name="ArchitectureCheck" presentationName="Architecture Check"></analyzer>
+        <analyzer description="Calculates number of violatong/ignored parser dependencies" licensed="true" id="_2" name="ArchitectureCheckMetrics" presentationName="Architecture Metrics"></analyzer>
+        <analyzer description="Calculates cohesion and coupling metrics" licensed="true" id="_3" name="CohesionAndCouplingMetrics" presentationName="Cohesion and Coupling Metrics"></analyzer>
+        <analyzer description="Analyzes component / compilation unit cycles on module level" licensed="true" id="_4" name="ComponentCyclesModule" presentationName="Component Cycles (Module)"></analyzer>
+        <analyzer description="Computes component cycle metrics on module level" licensed="true" id="_5" name="ComponentCyclesModuleMetrics" presentationName="Component Cycle Metrics (Module)"></analyzer>
+        <analyzer description="Analyzes component / compilation unit cycles on system level" licensed="true" id="_6" name="ComponentCyclesSystem" presentationName="Component Cycles (System)"></analyzer>
+        <analyzer description="Computes component cycle metrics on system level" licensed="true" id="_7" name="ComponentCyclesSystemMetrics" presentationName="Component Cycle Metrics (System)"></analyzer>
+        <analyzer description="Calculates John Lakos metrics on module level" licensed="true" id="_8" name="CumulateDependenciesModule" presentationName="Module Dependencies"></analyzer>
+        <analyzer description="Calculates John Lakos metrics on system level" licensed="true" id="_9" name="CumulateDependenciesSystem" presentationName="System Dependencies"></analyzer>
+        <analyzer description="Cumulates sizes" licensed="true" id="_a" name="CumulateSize" presentationName="Cumulate size"></analyzer>
+        <analyzer description="Analyzes directory cycles on module level" licensed="true" id="_b" name="DirectoryCyclesModule" presentationName="C/C++ Directory Cycles (Module)"></analyzer>
+        <analyzer description="Computes directory cycle metrics on module level" licensed="true" id="_c" name="DirectoryCyclesModuleMetrics" presentationName="C/C++ Directory Cycle Metrics (Module)"></analyzer>
+        <analyzer description="Analyzes directory cycles on system level" licensed="true" id="_d" name="DirectoryCyclesSystem" presentationName="C/C++ Directory Cycles (System)"></analyzer>
+        <analyzer description="Computes directory cycle metrics on system level" licensed="true" id="_e" name="DirectoryCyclesSystemMetrics" presentationName="C/C++ Directory Cycle Metrics (System)"></analyzer>
+        <analyzer description="Search duplicate code on system level" licensed="true" id="_f" name="DuplicateCode" presentationName="Duplicate Code"></analyzer>
+        <analyzer description="Calculates duplicate code metrics" licensed="true" id="_10" name="DuplicateCodeMetrics" presentationName="Duplicate Code Metrics"></analyzer>
+        <analyzer description="Checks for metric threshold violations" licensed="true" id="_11" name="MetricThresholds" presentationName="Metric Thresholds"></analyzer>
+        <analyzer description="Analyzes module cycles on system level" licensed="true" id="_12" name="ModuleCyclesSystem" presentationName="Module Cycles"></analyzer>
+        <analyzer description="Analyzes namespace cycles on module level" licensed="true" id="_13" name="NamespaceCyclesModule" presentationName="C# Namespace Cycles (Module)"></analyzer>
+        <analyzer description="Computes namespace cycle metrics on module level" licensed="true" id="_14" name="NamespaceCyclesModuleMetrics" presentationName="C# Namespace Cycle Metrics (Module)"></analyzer>
+        <analyzer description="Analyzes namespace cycles on system level" licensed="true" id="_15" name="NamespaceCyclesSystem" presentationName="C# Namespace Cycles (System)"></analyzer>
+        <analyzer description="Computes namespace cycle metrics on system level" licensed="true" id="_16" name="NamespaceCyclesSystemMetrics" presentationName="C# Namespace Cycle Metrics (System)"></analyzer>
+        <analyzer description="Analyzes package cycles on module level" licensed="true" id="_17" name="PackageCyclesModule" presentationName="Package Cycles (Module)"></analyzer>
+        <analyzer description="Computes package cycle metrcis on module level" licensed="true" id="_18" name="PackageCyclesModuleMetrics" presentationName="Package Cycle Metrics (Module)"></analyzer>
+        <analyzer description="Analyzes package cycles on system level" licensed="true" id="_19" name="PackageCyclesSystem" presentationName="Package Cycles (System)"></analyzer>
+        <analyzer description="Computes package cycle metrcis on system level" licensed="true" id="_1a" name="PackageCyclesSystemMetrics" presentationName="Package Cycle Metrics (System)"></analyzer>
+        <analyzer description="Runs scripts configured for automated execution" licensed="true" id="_1b" name="ScriptRunner" presentationName="Script Runner"></analyzer>
+    </analyzers>
+    <elementKinds>
+        <elementKind id="_38" standardKind="JavaExternal" presentationKind="Java External"></elementKind>
+        <elementKind id="_43" standardKind="JavaType" presentationKind="Java Type"></elementKind>
+        <elementKind id="_3a" standardKind="JavaLogicalModuleNamespace" presentationKind="Package"></elementKind>
+        <elementKind id="_30" standardKind="JavaClassRootDirectoryPath" presentationKind="Java Class Root Directory/Archive"></elementKind>
+        <elementKind id="_4d" standardKind="JavaLogicalSystemNamespace" presentationKind="Package"></elementKind>
+        <elementKind id="_50" standardKind="LogicalSystemProgrammingElement" presentationKind="Logical System Programming Element"></elementKind>
+        <elementKind id="_5c" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+        <elementKind id="_45" standardKind="JavaInternalCompilationUnit" presentationKind="Java Internal Compilation Unit"></elementKind>
+        <elementKind id="_3c" standardKind="JavaPackageFragment" presentationKind="Package"></elementKind>
+        <elementKind id="_32" standardKind="JavaSourceRootDirectoryPath" presentationKind="Java Source Root Directory/Archive"></elementKind>
+        <elementKind id="_41" standardKind="LogicalModuleProgrammingElement" presentationKind="Logical Module Programming Element"></elementKind>
+        <elementKind id="_2e" standardKind="JavaModule" presentationKind="Java Module"></elementKind>
+    </elementKinds>
+    <workspace>
+        <module language="Java" description="" kind="_2e" fqName="Workspace:M1" id="_2d" name="M1" presentationName="M1">
+            <rootDirectory kind="_30" fqName="Workspace:M1:Class|./bin" id="_2f" name="Class|./bin" presentationName="./bin"></rootDirectory>
+            <rootDirectory kind="_32" fqName="Workspace:M1:./src" id="_31" name="./src" presentationName="./src">
+                <physicalRecursiveElement relativeDirectoryPath="./com/deeper/h4m" kind="_3c" fqName="Workspace:M1:./src:com:deeper:h4m" original="_4b" id="_3b" name="h4m" presentationName="com.deeper.h4m"></physicalRecursiveElement>
+                <physicalRecursiveElement relativeDirectoryPath="./com/h3m" kind="_3c" fqName="Workspace:M1:./src:com:h3m" id="_3e" name="h3m" presentationName="com.h3m"></physicalRecursiveElement>
+                <physicalRecursiveElement relativeDirectoryPath="./com/h2m" kind="_3c" fqName="Workspace:M1:./src:com:h2m" id="_4b" name="h2m" presentationName="com.h2m"></physicalRecursiveElement>
+                <sourceElement kind="_45" fqName="Workspace:M1:./src:com:h3m:Class2.java" id="_44" name="Class2.java" presentationName="./com/h3m/Class2.java"></sourceElement>
+                <sourceElement kind="_45" fqName="Workspace:M1:./src:com:h2m:Class1.java" id="_57" name="Class1.java" presentationName="./com/h2m/Class1.java"></sourceElement>
+                <sourceElement kind="_45" fqName="Workspace:M1:./src:com:deeper:h4m:Class1.java" original="_57" id="_58" name="Class1.java" presentationName="./com/deeper/h4m/Class1.java"></sourceElement>
+                <programmingElement line="3" kind="_43" fqName="Workspace:M1:./src:com:h3m:Class2.java:Class2" source="_44" id="_42" name="Class2" presentationName="com.h3m.Class2"></programmingElement>
+                <programmingElement line="5" kind="_43" fqName="Workspace:M1:./src:com:deeper:h4m:Class1.java:Class1" source="_58" id="_56" name="Class1" presentationName="com.deeper.h4m.Class1"></programmingElement>
+            </rootDirectory>
+            <rootDirectory kind="_32" fqName="Workspace:M1:./src2" id="_33" name="./src2" presentationName="./src2">
+                <physicalRecursiveElement relativeDirectoryPath="./com/h3m" kind="_3c" fqName="Workspace:M1:./src2:com:h3m" id="_3f" name="h3m" presentationName="com.h3m"></physicalRecursiveElement>
+            </rootDirectory>
+        </module>
+        <module language="Java" description="" kind="_2e" fqName="Workspace:M5" id="_34" name="M5" presentationName="M5">
+            <rootDirectory kind="_30" fqName="Workspace:M5:Class|./bin3" id="_35" name="Class|./bin3" presentationName="./bin3"></rootDirectory>
+            <rootDirectory kind="_32" fqName="Workspace:M5:./src3" id="_36" name="./src3" presentationName="./src3">
+                <physicalRecursiveElement relativeDirectoryPath="./com/h5m" kind="_3c" fqName="Workspace:M5:./src3:com:h5m" id="_47" name="h5m" presentationName="com.h5m"></physicalRecursiveElement>
+                <sourceElement kind="_45" fqName="Workspace:M5:./src3:com:h5m:Class5.java" id="_4a" name="Class5.java" presentationName="./com/h5m/Class5.java"></sourceElement>
+                <programmingElement line="3" kind="_43" fqName="Workspace:M5:./src3:com:h5m:Class5.java:Class5" source="_4a" id="_49" name="Class5" presentationName="com.h5m.Class5"></programmingElement>
+            </rootDirectory>
+        </module>
+        <external language="Java" description="Contains external Java elements" kind="_38" fqName="Workspace:External [Java]" id="_37" name="External [Java]" presentationName="External [Java]">
+            <physicalRecursiveElement kind="_3c" fqName="Workspace:External [Java]:[Unknown]:java:io" id="_4e" name="io" presentationName="java.io"></physicalRecursiveElement>
+            <programmingElement kind="_43" fqName="Workspace:External [Java]:[Unknown]:java:io:PrintStream:PrintStream" id="_51" name="PrintStream" presentationName="java.io.PrintStream"></programmingElement>
+            <programmingElement kind="_43" fqName="Workspace:External [Java]:[Unknown]:java:lang:System:System" id="_54" name="System" presentationName="java.lang.System"></programmingElement>
+        </external>
+    </workspace>
+    <systemElements ref="_0">
+        <element kind="_5c" fqName="Test" id="_5b" name="Test" presentationName="Test"></element>
+        <logicalNamespace derivedFrom="_3e _3f" kind="_4d" fqName="Logical system namespaces:Internal [Java]:com:h3m" id="_59" name="h3m" presentationName="com.h3m"></logicalNamespace>
+        <logicalProgrammingElement derivedFrom="_56" kind="_50" fqName="Logical system namespaces:Internal [Java]:com:deeper:h2m:Class1" id="_55" name="Class1" presentationName="com.deeper.h4m.Class1"></logicalProgrammingElement>
+        <logicalProgrammingElement derivedFrom="_42" kind="_50" fqName="Logical system namespaces:Internal [Java]:com:h3m:Class2" id="_5a" name="Class2" presentationName="com.h3m.Class2"></logicalProgrammingElement>
+    </systemElements>
+    <moduleElements ref="_2d">
+        <logicalNamespace derivedFrom="_3b" kind="_3a" fqName="Logical module namespaces:M1:com:deeper:h2m" id="_39" name="h2m" presentationName="com.deeper.h4m"></logicalNamespace>
+        <logicalNamespace derivedFrom="_3e _3f" kind="_3a" fqName="Logical module namespaces:M1:com:h3m" id="_3d" name="h3m" presentationName="com.h3m"></logicalNamespace>
+        <logicalProgrammingElement derivedFrom="_42" kind="_41" fqName="Logical module namespaces:M1:com:h3m:Class2" id="_40" name="Class2" presentationName="com.h3m.Class2"></logicalProgrammingElement>
+    </moduleElements>
+    <moduleElements ref="_34">
+        <logicalNamespace derivedFrom="_47" kind="_3a" fqName="Logical module namespaces:M5:com:h5m" id="_46" name="h5m" presentationName="com.h5m"></logicalNamespace>
+        <logicalProgrammingElement derivedFrom="_49" kind="_41" fqName="Logical module namespaces:M5:com:h5m:Class5" id="_48" name="Class5" presentationName="com.h5m.Class5"></logicalProgrammingElement>
+    </moduleElements>
+    <externalSystemScopeElements ref="_37">
+        <logicalNamespace derivedFrom="_4e" kind="_4d" fqName="Logical system namespaces:External [Java]:java:io" id="_4c" name="io" presentationName="java.io"></logicalNamespace>
+        <logicalProgrammingElement derivedFrom="_51" kind="_50" fqName="Logical system namespaces:External [Java]:java:io:PrintStream" id="_4f" name="PrintStream" presentationName="java.io.PrintStream"></logicalProgrammingElement>
+    </externalSystemScopeElements>
+    <externalModuleScopeElements ref="_37">
+        <logicalNamespace derivedFrom="_4e" kind="_3a" fqName="Logical module namespaces:External [Java]:java:io" id="_52" name="io" presentationName="java.io"></logicalNamespace>
+        <logicalProgrammingElement derivedFrom="_54" kind="_41" fqName="Logical module namespaces:External [Java]:java:lang:System" id="_53" name="System" presentationName="java.lang.System"></logicalProgrammingElement>
+    </externalModuleScopeElements>
+    <systemMetricValues elementRef="_0"></systemMetricValues>
+    <issues modelName="./Modifiable.vm" numberOfIssues="14" numberOfUnresolvedIssues="1">
+        <elementIssues>
+            <issue affectedElement="_55" id="_5d" type="_2c" provider="_29" description="System scope" line="5" hasResolution="true"></issue>
+            <issue affectedElement="_3b" id="_5e" type="_2b" provider="_29" description="Move to 'M1:./src/com.deeper' and rename to 'h4m'" hasResolution="true"></issue>
+            <issue affectedElement="_4a" id="_5f" type="_2c" provider="_29" description="Module 5" hasResolution="true"></issue>
+            <issue affectedElement="_48" id="_60" type="_2c" provider="_29" description="Logical Module 5" line="3" hasResolution="true"></issue>
+            <issue affectedElement="_48" id="_61" type="_2c" provider="_29" description="Logical Programming Element Module Scope" line="3" hasResolution="true"></issue>
+            <issue affectedElement="_52" id="_62" type="_2c" provider="_29" description="Review Logical Namespace External Module Scope" hasResolution="true"></issue>
+            <issue affectedElement="_46" id="_63" type="_2c" provider="_29" description="Logical Namespace Module Scope" hasResolution="true"></issue>
+            <issue affectedElement="_40" id="_64" type="_2c" provider="_29" description="Module Scope" line="3" hasResolution="true"></issue>
+            <issue affectedElement="_5a" id="_65" type="_2c" provider="_29" description="Logical Programming Element System Scope" line="3" hasResolution="true"></issue>
+            <issue affectedElement="_53" id="_66" type="_2c" provider="_29" description="Review Logical Programming Element External Module Scope" hasResolution="true"></issue>
+            <issue affectedElement="_59" id="_67" type="_2c" provider="_29" description="Logical Namespace System Scope" hasResolution="true"></issue>
+            <issue affectedElement="_4f" id="_68" type="_2c" provider="_29" description="Review Logical Programming Element External System Scope" hasResolution="true"></issue>
+            <issue affectedElement="_4c" id="_69" type="_2c" provider="_29" description="Review Logical Namespace External System Scope" hasResolution="true"></issue>
+            <cycleGroups analyzerRef="_17">
+                <cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:./Modifiable.vm:ba542e2d75d815fa3b517a88ca0a01b6|41b18934d00f6d70f6398019bef22613" id="_6a" type="_2a" provider="_29" description="2 cyclic packages" hasResolution="false">
+                    <element ref="_39"></element>
+                    <element ref="_3d"></element>
+                </cycleGroup>
+            </cycleGroups>
+        </elementIssues>
+    </issues>
+    <resolutions numberOfResolutions="13">
+        <resolution type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1323341623" issueIds="_5e" description="" information="" assignee="" date="2017-07-24T10:20:15.596-05:00" isApplicable="true" isTask="true" isRefactoring="true"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:809860444" issueIds="_5d" description="System scope" information="Todo" assignee="Didi" date="2017-07-26T07:54:28.732-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1073859550" issueIds="_64" description="Module Scope" information="Todo" assignee="Dietmar" date="2017-07-26T07:54:48.118-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:898992975" issueIds="_5f" description="Module 5" information="Todo" assignee="Diego" date="2017-07-26T08:31:28.281-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1868390295" issueIds="_60" description="Logical Module 5" information="Todo" assignee="Duderino" date="2017-07-26T08:33:41.508-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1961455805" issueIds="_65" description="Logical Programming Element System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:55:53.157-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:989334213" issueIds="_67" description="Logical Namespace System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:13.571-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:590225702" issueIds="_63" description="Logical Namespace Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:44.478-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:646607667" issueIds="_61" description="Logical Programming Element Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:57:02.856-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:425300935" issueIds="_66" description="Review Logical Programming Element External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:59:27.863-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1670192139" issueIds="_62" description="Review Logical Namespace External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:07.864-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:829957709" issueIds="_69" description="Review Logical Namespace External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:46.883-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1151256762" issueIds="_68" description="Review Logical Programming Element External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:01:03.124-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+    </resolutions>
+</ns2:report>

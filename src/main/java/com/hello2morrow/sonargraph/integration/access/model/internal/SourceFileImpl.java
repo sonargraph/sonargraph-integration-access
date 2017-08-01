@@ -29,7 +29,7 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     public SourceFileImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, -1, relativeRootDirectory);
+        super(kind, presentationKind, name, presentationName, fqName, relativeRootDirectory);
         setSourceFile(this);
     }
 

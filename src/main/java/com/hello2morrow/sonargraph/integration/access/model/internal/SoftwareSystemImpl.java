@@ -30,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -58,6 +59,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private int numberOfIssues = 0;
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
+    private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
@@ -170,10 +172,24 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Optional.empty();
     }
 
-    public void addModule(final ModuleImpl module)
+    public void addModule(final ModuleImpl moduleImpl)
     {
-        assert module != null : "Parameter 'module' of method 'addModule' must not be null";
-        modules.put(module.getFqName(), module);
+        assert moduleImpl != null : "Parameter 'moduleImpl' of method 'addModule' must not be null";
+        modules.put(moduleImpl.getFqName(), moduleImpl);
+    }
+
+    public void addExternal(final ExternalImpl externalImpl)
+    {
+        assert externalImpl != null : "Parameter 'externalImpl' of method 'addExternal' must not be null";
+        externals.put(externalImpl.getFqName(), externalImpl);
+    }
+
+    @Override
+    public Map<String, IExternal> getExternals()
+    {
+        final Map<String, IExternal> map = new LinkedHashMap<>();
+        externals.values().stream().forEach((final IExternal external) -> map.put(external.getName(), external));
+        return Collections.unmodifiableMap(map);
     }
 
     public void addIssueProvider(final IIssueProvider provider)

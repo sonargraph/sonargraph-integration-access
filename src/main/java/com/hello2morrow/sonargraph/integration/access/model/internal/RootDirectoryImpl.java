@@ -24,6 +24,7 @@ import java.util.TreeSet;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
+import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
@@ -59,12 +60,13 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IRootDi
     }
 
     private static final long serialVersionUID = -5510302644511647715L;
-    private final Set<SourceFileImpl> sourceFiles = new TreeSet<>(new NamedElementComparator());
-    private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElements = new TreeSet<>(new NamedElementComparator());
+    private final Set<SourceFileImpl> sourceFileImpls = new TreeSet<>(new NamedElementComparator());
+    private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
+    private final Set<ProgrammingElementImpl> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
 
     public RootDirectoryImpl(final String kind, final String presentationKind, final String relativePath, final String fqName)
     {
-        super(kind, presentationKind, relativePath, relativePath, fqName, -1);
+        super(kind, presentationKind, relativePath, relativePath, fqName);
     }
 
     /* (non-Javadoc)
@@ -76,30 +78,43 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IRootDi
         return getPresentationName();
     }
 
-    public void addSourceFile(final SourceFileImpl sourceFile)
+    public void addSourceFile(final SourceFileImpl sourceFileImpl)
     {
-        assert sourceFile != null : "Parameter 'sourceFile' of method 'addSourceFile' must not be null";
-        assert !sourceFiles.contains(sourceFile) : "sourceFile '" + sourceFile.getFqName() + "' has already been added";
-        sourceFiles.add(sourceFile);
+        assert sourceFileImpl != null : "Parameter 'sourceFileImpl' of method 'addSourceFile' must not be null";
+        assert !sourceFileImpls.contains(sourceFileImpl) : "sourceFileImpl'" + sourceFileImpl.getFqName() + "' has already been added";
+        sourceFileImpls.add(sourceFileImpl);
     }
 
     @Override
     public Set<ISourceFile> getSourceFiles()
     {
-        return Collections.unmodifiableSet(sourceFiles);
+        return Collections.unmodifiableSet(sourceFileImpls);
     }
 
-    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElement)
+    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl)
     {
-        assert physicalRecursiveElement != null : "Parameter 'physicalRecursiveElement' of method 'addPhysicalRecursiveElement' must not be null";
-        assert !physicalRecursiveElements.contains(physicalRecursiveElement) : "Already added physical recursive element: "
-                + physicalRecursiveElement.getFqName();
-        physicalRecursiveElements.add(physicalRecursiveElement);
+        assert physicalRecursiveElementImpl != null : "Parameter 'physicalRecursiveElementImpl' of method 'addPhysicalRecursiveElement' must not be null";
+        assert !physicalRecursiveElementImpls.contains(physicalRecursiveElementImpl) : "Already added physical recursive element: "
+                + physicalRecursiveElementImpl.getFqName();
+        physicalRecursiveElementImpls.add(physicalRecursiveElementImpl);
     }
 
     @Override
     public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements()
     {
-        return Collections.unmodifiableSet(physicalRecursiveElements);
+        return Collections.unmodifiableSet(physicalRecursiveElementImpls);
+    }
+
+    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl)
+    {
+        assert programmingElementImpl != null : "Parameter 'programmingElementImpl' of method 'addProgrammingElement' must not be null";
+        assert !programmingElementImpls.contains(programmingElementImpl) : "Already added programming element: " + programmingElementImpl.getFqName();
+        programmingElementImpls.add(programmingElementImpl);
+    }
+
+    @Override
+    public Set<IProgrammingElement> getProgrammingElements()
+    {
+        return Collections.unmodifiableSet(programmingElementImpls);
     }
 }

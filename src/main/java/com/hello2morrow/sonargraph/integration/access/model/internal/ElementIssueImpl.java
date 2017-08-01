@@ -31,11 +31,17 @@ public class ElementIssueImpl extends AbstractElementIssueImpl
     private static final long serialVersionUID = -3705193284431668430L;
     private final INamedElement element;
 
+    private static String createName(final IIssueType issueType, final INamedElement element, final int line)
+    {
+        assert issueType != null : "Parameter 'issueType' of method 'createName' must not be null";
+        assert element != null : "Parameter 'element' of method 'createName' must not be null";
+        return issueType.getName() + ":" + element.getFqName() + ":" + line;
+    }
+
     public ElementIssueImpl(final IIssueType issueType, final String description, final IIssueProvider issueProvider, final INamedElement element,
             final boolean hasResolution, final int line)
     {
-        super(issueType.getName() + element.toString() + line, issueType.getPresentationName(), description, issueType, issueProvider, hasResolution,
-                line);
+        super(createName(issueType, element, line), issueType.getPresentationName(), description, issueType, issueProvider, hasResolution, line);
         assert element != null : "Parameter 'element' of method 'ElementIssue' must not be null";
         this.element = element;
     }

@@ -21,6 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.IStandardEnumer
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 
+//TODO [Dietmar] Get rid of this class
 public interface IJavaMetricId extends IMetricId
 {
     public enum StandardName implements IStandardEnumeration

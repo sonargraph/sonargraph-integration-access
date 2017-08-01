@@ -32,7 +32,7 @@ public interface IModuleInfoProcessor extends IInfoProcessor
 
     public Map<ISourceFile, List<IIssue>> getIssuesForSourceFiles(Predicate<IIssue> filter);
 
-    public Map<INamedElement, List<IIssue>> getIssuesForNamedElements(final Predicate<IIssue> filter);
+    public Map<String, List<IIssue>> getIssuesForDirectories(final Predicate<IIssue> filter);
 
     public Map<ISourceFile, Map<IResolution, List<IIssue>>> getIssuesForResolutionsForSourceFiles(Predicate<IResolution> filter);
 }

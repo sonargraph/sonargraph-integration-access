@@ -29,11 +29,14 @@ import java.util.stream.Collectors;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalElement;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
@@ -94,24 +97,30 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public boolean isElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'isElementContainedInModule' must not be null";
-        final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
-        if (sourceFileOpt.isPresent())
-        {
-            final ISourceFile sourceFile = sourceFileOpt.get();
-            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginal();
-            if (originalSourceFileOpt.isPresent())
-            {
-                return module.hasElement(originalSourceFileOpt.get());
-            }
-            return module.hasElement(sourceFile);
-        }
-
         final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
         if (namedElementOpt.isPresent())
         {
             return module.hasElement(namedElementOpt.get());
         }
         return module.hasElement(element);
+    }
+
+    private INamedElement getElementContainedInModule(final INamedElement element)
+    {
+        assert element != null : "Parameter 'element' of method 'getElementContainedInModule' must not be null";
+        final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+        if (namedElementOpt.isPresent())
+        {
+            if (module.hasElement(namedElementOpt.get()))
+            {
+                return namedElementOpt.get();
+            }
+        }
+        if (module.hasElement(element))
+        {
+            return element;
+        }
+        return null;
     }
 
     @Override
@@ -153,7 +162,6 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public List<IMetricId> getMetricIdsForLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'getMetricIdsForLevel' must not be null";
-
         return module.getMetricIdsForLevel(level);
     }
 
@@ -233,52 +241,155 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         return Collections.unmodifiableMap(resultMap);
     }
 
-    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
-    {
-        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
-        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
-        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
+    //    private void addDirectoryForIssue(final Map<Directory, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
+    //    {
+    //        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
+    //        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
+    //        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
+    //
+    //        if (isElementContainedInModule(element))
+    //        {
+    //            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
+    //            if (!sourceFileOpt.isPresent())
+    //            {
+    //                INamedElement add = element;
+    //                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+    //                if (namedElementOpt.isPresent())
+    //                {
+    //                    add = namedElementOpt.get();
+    //                }
+    //                List<IIssue> issues = resultMap.get(add);
+    //                if (issues == null)
+    //                {
+    //                    issues = new ArrayList<>();
+    //                    resultMap.put(add, issues);
+    //                }
+    //                issues.add(issue);
+    //            }
+    //        }
+    //    }
 
-        if (isElementContainedInModule(element))
+    //    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
+    //    {
+    //        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
+    //        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
+    //        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
+    //
+    //        if (isElementContainedInModule(element))
+    //        {
+    //            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
+    //            if (!sourceFileOpt.isPresent())
+    //            {
+    //                INamedElement add = element;
+    //                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+    //                if (namedElementOpt.isPresent())
+    //                {
+    //                    add = namedElementOpt.get();
+    //                }
+    //                List<IIssue> issues = resultMap.get(add);
+    //                if (issues == null)
+    //                {
+    //                    issues = new ArrayList<>();
+    //                    resultMap.put(add, issues);
+    //                }
+    //                issues.add(issue);
+    //            }
+    //        }
+    //    }
+
+    private void addDirectoryIssue(final String directory, final IIssue issue, final Map<String, List<IIssue>> resultMap)
+    {
+        assert directory != null && directory.length() > 0 : "Parameter 'directory' of method 'addDirectoryIssue' must not be empty";
+        assert issue != null : "Parameter 'issue' of method 'addDirectoryIssue' must not be null";
+        assert resultMap != null : "Parameter 'resultMap' of method 'addDirectoryIssue' must not be null";
+
+        List<IIssue> issues = resultMap.get(directory);
+        if (issues == null)
         {
-            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
-            if (!sourceFileOpt.isPresent())
-            {
-                INamedElement add = element;
-                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
-                if (namedElementOpt.isPresent())
-                {
-                    add = namedElementOpt.get();
-                }
-                List<IIssue> issues = resultMap.get(add);
-                if (issues == null)
-                {
-                    issues = new ArrayList<>();
-                    resultMap.put(add, issues);
-                }
-                issues.add(issue);
-            }
+            issues = new ArrayList<>();
+            resultMap.put(directory, issues);
         }
+        issues.add(issue);
+    }
+
+    private String concatenate(final String relativeRootDirectory, final String relativeDirectory)
+    {
+        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'concatenate' must not be empty";
+        assert relativeDirectory != null && relativeDirectory.length() > 0 : "Parameter 'relativeDirectory' of method 'concatenate' must not be empty";
+
+        String directory = relativeRootDirectory;
+        if (relativeDirectory.startsWith("./"))
+        {
+            directory += relativeDirectory.substring(1);
+        }
+        else if (relativeDirectory.startsWith("."))
+        {
+            directory += relativeDirectory.substring(2);
+        }
+        else
+        {
+            directory += relativeDirectory;
+        }
+        return directory;
+    }
+
+    private List<INamedElement> getOrigins(final INamedElement namedElement)
+    {
+        assert namedElement != null : "Parameter 'namedElement' of method 'getOrigins' must not be null";
+
+        //        if (namedElement.getKind().endsWith("LogicalSystemNamespace") || namedElement.getKind().endsWith("LogicalModuleNamespace"))//TODO
+        if (namedElement instanceof ILogicalElement)
+        {
+            final List<INamedElement> origins = new ArrayList<>();
+            for (final INamedElement nextDerivedFrom : ((ILogicalElement) namedElement).getDerivedFrom())
+            {
+                origins.add(nextDerivedFrom);
+            }
+
+            return origins;
+        }
+
+        return Collections.singletonList(namedElement);
     }
 
     @Override
-    public Map<INamedElement, List<IIssue>> getIssuesForNamedElements(final Predicate<IIssue> filter)
+    public Map<String, List<IIssue>> getIssuesForDirectories(final Predicate<IIssue> filter)
     {
-        final Map<INamedElement, List<IIssue>> resultMap = new HashMap<>();
-        for (final IIssue issue : systemInfoProcessor.getIssues(filter))
+        final Map<String, List<IIssue>> resultMap = new HashMap<>();
+        for (final IIssue nextIssue : systemInfoProcessor.getIssues(filter))
         {
-            if (issue instanceof IElementIssue)
+            if (nextIssue instanceof IElementIssue)
             {
-                final List<INamedElement> elements = ((IElementIssue) issue).getAffectedElements();
+                final List<INamedElement> elements = ((IElementIssue) nextIssue).getAffectedElements();
                 for (final INamedElement next : elements)
                 {
-                    addNamedElementForIssue(resultMap, issue, next);
+                    for (final INamedElement nextOrigin : getOrigins(next))
+                    {
+                        final INamedElement contained = getElementContainedInModule(nextOrigin);
+                        if (contained != null)
+                        {
+                            if (contained instanceof IRootDirectory)
+                            {
+                                addDirectoryIssue(((IRootDirectory) contained).getRelativePath(), nextIssue, resultMap);
+                            }
+                            else if (contained instanceof IPhysicalRecursiveElement)
+                            {
+                                final IPhysicalRecursiveElement nextPhysicalRecursiveElement = (IPhysicalRecursiveElement) contained;
+                                final Optional<String> relDirOpt = nextPhysicalRecursiveElement.getRelativeDirectory();
+                                if (relDirOpt.isPresent())
+                                {
+                                    final String directory = concatenate(nextPhysicalRecursiveElement.getRelativeRootDirectory(), relDirOpt.get());
+                                    addDirectoryIssue(directory, nextIssue, resultMap);
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            if (issue instanceof IDependencyIssue)
+            if (nextIssue instanceof IDependencyIssue)
             {
-                final INamedElement from = ((IDependencyIssue) issue).getFrom();
-                addNamedElementForIssue(resultMap, issue, from);
+                final INamedElement from = ((IDependencyIssue) nextIssue).getFrom();
+                //                addNamedElementForIssue(resultMap, issue, from);
             }
         }
         return Collections.unmodifiableMap(resultMap);

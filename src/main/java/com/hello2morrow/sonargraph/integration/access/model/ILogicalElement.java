@@ -17,19 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Optional;
+import java.util.Set;
 
-public interface INamedElement extends IElement
+public interface ILogicalElement extends INamedElement
 {
-    public String getKind();
-
-    public String getPresentationKind();
-
-    public String getFqName();
-
-    public boolean isOriginal();
-
-    public Optional<? extends INamedElement> getOriginal();
-
-    public Optional<ISourceFile> getSourceFile();
+    public Set<INamedElement> getDerivedFrom();
 }

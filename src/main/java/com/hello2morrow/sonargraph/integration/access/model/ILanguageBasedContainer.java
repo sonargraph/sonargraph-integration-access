@@ -17,19 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface INamedElement extends IElement
+public interface ILanguageBasedContainer extends IElementContainer
 {
-    public String getKind();
+    public String getLanguage();
 
-    public String getPresentationKind();
-
-    public String getFqName();
-
-    public boolean isOriginal();
-
-    public Optional<? extends INamedElement> getOriginal();
-
-    public Optional<ISourceFile> getSourceFile();
+    public List<IRootDirectory> getRootDirectories();
 }

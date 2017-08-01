@@ -205,12 +205,13 @@ public class XmlReportWriter extends AbstractXmlReportAccess
     {
         final XsdWorkspace xmlWorkspace = factory.createXsdWorkspace();
 
-        final XsdRootDirectory xsdGenericRoot = factory.createXsdRootDirectory();
-        xsdGenericRoot.setId(idGenerator.getNextId());
-        xsdGenericRoot.setFqName(softwareSystem.getName());
-        xsdGenericRoot.setPresentationName(softwareSystem.getName());
-        xsdGenericRoot.setKind(elementToXmlMap.get(softwareSystem.getKind()));
-        xmlWorkspace.getGenericRoot().add(xsdGenericRoot); //This does not seem to be referenced by anything else in the XML reports?
+        //FIXME
+        //        final XsdRootDirectory xsdGenericRoot = factory.createXsdRootDirectory();
+        //        xsdGenericRoot.setId(idGenerator.getNextId());
+        //        xsdGenericRoot.setFqName(softwareSystem.getName());
+        //        xsdGenericRoot.setPresentationName(softwareSystem.getName());
+        //        xsdGenericRoot.setKind(elementToXmlMap.get(softwareSystem.getKind()));
+        //        xmlWorkspace.getGenericRoot().add(xsdGenericRoot); //This does not seem to be referenced by anything else in the XML reports?
 
         for (final IModule module : softwareSystem.getModules().values())
         {
@@ -237,6 +238,7 @@ public class XmlReportWriter extends AbstractXmlReportAccess
                 xmlModule.getRootDirectory().add(xmlRoot);
             }
         }
+        //TODO External
         return xmlWorkspace;
     }
 

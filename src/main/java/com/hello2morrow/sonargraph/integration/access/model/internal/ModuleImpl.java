@@ -17,57 +17,25 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public final class ModuleImpl extends NamedElementContainerImpl implements IModule
+public final class ModuleImpl extends LanguageBasedContainerImpl implements IModule
 {
     private static final long serialVersionUID = -4617725409511641491L;
-    private final List<RootDirectoryImpl> rootDirectories = new ArrayList<>(2);
-    private final String language;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl,
             final String language)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl);
-        assert language != null : "Parameter 'language' of method 'ModuleImpl' must not be null";
-        this.language = language;
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IModule#getLanguage()
-     */
-    @Override
-    public String getLanguage()
-    {
-        return language;
-    }
-
-    public void addRootDirectory(final RootDirectoryImpl rootDirectory)
-    {
-        assert rootDirectory != null : "Parameter 'rootDirectory' of method 'addRootDirectory' must not be null";
-        assert !rootDirectories.contains(rootDirectory) : "Root directory'" + rootDirectory.getFqName() + "' has already been added";
-        rootDirectories.add(rootDirectory);
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IModule#getRootDirectories()
-     */
-    @Override
-    public List<IRootDirectory> getRootDirectories()
-    {
-        return Collections.unmodifiableList(rootDirectories);
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
     }
 
     @Override
@@ -91,12 +59,12 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
             if (originalSourceFileOpt.isPresent())
             {
                 final ISourceFile originalSourceFile = originalSourceFileOpt.get();
-                return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == originalSourceFile).findFirst();
+                return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == originalSourceFile).findFirst();
             }
 
-            return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == sourceFile).findFirst();
+            return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == sourceFile).findFirst();
         }
-        return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
+        return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
     }
 }

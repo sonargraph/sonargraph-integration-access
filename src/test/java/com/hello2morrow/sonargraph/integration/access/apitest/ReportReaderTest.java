@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -204,52 +203,38 @@ public class ReportReaderTest
         return (final IIssue i) -> !i.hasResolution() && i.getIssueType().getCategory().getPresentationName().equals(categoryPresentationName);
     }
 
-    static final class NamedElementEntry
+    @Test
+    public void testReportStandard()
     {
-        private final INamedElement m_namedElement;
-        private final List<IIssue> m_issues;
-
-        NamedElementEntry(final INamedElement namedElement, final List<IIssue> issues)
-        {
-            assert namedElement != null : "Parameter 'namedElement' of method 'NamedElementEntry' must not be null";
-            assert issues != null : "Parameter 'issues' of method 'NamedElementEntry' must not be null";
-            m_namedElement = namedElement;
-            m_issues = issues;
-        }
-
-        INamedElement getNamedElement()
-        {
-            return m_namedElement;
-        }
-
-        List<IIssue> getIssues()
-        {
-            return m_issues;
-        }
+        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_STANDARD));
+        assertTrue(result.toString(), result.isSuccess());
     }
 
     @Test
-    public void testNonSourceFileIssues()
+    public void testDirectoryIssues()
     {
+        //TODO
         final ISonargraphSystemController controller = new ControllerFactory().createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORED_CYCLIC_JAVA_PACKAGE));
+        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_DERIVED));
         assertTrue(result.toString(), result.isSuccess());
-        assertEquals("Wrong number of modules", 1, controller.getSoftwareSystem().getModules().size());
+        assertEquals("Wrong number of modules", 2, controller.getSoftwareSystem().getModules().size());
 
         final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
         for (final IModule nextModule : systemInfoProcessor.getModules().values())
         {
             final IModuleInfoProcessor nextModuleInfoProcessor = controller.createModuleInfoProcessor(nextModule);
-            final Map<INamedElement, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForNamedElements(issue -> !issue.isIgnored()
+            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForDirectories(issue -> !issue.isIgnored()
                     && !IIssueCategory.StandardName.WORKSPACE.getStandardName().equals(issue.getIssueType().getCategory().getName()));
 
-            final Map<String, NamedElementEntry> fqNameToNamedElementIssues = new HashMap<>();
-            for (final Entry<INamedElement, List<IIssue>> nextEntry : issueMap.entrySet())
+            for (final Entry<String, List<IIssue>> nextEntry : issueMap.entrySet())
             {
-                fqNameToNamedElementIssues.put(nextEntry.getKey().getFqName(), new NamedElementEntry(nextEntry.getKey(), nextEntry.getValue()));
+                System.out.println("### DIR: " + nextEntry.getKey());
+                for (final IIssue next : nextEntry.getValue())
+                {
+                    System.out.println(next);
+                }
             }
-
-            assertEquals("3 elements with issues expected", 3, fqNameToNamedElementIssues.size());
 
             //Workspace:M1:./src:com:h2m
             //Logical module namespaces:M1:com:h3m
