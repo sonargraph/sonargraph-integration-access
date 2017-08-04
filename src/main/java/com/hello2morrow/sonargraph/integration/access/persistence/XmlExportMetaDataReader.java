@@ -32,15 +32,6 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.core.persistence.report.XsdExportMetaData;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdExportMetaDataRoot;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueCategory;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueProvider;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueType;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricCategory;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricId;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricLevel;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
@@ -59,12 +50,21 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevel
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SingleExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaData;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaDataRoot;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricCategory;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricLevel;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricProvider;
 
 public final class XmlExportMetaDataReader
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlExportMetaDataReader.class);
-    private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
-    private static final String METADATA_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
+    private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/integration/access/persistence/report/exportMetaData.xsd";
+    private static final String METADATA_NAMESPACE = "com.hello2morrow.sonargraph.integration.access.persistence.report";
 
     private JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createJaxbAdapter() throws XmlProcessingException
     {
@@ -127,9 +127,10 @@ public final class XmlExportMetaDataReader
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'convertXmlMetricsToPojo' must not be empty";
         assert result != null : "Parameter 'result' of method 'convertXmlMetaDataToPojo' must not be null";
 
-        final SingleExportMetaDataImpl metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(
-                xsdMetaData.getSystemPathUsedForExport(), xsdMetaData.getSystemId(), xsdMetaData.getVersion(), xsdMetaData.getTimestamp()
-                        .toGregorianCalendar().getTimeInMillis()), identifier);
+        final SingleExportMetaDataImpl metaData = new SingleExportMetaDataImpl(
+                new BasicSoftwareSystemInfoImpl(xsdMetaData.getSystemPathUsedForExport(), xsdMetaData.getSystemId(), xsdMetaData.getVersion(),
+                        xsdMetaData.getTimestamp().toGregorianCalendar().getTimeInMillis()),
+                identifier);
 
         final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(xsdMetaData);
         for (final IssueCategoryImpl category : issueCategoryXsdToPojoMap.values())
@@ -168,8 +169,8 @@ public final class XmlExportMetaDataReader
             metaData.addMetricLevel(level);
         }
 
-        for (final MetricIdImpl id : XmlExportMetaDataReader.processMetricIds(xsdMetaData, categoryXsdToPojoMap, providerXsdToPojoMap,
-                metricLevelXsdToPojoMap).values())
+        for (final MetricIdImpl id : XmlExportMetaDataReader
+                .processMetricIds(xsdMetaData, categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap).values())
         {
             metaData.addMetricId(id);
         }
@@ -218,9 +219,8 @@ public final class XmlExportMetaDataReader
         return Collections.unmodifiableMap(metricLevelXsdToPojoMap);
     }
 
-    static Map<Object, MetricIdImpl> processMetricIds(final XsdExportMetaData xsdMetaData,
-            final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap, final Map<Object, MetricProviderImpl> providerXsdToPojoMap,
-            final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap)
+    static Map<Object, MetricIdImpl> processMetricIds(final XsdExportMetaData xsdMetaData, final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap,
+            final Map<Object, MetricProviderImpl> providerXsdToPojoMap, final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetaData' of method 'processMetricIds' must not be null";
         assert categoryXsdToPojoMap != null : "Parameter 'categoryXsdToPojoMap' of method 'processMetricIds' must not be null";
@@ -250,8 +250,8 @@ public final class XmlExportMetaDataReader
             assert provider != null : "'provider' for metric '" + xsdMetricId.getName() + "' must not be null";
 
             metricIdXsdToPojoMap.put(xsdMetricId,
-                    new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories,
-                            metricLevels, provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
+                    new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories, metricLevels,
+                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
         }
         return Collections.unmodifiableMap(metricIdXsdToPojoMap);
     }
@@ -304,13 +304,13 @@ public final class XmlExportMetaDataReader
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
-                        + "' is not supported, setting to '" + Severity.ERROR + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
 
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category, providers.get(next
-                    .getProvider()), next.getDescription());
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category,
+                    providers.get(next.getProvider()), next.getDescription());
             issueTypeXsdToPojoMap.put(next, issueType);
         }
         return Collections.unmodifiableMap(issueTypeXsdToPojoMap);

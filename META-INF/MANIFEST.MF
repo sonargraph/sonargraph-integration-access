@@ -5,10 +5,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.hello2morrow.sonargraph.integration.access
 Bundle-Version: 3.1.2
 Bundle-Vendor: hello2morrow GmbH
-Export-Package: com.hello2morrow.sonargraph.integration.access,
- com.hello2morrow.sonargraph.integration.access.controller,
- com.hello2morrow.sonargraph.integration.access.foundation,
- com.hello2morrow.sonargraph.integration.access.model,
- com.hello2morrow.sonargraph.integration.access.model.diff,
- com.hello2morrow.sonargraph.integration.access.model.java,
- com.hello2morrow.sonargraph.integration.access.persistence
+Export-Package: com.hello2morrow.sonargraph.integration.access;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.controller;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.foundation;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.model;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.model.diff;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.model.java;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.persistence;version="3.1.2",
+ com.hello2morrow.sonargraph.integration.access.persistence.report;version="3.1.2"

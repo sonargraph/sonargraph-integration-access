@@ -54,9 +54,9 @@
             </goals>
             <configuration>
               <schemaIncludes>
-                <include>com/hello2morrow/sonargraph/core/persistence/report/report.xsd</include>
+                <include>com/hello2morrow/sonargraph/integration/access/persistence/report/report.xsd</include>
               </schemaIncludes> 
-              <generatePackage>com.hello2morrow.sonargraph.core.persistence.report</generatePackage>
+              <generatePackage>com.hello2morrow.sonargraph.integration.access.persistence.report</generatePackage>
             </configuration>
           </execution>
         </executions>
