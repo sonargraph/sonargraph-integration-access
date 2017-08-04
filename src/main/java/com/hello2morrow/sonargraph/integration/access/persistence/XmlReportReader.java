@@ -33,7 +33,6 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
@@ -94,10 +93,14 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDupl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFeature;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalNamespace;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricFloatValue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricIntValue;
@@ -111,12 +114,16 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModu
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModuleElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModuleMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdNamedElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
 
 public final class XmlReportReader extends AbstractXmlReportAccess
 {
@@ -614,8 +621,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 catch (final Exception e)
                 {
                     LOGGER.error("Failed to process resolution type '" + nextResolution.getType() + "'", e);
-                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Resolution type '" + nextResolution.getType()
-                            + "' is not supported and will be ignored.");
+                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                            "Resolution type '" + nextResolution.getType() + "' is not supported and will be ignored.");
                     continue;
                 }
             }
@@ -628,8 +635,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process priority type '" + nextResolution.getPrio() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Priority type '" + nextResolution.getPrio()
-                        + "' is not supported, setting to '" + Priority.NONE + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Priority type '" + nextResolution.getPrio() + "' is not supported, setting to '" + Priority.NONE + "'");
                 priority = Priority.NONE;
             }
 
@@ -826,8 +833,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
         globalXmlToElementMap.putAll(metricLevelXsdToPojoMap);
 
-        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(),
-                categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap);
+        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(), categoryXsdToPojoMap,
+                providerXsdToPojoMap, metricLevelXsdToPojoMap);
         for (final MetricIdImpl id : metricIdXsdToPojoMap.values())
         {
             softwareSystem.addMetricId(id);
@@ -879,14 +886,14 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 {
                     for (final XsdMetricIntValue nextIntValue : nextValue.getInt())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(), () -> new Integer(
-                                nextIntValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(),
+                                () -> new Integer(nextIntValue.getValue()));
                     }
 
                     for (final XsdMetricFloatValue nextFloatValue : nextValue.getFloat())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(), () -> new Float(
-                                nextFloatValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(),
+                                () -> new Float(nextFloatValue.getValue()));
                     }
                 }
             }
@@ -957,8 +964,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
-                        + "' is not supported, setting to '" + Severity.ERROR + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
             final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
@@ -1059,9 +1066,9 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
-                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
-                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(),
-                        analyzer);
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
+                        name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
+                        issueProvider, nextCycle.isHasResolution(), analyzer);
 
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
