@@ -28,9 +28,9 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     private final String relativeRootDirectory;
 
     public SourceFileImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String relativeRootDirectory)
+            final boolean isLocationOnly, final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, isLocationOnly);
         assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'SourceFileImpl' must not be empty";
         this.relativeRootDirectory = relativeRootDirectory;
         setSourceFile(this);
@@ -49,9 +49,9 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     }
 
     @Override
-    public Optional<ISourceFile> getOriginal()
+    public Optional<ISourceFile> getOriginalLocation()
     {
-        final Optional<? extends INamedElement> optOriginal = super.getOriginal();
+        final Optional<? extends INamedElement> optOriginal = super.getOriginalLocation();
         if (optOriginal.isPresent())
         {
             final INamedElement original = optOriginal.get();
@@ -62,10 +62,11 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     }
 
     @Override
-    public void setOriginal(final NamedElementImpl original)
+    public void setOriginalLocation(final PhysicalElementImpl physicalElementImpl)
     {
-        assert original != null && original instanceof SourceFileImpl : "Unexpected class in method 'setOriginal': " + original;
-        super.setOriginal(original);
+        assert physicalElementImpl != null && physicalElementImpl instanceof SourceFileImpl : "Unexpected class in method 'setOriginalLOcation': "
+                + physicalElementImpl;
+        super.setOriginalLocation(physicalElementImpl);
     }
 
     @Override

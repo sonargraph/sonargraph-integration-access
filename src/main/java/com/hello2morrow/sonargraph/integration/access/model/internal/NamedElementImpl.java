@@ -30,8 +30,6 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     private final String presentationKind;
     private final String fqName;
     private ISourceFile m_source;
-    private boolean isOriginal;
-    private NamedElementImpl original;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
@@ -90,25 +88,15 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     }
 
     @Override
-    public Optional<? extends INamedElement> getOriginal()
+    public Optional<? extends INamedElement> getOriginalLocation()
     {
-        return Optional.ofNullable(original);
-    }
-
-    public void setOriginal(final NamedElementImpl original)
-    {
-        this.original = original;
-    }
-
-    public final void setIsOriginal(final boolean isOriginal)
-    {
-        this.isOriginal = isOriginal;
+        return Optional.empty();
     }
 
     @Override
-    public final boolean isOriginal()
+    public boolean isLocationOnly()
     {
-        return isOriginal;
+        return false;
     }
 
     @Override
@@ -117,7 +105,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + fqName.hashCode();
-        result = prime * result + ((original == null) ? 0 : original.hashCode());
+        result = prime * result + (isLocationOnly() ? 1 : 0);
         return result;
     }
 
@@ -134,22 +122,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         }
 
         final NamedElementImpl other = (NamedElementImpl) obj;
-        if (!fqName.equals(other.fqName))
-        {
-            return false;
-        }
-        if (original == null)
-        {
-            if (other.original != null)
-            {
-                return false;
-            }
-        }
-        else if (!original.equals(other.original))
-        {
-            return false;
-        }
-        return true;
+        return fqName.equals(other.fqName) && isLocationOnly() == other.isLocationOnly();
     }
 
     @Override
@@ -160,13 +133,15 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         builder.append("kind:").append(kind);
         builder.append("\n");
         builder.append("fqName:").append(fqName);
-        if (original != null)
+        builder.append("\n");
+        builder.append("isLocationOnly:").append(isLocationOnly());
+
+        final Optional<? extends INamedElement> optOriginalLocation = getOriginalLocation();
+        if (optOriginalLocation.isPresent())
         {
             builder.append("\n");
-            builder.append("originalFqName:").append(original.getFqName());
+            builder.append("originalFqName:").append(optOriginalLocation.get().getFqName());
         }
-        builder.append("\n");
-        builder.append("isOriginal:").append(isOriginal);
         return builder.toString();
     }
 }

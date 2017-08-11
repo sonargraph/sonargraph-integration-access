@@ -18,7 +18,7 @@
     <xs:complexType name="xsdFeature">
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="presentationName" type="xs:string" use="required"/>
-        <xs:attribute name="licensed" type="xs:boolean" use="required"/>
+        <xs:attribute name="licensed" type="xs:boolean" default="false"/>
     </xs:complexType>
     
     <xs:complexType name="xsdAnalyzers">
@@ -31,7 +31,7 @@
         <xs:complexContent>
             <xs:extension base="export:xsdElement">
                 <xs:attribute name="description" type="xs:string"/>
-                <xs:attribute name="licensed" type="xs:boolean" use="required"/>
+                <xs:attribute name="licensed" type="xs:boolean" default="false"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -42,7 +42,6 @@
                 <xs:attribute name="kind" type="xs:IDREF" use="required"/>
                 <xs:attribute name="fqName" type="xs:string" use="required"/>
                 <xs:attribute name="source" type="xs:IDREF"/>
-                <xs:attribute name="original" type="xs:IDREF"/>
                 <xs:attribute name="debugInfo" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>   
@@ -97,18 +96,27 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="xsdPhysicalRecursiveElement">
+    <xs:complexType name="xsdPhysicalElement" abstract="true">
         <xs:complexContent>
             <xs:extension base="xsdNamedElement">
+                <xs:attribute name="locationOnly" type="xs:boolean" default="false"/>
+                <xs:attribute name="originalLocation" type="xs:IDREF"/>
+            </xs:extension>
+        </xs:complexContent>
+     </xs:complexType>
+    
+     <xs:complexType name="xsdPhysicalRecursiveElement">
+        <xs:complexContent>
+            <xs:extension base="xsdPhysicalElement">
                  <!-- Either the  'relativeDirectoryPath' or the 'source' (xsdNamedElement) is present -->
                  <xs:attribute name="relativeDirectoryPath" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
      </xs:complexType>
     
-    <xs:complexType name="xsdSourceFile">
+     <xs:complexType name="xsdSourceFile">
         <xs:complexContent>
-            <xs:extension base="xsdNamedElement"/>
+            <xs:extension base="xsdPhysicalElement"/>
         </xs:complexContent>
     </xs:complexType>
 
@@ -289,7 +297,7 @@
         <xs:attribute name="description" type="xs:string"/>
         <xs:attribute name="line" type="xs:int" default="-1"/>
         <xs:attribute name="column" type="xs:int" default="-1"/>
-        <xs:attribute name="hasResolution" type="xs:boolean" use="required"/>
+        <xs:attribute name="resolved" type="xs:boolean" default="false"/>
     </xs:complexType>
     
     <xs:complexType name="xsdDependencyIssue">
@@ -388,9 +396,9 @@
         <xs:attribute name="information" type="xs:string"/>
         <xs:attribute name="assignee" type="xs:string"/>
         <xs:attribute name="date" type="xs:dateTime" use="required"/>
-        <xs:attribute name="isApplicable" type="xs:boolean" use="required"/>
-        <xs:attribute name="isTask" type="xs:boolean" use="required" />
-        <xs:attribute name="isRefactoring" type="xs:boolean" use="required" />
+        <xs:attribute name="applicable" type="xs:boolean" default="false"/>
+        <xs:attribute name="task" type="xs:boolean" default="false"/>
+        <xs:attribute name="refactoring" type="xs:boolean" default="false"/>
         <xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" />
         <xs:attribute name="debugInfo" type="xs:string" />
     </xs:complexType>

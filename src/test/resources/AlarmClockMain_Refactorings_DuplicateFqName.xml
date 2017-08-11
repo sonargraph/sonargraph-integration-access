@@ -169,16 +169,16 @@
         <module description="" language="Java" kind="_75" fqName="Workspace:AlarmClock" id="_74" name="AlarmClock" presentationName="AlarmClock">
             <rootDirectory kind="_77" fqName="Workspace:AlarmClock:Class|./AlarmClock/target/classes" id="_76" name="Class|./AlarmClock/target/classes" presentationName="./AlarmClock/target/classes"></rootDirectory>
             <rootDirectory kind="_79" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java" id="_78" name="./AlarmClock/src/main/java" presentationName="./AlarmClock/src/main/java">
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java" id="_8a" name="AlarmClock.java" presentationName="./com/h2m/alarm/model/AlarmClock.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java" original="_8a" id="_8b" name="AlarmClock2.java" presentationName="./com/h2m/alarm/model/AlarmClock2.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java" id="_8a" locationOnly="true" name="AlarmClock.java" presentationName="./com/h2m/alarm/model/AlarmClock.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java" originalLocation="_8a" id="_8b" name="AlarmClock2.java" presentationName="./com/h2m/alarm/model/AlarmClock2.java"></sourceElement>
                 <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p2:C2.java" id="_91" name="C2.java" presentationName="./com/h2m/alarm/p2/C2.java"></sourceElement>
                 <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java" id="_93" name="AlarmHandler.java" presentationName="./com/h2m/alarm/presentation/AlarmHandler.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToFile.java" id="_97" name="AlarmToFile.java" presentationName="./com/h2m/alarm/presentation/AlarmToFile.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java" original="_97" id="_98" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java" id="_9d" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole_New.java" original="_9d" id="_9e" name="AlarmToConsole_New.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole_New.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToFile.java" id="_97" locationOnly="true" name="AlarmToFile.java" presentationName="./com/h2m/alarm/presentation/AlarmToFile.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java" originalLocation="_97" id="_98" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java" id="_9d" locationOnly="true" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole_New.java" originalLocation="_9d" id="_9e" name="AlarmToConsole_New.java" presentationName="./com/h2m/alarm/presentation/AlarmToConsole_New.java"></sourceElement>
                 <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:Main.java" id="_a0" name="Main.java" presentationName="./com/h2m/alarm/presentation/Main.java"></sourceElement>
-                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java" id="_a8" name="C1.java" presentationName="./com/h2m/alarm/p1/C1.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java" id="_a8" locationOnly="true" name="C1.java" presentationName="./com/h2m/alarm/p1/C1.java"></sourceElement>
             </rootDirectory>
             <rootDirectory kind="_79" fqName="Workspace:AlarmClock:./AlarmClock/src/test/java" id="_7a" name="./AlarmClock/src/test/java" presentationName="./AlarmClock/src/test/java">
                 <sourceElement kind="_a2" fqName="Workspace:AlarmClock:./AlarmClock/src/test/java:com:h2m:alarm:p1:C1Test.java" id="_a3" name="C1Test.java" presentationName="./com/h2m/alarm/p1/C1Test.java"></sourceElement>
@@ -188,7 +188,7 @@
         <module description="" language="Java" kind="_75" fqName="Workspace:Foundation" id="_7b" name="Foundation" presentationName="Foundation">
             <rootDirectory kind="_77" fqName="Workspace:Foundation:Class|./Foundation/target/classes" id="_7c" name="Class|./Foundation/target/classes" presentationName="./Foundation/target/classes"></rootDirectory>
             <rootDirectory kind="_79" fqName="Workspace:Foundation:./Foundation/src/main/java" id="_7d" name="./Foundation/src/main/java" presentationName="./Foundation/src/main/java">
-                <sourceElement kind="_89" fqName="Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java" original="_a8" id="_a9" name="C1_2.java" presentationName="./com/h2m/alarm/p1/C1_2.java"></sourceElement>
+                <sourceElement kind="_89" fqName="Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java" originalLocation="_a8" id="_a9" name="C1_2.java" presentationName="./com/h2m/alarm/p1/C1_2.java"></sourceElement>
             </rootDirectory>
         </module>
     </workspace>
@@ -203,14 +203,14 @@
         <element kind="_86" fqName="Logical module namespaces:AlarmClock:com:h2m:alarm:model" id="_85" name="model" presentationName="com.h2m.alarm.model"></element>
         <element kind="_86" fqName="Logical module namespaces:AlarmClock:com:h2m:alarm:presentation" id="_87" name="presentation" presentationName="com.h2m.alarm.presentation"></element>
         <element kind="_8d" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java:AlarmClock2:AlarmClock()" source="_8b" line="28" id="_8c" name="AlarmClock()" presentationName="com.h2m.alarm.model.AlarmClock2.AlarmClock()"></element>
-        <element kind="_8f" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1" id="_8e" name="p1" presentationName="com.h2m.alarm.p1"></element>
+        <element kind="_8f" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1" id="_8e" locationOnly="true" name="p1" presentationName="com.h2m.alarm.p1"></element>
         <element kind="_95" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler" source="_93" line="26" id="_94" name="AlarmHandler" presentationName="com.h2m.alarm.presentation.AlarmHandler"></element>
-        <element kind="_95" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java:AlarmToConsole" source="_98" line="24" original="_9b" id="_99" name="AlarmToConsole" presentationName="com.h2m.alarm.presentation.AlarmToConsole"></element>
+        <element kind="_95" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java:AlarmToConsole" source="_98" line="24" originalLocation="_9b" id="_99" name="AlarmToConsole" presentationName="com.h2m.alarm.presentation.AlarmToConsole"></element>
         <element kind="_8d" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java:AlarmToConsole:AlarmToFile()" source="_98" line="-1" id="_9a" name="AlarmToFile()" presentationName="com.h2m.alarm.presentation.AlarmToConsole.AlarmToFile()"></element>
-        <element kind="_95" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java:AlarmToFile" source="_98" line="24" id="_9b" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.AlarmToFile"></element>
+        <element kind="_95" fqName="Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:presentation:AlarmToConsole.java:AlarmToFile" source="_98" line="24" id="_9b" locationOnly="true" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.AlarmToFile"></element>
     </moduleElements>
     <moduleElements ref="_7b">
-        <element kind="_8f" fqName="Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1" original="_8e" id="_a6" name="p1" presentationName="com.h2m.alarm.p1"></element>
+        <element kind="_8f" fqName="Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1" originalLocation="_8e" id="_a6" name="p1" presentationName="com.h2m.alarm.p1"></element>
     </moduleElements>
     <systemMetricValues elementRef="_0">
         <levelValues levelRef="_3a">

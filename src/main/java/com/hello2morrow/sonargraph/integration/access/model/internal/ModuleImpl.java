@@ -55,7 +55,7 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
         if (sourceFileOpt.isPresent())
         {
             final ISourceFile sourceFile = sourceFileOpt.get();
-            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginal();
+            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginalLocation();
             if (originalSourceFileOpt.isPresent())
             {
                 final ISourceFile originalSourceFile = originalSourceFileOpt.get();

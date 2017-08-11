@@ -77,9 +77,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
             kindToNamedElements.put(element.getKind(), namedElements);
         }
         namedElements.add(element);
-        if (!element.isOriginal())
+        if (!element.isLocationOnly())
         {
-            //originals are never added to the registry - they are reachable through their refactored counterparts and never have issues nor metrics 
+            //'location-only' elements are never added to the registry - they are reachable through their refactored  counterparts and never have issues nor metrics 
             getElementRegistry().addElement(element);
         }
     }

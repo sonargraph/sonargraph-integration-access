@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<virtualModel version="9.4.3.100">
+<virtualModel version="9.4.4.100">
     <resolutions>
         <ignore date="2016-12-29T16:08:03.492Z" description="Tolerated">
             <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
@@ -42,5 +42,9 @@
             <type class="Script" name="Supertype uses subtype" descriptor="./SuperTypeUsesSubType.xml:Warning"></type>
             <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java:INamedElement:getSourceFile()" to="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java:ISourceFile"></dependencyPattern>
         </ignore>
+        <delete assignedTo="" priority="Medium" date="2017-08-11T20:04:56.293Z" description="">
+            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DeleteRefactoring" descriptor="043ef0877cb84c730a207451d9493cb0"></type>
+            <dependencyPattern type="ParserDependencyEndpoint" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java:INamedElement:getSourceFile()" to="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java:ISourceFile"></dependencyPattern>
+        </delete>
     </resolutions>
 </virtualModel>

@@ -97,7 +97,7 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public boolean isElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'isElementContainedInModule' must not be null";
-        final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+        final Optional<? extends INamedElement> namedElementOpt = element.getOriginalLocation();
         if (namedElementOpt.isPresent())
         {
             return module.hasElement(namedElementOpt.get());
@@ -108,7 +108,7 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     private INamedElement getElementContainedInModule(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'getElementContainedInModule' must not be null";
-        final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
+        final Optional<? extends INamedElement> namedElementOpt = element.getOriginalLocation();
         if (namedElementOpt.isPresent())
         {
             if (module.hasElement(namedElementOpt.get()))

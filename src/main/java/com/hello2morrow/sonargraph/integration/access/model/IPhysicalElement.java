@@ -19,17 +19,11 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.Optional;
 
-public interface INamedElement extends IElement
+public interface IPhysicalElement extends INamedElement
 {
-    public String getKind();
-
-    public String getPresentationKind();
-
-    public String getFqName();
-
-    public Optional<ISourceFile> getSourceFile();
-
+    @Override
     public boolean isLocationOnly();
 
-    public Optional<? extends INamedElement> getOriginalLocation();
+    @Override
+    public Optional<? extends IPhysicalElement> getOriginalLocation();
 }

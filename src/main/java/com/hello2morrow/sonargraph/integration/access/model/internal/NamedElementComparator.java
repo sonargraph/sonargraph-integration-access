@@ -23,6 +23,11 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
 final class NamedElementComparator implements Comparator<INamedElement>
 {
+    NamedElementComparator()
+    {
+        super();
+    }
+
     @Override
     public int compare(final INamedElement e1, final INamedElement e2)
     {
@@ -37,13 +42,16 @@ final class NamedElementComparator implements Comparator<INamedElement>
         int compared = e1.getFqName().compareTo(e2.getFqName());
         if (compared == 0)
         {
-            if (e1.getOriginal().isPresent())
+            if (e1.isLocationOnly())
             {
-                assert !e2.getOriginal().isPresent() : "No original expected for: " + e2;
+                assert !e2.isLocationOnly() : "No 'isLocationOnly' expected for: " + e2.getFqName();
                 compared = 1;
             }
-            assert !e1.getOriginal().isPresent() : "No original expected for: " + e1;
-            compared = -1;
+            else
+            {
+                assert e2.isLocationOnly() : "'isLocationOnly' expected for: " + e2.getFqName();
+                compared = -1;
+            }
         }
 
         return compared;

@@ -28,9 +28,9 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
     private String relativeDirectory;
 
     public PhysicalRecursiveElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName)
+            final String fqName, final boolean isLocationOnly)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, isLocationOnly);
     }
 
     public void setRelativeRootDirectory(final String relativeRootDirectory)

@@ -17,12 +17,38 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public abstract class PhysicalElementImpl extends NamedElementImpl
+import java.util.Optional;
+
+import com.hello2morrow.sonargraph.integration.access.model.IPhysicalElement;
+
+public abstract class PhysicalElementImpl extends NamedElementImpl implements IPhysicalElement
 {
     private static final long serialVersionUID = 3837143486613207544L;
+    private final boolean isLocationOnly;
+    private PhysicalElementImpl originalLocation;
 
-    public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
+    public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
+            final String fqName, final boolean isLocationOnly)
     {
         super(kind, presentationKind, name, presentationName, fqName);
+        this.isLocationOnly = isLocationOnly;
+    }
+
+    @Override
+    public final boolean isLocationOnly()
+    {
+        return isLocationOnly;
+    }
+
+    public void setOriginalLocation(final PhysicalElementImpl physicalElementImpl)
+    {
+        assert physicalElementImpl != null : "Parameter 'physicalElementImpl' of method 'setOriginalLocation' must not be null";
+        originalLocation = physicalElementImpl;
+    }
+
+    @Override
+    public Optional<? extends IPhysicalElement> getOriginalLocation()
+    {
+        return Optional.ofNullable(originalLocation);
     }
 }

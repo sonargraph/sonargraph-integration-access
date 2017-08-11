@@ -78,6 +78,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricValue
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementContainerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
@@ -119,6 +120,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModu
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModuleElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModuleMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdNamedElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
@@ -217,56 +219,58 @@ public final class XmlReportReader extends XmlAccess
         return (XsdElementKind) kind;
     }
 
-    private NamedElementImpl getNamedElementImpl(final XsdNamedElement xsdNamedElement)
+    @SuppressWarnings("unchecked")
+    private <T extends NamedElementImpl> T getNamedElementImpl(final XsdNamedElement xsdNamedElement, final Class<T> clazz)
     {
         assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'getNamedElementImpl' must not be null";
-        final Object namedElemenetImpl = globalXmlToElementMap.get(xsdNamedElement);
-        if (namedElemenetImpl == null)
+        assert clazz != null : "Parameter 'clazz' of method 'getNamedElementImpl' must not be null";
+
+        final Object namedElementImpl = globalXmlToElementMap.get(xsdNamedElement);
+        if (namedElementImpl == null)
         {
             LOGGER.error("Named element '{}' must have been created before.", xsdNamedElement.getFqName());
             return null;
         }
-        else if (!(namedElemenetImpl instanceof NamedElementImpl))
+        else if (!clazz.isAssignableFrom(namedElementImpl.getClass()))
         {
-            LOGGER.error("Unexpected class '{}'", namedElemenetImpl.getClass().getCanonicalName());
+            LOGGER.error("Expected class '{}' but was '{}'", clazz.getName(), namedElementImpl.getClass().getName());
             return null;
         }
-        return (NamedElementImpl) namedElemenetImpl;
+        return (T) namedElementImpl;
     }
 
-    private void connectNamedElementOriginal(final XsdNamedElement xsdNamedElement)
+    private void connectPhysicalElementOriginal(final XsdPhysicalElement xsdPhysicalElement)
     {
-        assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'connectNamedElementOriginal' must not be null";
-
-        final NamedElementImpl nextNamedElementImpl = getNamedElementImpl(xsdNamedElement);
-        if (nextNamedElementImpl == null)
+        assert xsdPhysicalElement != null : "Parameter 'xsdPhysicalElement' of method 'connectPhysicalElementOriginal' must not be null";
+        final PhysicalElementImpl nextPhysicalElementImpl = getNamedElementImpl(xsdPhysicalElement, PhysicalElementImpl.class);
+        if (nextPhysicalElementImpl == null)
         {
-            LOGGER.error("No named element impl found for xsd named element '{}'.", xsdNamedElement.getFqName());
+            LOGGER.error("No named element impl found for xsd named element '{}'.", xsdPhysicalElement.getFqName());
             return;
         }
 
-        final Object nextXsdOriginal = xsdNamedElement.getOriginal();
+        final Object nextXsdOriginal = xsdPhysicalElement.getOriginalLocation();
         if (nextXsdOriginal != null)
         {
-            if (nextXsdOriginal instanceof XsdNamedElement)
+            if (nextXsdOriginal instanceof XsdPhysicalElement)
             {
-                final NamedElementImpl original = getNamedElementImpl((XsdNamedElement) nextXsdOriginal);
+                final PhysicalElementImpl original = getNamedElementImpl((XsdNamedElement) nextXsdOriginal, PhysicalElementImpl.class);
                 if (original != null)
                 {
-                    if (nextNamedElementImpl.getClass().equals(original.getClass()))
+                    if (nextPhysicalElementImpl.getClass().equals(original.getClass()))
                     {
-                        nextNamedElementImpl.setOriginal(original);
-                        original.setIsOriginal(true);
+                        nextPhysicalElementImpl.setOriginalLocation(original);
                     }
                     else
                     {
-                        LOGGER.error("Class info does not match for original connection '{}' vs '{}'.", nextNamedElementImpl.getClass().getName(),
+                        LOGGER.error("Class info does not match for original connection '{}' vs '{}'.", nextPhysicalElementImpl.getClass().getName(),
                                 original.getClass().getName());
                     }
                 }
                 else
                 {
-                    LOGGER.error("No named element impl found for original xsd named element '{}'.", ((XsdSourceFile) nextXsdOriginal).getFqName());
+                    LOGGER.error("No named element impl found for original xsd named element '{}'.",
+                            ((PhysicalElementImpl) nextXsdOriginal).getFqName());
                 }
             }
             else
@@ -351,30 +355,11 @@ public final class XmlReportReader extends XmlAccess
             {
                 for (final XsdSourceFile nextXsdSourceFile : nextXsdRootDirectory.getSourceElement())
                 {
-                    connectNamedElementOriginal(nextXsdSourceFile);
-                }
-
-                for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdRootDirectory.getPhysicalRecursiveElement())
-                {
-                    connectNamedElementOriginal(nextXsdPhysicalRecursiveElement);
-                }
-            }
-        }
-
-        //First we need the correct isOriginal() state - so do a 2nd pass
-        for (final XsdModule nextXsdModule : xsdWorkspace.getModule())
-        {
-            final Object nextModule = globalXmlToElementMap.get(nextXsdModule);
-            assert nextModule != null && nextModule instanceof ModuleImpl : "Unexpected class in method 'finishWorkspaceCreation': " + nextModule;
-            for (final XsdRootDirectory nextXsdRootDirectory : nextXsdModule.getRootDirectory())
-            {
-                for (final XsdSourceFile nextXsdSourceFile : nextXsdRootDirectory.getSourceElement())
-                {
-                    ((ModuleImpl) nextModule).addElement(getNamedElementImpl(nextXsdSourceFile));
+                    connectPhysicalElementOriginal(nextXsdSourceFile);
                 }
                 for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdRootDirectory.getPhysicalRecursiveElement())
                 {
-                    ((ModuleImpl) nextModule).addElement(getNamedElementImpl(nextXsdPhysicalRecursiveElement));
+                    connectPhysicalElementOriginal(nextXsdPhysicalRecursiveElement);
                 }
             }
         }
@@ -401,9 +386,10 @@ public final class XmlReportReader extends XmlAccess
 
         final XsdElementKind sourceKind = (XsdElementKind) xsdSourceFile.getKind();
         final SourceFileImpl sourceFileImpl = new SourceFileImpl(sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
-                xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), rootDirectoryImpl.getRelativePath());
+                xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), xsdSourceFile.isLocationOnly(),
+                rootDirectoryImpl.getRelativePath());
         rootDirectoryImpl.addSourceFile(sourceFileImpl);
-        //        namedElementContainerImpl.addElement(sourceFileImpl);
+        namedElementContainerImpl.addElement(sourceFileImpl);
         globalXmlToElementMap.put(xsdSourceFile, sourceFileImpl);
     }
 
@@ -434,7 +420,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
         final PhysicalRecursiveElementImpl physicalRecursiveElementImpl = new PhysicalRecursiveElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdPhysicalRecursiveElement.getName(), xsdPhysicalRecursiveElement.getPresentationName(),
-                xsdPhysicalRecursiveElement.getFqName());
+                xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly());
 
         final String nextRelativeDirectory = xsdPhysicalRecursiveElement.getRelativeDirectoryPath();
         if (nextRelativeDirectory != null)
@@ -557,7 +543,7 @@ public final class XmlReportReader extends XmlAccess
         for (final XsdResolution nextResolution : report.getResolutions().getResolution())
         {
             ResolutionType type;
-            if (nextResolution.isIsRefactoring())
+            if (nextResolution.isRefactoring())
             {
                 type = ResolutionType.REFACTORING;
             }
@@ -601,7 +587,7 @@ public final class XmlReportReader extends XmlAccess
                 issues.add(nextIssueImpl);
             }
 
-            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isIsApplicable(),
+            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isApplicable(),
                     nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(), nextResolution.getAssignee(),
                     nextResolution.getDate().toString());
             softwareSystem.addResolution(resolution);
@@ -1009,7 +995,7 @@ public final class XmlReportReader extends XmlAccess
             assert to != null : "'to' element (" + toId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
             assert to != null && to instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + to;
             final DependencyIssueImpl dependencyIssue = new DependencyIssueImpl(issueType, nextDependencyIssue.getDescription(), issueProvider,
-                    nextDependencyIssue.isHasResolution(), (INamedElement) from, (INamedElement) to, nextDependencyIssue.getLine());
+                    nextDependencyIssue.isResolved(), (INamedElement) from, (INamedElement) to, nextDependencyIssue.getLine());
             softwareSystem.addIssue(dependencyIssue);
             globalXmlIdToIssueMap.put(nextDependencyIssue, dependencyIssue);
         }
@@ -1034,7 +1020,7 @@ public final class XmlReportReader extends XmlAccess
             }
 
             final DuplicateCodeBlockIssueImpl duplicate = new DuplicateCodeBlockIssueImpl(nextDuplicate.getFqName(), nextDuplicate.getName(),
-                    nextDuplicate.getDescription(), issueType, issueProvider, nextDuplicate.isHasResolution(), occurrences);
+                    nextDuplicate.getDescription(), issueType, issueProvider, nextDuplicate.isResolved(), occurrences);
             duplicate.setBlockSize(nextDuplicate.getBlockSize());
             softwareSystem.addDuplicateCodeBlock(duplicate);
 
@@ -1058,8 +1044,7 @@ public final class XmlReportReader extends XmlAccess
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
-                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(),
-                        analyzer);
+                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isResolved(), analyzer);
 
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
@@ -1100,7 +1085,7 @@ public final class XmlReportReader extends XmlAccess
             final IMetricThreshold metricThreshold = (IMetricThreshold) threshold;
             final ThresholdViolationIssue issue = new ThresholdViolationIssue(issueType,
                     nextXsdMetricThresholdViolationIssue.getDescription() != null ? nextXsdMetricThresholdViolationIssue.getDescription() : "",
-                    issueProvider, (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.isHasResolution(),
+                    issueProvider, (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.isResolved(),
                     nextXsdMetricThresholdViolationIssue.getLine(), nextXsdMetricThresholdViolationIssue.getMetricValue(), metricThreshold);
             softwareSystemImpl.addIssue(issue);
             globalXmlIdToIssueMap.put(nextXsdMetricThresholdViolationIssue, issue);
@@ -1127,7 +1112,7 @@ public final class XmlReportReader extends XmlAccess
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
 
             final AbstractElementIssueImpl issue = new ElementIssueImpl(issueType, next.getDescription() != null ? next.getDescription() : "",
-                    issueProvider, (INamedElement) affected, next.isHasResolution(), next.getLine());
+                    issueProvider, (INamedElement) affected, next.isResolved(), next.getLine());
             softwareSystem.addIssue(issue);
             globalXmlIdToIssueMap.put(next, issue);
         }
