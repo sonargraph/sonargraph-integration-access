@@ -26,16 +26,20 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFileLookup;
 
 public final class ModuleImpl extends LanguageBasedContainerImpl implements IModule
 {
     private static final long serialVersionUID = -4617725409511641491L;
+    private final ISourceFileLookup sourceFileLookup;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl,
-            final String language)
+            final String language, final ISourceFileLookup sourceFileLookup)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
+        assert sourceFileLookup != null : "Parameter 'sourceFileLookup' of method 'ModuleImpl' must not be null";
+        this.sourceFileLookup = sourceFileLookup;
     }
 
     @Override
@@ -51,7 +55,7 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
     public Optional<ISourceFile> getSourceForElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceForElement' must not be null";
-        final Optional<ISourceFile> sourceFileOpt = namedElement.getSourceFile();
+        final Optional<? extends ISourceFile> sourceFileOpt = sourceFileLookup.getSourceFile(namedElement);
         if (sourceFileOpt.isPresent())
         {
             final ISourceFile sourceFile = sourceFileOpt.get();

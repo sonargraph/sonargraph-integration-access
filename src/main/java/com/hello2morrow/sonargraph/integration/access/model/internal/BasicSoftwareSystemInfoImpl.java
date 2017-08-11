@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 
-public class BasicSoftwareSystemInfoImpl implements IBasicSoftwareSystemInfo
+public final class BasicSoftwareSystemInfoImpl implements IBasicSoftwareSystemInfo
 {
     private static final long serialVersionUID = 6625145907168624519L;
     private final String systemPath;

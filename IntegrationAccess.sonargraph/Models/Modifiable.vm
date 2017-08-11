@@ -29,22 +29,5 @@
             <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:print(com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta,java.lang.String)" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:out"></dependencyPattern>
             <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:printUsage()" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:out"></dependencyPattern>
         </ignore>
-        <ignore date="2017-07-16T15:39:52.414Z" description="For now.">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ComponentCycleGroup"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:./Modifiable.vm:7cfd0de4fa439bbbf464664a6d9101de|c560919c18953708f49e6885e3321443</elementPattern>
-            <matching info="Java Module 'com.hello2morrow:sonargraph-integration-access' contains 3 cyclic components">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:IFilePathElement.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2017-07-16T15:40:00.048Z" description="For now.">
-            <type class="Script" name="Supertype uses subtype" descriptor="./SuperTypeUsesSubType.xml:Warning"></type>
-            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java:INamedElement:getSourceFile()" to="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java:ISourceFile"></dependencyPattern>
-        </ignore>
-        <delete assignedTo="" priority="Medium" date="2017-08-11T20:04:56.293Z" description="">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DeleteRefactoring" descriptor="043ef0877cb84c730a207451d9493cb0"></type>
-            <dependencyPattern type="ParserDependencyEndpoint" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:INamedElement.java:INamedElement:getSourceFile()" to="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:ISourceFile.java:ISourceFile"></dependencyPattern>
-        </delete>
     </resolutions>
 </virtualModel>

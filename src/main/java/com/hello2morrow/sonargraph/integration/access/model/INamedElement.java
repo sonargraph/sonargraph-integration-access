@@ -27,8 +27,6 @@ public interface INamedElement extends IElement
 
     public String getFqName();
 
-    public Optional<ISourceFile> getSourceFile();
-
     public boolean isLocationOnly();
 
     public Optional<? extends INamedElement> getOriginalLocation();

@@ -286,16 +286,16 @@ public final class XmlReportReader extends XmlAccess
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
 
         final String systemDescription = report.getSystemDescription() != null ? report.getSystemDescription().trim() : "";
-        final SoftwareSystemImpl softwareSystem = new SoftwareSystemImpl("SoftwareSystem", "System", report.getSystemId(), report.getName(),
+        final SoftwareSystemImpl softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", report.getSystemId(), report.getName(),
                 systemDescription, report.getSystemPath(), report.getVersion(), report.getTimestamp().toGregorianCalendar().getTimeInMillis(),
                 report.getCurrentVirtualModel());
-        softwareSystem.addElement(softwareSystem);
+        softwareSystemImpl.addElement(softwareSystemImpl);
 
-        processAnalyzers(softwareSystem, report);
-        processFeatures(softwareSystem, report);
+        processAnalyzers(softwareSystemImpl, report);
+        processFeatures(softwareSystemImpl, report);
 
         final XsdWorkspace xsdWorkspace = report.getWorkspace();
-        createWorkspaceElements(softwareSystem, xsdWorkspace, result);
+        createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
         if (result.isFailure())
         {
             return Optional.empty();
@@ -303,26 +303,28 @@ public final class XmlReportReader extends XmlAccess
 
         finishWorkspaceElementCreation(xsdWorkspace);
 
-        createSystemElements(softwareSystem, report);
+        createSystemElements(softwareSystemImpl, report);
         createModuleElements(report);
         createExternalScopeElements(report);
 
-        connectSourceFiles();
+        connectSourceFiles(softwareSystemImpl);
 
-        processMetrics(softwareSystem, report);
-        processMetricThresholds(softwareSystem, report);
+        processMetrics(softwareSystemImpl, report);
+        processMetricThresholds(softwareSystemImpl, report);
 
-        processIssues(softwareSystem, report, result);
-        processResolutions(softwareSystem, report, result);
+        processIssues(softwareSystemImpl, report, result);
+        processResolutions(softwareSystemImpl, report, result);
 
         globalXmlToElementMap.clear();
         globalXmlIdToIssueMap.clear();
 
-        return Optional.of(softwareSystem);
+        return Optional.of(softwareSystemImpl);
     }
 
-    private void connectSourceFiles()
+    private void connectSourceFiles(final SoftwareSystemImpl softwareSystemImpl)
     {
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'connectSourceFiles' must not be null";
+
         for (final Map.Entry<Object, IElement> entry : globalXmlToElementMap.entrySet())
         {
             if (entry.getKey() instanceof XsdNamedElement)
@@ -334,11 +336,9 @@ public final class XmlReportReader extends XmlAccess
                     final IElement sourceFile = globalXmlToElementMap.get(source);
                     if (sourceFile != null)
                     {
-                        assert sourceFile instanceof ISourceFile : "Unexpected class '" + sourceFile.getClass().getCanonicalName() + "'";
-                        assert entry.getValue() instanceof NamedElementImpl : "Unexpected class '" + entry.getValue().getClass().getCanonicalName()
-                                + "'";
-                        final NamedElementImpl namedElement = (NamedElementImpl) entry.getValue();
-                        namedElement.setSourceFile((ISourceFile) sourceFile);
+                        assert sourceFile instanceof SourceFileImpl : "Unexpected class '" + sourceFile.getClass().getName() + "'";
+                        assert entry.getValue() instanceof NamedElementImpl : "Unexpected class '" + entry.getValue().getClass().getName() + "'";
+                        softwareSystemImpl.addSourceFile((NamedElementImpl) entry.getValue(), (SourceFileImpl) sourceFile);
                     }
                 }
             }
@@ -378,9 +378,10 @@ public final class XmlReportReader extends XmlAccess
         globalXmlToElementMap.put(xsdNamedElement, namedElementImpl);
     }
 
-    private void createSourceFileImpl(final NamedElementContainerImpl namedElementContainerImpl, final RootDirectoryImpl rootDirectoryImpl,
-            final XsdSourceFile xsdSourceFile)
+    private void createSourceFileImpl(final SoftwareSystemImpl softwareSystemImpl, final NamedElementContainerImpl namedElementContainerImpl,
+            final RootDirectoryImpl rootDirectoryImpl, final XsdSourceFile xsdSourceFile)
     {
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createSourceFileImpl' must not be null";
         assert rootDirectoryImpl != null : "Parameter 'rootDirectoryImpl' of method 'createSourceFileImpl' must not be null";
         assert xsdSourceFile != null : "Parameter 'xsdSourceFile' of method 'createSourceFileImpl' must not be null";
 
@@ -389,6 +390,7 @@ public final class XmlReportReader extends XmlAccess
                 xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), xsdSourceFile.isLocationOnly(),
                 rootDirectoryImpl.getRelativePath());
         rootDirectoryImpl.addSourceFile(sourceFileImpl);
+        softwareSystemImpl.addSourceFile(sourceFileImpl, sourceFileImpl);
         namedElementContainerImpl.addElement(sourceFileImpl);
         globalXmlToElementMap.put(xsdSourceFile, sourceFileImpl);
     }
@@ -408,13 +410,14 @@ public final class XmlReportReader extends XmlAccess
         globalXmlToElementMap.put(xsdProgrammingElement, programmingElementImpl);
     }
 
-    private void createPhysicalRecursiveElenentImpl(final NamedElementContainerImpl namedElementContainerImpl,
-            final IProgrammingElementContainer programmingElementContainer, final XsdPhysicalRecursiveElement xsdPhysicalRecursiveElement,
-            final String relativeRootDirectory)
+    private void createPhysicalRecursiveElementImpl(final SoftwareSystemImpl softwareSystemImpl,
+            final NamedElementContainerImpl namedElementContainerImpl, final IProgrammingElementContainer programmingElementContainer,
+            final XsdPhysicalRecursiveElement xsdPhysicalRecursiveElement, final String relativeRootDirectory)
     {
-        assert namedElementContainerImpl != null : "Parameter 'namedElementContainerImpl' of method 'createPhysicalRecursiveElenentImpl' must not be null";
-        assert programmingElementContainer != null : "Parameter 'programmingElementContainer' of method 'createPhysicalRecursiveElenentImpl' must not be null";
-        assert xsdPhysicalRecursiveElement != null : "Parameter 'xsdPhysicalRecursiveElement' of method 'createPhysicalRecursiveElenentImpl' must not be null";
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createPhysicalRecursiveElementImpl' must not be null";
+        assert namedElementContainerImpl != null : "Parameter 'namedElementContainerImpl' of method 'createPhysicalRecursiveElementImpl' must not be null";
+        assert programmingElementContainer != null : "Parameter 'programmingElementContainer' of method 'createPhysicalRecursiveElementImpl' must not be null";
+        assert xsdPhysicalRecursiveElement != null : "Parameter 'xsdPhysicalRecursiveElement' of method 'createPhysicalRecursiveElementImpl' must not be null";
         //'relativeRootDirectory' might be 'null';
 
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
@@ -435,8 +438,8 @@ public final class XmlReportReader extends XmlAccess
                 final IElement element = globalXmlToElementMap.get(nextSource);
                 if (element != null)
                 {
-                    assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
-                    physicalRecursiveElementImpl.setSourceFile((ISourceFile) element);
+                    assert element instanceof SourceFileImpl : "Unexpected element class: " + element.getClass().getName();
+                    softwareSystemImpl.addSourceFile(physicalRecursiveElementImpl, (SourceFileImpl) element);
                 }
                 else
                 {
@@ -454,8 +457,10 @@ public final class XmlReportReader extends XmlAccess
         namedElementContainerImpl.addElement(physicalRecursiveElementImpl);
     }
 
-    private void createRootDirectoryImpl(final LanguageBasedContainerImpl languageBasedContainerImpl, final XsdRootDirectory xsdRootDirectory)
+    private void createRootDirectoryImpl(final SoftwareSystemImpl softwareSystemImpl, final LanguageBasedContainerImpl languageBasedContainerImpl,
+            final XsdRootDirectory xsdRootDirectory)
     {
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createRootDirectoryImpl' must not be null";
         assert languageBasedContainerImpl != null : "Parameter 'languageBasedContainerImpl' of method 'createRootDirectoryImpl' must not be null";
         assert xsdRootDirectory != null : "Parameter 'xsdRootDirectory' of method 'createRootDirectoryImpl' must not be null";
 
@@ -468,12 +473,12 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : xsdRootDirectory.getPhysicalRecursiveElement())
         {
-            createPhysicalRecursiveElenentImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdPhysicalRecursiveElement,
+            createPhysicalRecursiveElementImpl(softwareSystemImpl, languageBasedContainerImpl, rootDirectoryImpl, nextXsdPhysicalRecursiveElement,
                     rootDirectoryImpl.getRelativePath());
         }
         for (final XsdSourceFile nextXsdSourceFile : xsdRootDirectory.getSourceElement())
         {
-            createSourceFileImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdSourceFile);
+            createSourceFileImpl(softwareSystemImpl, languageBasedContainerImpl, rootDirectoryImpl, nextXsdSourceFile);
         }
         for (final XsdProgrammingElement nextXsdProgrammingElement : xsdRootDirectory.getProgrammingElement())
         {
@@ -481,9 +486,9 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystem, final XsdWorkspace xsdWorkspace, final OperationResult result)
+    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystemImpl, final XsdWorkspace xsdWorkspace, final OperationResult result)
     {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'createWorkspaceElements' must not be null";
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createWorkspaceElements' must not be null";
         assert xsdWorkspace != null : "Parameter 'report' of method 'createWorkspaceElements' must not be null";
         assert result != null : "Parameter 'result' of method 'createWorkspaceElements' must not be null";
 
@@ -492,14 +497,14 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
             final ModuleImpl nextModuleImpl = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), nextXsdModule.getName(),
                     nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(),
-                    softwareSystem.getMetaDataAccess(), softwareSystem.getElementRegistry(), nextXsdModule.getLanguage());
-            softwareSystem.addModule(nextModuleImpl);
+                    softwareSystemImpl.getMetaDataAccess(), softwareSystemImpl.getElementRegistry(), nextXsdModule.getLanguage(), softwareSystemImpl);
+            softwareSystemImpl.addModule(nextModuleImpl);
             nextModuleImpl.addElement(nextModuleImpl);
             globalXmlToElementMap.put(nextXsdModule, nextModuleImpl);
 
             for (final XsdRootDirectory nextXsdRootDirectory : nextXsdModule.getRootDirectory())
             {
-                createRootDirectoryImpl(nextModuleImpl, nextXsdRootDirectory);
+                createRootDirectoryImpl(softwareSystemImpl, nextModuleImpl, nextXsdRootDirectory);
             }
         }
 
@@ -508,18 +513,18 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind nextExternalKind = (XsdElementKind) nextXsdExternal.getKind();
             final ExternalImpl nextExternalImpl = new ExternalImpl(nextExternalKind.getStandardKind(), nextExternalKind.getPresentationKind(),
                     nextXsdExternal.getName(), nextXsdExternal.getPresentationName(), nextXsdExternal.getFqName(), nextXsdExternal.getDescription(),
-                    softwareSystem.getMetaDataAccess(), softwareSystem.getElementRegistry(), nextXsdExternal.getLanguage());
-            softwareSystem.addExternal(nextExternalImpl);
+                    softwareSystemImpl.getMetaDataAccess(), softwareSystemImpl.getElementRegistry(), nextXsdExternal.getLanguage());
+            softwareSystemImpl.addExternal(nextExternalImpl);
             nextExternalImpl.addElement(nextExternalImpl);
             globalXmlToElementMap.put(nextXsdExternal, nextExternalImpl);
 
             for (final XsdRootDirectory nextXsdRootDirectory : nextXsdExternal.getRootDirectory())
             {
-                createRootDirectoryImpl(nextExternalImpl, nextXsdRootDirectory);
+                createRootDirectoryImpl(softwareSystemImpl, nextExternalImpl, nextXsdRootDirectory);
             }
             for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdExternal.getPhysicalRecursiveElement())
             {
-                createPhysicalRecursiveElenentImpl(nextExternalImpl, nextExternalImpl, nextXsdPhysicalRecursiveElement, null);
+                createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, nextXsdPhysicalRecursiveElement, null);
             }
             for (final XsdProgrammingElement nextXsdProgrammingElement : nextXsdExternal.getProgrammingElement())
             {

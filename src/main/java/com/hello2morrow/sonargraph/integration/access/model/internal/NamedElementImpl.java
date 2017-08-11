@@ -20,7 +20,6 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
@@ -29,7 +28,6 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     private final String kind;
     private final String presentationKind;
     private final String fqName;
-    private ISourceFile m_source;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
@@ -48,39 +46,18 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         this(kind, presentationKind, name, presentationName, fqName, "");
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getKind()
-     */
     @Override
     public final String getKind()
     {
         return kind;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getFqName()
-     */
     @Override
     public final String getFqName()
     {
         return fqName;
     }
 
-    public final void setSourceFile(final ISourceFile source)
-    {
-        assert source != null : "Parameter 'source' of method 'setSourceFile' must not be null";
-        m_source = source;
-    }
-
-    @Override
-    public final Optional<ISourceFile> getSourceFile()
-    {
-        return Optional.ofNullable(m_source);
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getPresentationKind()
-     */
     @Override
     public final String getPresentationKind()
     {

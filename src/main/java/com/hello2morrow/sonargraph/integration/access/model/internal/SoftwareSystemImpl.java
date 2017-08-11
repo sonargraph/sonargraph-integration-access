@@ -43,6 +43,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -70,6 +71,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
+    private final Map<NamedElementImpl, SourceFileImpl> namedElementToSourceFile = new HashMap<>();
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
@@ -98,27 +100,18 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         this.virtualModel = virtualModel;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getSystemId()
-     */
     @Override
     public String getSystemId()
     {
         return systemId;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getPath()
-     */
     @Override
     public String getPath()
     {
         return path;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getBaseDir()
-     */
     @Override
     public String getBaseDir()
     {
@@ -130,27 +123,18 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         baseDir = baseDirectory;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getVersion()
-     */
     @Override
     public String getVersion()
     {
         return version;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getTimestamp()
-     */
     @Override
     public long getTimestamp()
     {
         return timestamp;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getModules()
-     */
     @Override
     public Map<String, IModule> getModules()
     {
@@ -374,9 +358,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return getMetaDataAccess().getMetricCategories();
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem#getMetricLevels()
-     */
     @Override
     public Map<String, IMetricLevel> getMetricLevels()
     {
@@ -426,5 +407,19 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public List<IMetricThreshold> getMetricThresholds()
     {
         return Collections.unmodifiableList(m_thresholds);
+    }
+
+    public void addSourceFile(final NamedElementImpl forNamedElement, final SourceFileImpl sourceFile)
+    {
+        assert forNamedElement != null : "Parameter 'forNamedElement' of method 'addSourceFile' must not be null";
+        assert sourceFile != null : "Parameter 'sourceFile' of method 'addSourceFile' must not be null";
+        final SourceFileImpl previous = namedElementToSourceFile.put(forNamedElement, sourceFile);
+        assert previous == null : "'previous' of method 'addSourceFile' must be null";
+    }
+
+    public Optional<SourceFileImpl> getSourceFile(final INamedElement namedElement)
+    {
+        assert namedElement != null : "Parameter 'namedElement' of method 'getSourceFile' must not be null";
+        return Optional.ofNullable(namedElementToSourceFile.get(namedElement));
     }
 }
