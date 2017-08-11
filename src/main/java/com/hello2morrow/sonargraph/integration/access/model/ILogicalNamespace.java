@@ -17,14 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-/**
- * Useful if you want to replace patterns in paths to make reports look-alike that come from different locations representing the same system.
- */
-public interface INamedElementAdjuster
+public interface ILogicalNamespace extends ILogicalElement
 {
-    public String adjustFqName(String standardKind, String fqName);
-
-    public String adjustName(String standardKind, String name);
-
-    public String adjustPresentationName(String standardKind, String presentationName);
+    //Marker
 }

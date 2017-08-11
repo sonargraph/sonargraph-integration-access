@@ -18,47 +18,16 @@
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public final class RootDirectoryImpl extends NamedElementImpl implements IRootDirectory
+public final class RootDirectoryImpl extends NamedElementImpl implements IProgrammingElementContainer, IRootDirectory
 {
-    static final class NamedElementComparator implements Comparator<INamedElement>
-    {
-        @Override
-        public int compare(final INamedElement e1, final INamedElement e2)
-        {
-            assert e1 != null : "Parameter 'e1' of method 'compare' must not be null";
-            assert e2 != null : "Parameter 'e2' of method 'compare' must not be null";
-
-            if (e1 == e2)
-            {
-                return 0;
-            }
-
-            int compared = e1.getFqName().compareTo(e2.getFqName());
-            if (compared == 0)
-            {
-                if (e1.getOriginal().isPresent())
-                {
-                    assert !e2.getOriginal().isPresent() : "No original expected for: " + e2;
-                    compared = 1;
-                }
-                assert !e1.getOriginal().isPresent() : "No original expected for: " + e1;
-                compared = -1;
-            }
-
-            return compared;
-        }
-    }
-
     private static final long serialVersionUID = -5510302644511647715L;
     private final Set<SourceFileImpl> sourceFileImpls = new TreeSet<>(new NamedElementComparator());
     private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
@@ -69,9 +38,6 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IRootDi
         super(kind, presentationKind, relativePath, relativePath, fqName);
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IRootDirectory#getAbsolutePath()
-     */
     @Override
     public String getRelativePath()
     {
@@ -91,6 +57,7 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IRootDi
         return Collections.unmodifiableSet(sourceFileImpls);
     }
 
+    @Override
     public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl)
     {
         assert physicalRecursiveElementImpl != null : "Parameter 'physicalRecursiveElementImpl' of method 'addPhysicalRecursiveElement' must not be null";
@@ -105,6 +72,7 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IRootDi
         return Collections.unmodifiableSet(physicalRecursiveElementImpls);
     }
 
+    @Override
     public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl)
     {
         assert programmingElementImpl != null : "Parameter 'programmingElementImpl' of method 'addProgrammingElement' must not be null";

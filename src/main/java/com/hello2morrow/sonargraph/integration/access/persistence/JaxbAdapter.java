@@ -65,39 +65,36 @@ final class JaxbAdapter<T>
     private final Marshaller writer;
     private Listener marshallListener;
 
-    private JaxbAdapter(final JAXBContextCreator creator, final URL... schemaUrl) throws XmlProcessingException
+    private static Source[] getSources(final URL... schemaUrl) throws IOException
     {
-        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'JaxbAdapter' must not be null";
+        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'getSources' must not be null";
 
         final Source[] sources = new Source[schemaUrl.length];
+        for (int i = 0; i < schemaUrl.length; i++)
+        {
+            sources[i] = new StreamSource(schemaUrl[i].openStream());
+        }
+        return sources;
+    }
+
+    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws XmlProcessingException
+    {
+        assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
+        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'JaxbAdapter' must not be null";
+
         try
         {
-            for (int i = 0; i < schemaUrl.length; i++)
-            {
-                sources[i] = new StreamSource(schemaUrl[i].openStream());
-            }
-
-            final JAXBContext jaxbContextProject = creator.get();
+            final JAXBContext jaxbContextProject = JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader());
+            final Source[] sources = getSources(schemaUrl);
             final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
-
-        reader = createReader(jaxbContextProject, schema);
-        writer = createWriter(jaxbContextProject);
+            reader = createReader(jaxbContextProject, schema);
+            writer = createWriter(jaxbContextProject);
 
         }
         catch (final SAXException | IOException | JAXBException ex)
         {
             throw new XmlProcessingException("Failed to initialize JaxbAdapter", ex);
         }
-    }
-
-    public JaxbAdapter(final Class<T> jaxbClass, final URL... schemaUrl) throws XmlProcessingException
-    {
-        this(() -> JAXBContext.newInstance(jaxbClass), schemaUrl);
-    }
-
-    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws XmlProcessingException
-    {
-        this(() -> JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader()), schemaUrl);
     }
 
     private static Unmarshaller createReader(final JAXBContext jaxbContext, final Schema schema) throws JAXBException

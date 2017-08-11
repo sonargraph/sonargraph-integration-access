@@ -20,7 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model;
 import java.util.Map;
 import java.util.Optional;
 
-public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, IElementContainer
+public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElementContainer
 {
     @Override
     public String getSystemId();

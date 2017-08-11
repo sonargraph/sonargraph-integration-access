@@ -21,24 +21,19 @@ import java.io.File;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface ISonargraphSystemController
 {
-    public OperationResult loadSystemReport(File systemReportFile, boolean enableSchemaValidation);
-
     /**
-     * Loads an XML report file without XML schema validation.
+     * Loads an XML report file.
      * @param systemReportFile
      * @return {@link OperationResult} containing info about any errors.
      */
     public OperationResult loadSystemReport(File systemReportFile);
 
-    public OperationResult loadSystemReport(File systemReportFile, INamedElementAdjuster adjuster);
-
     /**
-     * Loads an XML report file without validation, generated on a different machine.
+     * Loads an XML report file, generated on a different machine.
      * Useful for clients that are just interested in the report's results and have the same workspace on disk.
      * For example, running the Sonargraph analysis on one machine, the SonarQube analysis on another.
      *
@@ -47,8 +42,6 @@ public interface ISonargraphSystemController
      * @return {@link OperationResult} containing info about any errors.
      */
     public OperationResult loadSystemReport(File systemReportFile, File baseDirectory);
-
-    public OperationResult loadSystemReport(File systemReportFile, File baseDirectory, boolean enableSchemaValidation);
 
     public ISoftwareSystem getSoftwareSystem();
 

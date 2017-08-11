@@ -17,11 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Set;
-
-public interface IElementContainer extends INamedElement, IElementWithDescription
+public interface ILogicalProgrammingElement extends ILogicalElement
 {
-    public Set<INamedElement> getElements(String elementKind);
-
-    public Set<String> getElementKinds();
+    //Marker
 }

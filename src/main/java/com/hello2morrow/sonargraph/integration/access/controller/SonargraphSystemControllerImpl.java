@@ -24,7 +24,6 @@ import java.util.Optional;
 import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
@@ -36,76 +35,38 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     private SoftwareSystemImpl softwareSystem;
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final boolean enableSchemaValidation)
-    {
-        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
-
-        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
-        if (!systemReportFile.exists())
-        {
-            result.addError(IOMessageCause.FILE_NOT_FOUND);
-        }
-        else if (!systemReportFile.canRead())
-        {
-            result.addError(IOMessageCause.NO_PERMISSION);
-        }
-
-        if (result.isFailure())
-        {
-            return result;
-        }
-
-        final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, enableSchemaValidation);
-        if (!readResult.isPresent() || result.isFailure())
-        {
-            return result;
-        }
-
-        softwareSystem = readResult.get();
-        return result;
-    }
-
-    @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final INamedElementAdjuster adjuster)
-    {
-        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
-        assert adjuster != null : "Parameter 'adjuster' of method 'loadSystemReport' must not be null";
-
-        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
-        if (!systemReportFile.exists())
-        {
-            result.addError(IOMessageCause.FILE_NOT_FOUND);
-        }
-        else if (!systemReportFile.canRead())
-        {
-            result.addError(IOMessageCause.NO_PERMISSION);
-        }
-
-        if (result.isFailure())
-        {
-            return result;
-        }
-
-        final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, adjuster);
-        if (!readResult.isPresent() || result.isFailure())
-        {
-            return result;
-        }
-
-        softwareSystem = readResult.get();
-        return result;
-    }
-
-    @Override
     public OperationResult loadSystemReport(final File systemReportFile)
     {
-        return loadSystemReport(systemReportFile, false);
+        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
+
+        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
+        if (!systemReportFile.exists())
+        {
+            result.addError(IOMessageCause.FILE_NOT_FOUND);
+        }
+        else if (!systemReportFile.canRead())
+        {
+            result.addError(IOMessageCause.NO_PERMISSION);
+        }
+
+        if (result.isFailure())
+        {
+            return result;
+        }
+
+        final XmlReportReader persistence = new XmlReportReader();
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result);
+        if (!readResult.isPresent() || result.isFailure())
+        {
+            return result;
+        }
+
+        softwareSystem = readResult.get();
+        return result;
     }
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory, final boolean enableSchemaValidation)
+    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
         assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
@@ -126,7 +87,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
             return result;
         }
 
-        result.addMessagesFrom(loadSystemReport(systemReportFile, enableSchemaValidation));
+        result.addMessagesFrom(loadSystemReport(systemReportFile));
         if (result.isFailure())
         {
             return result;
@@ -134,12 +95,6 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         softwareSystem.setBaseDir(Paths.get(baseDirectory.getAbsolutePath()).normalize().toString());
 
         return result;
-    }
-
-    @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
-    {
-        return loadSystemReport(systemReportFile, baseDirectory, false);
     }
 
     @Override

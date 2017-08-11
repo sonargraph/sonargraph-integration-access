@@ -27,7 +27,7 @@ public final class ProgrammingElementImpl extends NamedElementImpl implements IP
     public ProgrammingElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final int line)
     {
-        super(kind, presentationKind, name, presentationName, fqName, "");
+        super(kind, presentationKind, name, presentationName, fqName);
         this.line = line;
     }
 

@@ -25,12 +25,21 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 public final class SourceFileImpl extends PhysicalElementImpl implements ISourceFile
 {
     private static final long serialVersionUID = -2940999235312739954L;
+    private final String relativeRootDirectory;
 
     public SourceFileImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, relativeRootDirectory);
+        super(kind, presentationKind, name, presentationName, fqName);
+        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'SourceFileImpl' must not be empty";
+        this.relativeRootDirectory = relativeRootDirectory;
         setSourceFile(this);
+    }
+
+    @Override
+    public final String getRelativeRootDirectory()
+    {
+        return relativeRootDirectory;
     }
 
     @Override
@@ -57,5 +66,11 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     {
         assert original != null && original instanceof SourceFileImpl : "Unexpected class in method 'setOriginal': " + original;
         super.setOriginal(original);
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + "\nrelativeRootDirectory:" + relativeRootDirectory;
     }
 }

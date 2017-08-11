@@ -375,10 +375,11 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
                             else if (contained instanceof IPhysicalRecursiveElement)
                             {
                                 final IPhysicalRecursiveElement nextPhysicalRecursiveElement = (IPhysicalRecursiveElement) contained;
+                                final Optional<String> relRootDirOpt = nextPhysicalRecursiveElement.getRelativeRootDirectory();
                                 final Optional<String> relDirOpt = nextPhysicalRecursiveElement.getRelativeDirectory();
-                                if (relDirOpt.isPresent())
+                                if (relRootDirOpt.isPresent() && relDirOpt.isPresent())
                                 {
-                                    final String directory = concatenate(nextPhysicalRecursiveElement.getRelativeRootDirectory(), relDirOpt.get());
+                                    final String directory = concatenate(relRootDirOpt.get(), relDirOpt.get());
                                     addDirectoryIssue(directory, nextIssue, resultMap);
                                 }
                             }

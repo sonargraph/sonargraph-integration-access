@@ -24,12 +24,25 @@ import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveEl
 public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl implements IPhysicalRecursiveElement
 {
     private static final long serialVersionUID = 84185773903958748L;
+    private String relativeRootDirectory;
     private String relativeDirectory;
 
     public PhysicalRecursiveElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String relativeRootDirectory)
+            final String fqName)
     {
-        super(kind, presentationKind, name, presentationName, fqName, relativeRootDirectory);
+        super(kind, presentationKind, name, presentationName, fqName);
+    }
+
+    public void setRelativeRootDirectory(final String relativeRootDirectory)
+    {
+        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'setRelativeRootDirectory' must not be empty";
+        this.relativeDirectory = relativeRootDirectory;
+    }
+
+    @Override
+    public Optional<String> getRelativeRootDirectory()
+    {
+        return Optional.ofNullable(relativeRootDirectory);
     }
 
     public void setRelativeDirectory(final String relativeDirectory)
@@ -47,11 +60,16 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
     @Override
     public String toString()
     {
-        if (relativeDirectory == null)
+        final StringBuilder builder = new StringBuilder(super.toString());
+        if (relativeRootDirectory != null)
         {
-            return super.toString();
+            builder.append("\nrelativeRootDirectory:").append(relativeRootDirectory);
+        }
+        if (relativeDirectory != null)
+        {
+            builder.append("\nrelativeDirectory:").append(relativeDirectory);
         }
 
-        return super.toString() + "\nrelativeDirectory:" + relativeDirectory;
+        return builder.toString();
     }
 }

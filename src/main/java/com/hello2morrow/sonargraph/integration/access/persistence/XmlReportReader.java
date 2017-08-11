@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -48,7 +47,6 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -62,12 +60,15 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCo
 import com.hello2morrow.sonargraph.integration.access.model.internal.ElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LanguageBasedContainerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalNamespaceImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricIdImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevelImpl;
@@ -75,6 +76,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricProvi
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricValueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementContainerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
@@ -93,7 +95,10 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDupl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFeature;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
@@ -125,89 +130,41 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSyst
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
 
-public final class XmlReportReader extends AbstractXmlReportAccess
+public final class XmlReportReader extends XmlAccess
 {
-    private static class NoOpAdjuster implements INamedElementAdjuster
-    {
-        @Override
-        public String adjustFqName(final String standardKind, final String fqName)
-        {
-            return fqName;
-        }
-
-        @Override
-        public String adjustName(final String standardKind, final String name)
-        {
-            return name;
-        }
-
-        @Override
-        public String adjustPresentationName(final String standardKind, final String presentationName)
-        {
-            return presentationName;
-        }
-    }
-
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
     private static final String SOFTWARE_SYSTEM_STANDARD_KIND = "SoftwareSystem";
     private static final String MODULE_STANDARD_KIND_SUFFIX = "Module";
-
+    private static final String EXTERNAL_STANDARD_KIND_SUFFIX = "External";
     private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
     private final Map<Object, IssueImpl> globalXmlIdToIssueMap = new HashMap<>();
+    private File currentlyReading;
 
     /**
-     * Reads an XML report and allows to enable XML schema validation.
-     * For big reports with thousands of elements, issues and resolutions the schema validation should be switched off.
-     *
-     * @param reportFile XML file that is expected to exist and be readable.
-     * @param result Contains info about errors.
-     * @param enableSchemaValidation flag to switch XML validation off.
-     */
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result, final boolean enableSchemaValidation)
-    {
-        assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
-        assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
-        assert reportFile.canRead() : "Parameter 'reportFile' of method 'readReportFile' must be a file with read access";
-        assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
-
-        return internReadReportFile(reportFile, result, enableSchemaValidation, new NoOpAdjuster());
-    }
-
-    /**
-     * Reads an XML report without schema validation.
-     *
+     * Reads an XML report.
      * @param reportFile XML file that is expected to exist and be readable.
      * @param result Contains info about errors.
      */
     public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
     {
-        return internReadReportFile(reportFile, result, false, new NoOpAdjuster());
-    }
-
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result, final INamedElementAdjuster adjuster)
-    {
-        return internReadReportFile(reportFile, result, false, adjuster);
-    }
-
-    private Optional<SoftwareSystemImpl> internReadReportFile(final File reportFile, final OperationResult result,
-            final boolean enableSchemaValidation, final INamedElementAdjuster adjuster)
-    {
         assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
         assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
         assert reportFile.canRead() : "Parameter 'reportFile' of method 'readReportFile' must be a file with read access";
         assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
-        assert adjuster != null : "Parameter 'adjuster' of method 'internReadReportFile' must not be null";
+        assert currentlyReading == null : "'currentlyReading' of method 'readReportFile' must be null";
 
         JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter;
         try
         {
-            jaxbAdapter = createJaxbAdapter(enableSchemaValidation);
+            jaxbAdapter = createReportJaxbAdapter();
         }
         catch (final Exception e)
         {
             result.addError(IOMessageCause.READ_ERROR, "Failed to initialize JAXB", e);
             return Optional.empty();
         }
+
+        this.currentlyReading = reportFile;
 
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
 
@@ -217,7 +174,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             xmlRoot = jaxbAdapter.load(in, eventHandler);
             if (xmlRoot.isPresent())
             {
-                return convertXmlReportToPojo(xmlRoot.get().getValue(), adjuster, result);
+                return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
             }
         }
         catch (final Exception ex)
@@ -232,8 +189,32 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 result.addError(IOMessageCause.WRONG_FORMAT,
                         "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
             }
+            this.currentlyReading = null;
         }
+
         return Optional.empty();
+    }
+
+    private XsdElementKind getXsdElementKind(final XsdNamedElement xsdNamedElement)
+    {
+        assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'getXsdElementKind' must not be null";
+        assert currentlyReading != null : "'currentlyReading' of method 'getXsdElementKind' must not be null";
+
+        final Object kind = xsdNamedElement.getKind();
+        if (kind == null)
+        {
+            final String msg = "No associated element kind found for named element: " + xsdNamedElement.getFqName();
+            LOGGER.error(msg);
+            throw new NullPointerException(msg);
+        }
+        if (kind instanceof XsdElementKind == false)
+        {
+            final String msg = "Associated element kind is of wrong class '" + kind.getClass().getName() + "' for named element: "
+                    + xsdNamedElement.getFqName();
+            LOGGER.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+        return (XsdElementKind) kind;
     }
 
     private NamedElementImpl getNamedElementImpl(final XsdNamedElement xsdNamedElement)
@@ -295,12 +276,10 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final INamedElementAdjuster adjuster,
-            final OperationResult result)
+    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final OperationResult result)
     {
         assert report != null : "Parameter 'report' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
-        assert adjuster != null : "Parameter 'adjuster' of method 'convertXmlReportToPojo' must not be null";
 
         final String systemDescription = report.getSystemDescription() != null ? report.getSystemDescription().trim() : "";
         final SoftwareSystemImpl softwareSystem = new SoftwareSystemImpl("SoftwareSystem", "System", report.getSystemId(), report.getName(),
@@ -312,7 +291,7 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         processFeatures(softwareSystem, report);
 
         final XsdWorkspace xsdWorkspace = report.getWorkspace();
-        createWorkspaceElements(softwareSystem, xsdWorkspace, result, adjuster);
+        createWorkspaceElements(softwareSystem, xsdWorkspace, result);
         if (result.isFailure())
         {
             return Optional.empty();
@@ -320,19 +299,9 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
         finishWorkspaceElementCreation(xsdWorkspace);
 
-        processSystemElements(softwareSystem, report, adjuster);
-        createModuleElements(softwareSystem, report, adjuster);
-
-        for (final Entry<Object, IElement> nextEntry : globalXmlToElementMap.entrySet())
-        {
-            final Object nextXsdElement = nextEntry.getKey();
-            final IElement nextElement = nextEntry.getValue();
-
-            if (nextXsdElement instanceof XsdLogicalElement && nextElement instanceof LogicalElementImpl)
-            {
-                setDerivedFrom((XsdLogicalElement) nextXsdElement, (LogicalElementImpl) nextElement);
-            }
-        }
+        createSystemElements(softwareSystem, report);
+        createModuleElements(report);
+        createExternalScopeElements(report);
 
         connectSourceFiles();
 
@@ -411,46 +380,22 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private NamedElementImpl createNamedElementImpl(final INamedElementAdjuster adjuster, final XsdNamedElement xsdNamedElement,
+    private void createNamedElementImpl(final NamedElementContainerImpl namedElementContainerImpl, final XsdNamedElement xsdNamedElement,
             final XsdElementKind xsdElementKind)
     {
-        assert adjuster != null : "Parameter 'adjuster' of method 'createNamedElementImpl' must not be null";
+        assert namedElementContainerImpl != null : "Parameter 'namedElementContainerImpl' of method 'createNamedElementImpl' must not be null";
         assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'createNamedElementImpl' must not be null";
         assert xsdElementKind != null : "Parameter 'xsdElementKind' of method 'createNamedElementImpl' must not be null";
 
-        final String standardKind = xsdElementKind.getStandardKind();
-        final String name = adjuster.adjustName(standardKind, xsdNamedElement.getName());
-        final String presentationName = adjuster.adjustPresentationName(standardKind, xsdNamedElement.getPresentationName());
-        final String fqName = adjuster.adjustFqName(standardKind, xsdNamedElement.getFqName());
-        final NamedElementImpl namedElementImpl = new NamedElementImpl(standardKind, xsdElementKind.getPresentationKind(), name, presentationName,
-                fqName);
-        return namedElementImpl;
+        final NamedElementImpl namedElementImpl = new NamedElementImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
+                xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName());
+        namedElementContainerImpl.addElement(namedElementImpl);
+        globalXmlToElementMap.put(xsdNamedElement, namedElementImpl);
     }
 
-    private RootDirectoryImpl createRootDirectoryImpl(final INamedElementAdjuster adjuster,
-            final LanguageBasedContainerImpl languageBasedContainerImpl, final XsdRootDirectory xsdRootDirectory)
-    {
-        assert adjuster != null : "Parameter 'adjuster' of method 'createRootDirectoryImpl' must not be null";
-        assert languageBasedContainerImpl != null : "Parameter 'languageBasedContainerImpl' of method 'createRootDirectoryImpl' must not be null";
-        assert xsdRootDirectory != null : "Parameter 'xsdRootDirectory' of method 'createRootDirectoryImpl' must not be null";
-
-        final XsdElementKind elementKind = (XsdElementKind) xsdRootDirectory.getKind();
-        final String presentationKind = elementKind.getPresentationKind();
-        final String standardKind = elementKind.getStandardKind();
-        final String fqName = adjuster.adjustFqName(standardKind, xsdRootDirectory.getFqName());
-        final String presentationName = adjuster.adjustPresentationName(standardKind, xsdRootDirectory.getPresentationName());
-        final RootDirectoryImpl rootDirectoryImpl = new RootDirectoryImpl(standardKind, presentationKind, presentationName, fqName);
-        languageBasedContainerImpl.addRootDirectory(rootDirectoryImpl);
-        languageBasedContainerImpl.addElement(rootDirectoryImpl);
-        globalXmlToElementMap.put(xsdRootDirectory, rootDirectoryImpl);
-
-        return rootDirectoryImpl;
-    }
-
-    private void createSourceFileImpl(final INamedElementAdjuster adjuster, final RootDirectoryImpl rootDirectoryImpl,
+    private void createSourceFileImpl(final NamedElementContainerImpl namedElementContainerImpl, final RootDirectoryImpl rootDirectoryImpl,
             final XsdSourceFile xsdSourceFile)
     {
-        assert adjuster != null : "Parameter 'adjuster' of method 'createSourceFileImpl' must not be null";
         assert rootDirectoryImpl != null : "Parameter 'rootDirectoryImpl' of method 'createSourceFileImpl' must not be null";
         assert xsdSourceFile != null : "Parameter 'xsdSourceFile' of method 'createSourceFileImpl' must not be null";
 
@@ -458,100 +403,117 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         final SourceFileImpl sourceFileImpl = new SourceFileImpl(sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
                 xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), rootDirectoryImpl.getRelativePath());
         rootDirectoryImpl.addSourceFile(sourceFileImpl);
+        //        namedElementContainerImpl.addElement(sourceFileImpl);
         globalXmlToElementMap.put(xsdSourceFile, sourceFileImpl);
     }
 
-    private ProgrammingElementImpl createProgrammingElementImpl(final INamedElementAdjuster adjuster,
-            final XsdProgrammingElement xsdProgrammingElement, final XsdElementKind xsdElementKind)
+    private void createProgrammingElementImpl(final NamedElementContainerImpl namedElementContainerImpl,
+            final IProgrammingElementContainer programmingElementContainer, final XsdProgrammingElement xsdProgrammingElement)
     {
-        assert adjuster != null : "Parameter 'adjuster' of method 'createNamedElementImpl' must not be null";
+        assert programmingElementContainer != null : "Parameter 'programmingElementContainer' of method 'createProgrammingElementImpl' must not be null";
         assert xsdProgrammingElement != null : "Parameter 'xsdProgrammingElement' of method 'createProgrammingElementImpl' must not be null";
-        assert xsdElementKind != null : "Parameter 'xsdElementKind' of method 'createNamedElementImpl' must not be null";
 
-        final String standardKind = xsdElementKind.getStandardKind();
-        final String name = adjuster.adjustName(standardKind, xsdProgrammingElement.getName());
-        final String presentationName = adjuster.adjustPresentationName(standardKind, xsdProgrammingElement.getPresentationName());
-        final String fqName = adjuster.adjustFqName(standardKind, xsdProgrammingElement.getFqName());
-        return new ProgrammingElementImpl(standardKind, xsdElementKind.getPresentationKind(), name, presentationName, fqName,
-                xsdProgrammingElement.getLine());
+        final XsdElementKind xsdElementKind = getXsdElementKind(xsdProgrammingElement);
+        final ProgrammingElementImpl programmingElementImpl = new ProgrammingElementImpl(xsdElementKind.getStandardKind(),
+                xsdElementKind.getPresentationKind(), xsdProgrammingElement.getName(), xsdProgrammingElement.getPresentationName(),
+                xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine());
+        programmingElementContainer.addProgrammingElement(programmingElementImpl);
+        namedElementContainerImpl.addElement(programmingElementImpl);
+        globalXmlToElementMap.put(xsdProgrammingElement, programmingElementImpl);
     }
 
-    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystem, final XsdWorkspace xsdWorkspace, final OperationResult result,
-            final INamedElementAdjuster adjuster)
+    private void createPhysicalRecursiveElenentImpl(final NamedElementContainerImpl namedElementContainerImpl,
+            final IProgrammingElementContainer programmingElementContainer, final XsdPhysicalRecursiveElement xsdPhysicalRecursiveElement,
+            final String relativeRootDirectory)
+    {
+        assert namedElementContainerImpl != null : "Parameter 'namedElementContainerImpl' of method 'createPhysicalRecursiveElenentImpl' must not be null";
+        assert programmingElementContainer != null : "Parameter 'programmingElementContainer' of method 'createPhysicalRecursiveElenentImpl' must not be null";
+        assert xsdPhysicalRecursiveElement != null : "Parameter 'xsdPhysicalRecursiveElement' of method 'createPhysicalRecursiveElenentImpl' must not be null";
+        //'relativeRootDirectory' might be 'null';
+
+        final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
+        final PhysicalRecursiveElementImpl physicalRecursiveElementImpl = new PhysicalRecursiveElementImpl(xsdElementKind.getStandardKind(),
+                xsdElementKind.getPresentationKind(), xsdPhysicalRecursiveElement.getName(), xsdPhysicalRecursiveElement.getPresentationName(),
+                xsdPhysicalRecursiveElement.getFqName());
+
+        final String nextRelativeDirectory = xsdPhysicalRecursiveElement.getRelativeDirectoryPath();
+        if (nextRelativeDirectory != null)
+        {
+            physicalRecursiveElementImpl.setRelativeDirectory(nextRelativeDirectory);
+        }
+        else
+        {
+            final Object nextSource = xsdPhysicalRecursiveElement.getSource();
+            if (nextSource != null)
+            {
+                final IElement element = globalXmlToElementMap.get(nextSource);
+                if (element != null)
+                {
+                    assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
+                    physicalRecursiveElementImpl.setSourceFile((ISourceFile) element);
+                }
+                else
+                {
+                    //TODO warn
+                }
+            }
+        }
+
+        if (relativeRootDirectory != null)
+        {
+            physicalRecursiveElementImpl.setRelativeRootDirectory(relativeRootDirectory);
+        }
+        globalXmlToElementMap.put(xsdPhysicalRecursiveElement, physicalRecursiveElementImpl);
+        programmingElementContainer.addPhysicalRecursiveElement(physicalRecursiveElementImpl);
+        namedElementContainerImpl.addElement(physicalRecursiveElementImpl);
+    }
+
+    private void createRootDirectoryImpl(final LanguageBasedContainerImpl languageBasedContainerImpl, final XsdRootDirectory xsdRootDirectory)
+    {
+        assert languageBasedContainerImpl != null : "Parameter 'languageBasedContainerImpl' of method 'createRootDirectoryImpl' must not be null";
+        assert xsdRootDirectory != null : "Parameter 'xsdRootDirectory' of method 'createRootDirectoryImpl' must not be null";
+
+        final XsdElementKind xsdElementKind = (XsdElementKind) xsdRootDirectory.getKind();
+        final RootDirectoryImpl rootDirectoryImpl = new RootDirectoryImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
+                xsdRootDirectory.getPresentationName(), xsdRootDirectory.getFqName());
+        languageBasedContainerImpl.addRootDirectory(rootDirectoryImpl);
+        languageBasedContainerImpl.addElement(rootDirectoryImpl);
+        globalXmlToElementMap.put(xsdRootDirectory, rootDirectoryImpl);
+
+        for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : xsdRootDirectory.getPhysicalRecursiveElement())
+        {
+            createPhysicalRecursiveElenentImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdPhysicalRecursiveElement,
+                    rootDirectoryImpl.getRelativePath());
+        }
+        for (final XsdSourceFile nextXsdSourceFile : xsdRootDirectory.getSourceElement())
+        {
+            createSourceFileImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdSourceFile);
+        }
+        for (final XsdProgrammingElement nextXsdProgrammingElement : xsdRootDirectory.getProgrammingElement())
+        {
+            createProgrammingElementImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdProgrammingElement);
+        }
+    }
+
+    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystem, final XsdWorkspace xsdWorkspace, final OperationResult result)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'createWorkspaceElements' must not be null";
         assert xsdWorkspace != null : "Parameter 'report' of method 'createWorkspaceElements' must not be null";
         assert result != null : "Parameter 'result' of method 'createWorkspaceElements' must not be null";
-        assert adjuster != null : "Parameter 'adjuster' of method 'createWorkspaceElements' must not be null";
 
-        for (final XsdModule xsdModule : xsdWorkspace.getModule())
+        for (final XsdModule nextXsdModule : xsdWorkspace.getModule())
         {
-            final XsdElementKind moduleKind = (XsdElementKind) xsdModule.getKind();
-            final ModuleImpl module = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), xsdModule.getName(),
-                    xsdModule.getPresentationName(), xsdModule.getFqName(), xsdModule.getDescription(), softwareSystem.getMetaDataAccess(),
-                    softwareSystem.getElementRegistry(), xsdModule.getLanguage());
-            softwareSystem.addModule(module);
-            module.addElement(module);
+            final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
+            final ModuleImpl nextModuleImpl = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), nextXsdModule.getName(),
+                    nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(),
+                    softwareSystem.getMetaDataAccess(), softwareSystem.getElementRegistry(), nextXsdModule.getLanguage());
+            softwareSystem.addModule(nextModuleImpl);
+            nextModuleImpl.addElement(nextModuleImpl);
+            globalXmlToElementMap.put(nextXsdModule, nextModuleImpl);
 
-            globalXmlToElementMap.put(xsdModule, module);
-            for (final XsdRootDirectory nextXsdRootDirectory : xsdModule.getRootDirectory())
+            for (final XsdRootDirectory nextXsdRootDirectory : nextXsdModule.getRootDirectory())
             {
-                final XsdElementKind elementKind = (XsdElementKind) nextXsdRootDirectory.getKind();
-                final String presentationKind = elementKind.getPresentationKind();
-                final String standardKind = elementKind.getStandardKind();
-                final String fqName = adjuster.adjustFqName(standardKind, nextXsdRootDirectory.getFqName());
-                final String presentationName = adjuster.adjustPresentationName(standardKind, nextXsdRootDirectory.getPresentationName());
-                final RootDirectoryImpl nextRootDirectoryImpl = new RootDirectoryImpl(standardKind, presentationKind, presentationName, fqName);
-                module.addRootDirectory(nextRootDirectoryImpl);
-                module.addElement(nextRootDirectoryImpl);
-                globalXmlToElementMap.put(nextXsdRootDirectory, nextRootDirectoryImpl);
-
-                for (final XsdSourceFile nextXsdSourceFile : nextXsdRootDirectory.getSourceElement())
-                {
-                    createSourceFileImpl(adjuster, nextRootDirectoryImpl, nextXsdSourceFile);
-                }
-
-                for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdRootDirectory.getPhysicalRecursiveElement())
-                {
-                    final XsdElementKind nextKind = (XsdElementKind) nextXsdPhysicalRecursiveElement.getKind();
-                    final PhysicalRecursiveElementImpl nextPhysicalRecursiveElement = new PhysicalRecursiveElementImpl(nextKind.getStandardKind(),
-                            nextKind.getPresentationKind(), nextXsdPhysicalRecursiveElement.getName(),
-                            nextXsdPhysicalRecursiveElement.getPresentationName(), nextXsdPhysicalRecursiveElement.getFqName(),
-                            nextRootDirectoryImpl.getRelativePath());
-                    final String nextRelativeDirectory = nextXsdPhysicalRecursiveElement.getRelativeDirectoryPath();
-                    if (nextRelativeDirectory != null)
-                    {
-                        nextPhysicalRecursiveElement.setRelativeDirectory(nextRelativeDirectory);
-                        globalXmlToElementMap.put(nextXsdPhysicalRecursiveElement, nextPhysicalRecursiveElement);
-                    }
-                    else
-                    {
-                        final Object nextSource = nextXsdPhysicalRecursiveElement.getSource();
-                        if (nextSource != null)
-                        {
-                            final IElement element = globalXmlToElementMap.get(nextSource);
-                            if (element != null)
-                            {
-                                assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
-                                nextPhysicalRecursiveElement.setSourceFile((ISourceFile) element);
-                                globalXmlToElementMap.put(nextXsdPhysicalRecursiveElement, nextPhysicalRecursiveElement);
-                            }
-                            else
-                            {
-                                //TODO warn
-                            }
-                        }
-                    }
-                    nextRootDirectoryImpl.addPhysicalRecursiveElement(nextPhysicalRecursiveElement);
-                }
-
-                for (final XsdProgrammingElement nextXsdProgrammingElement : nextXsdRootDirectory.getProgrammingElement())
-                {
-                    final ProgrammingElementImpl nextProgrammingElementImpl = createProgrammingElementImpl(adjuster, nextXsdProgrammingElement,
-                            elementKind);
-                    nextRootDirectoryImpl.addProgrammingElement(nextProgrammingElementImpl);
-                    globalXmlToElementMap.put(nextXsdProgrammingElement, nextProgrammingElementImpl);
-                }
+                createRootDirectoryImpl(nextModuleImpl, nextXsdRootDirectory);
             }
         }
 
@@ -563,32 +525,19 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                     softwareSystem.getMetaDataAccess(), softwareSystem.getElementRegistry(), nextXsdExternal.getLanguage());
             softwareSystem.addExternal(nextExternalImpl);
             nextExternalImpl.addElement(nextExternalImpl);
+            globalXmlToElementMap.put(nextXsdExternal, nextExternalImpl);
 
             for (final XsdRootDirectory nextXsdRootDirectory : nextXsdExternal.getRootDirectory())
             {
-                final RootDirectoryImpl nextRootDirectoryImpl = createRootDirectoryImpl(adjuster, nextExternalImpl, nextXsdRootDirectory);
-
-                //TODO as above
-                for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdRootDirectory.getPhysicalRecursiveElement())
-                {
-                    //TODO
-                }
-                for (final XsdSourceFile nextXsdSourceFile : nextXsdRootDirectory.getSourceElement())
-                {
-                    createSourceFileImpl(adjuster, nextRootDirectoryImpl, nextXsdSourceFile);
-                }
-                for (final XsdProgrammingElement nextXsdProgrammingElement : nextXsdRootDirectory.getProgrammingElement())
-                {
-                    //TODO
-                }
+                createRootDirectoryImpl(nextExternalImpl, nextXsdRootDirectory);
             }
             for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdExternal.getPhysicalRecursiveElement())
             {
-                //TODO
+                createPhysicalRecursiveElenentImpl(nextExternalImpl, nextExternalImpl, nextXsdPhysicalRecursiveElement, null);
             }
             for (final XsdProgrammingElement nextXsdProgrammingElement : nextXsdExternal.getProgrammingElement())
             {
-                //TODO
+                createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, nextXsdProgrammingElement);
             }
         }
     }
@@ -621,8 +570,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 catch (final Exception e)
                 {
                     LOGGER.error("Failed to process resolution type '" + nextResolution.getType() + "'", e);
-                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                            "Resolution type '" + nextResolution.getType() + "' is not supported and will be ignored.");
+                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Resolution type '" + nextResolution.getType()
+                            + "' is not supported and will be ignored.");
                     continue;
                 }
             }
@@ -635,8 +584,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process priority type '" + nextResolution.getPrio() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                        "Priority type '" + nextResolution.getPrio() + "' is not supported, setting to '" + Priority.NONE + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Priority type '" + nextResolution.getPrio()
+                        + "' is not supported, setting to '" + Priority.NONE + "'");
                 priority = Priority.NONE;
             }
 
@@ -707,80 +656,6 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private void processSystemElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
-            final INamedElementAdjuster adjuster)
-    {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addSystemElements' must not be null";
-        assert report != null : "Parameter 'report' of method 'addSystemElements' must not be null";
-        final XsdSystemElements xsdSystemElements = report.getSystemElements();
-        if (xsdSystemElements != null)
-        {
-            for (final XsdNamedElement nextElement : xsdSystemElements.getElement())
-            {
-                final XsdElementKind elementKind = (XsdElementKind) nextElement.getKind();
-                NamedElementImpl add = null;
-                if (!SOFTWARE_SYSTEM_STANDARD_KIND.equals(elementKind.getStandardKind()))
-                {
-                    add = createNamedElementImpl(adjuster, nextElement, elementKind);
-                    softwareSystem.addElement(add);
-                }
-                else
-                {
-                    add = softwareSystem;
-                }
-                assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
-                globalXmlToElementMap.put(nextElement, add);
-            }
-            for (final XsdLogicalNamespace nextXsdLogicalNamespace : xsdSystemElements.getLogicalNamespace())
-            {
-                //TODO
-            }
-            for (final XsdLogicalProgrammingElement nextXsdLogicalProgrammingElement : xsdSystemElements.getLogicalProgrammingElement())
-            {
-                //TODO
-            }
-        }
-    }
-
-    private void createModuleElements(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
-            final INamedElementAdjuster adjuster)
-    {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'createModuleElements' must not be null";
-        assert report != null : "Parameter 'report' of method 'createModuleElements' must not be null";
-
-        for (final XsdModuleElements nextXsdModuleElements : report.getModuleElements())
-        {
-            final IElement moduleElement = globalXmlToElementMap.get(nextXsdModuleElements.getRef());
-            assert moduleElement != null : "Module does not exist";
-            final ModuleImpl module = (ModuleImpl) moduleElement;
-
-            for (final XsdNamedElement nextElement : nextXsdModuleElements.getElement())
-            {
-                final XsdElementKind elementKind = (XsdElementKind) nextElement.getKind();
-                NamedElementImpl add = null;
-                if (!elementKind.getStandardKind().endsWith(MODULE_STANDARD_KIND_SUFFIX))
-                {
-                    add = createNamedElementImpl(adjuster, nextElement, elementKind);
-                    module.addElement(add);
-                }
-                else
-                {
-                    add = module;
-                }
-                assert !globalXmlToElementMap.containsKey(nextElement) : "element already contained: " + nextElement.getFqName();
-                globalXmlToElementMap.put(nextElement, add);
-            }
-            for (final XsdLogicalNamespace nextXsdLogicalNamespace : nextXsdModuleElements.getLogicalNamespace())
-            {
-                //TODO
-            }
-            for (final XsdLogicalProgrammingElement nextXsdLogicalProgrammingElement : nextXsdModuleElements.getLogicalProgrammingElement())
-            {
-                //TODO
-            }
-        }
-    }
-
     private void setDerivedFrom(final XsdLogicalElement xsLogicalElement, final LogicalElementImpl logicalElementImpl)
     {
         assert xsLogicalElement != null : "Parameter 'xsLogicalElement' of method 'setDerivedFrom' must not be null";
@@ -804,6 +679,122 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             {
                 LOGGER.warn("No element has been created for 'derivedFrom':" + nextDerivedFrom);
             }
+        }
+    }
+
+    private void createLogicalElements(final NamedElementContainerImpl namedElementContainerImpl, final XsdElements xsdElements)
+    {
+        assert namedElementContainerImpl != null : "Parameter 'namedElementContainerImpl' of method 'createLogicalElements' must not be null";
+        assert xsdElements != null : "Parameter 'xsdElements' of method 'createLogicalElements' must not be null";
+
+        for (final XsdLogicalNamespace nextXsdLogicalNamespace : xsdElements.getLogicalNamespace())
+        {
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalNamespace);
+            final LogicalNamespaceImpl logicalNamespaceImpl = new LogicalNamespaceImpl(xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdLogicalNamespace.getName(), nextXsdLogicalNamespace.getPresentationName(),
+                    nextXsdLogicalNamespace.getFqName());
+            globalXmlToElementMap.put(nextXsdLogicalNamespace, logicalNamespaceImpl);
+            namedElementContainerImpl.addElement(logicalNamespaceImpl);
+            namedElementContainerImpl.addLogicalNamespace(logicalNamespaceImpl);
+            setDerivedFrom(nextXsdLogicalNamespace, logicalNamespaceImpl);
+        }
+        for (final XsdLogicalProgrammingElement nextXsdLogicalProgrammingElement : xsdElements.getLogicalProgrammingElement())
+        {
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalProgrammingElement);
+            final LogicalProgrammingElementImpl logicalProgrammingElementImpl = new LogicalProgrammingElementImpl(xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdLogicalProgrammingElement.getName(),
+                    nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName());
+            globalXmlToElementMap.put(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
+            namedElementContainerImpl.addElement(logicalProgrammingElementImpl);
+            namedElementContainerImpl.addLogicalProgrammingElement(logicalProgrammingElementImpl);
+            setDerivedFrom(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
+        }
+    }
+
+    private void createSystemElements(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createSystemElements' must not be null";
+        assert report != null : "Parameter 'report' of method 'createSystemElements' must not be null";
+
+        final XsdSystemElements xsdSystemElements = report.getSystemElements();
+        if (xsdSystemElements != null)
+        {
+            for (final XsdNamedElement nextElement : xsdSystemElements.getElement())
+            {
+                final XsdElementKind elementKind = getXsdElementKind(nextElement);
+                if (!SOFTWARE_SYSTEM_STANDARD_KIND.equals(elementKind.getStandardKind()))
+                {
+                    createNamedElementImpl(softwareSystemImpl, nextElement, elementKind);
+                }
+                else
+                {
+                    //We have the software system itself - register it!
+                    globalXmlToElementMap.put(nextElement, softwareSystemImpl);
+                }
+            }
+            createLogicalElements(softwareSystemImpl, xsdSystemElements);
+        }
+    }
+
+    private void createModuleElements(final XsdSoftwareSystemReport report)
+    {
+        assert report != null : "Parameter 'report' of method 'createModuleElements' must not be null";
+
+        for (final XsdModuleElements nextXsdModuleElements : report.getModuleElements())
+        {
+            final IElement nextElement = globalXmlToElementMap.get(nextXsdModuleElements.getRef());
+            assert nextElement != null && nextElement instanceof ModuleImpl : "Unexpected class in method 'createModuleElements': " + nextElement;
+            final ModuleImpl nextModuleImpl = (ModuleImpl) nextElement;
+
+            for (final XsdNamedElement nextModuleElement : nextXsdModuleElements.getElement())
+            {
+                final XsdElementKind elementKind = getXsdElementKind(nextModuleElement);
+                if (!elementKind.getStandardKind().endsWith(MODULE_STANDARD_KIND_SUFFIX))
+                {
+                    createNamedElementImpl(nextModuleImpl, nextModuleElement, elementKind);
+                }
+            }
+            createLogicalElements(nextModuleImpl, nextXsdModuleElements);
+        }
+    }
+
+    private void createExternalScopeElements(final XsdSoftwareSystemReport report)
+    {
+        assert report != null : "Parameter 'report' of method 'createModuleElements' must not be null";
+
+        for (final XsdExternalSystemScopeElements nextXsdExternalSystemScopeElements : report.getExternalSystemScopeElements())
+        {
+            final IElement nextElement = globalXmlToElementMap.get(nextXsdExternalSystemScopeElements.getRef());
+            assert nextElement != null && nextElement instanceof ExternalImpl : "Unexpected class in method 'createExternalScopeElements': "
+                    + nextElement;
+            final ExternalImpl nextExternalImpl = (ExternalImpl) nextElement;
+
+            for (final XsdNamedElement nextNamedElement : nextXsdExternalSystemScopeElements.getElement())
+            {
+                final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
+                if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
+                {
+                    createNamedElementImpl(nextExternalImpl, nextNamedElement, elementKind);
+                }
+            }
+            createLogicalElements(nextExternalImpl, nextXsdExternalSystemScopeElements);
+        }
+        for (final XsdExternalModuleScopeElements nextXsdExternalModuleScopeElements : report.getExternalModuleScopeElements())
+        {
+            final IElement nextElement = globalXmlToElementMap.get(nextXsdExternalModuleScopeElements.getRef());
+            assert nextElement != null && nextElement instanceof ExternalImpl : "Unexpected class in method 'createExternalScopeElements': "
+                    + nextElement;
+            final ExternalImpl nextExternalImpl = (ExternalImpl) nextElement;
+
+            for (final XsdNamedElement nextNamedElement : nextXsdExternalModuleScopeElements.getElement())
+            {
+                final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
+                if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
+                {
+                    createNamedElementImpl(nextExternalImpl, nextNamedElement, elementKind);
+                }
+            }
+            createLogicalElements(nextExternalImpl, nextXsdExternalModuleScopeElements);
         }
     }
 
@@ -833,8 +824,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
         globalXmlToElementMap.putAll(metricLevelXsdToPojoMap);
 
-        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(), categoryXsdToPojoMap,
-                providerXsdToPojoMap, metricLevelXsdToPojoMap);
+        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(),
+                categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap);
         for (final MetricIdImpl id : metricIdXsdToPojoMap.values())
         {
             softwareSystem.addMetricId(id);
@@ -886,14 +877,14 @@ public final class XmlReportReader extends AbstractXmlReportAccess
                 {
                     for (final XsdMetricIntValue nextIntValue : nextValue.getInt())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(),
-                                () -> new Integer(nextIntValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(), () -> new Integer(
+                                nextIntValue.getValue()));
                     }
 
                     for (final XsdMetricFloatValue nextFloatValue : nextValue.getFloat())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(),
-                                () -> new Float(nextFloatValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(), () -> new Float(
+                                nextFloatValue.getValue()));
                     }
                 }
             }
@@ -964,8 +955,8 @@ public final class XmlReportReader extends AbstractXmlReportAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
+                        + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
             final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
@@ -1066,9 +1057,9 @@ public final class XmlReportReader extends AbstractXmlReportAccess
 
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
-                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
-                        name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
-                        issueProvider, nextCycle.isHasResolution(), analyzer);
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
+                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isHasResolution(),
+                        analyzer);
 
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
@@ -1085,26 +1076,34 @@ public final class XmlReportReader extends AbstractXmlReportAccess
         }
     }
 
-    private void processThresholdIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processThresholdIssues(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport report)
     {
-        for (final XsdMetricThresholdViolationIssue next : report.getIssues().getElementIssues().getThresholdViolation())
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'processThresholdIssues' must not be null";
+        assert report != null : "Parameter 'report' of method 'processThresholdIssues' must not be null";
+
+        for (final XsdMetricThresholdViolationIssue nextXsdMetricThresholdViolationIssue : report.getIssues().getElementIssues()
+                .getThresholdViolation())
         {
-            final XsdElement affectedElement = (XsdElement) next.getAffectedElement();
-            final IElement affected = globalXmlToElementMap.get(affectedElement);
-            assert affected != null : "Affected element of issue '" + next + "' has not been processed";
-            assert affected != null && affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
+            final XsdElement nextAffectedXsdElement = (XsdElement) nextXsdMetricThresholdViolationIssue.getAffectedElement();
+            final IElement nextAffectedElement = globalXmlToElementMap.get(nextAffectedXsdElement);
+            assert nextAffectedElement != null : "Affected element of issue '" + nextXsdMetricThresholdViolationIssue
+                    + "' has not been processed - xsd element id: " + nextAffectedXsdElement.getId();
+            assert nextAffectedElement != null && nextAffectedElement instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': "
+                    + nextAffectedElement;
 
-            final IIssueType issueType = getIssueType(softwareSystem, next);
-            final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
+            final IIssueType issueType = getIssueType(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
+            final IIssueProvider issueProvider = getIssueProvider(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
 
-            final IElement threshold = globalXmlToElementMap.get(next.getThresholdRef());
-            assert threshold != null : "threshold has not been added to system for '" + next.getDescription() + "'";
+            final IElement threshold = globalXmlToElementMap.get(nextXsdMetricThresholdViolationIssue.getThresholdRef());
+            assert threshold != null : "threshold has not been added to system for '" + nextXsdMetricThresholdViolationIssue.getDescription() + "'";
 
             final IMetricThreshold metricThreshold = (IMetricThreshold) threshold;
-            final ThresholdViolationIssue issue = new ThresholdViolationIssue(issueType, next.getDescription() != null ? next.getDescription() : "",
-                    issueProvider, (INamedElement) affected, next.isHasResolution(), next.getLine(), next.getMetricValue(), metricThreshold);
-            softwareSystem.addIssue(issue);
-            globalXmlIdToIssueMap.put(next, issue);
+            final ThresholdViolationIssue issue = new ThresholdViolationIssue(issueType,
+                    nextXsdMetricThresholdViolationIssue.getDescription() != null ? nextXsdMetricThresholdViolationIssue.getDescription() : "",
+                    issueProvider, (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.isHasResolution(),
+                    nextXsdMetricThresholdViolationIssue.getLine(), nextXsdMetricThresholdViolationIssue.getMetricValue(), metricThreshold);
+            softwareSystemImpl.addIssue(issue);
+            globalXmlIdToIssueMap.put(nextXsdMetricThresholdViolationIssue, issue);
         }
     }
 

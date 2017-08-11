@@ -17,15 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import com.hello2morrow.sonargraph.integration.access.model.ILogicalProgrammingElement;
-
-public final class LogicalProgrammingElementImpl extends LogicalElementImpl implements ILogicalProgrammingElement
+public interface IProgrammingElementContainer
 {
-    private static final long serialVersionUID = -1327978719883213140L;
+    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl);
 
-    public LogicalProgrammingElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName)
-    {
-        super(kind, presentationKind, name, presentationName, fqName);
-    }
+    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl);
 }

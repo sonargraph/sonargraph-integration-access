@@ -17,7 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public final class LogicalNamespaceImpl extends LogicalElementImpl
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalNamespace;
+
+public final class LogicalNamespaceImpl extends LogicalElementImpl implements ILogicalNamespace
 {
     private static final long serialVersionUID = -5879292544809212404L;
 

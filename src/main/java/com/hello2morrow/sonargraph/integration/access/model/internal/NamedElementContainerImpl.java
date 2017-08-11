@@ -25,19 +25,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
-import com.hello2morrow.sonargraph.integration.access.model.IElementContainer;
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalNamespace;
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementContainer;
 
-public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
+public abstract class NamedElementContainerImpl extends NamedElementImpl implements INamedElementContainer
 {
     private static final long serialVersionUID = 995206422502257231L;
     private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
     private final Map<String, Set<INamedElement>> kindToNamedElements = new HashMap<>();
+    private final Set<LogicalNamespaceImpl> logicalNamespaces = new TreeSet<>(new NamedElementComparator());
+    private final Set<LogicalProgrammingElementImpl> logicalProgrammingElements = new TreeSet<>(new NamedElementComparator());
     private final MetaDataAccessImpl metaDataAccessImpl;
     private final ElementRegistryImpl elementRegistryImpl;
 
@@ -86,9 +91,6 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         return namedElements != null ? namedElements.contains(element) : false;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IElementContainer#getElements(java.lang.String)
-     */
     @Override
     public final Set<INamedElement> getElements(final String elementKind)
     {
@@ -97,13 +99,36 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         return namedElements != null ? Collections.unmodifiableSet(namedElements) : Collections.emptySet();
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IElementContainer#getElementKinds()
-     */
     @Override
     public final Set<String> getElementKinds()
     {
         return Collections.unmodifiableSet(kindToNamedElements.keySet());
+    }
+
+    public final void addLogicalNamespace(final LogicalNamespaceImpl logicalNamespaceImpl)
+    {
+        assert logicalNamespaceImpl != null : "Parameter 'logicalNamespaceImpl' of method 'addLogicalNamespace' must not be null";
+        final boolean success = logicalNamespaces.add(logicalNamespaceImpl);
+        assert success : "Logical namespace already added: " + logicalNamespaceImpl;
+    }
+
+    public final void addLogicalProgrammingElement(final LogicalProgrammingElementImpl logicalProgrammingElementImpl)
+    {
+        assert logicalProgrammingElementImpl != null : "Parameter 'logicalProgrammingElementImpl' of method 'addLogicalProgrammingElement' must not be null";
+        final boolean success = logicalProgrammingElements.add(logicalProgrammingElementImpl);
+        assert success : "Logical programming element already added: " + logicalProgrammingElementImpl;
+    }
+
+    @Override
+    public final Set<ILogicalNamespace> getLogicalNamespaces()
+    {
+        return Collections.unmodifiableSet(logicalNamespaces);
+    }
+
+    @Override
+    public final Set<ILogicalProgrammingElement> getLogicalProgrammingElements()
+    {
+        return Collections.unmodifiableSet(logicalProgrammingElements);
     }
 
     public final void addMetricValueForElement(final IMetricValue value, final INamedElement element)

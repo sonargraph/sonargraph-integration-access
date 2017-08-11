@@ -20,24 +20,9 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 public abstract class PhysicalElementImpl extends NamedElementImpl
 {
     private static final long serialVersionUID = 3837143486613207544L;
-    private final String relativeRootDirectory;
 
-    public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String relativeRootDirectory)
+    public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
     {
         super(kind, presentationKind, name, presentationName, fqName);
-        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'PhysicalElementImpl' must not be empty";
-        this.relativeRootDirectory = relativeRootDirectory;
-    }
-
-    public final String getRelativeRootDirectory()
-    {
-        return relativeRootDirectory;
-    }
-
-    @Override
-    public String toString()
-    {
-        return super.toString() + "\nrelativeRootDirectory:" + relativeRootDirectory;
     }
 }

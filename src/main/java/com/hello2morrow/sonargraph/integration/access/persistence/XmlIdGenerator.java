@@ -17,18 +17,18 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
-class XmlIdGenerator
+public final class XmlIdGenerator
 {
-    private static final String xmlElementIdFormat = "_%1x";
+    private static final String ID_FORMAT = "_%1x";
     private int m_idCounter;
 
     public XmlIdGenerator()
     {
-        m_idCounter = 0;
+        super();
     }
 
     public String getNextId()
     {
-        return String.format(xmlElementIdFormat, m_idCounter++);
+        return String.format(ID_FORMAT, m_idCounter++);
     }
 }

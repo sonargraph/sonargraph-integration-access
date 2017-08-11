@@ -15,17 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.internal;
+package com.hello2morrow.sonargraph.integration.access.model;
 
-import com.hello2morrow.sonargraph.integration.access.model.ILogicalProgrammingElement;
+import java.util.Set;
 
-public final class LogicalProgrammingElementImpl extends LogicalElementImpl implements ILogicalProgrammingElement
+public interface INamedElementContainer extends INamedElement, IElementWithDescription
 {
-    private static final long serialVersionUID = -1327978719883213140L;
+    public Set<String> getElementKinds();
 
-    public LogicalProgrammingElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName)
-    {
-        super(kind, presentationKind, name, presentationName, fqName);
-    }
+    public Set<INamedElement> getElements(String elementKind);
+
+    public Set<ILogicalNamespace> getLogicalNamespaces();
+
+    public Set<ILogicalProgrammingElement> getLogicalProgrammingElements();
 }

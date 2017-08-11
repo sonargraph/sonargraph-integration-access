@@ -23,25 +23,19 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-/**
- * Implementation which is able to decide to use a CDATA section for a string.
- * @see http://stackoverflow.com/questions/3136375/how-to-generate-cdata-block-using-jaxb
- */
-public class XmlCDataStreamWriter implements XMLStreamWriter
+final class XmlCDataStreamWriter implements XMLStreamWriter
 {
     private static final String CDATA_END = "]]>";
     private static final String CDATA_START = "<![CDATA[";
-
     /**
      * The CDATA section end string "]]>" must not be part of text in a CDATA section.
      * Split it into "]]" and ">", and put CDATA_END and CDATA_START in between.
      */
     private static final String CDATA_END_ENCODED = "]]" + CDATA_END + CDATA_START + ">";
-
     private static final Pattern XML_CHARS = Pattern.compile("[&<>]");
     private final XMLStreamWriter m_xmlStreamWriter;
 
-    public XmlCDataStreamWriter(final XMLStreamWriter writer)
+    XmlCDataStreamWriter(final XMLStreamWriter writer)
     {
         m_xmlStreamWriter = writer;
     }

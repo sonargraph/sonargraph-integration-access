@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public interface IPhysicalRecursiveElement extends INamedElement
 {
-    public String getRelativeRootDirectory();
+    public Optional<String> getRelativeRootDirectory();
 
     public Optional<String> getRelativeDirectory();
 }

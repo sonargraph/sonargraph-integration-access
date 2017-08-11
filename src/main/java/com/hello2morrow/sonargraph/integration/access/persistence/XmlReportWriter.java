@@ -77,7 +77,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWork
  * NOTE: Currently only writes the meta-data and workspace info of a software system to file.
  * TODO: Write further info to disk (not top-prio, but as a matter of completeness).
  */
-public class XmlReportWriter extends AbstractXmlReportAccess
+public final class XmlReportWriter extends XmlAccess
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportWriter.class);
 
@@ -87,7 +87,7 @@ public class XmlReportWriter extends AbstractXmlReportAccess
         assert reportFile != null : "Parameter 'reportFile' of method 'writeReport' must not be null";
 
         final JAXBElement<XsdSoftwareSystemReport> reportXml = convertPojoToXml(softwareSystem);
-        final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter = createJaxbAdapter(false);
+        final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter = createReportJaxbAdapter();
         jaxbAdapter.save(reportXml, reportFile);
     }
 

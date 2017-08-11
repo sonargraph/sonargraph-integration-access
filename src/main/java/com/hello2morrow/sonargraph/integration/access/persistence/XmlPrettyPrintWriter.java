@@ -26,27 +26,16 @@ import javax.xml.stream.XMLStreamWriter;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 
-/**
- * Decorator of an XMLStreamWriter implementation that produces formatted XML output.
- *
- * @author Ingmar
- *
- * @see http://www.ewernli.com/web/guest/47
- */
-public class XmlPrettyPrintWriter implements XMLStreamWriter
+final class XmlPrettyPrintWriter implements XMLStreamWriter
 {
-    public static final int INDENTATION_LENGTH = 4;
-
+    private static final int INDENTATION_LENGTH = 4;
     private static final char INDENT_CHAR = ' ';
-
-    //We don't use StringUtility.LINE_SEPARATOR, because we want the same output format on all platforms.
     private static final String LINEFEED_CHAR = "\n";
-
     private final XMLStreamWriter m_writer;
     private int m_depth = 0;
     private final Map<Integer, Boolean> m_hasChildElement = new HashMap<Integer, Boolean>();
 
-    public XmlPrettyPrintWriter(final XMLStreamWriter writer)
+    XmlPrettyPrintWriter(final XMLStreamWriter writer)
     {
         assert writer != null : "Parameter 'writer' of method 'XmlPrettyPrintWriter' must not be null";
         m_writer = writer;

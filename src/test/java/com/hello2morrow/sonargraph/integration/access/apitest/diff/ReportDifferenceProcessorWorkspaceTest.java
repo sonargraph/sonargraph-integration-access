@@ -32,55 +32,14 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
 public class ReportDifferenceProcessorWorkspaceTest
 {
-    private static class RootPathsReducer implements INamedElementAdjuster
-    {
-        private final String searchPattern;
-        private final String replacement;
-
-        public RootPathsReducer(final String searchPattern, final String replacement)
-        {
-            assert searchPattern != null && searchPattern.length() > 0 : "Parameter 'searchPattern' of method 'RootPathsReducer' must not be empty";
-            assert replacement != null : "Parameter 'replacement' of method 'RootPathsReducer' must not be null";
-
-            this.searchPattern = searchPattern;
-            this.replacement = replacement;
-        }
-
-        @Override
-        public String adjustFqName(final String standardKind, final String fqName)
-        {
-            return replace(fqName);
-        }
-
-        private String replace(final String name)
-        {
-            return name.replaceFirst(searchPattern, replacement);
-        }
-
-        @Override
-        public String adjustName(final String standardKind, final String name)
-        {
-            return replace(name);
-        }
-
-        @Override
-        public String adjustPresentationName(final String standardKind, final String presentationName)
-        {
-            return replace(presentationName);
-        }
-    }
-
     private static final String REPORT_1 = TestFixture.TEST_REPORT_WORKSPACE_1;
     private static final String REPORT_2 = TestFixture.TEST_REPORT_WORKSPACE_2;
-
-    private static final String REPORT_2_ADJUSTED = TestFixture.TEST_REPORT_WORKSPACE_2_ADJUSTED;
 
     @Test
     public void compareWorkspaceOfReports()
@@ -121,23 +80,5 @@ public class ReportDifferenceProcessorWorkspaceTest
 
         System.out.println("---- Delta (Architect vs Build) -----\n");
         System.out.println(workspaceDelta.toString());
-    }
-
-    @Test
-    public void compareWithAdjustingRootPaths()
-    {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(REPORT_1));
-        assertTrue(load1.toString(), load1.isSuccess());
-        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
-        assertEquals("Wrong number of modules", 2, softwareSystem.getModules().size());
-
-        final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
-
-        final OperationResult load2 = controller.loadSystemReport(new File(REPORT_2_ADJUSTED), new RootPathsReducer("\\.\\./test/", "\\./"));
-        assertTrue(load2.toString(), load2.isSuccess());
-
-        final IWorkspaceDelta workspaceDelta = diffProcessor.getWorkspaceDelta(controller.createSystemInfoProcessor());
-        assertTrue("Empty delta expected: " + workspaceDelta, workspaceDelta.isEmpty());
     }
 }

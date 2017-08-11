@@ -46,13 +46,11 @@ public class TestFixture
 
     public static final String ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT = "./src/test/resources/AlarmClock_ClassFileIssues.xml";
 
-    public static final String TEST_REPORT_WITH_UNKNOWN_ATTRIBUTES = "./src/test/resources/AlarmClock_unknownAttributes.xml";
     public static final String TEST_REPORT_STANDARD = "./src/test/resources/ReportStandard.xml";
     public static final String TEST_REPORT_WITH_DERIVED = "./src/test/resources/ReportWithDerived.xml";
 
     public static final String TEST_REPORT_WORKSPACE_1 = "./src/test/diff/Workspace_AlarmClockMain_01.xml";
     public static final String TEST_REPORT_WORKSPACE_2 = "./src/test/diff/Workspace_AlarmClockMain_02.xml";
-    public static final String TEST_REPORT_WORKSPACE_2_ADJUSTED = "./src/test/diff/WorkspaceMoved_AlarmClockMain_02.xml";
 
     public static final String TEST_REPORT_META_DATA_1 = "./src/test/diff/MetaData_AlarmClockMain_01.xml";
     public static final String TEST_REPORT_META_DATA_2 = "./src/test/diff/MetaData_AlarmClockMain_02.xml";
