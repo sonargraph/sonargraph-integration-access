@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<ns2:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/export" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/report" id="_0" systemId="12e517db0ad9967b199391d0da1a91bd" name="Test" version="9.4.4.100" systemPath="/Users/Dietmar/Documents/Workspaces/sgng-e4/Test/Test.sonargraph" timestamp="2017-08-01T07:27:31.504-05:00" currentVirtualModel="Modifiable.vm">
+<ns2:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/export" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/report" id="_0" systemId="12e517db0ad9967b199391d0da1a91bd" name="Test" version="9.4.4.100" systemPath="/Users/Dietmar/Documents/Workspaces/sgng-e4/Test/Test.sonargraph" timestamp="2017-08-11T18:40:40.325-05:00" currentVirtualModel="Modifiable.vm">
     <metaData>
         <issueProviders>
             <issueProvider id="_29" name="Core" presentationName="Core"></issueProvider>
@@ -90,12 +90,12 @@
         <module language="Java" description="" kind="_2e" fqName="Workspace:M1" id="_2d" name="M1" presentationName="M1">
             <rootDirectory kind="_30" fqName="Workspace:M1:Class|./bin" id="_2f" name="Class|./bin" presentationName="./bin"></rootDirectory>
             <rootDirectory kind="_32" fqName="Workspace:M1:./src" id="_31" name="./src" presentationName="./src">
-                <physicalRecursiveElement relativeDirectoryPath="./com/deeper/h4m" kind="_3c" fqName="Workspace:M1:./src:com:deeper:h4m" original="_4b" id="_3b" name="h4m" presentationName="com.deeper.h4m"></physicalRecursiveElement>
+                <physicalRecursiveElement relativeDirectoryPath="./com/deeper/h4m" originalLocation="_4b" kind="_3c" fqName="Workspace:M1:./src:com:deeper:h4m" id="_3b" name="h4m" presentationName="com.deeper.h4m"></physicalRecursiveElement>
                 <physicalRecursiveElement relativeDirectoryPath="./com/h3m" kind="_3c" fqName="Workspace:M1:./src:com:h3m" id="_3e" name="h3m" presentationName="com.h3m"></physicalRecursiveElement>
-                <physicalRecursiveElement relativeDirectoryPath="./com/h2m" kind="_3c" fqName="Workspace:M1:./src:com:h2m" id="_4b" name="h2m" presentationName="com.h2m"></physicalRecursiveElement>
+                <physicalRecursiveElement relativeDirectoryPath="./com/h2m" locationOnly="true" kind="_3c" fqName="Workspace:M1:./src:com:h2m" id="_4b" name="h2m" presentationName="com.h2m"></physicalRecursiveElement>
                 <sourceElement kind="_45" fqName="Workspace:M1:./src:com:h3m:Class2.java" id="_44" name="Class2.java" presentationName="./com/h3m/Class2.java"></sourceElement>
-                <sourceElement kind="_45" fqName="Workspace:M1:./src:com:h2m:Class1.java" id="_57" name="Class1.java" presentationName="./com/h2m/Class1.java"></sourceElement>
-                <sourceElement kind="_45" fqName="Workspace:M1:./src:com:deeper:h4m:Class1.java" original="_57" id="_58" name="Class1.java" presentationName="./com/deeper/h4m/Class1.java"></sourceElement>
+                <sourceElement locationOnly="true" kind="_45" fqName="Workspace:M1:./src:com:h2m:Class1.java" id="_57" name="Class1.java" presentationName="./com/deeper/h4m/Class1.java"></sourceElement>
+                <sourceElement originalLocation="_57" kind="_45" fqName="Workspace:M1:./src:com:deeper:h4m:Class1.java" id="_58" name="Class1.java" presentationName="./com/deeper/h4m/Class1.java"></sourceElement>
                 <programmingElement line="3" kind="_43" fqName="Workspace:M1:./src:com:h3m:Class2.java:Class2" source="_44" id="_42" name="Class2" presentationName="com.h3m.Class2"></programmingElement>
                 <programmingElement line="5" kind="_43" fqName="Workspace:M1:./src:com:deeper:h4m:Class1.java:Class1" source="_58" id="_56" name="Class1" presentationName="com.deeper.h4m.Class1"></programmingElement>
             </rootDirectory>
@@ -143,21 +143,21 @@
     <systemMetricValues elementRef="_0"></systemMetricValues>
     <issues modelName="./Modifiable.vm" numberOfIssues="14" numberOfUnresolvedIssues="1">
         <elementIssues>
-            <issue affectedElement="_55" id="_5d" type="_2c" provider="_29" description="System scope" line="5" hasResolution="true"></issue>
-            <issue affectedElement="_3b" id="_5e" type="_2b" provider="_29" description="Move to 'M1:./src/com.deeper' and rename to 'h4m'" hasResolution="true"></issue>
-            <issue affectedElement="_4a" id="_5f" type="_2c" provider="_29" description="Module 5" hasResolution="true"></issue>
-            <issue affectedElement="_48" id="_60" type="_2c" provider="_29" description="Logical Module 5" line="3" hasResolution="true"></issue>
-            <issue affectedElement="_48" id="_61" type="_2c" provider="_29" description="Logical Programming Element Module Scope" line="3" hasResolution="true"></issue>
-            <issue affectedElement="_52" id="_62" type="_2c" provider="_29" description="Review Logical Namespace External Module Scope" hasResolution="true"></issue>
-            <issue affectedElement="_46" id="_63" type="_2c" provider="_29" description="Logical Namespace Module Scope" hasResolution="true"></issue>
-            <issue affectedElement="_40" id="_64" type="_2c" provider="_29" description="Module Scope" line="3" hasResolution="true"></issue>
-            <issue affectedElement="_5a" id="_65" type="_2c" provider="_29" description="Logical Programming Element System Scope" line="3" hasResolution="true"></issue>
-            <issue affectedElement="_53" id="_66" type="_2c" provider="_29" description="Review Logical Programming Element External Module Scope" hasResolution="true"></issue>
-            <issue affectedElement="_59" id="_67" type="_2c" provider="_29" description="Logical Namespace System Scope" hasResolution="true"></issue>
-            <issue affectedElement="_4f" id="_68" type="_2c" provider="_29" description="Review Logical Programming Element External System Scope" hasResolution="true"></issue>
-            <issue affectedElement="_4c" id="_69" type="_2c" provider="_29" description="Review Logical Namespace External System Scope" hasResolution="true"></issue>
+            <issue affectedElement="_52" id="_5d" type="_2c" provider="_29" description="Review Logical Namespace External Module Scope" resolved="true"></issue>
+            <issue affectedElement="_59" id="_5e" type="_2c" provider="_29" description="Logical Namespace System Scope" resolved="true"></issue>
+            <issue affectedElement="_48" id="_5f" type="_2c" provider="_29" description="Logical Module 5" line="3" resolved="true"></issue>
+            <issue affectedElement="_48" id="_60" type="_2c" provider="_29" description="Logical Programming Element Module Scope" line="3" resolved="true"></issue>
+            <issue affectedElement="_3b" id="_61" type="_2b" provider="_29" description="Move to 'M1:./src/com.deeper' and rename to 'h4m'" resolved="true"></issue>
+            <issue affectedElement="_4c" id="_62" type="_2c" provider="_29" description="Review Logical Namespace External System Scope" resolved="true"></issue>
+            <issue affectedElement="_40" id="_63" type="_2c" provider="_29" description="Module Scope" line="3" resolved="true"></issue>
+            <issue affectedElement="_5a" id="_64" type="_2c" provider="_29" description="Logical Programming Element System Scope" line="3" resolved="true"></issue>
+            <issue affectedElement="_4f" id="_65" type="_2c" provider="_29" description="Review Logical Programming Element External System Scope" resolved="true"></issue>
+            <issue affectedElement="_46" id="_66" type="_2c" provider="_29" description="Logical Namespace Module Scope" resolved="true"></issue>
+            <issue affectedElement="_4a" id="_67" type="_2c" provider="_29" description="Module 5" resolved="true"></issue>
+            <issue affectedElement="_55" id="_68" type="_2c" provider="_29" description="System scope" line="5" resolved="true"></issue>
+            <issue affectedElement="_53" id="_69" type="_2c" provider="_29" description="Review Logical Programming Element External Module Scope" resolved="true"></issue>
             <cycleGroups analyzerRef="_17">
-                <cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:./Modifiable.vm:ba542e2d75d815fa3b517a88ca0a01b6|41b18934d00f6d70f6398019bef22613" id="_6a" type="_2a" provider="_29" description="2 cyclic packages" hasResolution="false">
+                <cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:./Modifiable.vm:ba542e2d75d815fa3b517a88ca0a01b6|41b18934d00f6d70f6398019bef22613" id="_6a" type="_2a" provider="_29" description="2 cyclic packages">
                     <element ref="_39"></element>
                     <element ref="_3d"></element>
                 </cycleGroup>
@@ -165,18 +165,18 @@
         </elementIssues>
     </issues>
     <resolutions numberOfResolutions="13">
-        <resolution type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1323341623" issueIds="_5e" description="" information="" assignee="" date="2017-07-24T10:20:15.596-05:00" isApplicable="true" isTask="true" isRefactoring="true"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:809860444" issueIds="_5d" description="System scope" information="Todo" assignee="Didi" date="2017-07-26T07:54:28.732-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1073859550" issueIds="_64" description="Module Scope" information="Todo" assignee="Dietmar" date="2017-07-26T07:54:48.118-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:898992975" issueIds="_5f" description="Module 5" information="Todo" assignee="Diego" date="2017-07-26T08:31:28.281-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1868390295" issueIds="_60" description="Logical Module 5" information="Todo" assignee="Duderino" date="2017-07-26T08:33:41.508-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1961455805" issueIds="_65" description="Logical Programming Element System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:55:53.157-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:989334213" issueIds="_67" description="Logical Namespace System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:13.571-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:590225702" issueIds="_63" description="Logical Namespace Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:44.478-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:646607667" issueIds="_61" description="Logical Programming Element Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:57:02.856-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:425300935" issueIds="_66" description="Review Logical Programming Element External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:59:27.863-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1670192139" issueIds="_62" description="Review Logical Namespace External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:07.864-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:829957709" issueIds="_69" description="Review Logical Namespace External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:46.883-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
-        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1151256762" issueIds="_68" description="Review Logical Programming Element External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:01:03.124-05:00" isApplicable="true" isTask="true" isRefactoring="false"></resolution>
+        <resolution type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1220956582" issueIds="_61" description="" information="" assignee="" date="2017-07-24T10:20:15.596-05:00" applicable="true" task="true" refactoring="true"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:948910626" issueIds="_68" description="System scope" information="Todo" assignee="Didi" date="2017-07-26T07:54:28.732-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1300688711" issueIds="_63" description="Module Scope" information="Todo" assignee="Dietmar" date="2017-07-26T07:54:48.118-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1021361122" issueIds="_67" description="Module 5" information="Todo" assignee="Diego" date="2017-07-26T08:31:28.281-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1303518636" issueIds="_5f" description="Logical Module 5" information="Todo" assignee="Duderino" date="2017-07-26T08:33:41.508-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:204300306" issueIds="_64" description="Logical Programming Element System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:55:53.157-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1982552583" issueIds="_5e" description="Logical Namespace System Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:13.571-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1328398475" issueIds="_66" description="Logical Namespace Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:56:44.478-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:313519039" issueIds="_60" description="Logical Programming Element Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:57:02.856-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1969562632" issueIds="_69" description="Review Logical Programming Element External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T06:59:27.863-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:1504883649" issueIds="_5d" description="Review Logical Namespace External Module Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:07.864-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:2025458148" issueIds="_62" description="Review Logical Namespace External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:00:46.883-05:00" applicable="true" task="true" refactoring="false"></resolution>
+        <resolution type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Modifiable.vm:363194207" issueIds="_65" description="Review Logical Programming Element External System Scope" information="Todo" assignee="Didi" date="2017-08-01T07:01:03.124-05:00" applicable="true" task="true" refactoring="false"></resolution>
     </resolutions>
 </ns2:report>

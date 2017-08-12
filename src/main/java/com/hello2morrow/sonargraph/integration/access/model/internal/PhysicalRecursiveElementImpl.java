@@ -36,7 +36,7 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
     public void setRelativeRootDirectory(final String relativeRootDirectory)
     {
         assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'setRelativeRootDirectory' must not be empty";
-        this.relativeDirectory = relativeRootDirectory;
+        this.relativeRootDirectory = relativeRootDirectory;
     }
 
     @Override
