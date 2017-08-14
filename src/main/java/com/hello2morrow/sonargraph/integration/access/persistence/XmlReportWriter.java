@@ -18,6 +18,10 @@
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,6 +85,11 @@ public final class XmlReportWriter extends XmlAccess
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportWriter.class);
 
+    public XmlReportWriter()
+    {
+        super();
+    }
+
     public void writeReport(final SoftwareSystemImpl softwareSystem, final File reportFile) throws Exception
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'writeReport' must not be null";
@@ -88,7 +97,25 @@ public final class XmlReportWriter extends XmlAccess
 
         final JAXBElement<XsdSoftwareSystemReport> reportXml = convertPojoToXml(softwareSystem);
         final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter = createReportJaxbAdapter();
-        jaxbAdapter.save(reportXml, reportFile);
+
+        int i = 1;
+        File tmpFile = reportFile;
+        while (tmpFile.exists())
+        {
+            tmpFile = new File(reportFile.getAbsolutePath() + "." + i);
+            ++i;
+        }
+        try (OutputStream out = new FileOutputStream(tmpFile))
+        {
+            jaxbAdapter.save(reportXml, out);
+        }
+        finally
+        {
+            if (tmpFile.exists() && !tmpFile.equals(reportFile))
+            {
+                Files.move(tmpFile.toPath(), reportFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
 
     private static XMLGregorianCalendar createDateTimeObject(final long timeStamp)

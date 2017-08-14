@@ -19,20 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Marshaller.Listener;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEventHandler;
@@ -49,14 +44,13 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.ExceptionUtility;
-import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
 
 final class JaxbAdapter<T>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaxbAdapter.class);
+    private static final String UTF8_ENCODING = "UTF-8";
     private final Unmarshaller reader;
     private final Marshaller writer;
-    private Listener marshallListener;
 
     private static Schema getSchema(final URL... schemaUrls) throws IOException, SAXException
     {
@@ -110,6 +104,20 @@ final class JaxbAdapter<T>
         return reader;
     }
 
+    private static Marshaller createWriter(final JAXBContext jaxbContext) throws JAXBException, PropertyException
+    {
+        assert jaxbContext != null : "Parameter 'jaxbContext' of method 'createWriter' must not be null";
+        final Marshaller writer = jaxbContext.createMarshaller();
+        writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        writer.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+        return writer;
+    }
+
+    public void setMarshalListener(final Marshaller.Listener listener)
+    {
+        writer.setListener(listener);
+    }
+
     @SuppressWarnings("unchecked")
     public final T load(final InputStream from, final ValidationEventHandler validationHandler)
     {
@@ -128,47 +136,6 @@ final class JaxbAdapter<T>
         return null;
     }
 
-    private static Marshaller createWriter(final JAXBContext jaxbContext) throws JAXBException, PropertyException
-    {
-        final Marshaller writer = jaxbContext.createMarshaller();
-        writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        writer.setProperty(Marshaller.JAXB_ENCODING, FileUtility.UTF8_ENCODING);
-        return writer;
-    }
-
-    public void save(final T jaxbRoot, final File toFile) throws IOException
-    {
-        assert jaxbRoot != null : "'jaxbRoot' must not be null";
-        assert toFile != null : "'toFile' must not be null";
-        assert !toFile.exists() || toFile.isFile() : "'toFile' must be an existing file:" + toFile;
-
-        int i = 1;
-        File tmpFile = toFile;
-        while (tmpFile.exists())
-        {
-            tmpFile = new File(toFile.getAbsolutePath() + "." + i);
-            ++i;
-        }
-
-        try (OutputStream out = new FileOutputStream(tmpFile))
-        {
-            save(jaxbRoot, out);
-        }
-        finally
-        {
-            if (tmpFile.exists() && !tmpFile.equals(toFile))
-            {
-                Files.move(tmpFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-        }
-    }
-
-    public void setMarshalListener(final Marshaller.Listener listener)
-    {
-        assert listener != null : "Parameter 'listener' of method 'setMarshallListener' must not be null";
-        marshallListener = listener;
-    }
-
     public void save(final T jaxbRoot, final OutputStream out) throws IOException
     {
         assert jaxbRoot != null : "Parameter 'jaxbRoot' of method 'save' must not be null";
@@ -177,10 +144,9 @@ final class JaxbAdapter<T>
         {
             //Using two decorators to correctly handle CDATA sections and output formatting.
             //The output formatting property set on the JAXB marshaller is not respected when using XMLStreamWriters.
-            final XMLStreamWriter streamWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(bufferedOut, FileUtility.UTF8_ENCODING);
+            final XMLStreamWriter streamWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
             final XmlCDataStreamWriter cdataStreamWriter = new XmlCDataStreamWriter(streamWriter);
             final XmlPrettyPrintWriter xmlPrettyWriter = new XmlPrettyPrintWriter(cdataStreamWriter);
-            writer.setListener(marshallListener);
             writer.marshal(jaxbRoot, xmlPrettyWriter);
         }
         catch (final JAXBException e)

@@ -38,7 +38,6 @@ public final class FileUtility
     public static final String RELATIVE_PATH_CURRENT = ".";
     public static final String RELATIVE_PATH_UP = "..";
     public static final char PATH_SEPARATOR_CHAR_TO_BE_CONVERTED = '\\';
-    public static final String UTF8_ENCODING = "UTF-8";
     public static final String SYSTEM_PATH_SEPARATOR = System.getProperty("file.separator");
 
     public static final String STANDARD_DIRECTORY_NAME_PATTERN = "[\\w\\-]+[ \\w\\-]*";
@@ -198,8 +197,8 @@ public final class FileUtility
         int numberOfEqualParts = 0;
         for (int i = 0; i < basePathParts.size() && i < convertToRelativePathParts.size(); i++)
         {
-            if (ignoreCase ? basePathParts.get(i).equalsIgnoreCase(convertToRelativePathParts.get(i))
-                    : basePathParts.get(i).equals(convertToRelativePathParts.get(i)))
+            if (ignoreCase ? basePathParts.get(i).equalsIgnoreCase(convertToRelativePathParts.get(i)) : basePathParts.get(i).equals(
+                    convertToRelativePathParts.get(i)))
             {
                 numberOfEqualParts++;
             }
