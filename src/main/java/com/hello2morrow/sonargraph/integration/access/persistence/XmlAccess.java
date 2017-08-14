@@ -22,23 +22,22 @@ import javax.xml.bind.JAXBElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaDataRoot;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 
-abstract class XmlAccess
+public abstract class XmlAccess
 {
-    public static final String NAMESPACE = "com.hello2morrow.sonargraph.integration.access.persistence.report";
-    public static final String REPORT_XSD = "com/hello2morrow/sonargraph/integration/access/persistence/report/report.xsd";
-    public static final String EXPORT_METADATA_XSD = "com/hello2morrow/sonargraph/integration/access/persistence/report/exportMetaData.xsd";
+    private static final String NAMESPACE = "com.hello2morrow.sonargraph.integration.access.persistence.report";
+    private static final String EXPORT_METADATA_XSD = "com/hello2morrow/sonargraph/integration/access/persistence/report/exportMetaData.xsd";
 
     protected XmlAccess()
     {
         super();
     }
 
-    protected final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createExportMetaDataJaxbAdapter()
+    public static final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createExportMetaDataJaxbAdapter()
     {
-        return new JaxbAdapter<>(NAMESPACE, getClass().getClassLoader().getResource(EXPORT_METADATA_XSD));
+        return new JaxbAdapter<>(NAMESPACE, XmlAccess.class.getClassLoader().getResource(EXPORT_METADATA_XSD));
     }
 
-    protected final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createReportJaxbAdapter() throws Exception
+    public static final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createReportJaxbAdapter()
     {
         //No XML validation for reports - no URL parameter used 
         return new JaxbAdapter<>(NAMESPACE);
