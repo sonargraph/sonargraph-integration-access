@@ -33,7 +33,7 @@ abstract class XmlAccess
         super();
     }
 
-    protected final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createExportMetaDataJaxbAdapter() throws XmlProcessingException
+    protected final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createExportMetaDataJaxbAdapter()
     {
         return new JaxbAdapter<>(NAMESPACE, getClass().getClassLoader().getResource(EXPORT_METADATA_XSD));
     }

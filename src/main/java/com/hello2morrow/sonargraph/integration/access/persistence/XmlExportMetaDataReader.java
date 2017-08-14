@@ -82,23 +82,23 @@ public final class XmlExportMetaDataReader extends XmlAccess
 
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
 
-        Optional<JAXBElement<XsdExportMetaDataRoot>> xmlRoot = Optional.empty();
+        JAXBElement<XsdExportMetaDataRoot> xmlRoot = null;
         try (BufferedInputStream in = new BufferedInputStream(input))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            if (xmlRoot.isPresent())
+            if (xmlRoot != null)
             {
-                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
+                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.getValue();
                 return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
             }
         }
         catch (final Exception ex)
         {
-            result.addError(IOMessageCause.IO_EXCEPTION, ex);
+            result.addError(IOMessageCause.READ_ERROR, ex);
         }
         finally
         {
-            if (result.isFailure() || !xmlRoot.isPresent())
+            if (result.isFailure() || xmlRoot == null)
             {
                 result.addError(IOMessageCause.WRONG_FORMAT,
                         "Report is corrupt, please ensure that versions of SonargraphBuild and Sonargraph SonarQube Plugin are compatible");

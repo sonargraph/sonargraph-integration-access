@@ -170,23 +170,23 @@ public final class XmlReportReader extends XmlAccess
 
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
 
-        Optional<JAXBElement<XsdSoftwareSystemReport>> xmlRoot = Optional.empty();
+        JAXBElement<XsdSoftwareSystemReport> xmlRoot = null;
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(reportFile)))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            if (xmlRoot.isPresent())
+            if (xmlRoot != null)
             {
-                return convertXmlReportToPojo(xmlRoot.get().getValue(), result);
+                return convertXmlReportToPojo(xmlRoot.getValue(), result);
             }
         }
         catch (final Exception ex)
         {
             LOGGER.error("Failed to read report from '" + reportFile.getAbsolutePath() + "'", ex);
-            result.addError(IOMessageCause.IO_EXCEPTION, ex);
+            result.addError(IOMessageCause.READ_ERROR, ex);
         }
         finally
         {
-            if (result.isFailure() || !xmlRoot.isPresent())
+            if (result.isFailure() || xmlRoot == null)
             {
                 result.addError(IOMessageCause.WRONG_FORMAT,
                         "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");

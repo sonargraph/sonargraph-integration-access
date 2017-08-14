@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -49,63 +48,70 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.ExceptionUtility;
 import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
 
 final class JaxbAdapter<T>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaxbAdapter.class);
-
-    @FunctionalInterface
-    private interface JAXBContextCreator
-    {
-        JAXBContext get() throws JAXBException;
-    }
-
     private final Unmarshaller reader;
     private final Marshaller writer;
     private Listener marshallListener;
 
-    private static Source[] getSources(final URL... schemaUrl) throws IOException
+    private static Schema getSchema(final URL... schemaUrls) throws IOException, SAXException
     {
-        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'getSources' must not be null";
+        assert schemaUrls != null : "Parameter 'schemaUrls' of method 'getSchema' must not be null";
 
-        final Source[] sources = new Source[schemaUrl.length];
-        for (int i = 0; i < schemaUrl.length; i++)
+        if (schemaUrls.length > 0)
         {
-            sources[i] = new StreamSource(schemaUrl[i].openStream());
+            final Source[] sources = new Source[schemaUrls.length];
+            for (int i = 0; i < schemaUrls.length; i++)
+            {
+                sources[i] = new StreamSource(schemaUrls[i].openStream());
+            }
+            return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
         }
-        return sources;
+        return null;
     }
 
-    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws XmlProcessingException
+    public JaxbAdapter(final String namespace, final URL... schemaUrls)
     {
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
-        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'JaxbAdapter' must not be null";
+        assert schemaUrls != null : "Parameter 'schemaUrls' of method 'JaxbAdapter' must not be null";
+
+        Marshaller writer;
+        Unmarshaller reader;
 
         try
         {
             final JAXBContext jaxbContextProject = JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader());
-            final Source[] sources = getSources(schemaUrl);
-            final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
+            final Schema schema = getSchema(schemaUrls);
             reader = createReader(jaxbContextProject, schema);
             writer = createWriter(jaxbContextProject);
 
         }
         catch (final SAXException | IOException | JAXBException ex)
         {
-            throw new XmlProcessingException("Failed to initialize JaxbAdapter", ex);
+            LOGGER.error("Failed to initialize", ex);
+            reader = null;
+            writer = null;
+            assert false : "Failed to initialize: " + ExceptionUtility.collectAll(ex);
         }
+
+        this.reader = reader;
+        this.writer = writer;
     }
 
     private static Unmarshaller createReader(final JAXBContext jaxbContext, final Schema schema) throws JAXBException
     {
+        assert jaxbContext != null : "Parameter 'jaxbContext' of method 'createReader' must not be null";
         final Unmarshaller reader = jaxbContext.createUnmarshaller();
         reader.setSchema(schema);
         return reader;
     }
 
     @SuppressWarnings("unchecked")
-    public final Optional<T> load(final InputStream from, final ValidationEventHandler validationHandler)
+    public final T load(final InputStream from, final ValidationEventHandler validationHandler)
     {
         assert from != null : "'from' must not be null";
         assert validationHandler != null : "'validationHandler' must not be null";
@@ -113,14 +119,13 @@ final class JaxbAdapter<T>
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
             reader.setEventHandler(validationHandler);
-            final T jaxbRoot = (T) reader.unmarshal(bufferedIn);
-            return Optional.of(jaxbRoot);
+            return (T) reader.unmarshal(bufferedIn);
         }
         catch (final IOException | JAXBException e)
         {
             LOGGER.error("Failed to load xml file", e);
-            return Optional.empty();
         }
+        return null;
     }
 
     private static Marshaller createWriter(final JAXBContext jaxbContext) throws JAXBException, PropertyException
