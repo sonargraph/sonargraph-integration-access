@@ -75,7 +75,7 @@ public final class JaxbAdapter<T>
         return null;
     }
 
-    public JaxbAdapter(final String namespace, final URL... schemaUrls)
+    JaxbAdapter(final String namespace, final URL... schemaUrls)
     {
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
         assert schemaUrls != null : "Parameter 'schemaUrls' of method 'JaxbAdapter' must not be null";
@@ -89,7 +89,6 @@ public final class JaxbAdapter<T>
             final Schema schema = getSchema(schemaUrls);
             reader = createReader(jaxbContextProject, schema);
             writer = createWriter(jaxbContextProject);
-
         }
         catch (final SAXException | IOException | JAXBException ex)
         {
