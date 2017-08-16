@@ -118,7 +118,7 @@
         </executions>
         <configuration>
           <additionalparam>-Xdoclint:none</additionalparam>
-          <excludePackageNames>com.hello2morrow.sonargraph.core.persistence.*</excludePackageNames>
+          <excludePackageNames>com.hello2morrow.sonargraph.integration.access.persistence.report</excludePackageNames>
         </configuration>
       </plugin>
       <plugin>

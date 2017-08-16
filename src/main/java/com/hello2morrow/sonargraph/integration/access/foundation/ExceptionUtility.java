@@ -17,8 +17,6 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-import java.util.Collection;
-
 public final class ExceptionUtility
 {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -113,18 +111,5 @@ public final class ExceptionUtility
         }
 
         return buffer.toString();
-    }
-
-    public static boolean checkReferences(final Collection<?> collection)
-    {
-        assert collection != null : "Parameter 'collection' of method 'checkReferences' must not be null";
-        for (final Object next : collection)
-        {
-            if (next == null)
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }

@@ -337,7 +337,6 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getOrigins' must not be null";
 
-        //        if (namedElement.getKind().endsWith("LogicalSystemNamespace") || namedElement.getKind().endsWith("LogicalModuleNamespace"))//TODO
         if (namedElement instanceof ILogicalElement)
         {
             final List<INamedElement> origins = new ArrayList<>();
@@ -352,6 +351,36 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         return Collections.singletonList(namedElement);
     }
 
+    private void addDirectoryIssues(final IIssue issue, final INamedElement namedElement, final Map<String, List<IIssue>> resultMap)
+    {
+        assert issue != null : "Parameter 'issue' of method 'addDirectoryIssues' must not be null";
+        assert namedElement != null : "Parameter 'namedElement' of method 'addDirectoryIssues' must not be null";
+        assert resultMap != null : "Parameter 'resultMap' of method 'addDirectoryIssues' must not be null";
+
+        for (final INamedElement nextOrigin : getOrigins(namedElement))
+        {
+            final INamedElement contained = getElementContainedInModule(nextOrigin);
+            if (contained != null)
+            {
+                if (contained instanceof IRootDirectory)
+                {
+                    addDirectoryIssue(((IRootDirectory) contained).getRelativePath(), issue, resultMap);
+                }
+                else if (contained instanceof IPhysicalRecursiveElement)
+                {
+                    final IPhysicalRecursiveElement nextPhysicalRecursiveElement = (IPhysicalRecursiveElement) contained;
+                    final Optional<String> relRootDirOpt = nextPhysicalRecursiveElement.getRelativeRootDirectory();
+                    final Optional<String> relDirOpt = nextPhysicalRecursiveElement.getRelativeDirectory();
+                    if (relRootDirOpt.isPresent() && relDirOpt.isPresent())
+                    {
+                        final String directory = concatenate(relRootDirOpt.get(), relDirOpt.get());
+                        addDirectoryIssue(directory, issue, resultMap);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public Map<String, List<IIssue>> getIssuesForDirectories(final Predicate<IIssue> filter)
     {
@@ -363,34 +392,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
                 final List<INamedElement> elements = ((IElementIssue) nextIssue).getAffectedElements();
                 for (final INamedElement next : elements)
                 {
-                    for (final INamedElement nextOrigin : getOrigins(next))
-                    {
-                        final INamedElement contained = getElementContainedInModule(nextOrigin);
-                        if (contained != null)
-                        {
-                            if (contained instanceof IRootDirectory)
-                            {
-                                addDirectoryIssue(((IRootDirectory) contained).getRelativePath(), nextIssue, resultMap);
-                            }
-                            else if (contained instanceof IPhysicalRecursiveElement)
-                            {
-                                final IPhysicalRecursiveElement nextPhysicalRecursiveElement = (IPhysicalRecursiveElement) contained;
-                                final Optional<String> relRootDirOpt = nextPhysicalRecursiveElement.getRelativeRootDirectory();
-                                final Optional<String> relDirOpt = nextPhysicalRecursiveElement.getRelativeDirectory();
-                                if (relRootDirOpt.isPresent() && relDirOpt.isPresent())
-                                {
-                                    final String directory = concatenate(relRootDirOpt.get(), relDirOpt.get());
-                                    addDirectoryIssue(directory, nextIssue, resultMap);
-                                }
-                            }
-                        }
-                    }
+                    addDirectoryIssues(nextIssue, next, resultMap);
                 }
             }
             if (nextIssue instanceof IDependencyIssue)
             {
                 final INamedElement from = ((IDependencyIssue) nextIssue).getFrom();
-                //                addNamedElementForIssue(resultMap, issue, from);
+                addDirectoryIssues(nextIssue, from, resultMap);
             }
         }
         return Collections.unmodifiableMap(resultMap);

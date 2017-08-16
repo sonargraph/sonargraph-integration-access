@@ -21,7 +21,7 @@ public final class NumberUtility
 {
     private NumberUtility()
     {
-        //utility class - must not be instantiated
+        super();
     }
 
     public static double round(final double value, final int decimals)

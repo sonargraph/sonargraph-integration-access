@@ -22,7 +22,6 @@ import java.io.Serializable;
 public final class OperationResultWithOutcome<T extends Serializable> extends OperationResult
 {
     private static final long serialVersionUID = -7003717724920078792L;
-
     private T outcome;
 
     public OperationResultWithOutcome(final String description)

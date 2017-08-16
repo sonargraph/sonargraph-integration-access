@@ -25,7 +25,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult.IMessageCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
 
-public final class ValidationEventHandlerImpl implements ValidationEventHandler
+final class ValidationEventHandlerImpl implements ValidationEventHandler
 {
     public enum ValidationMessageCauses implements IMessageCause
     {
@@ -48,7 +48,7 @@ public final class ValidationEventHandlerImpl implements ValidationEventHandler
 
     private final OperationResult operationResult;
 
-    public ValidationEventHandlerImpl(final OperationResult result)
+    ValidationEventHandlerImpl(final OperationResult result)
     {
         assert result != null : "Parameter 'result' of method 'ValidationEventHandlerImpl' must not be null";
         operationResult = result;
