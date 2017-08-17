@@ -25,10 +25,10 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResultWithOutcome;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
@@ -51,9 +51,9 @@ public class ReportDiff
         this.pathToReport2 = pathToReport2;
     }
 
-    public OperationResultWithOutcome<IReportDelta> calculateDelta()
+    public ResultWithOutcome<IReportDelta> calculateDelta()
     {
-        final OperationResultWithOutcome<IReportDelta> result = new OperationResultWithOutcome<>("Calculating delta");
+        final ResultWithOutcome<IReportDelta> result = new ResultWithOutcome<>("Calculating delta");
         result.addMessagesFrom(validatePaths());
         if (result.isFailure())
         {
@@ -61,7 +61,7 @@ public class ReportDiff
         }
 
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(pathToReport1));
+        final Result load1 = controller.loadSystemReport(new File(pathToReport1));
         if (load1.isFailure())
         {
             result.addMessagesFrom(load1);
@@ -70,7 +70,7 @@ public class ReportDiff
         final ISoftwareSystem system1 = controller.getSoftwareSystem();
 
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
-        final OperationResult load2 = controller.loadSystemReport(new File(pathToReport2));
+        final Result load2 = controller.loadSystemReport(new File(pathToReport2));
         if (load2.isFailure())
         {
             result.addMessagesFrom(load2);
@@ -89,11 +89,11 @@ public class ReportDiff
         return result;
     }
 
-    public OperationResult print(final IReportDelta delta, final String outputPath)
+    public Result print(final IReportDelta delta, final String outputPath)
     {
         assert delta != null : "Parameter 'delta' of method 'print' must not be null";
 
-        final OperationResult result = new OperationResult("Printing delta of reports");
+        final Result result = new Result("Printing delta of reports");
         if (outputPath == null)
         {
             System.out.println(createPreamble());
@@ -106,7 +106,7 @@ public class ReportDiff
         {
             if (!file.getParentFile().mkdirs())
             {
-                result.addError(IOMessageCause.FAILED_TO_CREATE_DIRECTORY, "Failed to create parent directory of output file " + outputPath);
+                result.addError(ResultCause.FAILED_TO_CREATE_DIRECTORY, "Failed to create parent directory of output file " + outputPath);
                 return result;
             }
         }
@@ -118,7 +118,7 @@ public class ReportDiff
         }
         catch (final IOException ex)
         {
-            result.addError(IOMessageCause.IO_EXCEPTION, ex);
+            result.addError(ResultCause.IO_EXCEPTION, ex);
         }
         return result;
     }
@@ -127,37 +127,37 @@ public class ReportDiff
     {
         final StringBuilder builder = new StringBuilder();
         builder.append("Delta of System Reports:");
-        builder.append("\n").append(StringUtility.INDENTATION).append("Report1 (baseline): ").append(pathToReport1);
-        builder.append("\n").append(StringUtility.INDENTATION).append("Report2           : ").append(pathToReport2);
+        builder.append("\n").append(Utility.INDENTATION).append("Report1 (baseline): ").append(pathToReport1);
+        builder.append("\n").append(Utility.INDENTATION).append("Report2           : ").append(pathToReport2);
 
         return builder.toString();
     }
 
-    public OperationResult validatePaths()
+    public Result validatePaths()
     {
-        final OperationResult result = new OperationResult("Validating XML report paths");
+        final Result result = new Result("Validating XML report paths");
         validatePath(pathToReport1, result);
         validatePath(pathToReport2, result);
         return result;
     }
 
-    private void validatePath(final String path, final OperationResult result)
+    private void validatePath(final String path, final Result result)
     {
         final File file = new File(path);
         if (!file.exists())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND, path);
+            result.addError(ResultCause.FILE_NOT_FOUND, path);
             return;
         }
 
         if (!file.isFile())
         {
-            result.addError(IOMessageCause.NOT_A_FILE, path);
+            result.addError(ResultCause.NOT_A_FILE, path);
         }
 
         if (!file.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSION, path);
+            result.addError(ResultCause.NO_PERMISSION, path);
         }
     }
 
@@ -173,7 +173,7 @@ public class ReportDiff
         final String pathToReport2 = args[1];
         final ReportDiff diff = new ReportDiff(pathToReport1, pathToReport2);
 
-        final OperationResultWithOutcome<IReportDelta> result = diff.calculateDelta();
+        final ResultWithOutcome<IReportDelta> result = diff.calculateDelta();
         if (result.isFailure())
         {
             System.err.println(result.toString());
@@ -181,7 +181,7 @@ public class ReportDiff
         }
 
         final String outputPath = args.length == 3 ? args[2] : null;
-        final OperationResult printResult = diff.print(result.getOutcome(), outputPath);
+        final Result printResult = diff.print(result.getOutcome(), outputPath);
         if (printResult.isFailure())
         {
             System.err.println(result.toString());

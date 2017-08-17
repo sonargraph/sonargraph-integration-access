@@ -35,8 +35,8 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IMetaDataController;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResultWithOutcome;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
@@ -64,12 +64,12 @@ public class ModuleInfoProcessorTest
     public void before()
     {
         m_exportMetaDataController = ControllerAccess.createMetaDataController();
-        final OperationResultWithOutcome<IExportMetaData> loadMetaDataResult = m_exportMetaDataController.loadExportMetaData(new File(
+        final ResultWithOutcome<IExportMetaData> loadMetaDataResult = m_exportMetaDataController.loadExportMetaData(new File(
                 TestFixture.META_DATA_PATH));
         assertTrue(loadMetaDataResult.toString(), loadMetaDataResult.isSuccess());
         m_exportMetaData = loadMetaDataResult.getOutcome();
         m_controller = ControllerAccess.createController();
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT));
         assertTrue(result.toString(), result.isSuccess());
 
         assertTrue(loadMetaDataResult.toString(), loadMetaDataResult.isSuccess());

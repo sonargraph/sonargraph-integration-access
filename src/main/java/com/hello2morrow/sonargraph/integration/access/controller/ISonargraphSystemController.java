@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
@@ -28,9 +28,9 @@ public interface ISonargraphSystemController
     /**
      * Loads an XML report file.
      * @param systemReportFile
-     * @return {@link OperationResult} containing info about any errors.
+     * @return {@link Result} containing info about any errors.
      */
-    public OperationResult loadSystemReport(File systemReportFile);
+    public Result loadSystemReport(File systemReportFile);
 
     /**
      * Loads an XML report file, generated on a different machine.
@@ -39,9 +39,9 @@ public interface ISonargraphSystemController
      *
      * @param systemReportFile
      * @param baseDirectory the parent directory of the Sonargraph system, i.e. parent of xyz.sonargraph directory
-     * @return {@link OperationResult} containing info about any errors.
+     * @return {@link Result} containing info about any errors.
      */
-    public OperationResult loadSystemReport(File systemReportFile, File baseDirectory);
+    public Result loadSystemReport(File systemReportFile, File baseDirectory);
 
     public ISoftwareSystem getSoftwareSystem();
 
@@ -60,5 +60,5 @@ public interface ISonargraphSystemController
      * Writes a system report and can be used to reduce the size of huge XML report files.
      * NOTE: This is currently not completed and only includes meta-data and workspace info of a SoftwareSystem.
      */
-    public OperationResult writeSystemReport(File file);
+    public Result writeSystemReport(File file);
 }

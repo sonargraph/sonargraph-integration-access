@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
@@ -83,17 +83,16 @@ public class ModuleDeltaImpl implements IModuleDelta
         final StringBuilder builder = new StringBuilder("  Delta of module ");
         builder.append(module.getName());
 
-        builder.append("\n").append(StringUtility.INDENTATION).append("Removed roots (").append(removed.size()).append("):");
-        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
-                .append(r);
+        builder.append("\n").append(Utility.INDENTATION).append("Removed roots (").append(removed.size()).append("):");
+        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(r);
         removed.forEach(action);
 
-        builder.append("\n").append(StringUtility.INDENTATION).append("Added roots (").append(added.size()).append("):");
+        builder.append("\n").append(Utility.INDENTATION).append("Added roots (").append(added.size()).append("):");
         added.forEach(action);
 
         if (includeUnchanged)
         {
-            builder.append("\n").append(StringUtility.INDENTATION).append("Unchanged roots (").append(unchanged.size()).append("):");
+            builder.append("\n").append(Utility.INDENTATION).append("Unchanged roots (").append(unchanged.size()).append("):");
             unchanged.forEach(action);
         }
         return builder.toString();

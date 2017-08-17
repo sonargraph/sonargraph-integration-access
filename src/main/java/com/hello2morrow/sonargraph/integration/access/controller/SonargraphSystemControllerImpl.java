@@ -21,8 +21,8 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
@@ -35,18 +35,18 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     private SoftwareSystemImpl softwareSystem;
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile)
+    public Result loadSystemReport(final File systemReportFile)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
 
-        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
+        final Result result = new Result("Load data from '" + systemReportFile.getAbsolutePath() + "'");
         if (!systemReportFile.exists())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND);
+            result.addError(ResultCause.FILE_NOT_FOUND);
         }
         else if (!systemReportFile.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSION);
+            result.addError(ResultCause.NO_PERMISSION);
         }
 
         if (result.isFailure())
@@ -66,20 +66,20 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     }
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
+    public Result loadSystemReport(final File systemReportFile, final File baseDirectory)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
         assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
 
-        final OperationResult result = new OperationResult(String.format("Load data from '%s', using baseDirectory '%s'",
+        final Result result = new Result(String.format("Load data from '%s', using baseDirectory '%s'",
                 systemReportFile.getAbsolutePath(), baseDirectory.getAbsolutePath()));
         if (!baseDirectory.exists())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
+            result.addError(ResultCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
         }
         else if (!baseDirectory.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
+            result.addError(ResultCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
         }
 
         if (result.isFailure())
@@ -134,12 +134,12 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     }
 
     @Override
-    public OperationResult writeSystemReport(final File file)
+    public Result writeSystemReport(final File file)
     {
         assert file != null : "Parameter 'file' of method 'writeSystemReport' must not be null";
         assert softwareSystem != null : "No software system available";
 
-        final OperationResult result = new OperationResult("Writing XML report");
+        final Result result = new Result("Writing XML report");
         final XmlReportWriter writer = new XmlReportWriter();
         try
         {
@@ -147,7 +147,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         }
         catch (final Exception ex)
         {
-            result.addError(IOMessageCause.WRITE_ERROR, ex);
+            result.addError(ResultCause.WRITE_ERROR, ex);
         }
 
         return result;

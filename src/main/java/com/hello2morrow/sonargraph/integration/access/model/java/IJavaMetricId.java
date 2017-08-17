@@ -17,14 +17,13 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.java;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IStandardEnumeration;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 
-//TODO [Dietmar] Get rid of this class
 public interface IJavaMetricId extends IMetricId
 {
-    public enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IEnumeration
     {
         JAVA_PACKAGES("Number of Packages"),
         JAVA_CYCLIC_PACKAGES("Number of Cyclic Packages"),
@@ -41,7 +40,7 @@ public interface IJavaMetricId extends IMetricId
         @Override
         public String getStandardName()
         {
-            return StringUtility.convertConstantNameToStandardName(name());
+            return Utility.convertConstantNameToStandardName(name());
         }
 
         @Override

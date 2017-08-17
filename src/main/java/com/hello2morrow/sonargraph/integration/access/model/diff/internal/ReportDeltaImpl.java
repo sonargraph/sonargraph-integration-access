@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IDelta;
@@ -124,14 +124,14 @@ public class ReportDeltaImpl implements IReportDelta
         if (!containsChanges())
         {
             builder.append("\n\nNo delta detected between systems:");
-            builder.append("\n").append(StringUtility.INDENTATION).append("System 1 (Baseline): ").append(printNameAndTimestamp(system1));
-            builder.append("\n").append(StringUtility.INDENTATION).append("System 2           : ").append(printNameAndTimestamp(system2));
+            builder.append("\n").append(Utility.INDENTATION).append("System 1 (Baseline): ").append(printNameAndTimestamp(system1));
+            builder.append("\n").append(Utility.INDENTATION).append("System 2           : ").append(printNameAndTimestamp(system2));
             return builder.toString();
         }
 
         builder.append("\n\nDelta of Systems");
-        builder.append("\n").append(StringUtility.INDENTATION).append("System 1 (Baseline): ").append(printNameAndTimestamp(system1));
-        builder.append("\n").append(StringUtility.INDENTATION).append("System 2           : ").append(printNameAndTimestamp(system2));
+        builder.append("\n").append(Utility.INDENTATION).append("System 1 (Baseline): ").append(printNameAndTimestamp(system1));
+        builder.append("\n").append(Utility.INDENTATION).append("System 2           : ").append(printNameAndTimestamp(system2));
         builder.append("\n");
 
         final List<IDelta> deltas = Arrays.asList(getCoreDelta(), getWorkspaceDelta(), getIssueDelta(), getResolutionDelta());
@@ -149,7 +149,7 @@ public class ReportDeltaImpl implements IReportDelta
     private String printNameAndTimestamp(final ISoftwareSystem system)
     {
         final StringBuilder builder = new StringBuilder();
-        final String timestamp = StringUtility.getDateTimeStringFromLocale(new Date(system.getTimestamp()));
+        final String timestamp = Utility.getDateTimeStringFromLocale(new Date(system.getTimestamp()));
         builder.append(system.getName()).append(" from ").append(timestamp);
         return builder.toString();
     }
@@ -157,10 +157,9 @@ public class ReportDeltaImpl implements IReportDelta
     private String printSystemInfo(final ISoftwareSystem system)
     {
         final StringBuilder builder = new StringBuilder();
-        builder.append("\n").append(StringUtility.INDENTATION).append("Name: ").append(system.getName());
-        builder.append("\n").append(StringUtility.INDENTATION).append("ID: ").append(system.getSystemId());
-        builder.append("\n").append(StringUtility.INDENTATION).append("Path: ").append(system.getPath());
+        builder.append("\n").append(Utility.INDENTATION).append("Name: ").append(system.getName());
+        builder.append("\n").append(Utility.INDENTATION).append("ID: ").append(system.getSystemId());
+        builder.append("\n").append(Utility.INDENTATION).append("Path: ").append(system.getPath());
         return builder.toString();
     }
-
 }

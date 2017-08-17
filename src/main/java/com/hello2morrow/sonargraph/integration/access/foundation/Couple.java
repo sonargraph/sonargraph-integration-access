@@ -19,13 +19,13 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 import java.io.Serializable;
 
-public final class Pair<T1 extends Serializable, T2 extends Serializable> implements Serializable
+public final class Couple<T1 extends Serializable, T2 extends Serializable> implements Serializable
 {
     private static final long serialVersionUID = 7247108645914680029L;
     private final T1 t1;
     private final T2 t2;
 
-    public Pair(final T1 t1, final T2 t2)
+    public Couple(final T1 t1, final T2 t2)
     {
         this.t1 = t1;
         this.t2 = t2;
@@ -63,7 +63,7 @@ public final class Pair<T1 extends Serializable, T2 extends Serializable> implem
             return false;
         }
 
-        final Pair<?, ?> other = (Pair<?, ?>) obj;
+        final Couple<?, ?> other = (Couple<?, ?>) obj;
         if (t1 == null)
         {
             if (other.t1 != null)

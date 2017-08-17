@@ -32,9 +32,9 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
@@ -147,7 +147,7 @@ public final class XmlReportReader extends XmlAccess
      * @param reportFile XML file that is expected to exist and be readable.
      * @param result Contains info about errors.
      */
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final OperationResult result)
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final Result result)
     {
         assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
         assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
@@ -162,7 +162,7 @@ public final class XmlReportReader extends XmlAccess
         }
         catch (final Exception e)
         {
-            result.addError(IOMessageCause.READ_ERROR, "Failed to initialize JAXB", e);
+            result.addError(ResultCause.READ_ERROR, "Failed to initialize JAXB", e);
             return Optional.empty();
         }
 
@@ -182,13 +182,13 @@ public final class XmlReportReader extends XmlAccess
         catch (final Exception ex)
         {
             LOGGER.error("Failed to read report from '" + reportFile.getAbsolutePath() + "'", ex);
-            result.addError(IOMessageCause.READ_ERROR, ex);
+            result.addError(ResultCause.READ_ERROR, ex);
         }
         finally
         {
             if (result.isFailure() || xmlRoot == null)
             {
-                result.addError(IOMessageCause.WRONG_FORMAT,
+                result.addError(ResultCause.WRONG_FORMAT,
                         "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
             }
             this.currentlyReading = null;
@@ -280,7 +280,7 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final OperationResult result)
+    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final Result result)
     {
         assert report != null : "Parameter 'report' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
@@ -486,7 +486,7 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystemImpl, final XsdWorkspace xsdWorkspace, final OperationResult result)
+    private void createWorkspaceElements(final SoftwareSystemImpl softwareSystemImpl, final XsdWorkspace xsdWorkspace, final Result result)
     {
         assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'createWorkspaceElements' must not be null";
         assert xsdWorkspace != null : "Parameter 'report' of method 'createWorkspaceElements' must not be null";
@@ -533,7 +533,7 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
+    private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final Result result)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processResolutions' must not be null";
         assert report != null : "Parameter 'report' of method 'processResolutions' must not be null";
@@ -570,7 +570,7 @@ public final class XmlReportReader extends XmlAccess
             Priority priority;
             try
             {
-                priority = Priority.valueOf(StringUtility.convertStandardNameToConstantName(nextResolution.getPrio()));
+                priority = Priority.valueOf(Utility.convertStandardNameToConstantName(nextResolution.getPrio()));
             }
             catch (final Exception e)
             {
@@ -909,7 +909,7 @@ public final class XmlReportReader extends XmlAccess
         softwareSystem.addMetricValueForElement(value, softwareSystem);
     }
 
-    private void processIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final OperationResult result)
+    private void processIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final Result result)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processIssues' must not be null";
         assert report != null : "Parameter 'report' of method 'processIssues' must not be null";
@@ -941,7 +941,7 @@ public final class XmlReportReader extends XmlAccess
             Severity severity;
             try
             {
-                severity = Severity.valueOf(StringUtility.convertStandardNameToConstantName(next.getSeverity()));
+                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
             }
             catch (final Exception e)
             {

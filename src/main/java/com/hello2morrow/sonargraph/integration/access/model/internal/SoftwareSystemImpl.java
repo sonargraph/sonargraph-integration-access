@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
@@ -94,7 +94,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
             lastIndexOf = path.lastIndexOf('\\');
         }
         assert lastIndexOf != -1 : "Invalid path for system file: " + path;
-        this.baseDir = FileUtility.convertPathToUniversalForm(path.substring(0, lastIndexOf));
+        this.baseDir = Utility.convertPathToUniversalForm(path.substring(0, lastIndexOf));
         this.version = version;
         this.timestamp = timestamp;
         this.virtualModel = virtualModel;
@@ -417,6 +417,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         assert previous == null : "'previous' of method 'addSourceFile' must be null";
     }
 
+    @Override
     public Optional<SourceFileImpl> getSourceFile(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceFile' must not be null";

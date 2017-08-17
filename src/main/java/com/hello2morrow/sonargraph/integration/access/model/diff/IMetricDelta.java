@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 
 import java.util.Map;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
@@ -33,7 +33,7 @@ public interface IMetricDelta extends IDelta
 {
     Map<IMetricLevel, Map<IMetricId, Map<INamedElement, IMetricValue>>> getUnchangedValues();
 
-    Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getWorseValues();
+    Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getWorseValues();
 
-    Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getImprovedValues();
+    Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getImprovedValues();
 }

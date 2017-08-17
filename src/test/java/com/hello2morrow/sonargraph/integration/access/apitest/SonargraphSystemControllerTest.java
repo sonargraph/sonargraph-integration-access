@@ -46,7 +46,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.IInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
@@ -87,7 +87,7 @@ public class SonargraphSystemControllerTest
     @Test
     public void validateThresholdIssues()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISystemInfoProcessor processor = m_controller.createSystemInfoProcessor();
         final List<IThresholdViolationIssue> thresholdIssues = processor.getThresholdViolationIssues(null);
@@ -102,7 +102,7 @@ public class SonargraphSystemControllerTest
     @Test
     public void validateRefactorings()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISystemInfoProcessor systemProcessor = m_controller.createSystemInfoProcessor();
         final List<IIssue> issues = systemProcessor.getIssues(i -> i.getIssueType().getCategory().getName().equals("Refactoring"));
@@ -150,7 +150,7 @@ public class SonargraphSystemControllerTest
     @Test
     public void testReadValidReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH));
+        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
@@ -167,7 +167,7 @@ public class SonargraphSystemControllerTest
     public void testReadValidReportAndOverrideSystemBaseDir()
     {
         final String baseDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
+        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
@@ -444,14 +444,14 @@ public class SonargraphSystemControllerTest
     @Test
     public void testReadInvalidReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(INVALID_REPORT));
+        final Result result = m_controller.loadSystemReport(new File(INVALID_REPORT));
         assertTrue("Expect failure, but got success", result.isFailure());
     }
 
     @Test
     public void testReadNotExistingReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File("./fantasyDir/fantasyReport.xml"));
+        final Result result = m_controller.loadSystemReport(new File("./fantasyDir/fantasyReport.xml"));
         assertTrue("Expect failure, but got success", result.isFailure());
     }
 }

@@ -36,8 +36,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.ExceptionUtility;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -130,7 +129,7 @@ public final class XmlReportWriter extends XmlAccess
         catch (final DatatypeConfigurationException ex)
         {
             assert false : "Failed to create new instance of XMLGregorianCalendar!";
-            LOGGER.error("Failed to create XMLGregorianCalendar: " + ExceptionUtility.collectAll(ex));
+            LOGGER.error("Failed to create XMLGregorianCalendar: " + Utility.collectAll(ex));
         }
         return xgcal;
     }
@@ -185,7 +184,7 @@ public final class XmlReportWriter extends XmlAccess
             final XsdElementKind xmlKind = factory.createXsdElementKind();
             xmlKind.setId(idGenerator.getNextId());
             xmlKind.setStandardKind(kind);
-            xmlKind.setPresentationKind(StringUtility.convertMixedCaseStringToPresentationName(kind));
+            xmlKind.setPresentationKind(Utility.convertMixedCaseStringToPresentationName(kind));
             elementToXmlMap.put(kind, xmlKind);
             xmlElementKinds.getElementKind().add(xmlKind);
         }

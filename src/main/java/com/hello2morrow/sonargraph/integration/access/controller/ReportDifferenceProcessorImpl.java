@@ -30,7 +30,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -90,8 +90,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final Set<IIssue> removed = new HashSet<>(originalIssueList);
         final List<IIssue> added = new ArrayList<>();
         final List<IIssue> unchanged = new ArrayList<>();
-        final List<Pair<IIssue, IIssue>> improved = new ArrayList<>();
-        final List<Pair<IIssue, IIssue>> worse = new ArrayList<>();
+        final List<Couple<IIssue, IIssue>> improved = new ArrayList<>();
+        final List<Couple<IIssue, IIssue>> worse = new ArrayList<>();
 
         for (final IIssue next : issues)
         {
@@ -115,7 +115,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
     }
 
     private void processThresholdIssues(final List<IIssue> unchanged, final Collection<IIssue> added, final Collection<IIssue> removed,
-            final List<Pair<IIssue, IIssue>> improved, final List<Pair<IIssue, IIssue>> worse)
+            final List<Couple<IIssue, IIssue>> improved, final List<Couple<IIssue, IIssue>> worse)
     {
         assert unchanged != null : "Parameter 'unchanged' of method 'processThresholdIssues' must not be null";
         assert added != null : "Parameter 'added' of method 'processThresholdIssues' must not be null";
@@ -134,14 +134,14 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             return;
         }
 
-        final List<Pair<IThresholdViolationIssue, IThresholdViolationIssue>> changed = new ArrayList<>();
+        final List<Couple<IThresholdViolationIssue, IThresholdViolationIssue>> changed = new ArrayList<>();
         for (final IThresholdViolationIssue previous : removeThresholdIssues)
         {
             addedThresholdIssues.stream().filter(createSameThresholdPredicate(previous)).findAny()
-                    .ifPresent(i -> changed.add(new Pair<>(previous, i)));
+                    .ifPresent(i -> changed.add(new Couple<>(previous, i)));
         }
 
-        for (final Pair<IThresholdViolationIssue, IThresholdViolationIssue> next : changed)
+        for (final Couple<IThresholdViolationIssue, IThresholdViolationIssue> next : changed)
         {
             final IThresholdViolationIssue originalTh = next.getFirst();
             final IThresholdViolationIssue th = next.getSecond();
@@ -152,10 +152,10 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 unchanged.add(th);
                 break;
             case BETTER:
-                improved.add(new Pair<IIssue, IIssue>(originalTh, th));
+                improved.add(new Couple<IIssue, IIssue>(originalTh, th));
                 break;
             case WORSE:
-                worse.add(new Pair<IIssue, IIssue>(originalTh, th));
+                worse.add(new Couple<IIssue, IIssue>(originalTh, th));
                 break;
             case CHANGED:
                 //handled by removing the previous and adding the new
@@ -202,8 +202,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
     //    }
 
     //Check in removed if there are any cycle groups that match more or less any in added.
-    private void processCycleGroups(final List<IIssue> added, final Set<IIssue> removed, final List<Pair<IIssue, IIssue>> improved,
-            final List<Pair<IIssue, IIssue>> worse)
+    private void processCycleGroups(final List<IIssue> added, final Set<IIssue> removed, final List<Couple<IIssue, IIssue>> improved,
+            final List<Couple<IIssue, IIssue>> worse)
     {
         //TODO
         //1. if there is a removed cycle group where all involved elements are present in an added, then it is likely that it has been made worse
@@ -212,8 +212,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         //   (check for special case where cycle group is broken into two or more smaller cycle groups)
     }
 
-    private void processDuplicates(final List<IIssue> added, final Set<IIssue> removed, final List<Pair<IIssue, IIssue>> improved,
-            final List<Pair<IIssue, IIssue>> worse)
+    private void processDuplicates(final List<IIssue> added, final Set<IIssue> removed, final List<Couple<IIssue, IIssue>> improved,
+            final List<Couple<IIssue, IIssue>> worse)
     {
         //TODO
         //same as for cycles: check if there are duplicates that contain exact matches and more to detect improved / worse
@@ -459,7 +459,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final List<IMetricThreshold> removed = new ArrayList<>();
         final List<IMetricThreshold> unchanged = new ArrayList<>();
-        final List<Pair<IMetricThreshold, IMetricThreshold>> changed = new ArrayList<>();
+        final List<Couple<IMetricThreshold, IMetricThreshold>> changed = new ArrayList<>();
         final List<IMetricThreshold> added = new ArrayList<>(thresholds2);
 
         for (final IMetricThreshold next : new ArrayList<>(thresholds1))
@@ -475,7 +475,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 if (changedOpt.isPresent())
                 {
                     final IMetricThreshold changedTh = changedOpt.get();
-                    changed.add(new Pair<IMetricThreshold, IMetricThreshold>(next, changedTh));
+                    changed.add(new Couple<IMetricThreshold, IMetricThreshold>(next, changedTh));
                     added.remove(changedTh);
                 }
                 else
@@ -495,7 +495,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final List<IResolution> removed = new ArrayList<>();
         final List<IResolution> unchanged = new ArrayList<>();
-        final List<Pair<IResolution, IResolution>> changed = new ArrayList<>();
+        final List<Couple<IResolution, IResolution>> changed = new ArrayList<>();
         final List<IResolution> added = new ArrayList<>(infoProcessor.getResolutions(predicate));
 
         for (final IResolution next : new ArrayList<>(baseSystem.getResolutions(predicate)))
@@ -509,7 +509,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 final Optional<IResolution> matchOpt = added.stream().filter(r -> r.getName().equals(next.getName())).findFirst();
                 if (matchOpt.isPresent())
                 {
-                    changed.add(new Pair<>(next, matchOpt.get()));
+                    changed.add(new Couple<>(next, matchOpt.get()));
                     added.remove(matchOpt.get());
                 }
                 else

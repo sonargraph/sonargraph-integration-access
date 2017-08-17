@@ -20,8 +20,8 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 
@@ -30,11 +30,11 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     private static final long serialVersionUID = 173829836484799550L;
     private final List<IMetricThreshold> added;
     private final List<IMetricThreshold> removed;
-    private final List<Pair<IMetricThreshold, IMetricThreshold>> changed;
+    private final List<Couple<IMetricThreshold, IMetricThreshold>> changed;
     private final List<IMetricThreshold> unchanged;
 
     public MetricThresholdDeltaImpl(final List<IMetricThreshold> added, final List<IMetricThreshold> removed, final List<IMetricThreshold> unchanged,
-            final List<Pair<IMetricThreshold, IMetricThreshold>> changed)
+            final List<Couple<IMetricThreshold, IMetricThreshold>> changed)
     {
         assert added != null : "Parameter 'added' of method 'MetricThresholdDeltaImpl' must not be null";
         assert removed != null : "Parameter 'removed' of method 'MetricThresholdDeltaImpl' must not be null";
@@ -66,7 +66,7 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     }
 
     @Override
-    public List<Pair<IMetricThreshold, IMetricThreshold>> getChanged()
+    public List<Couple<IMetricThreshold, IMetricThreshold>> getChanged()
     {
         return changed;
     }
@@ -87,18 +87,18 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     public String print(final boolean includeUnchanged)
     {
         final StringBuilder builder = new StringBuilder("Delta of Metric Thresholds");
-        builder.append("\n").append(StringUtility.INDENTATION).append("Removed: (").append(removed.size()).append("):");
-        final Consumer<? super IMetricThreshold> action = th -> builder.append("\n").append(StringUtility.INDENTATION)
-                .append(StringUtility.INDENTATION).append(th.toString());
+        builder.append("\n").append(Utility.INDENTATION).append("Removed: (").append(removed.size()).append("):");
+        final Consumer<? super IMetricThreshold> action = th -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION)
+                .append(th.toString());
         removed.forEach(action);
-        builder.append("\n").append(StringUtility.INDENTATION).append("Added (").append(added.size()).append("):");
+        builder.append("\n").append(Utility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
-        builder.append("\n").append(StringUtility.INDENTATION).append("Changed (").append(changed.size()).append("):");
-        changed.forEach(p -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION).append("Previous: ")
+        builder.append("\n").append(Utility.INDENTATION).append("Changed (").append(changed.size()).append("):");
+        changed.forEach(p -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append("Previous: ")
                 .append(p.getFirst().toString()).append("; Now: ").append(p.getSecond().toString()));
         if (includeUnchanged)
         {
-            builder.append("\n").append(StringUtility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
+            builder.append("\n").append(Utility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
             unchanged.forEach(action);
         }
         return builder.toString();

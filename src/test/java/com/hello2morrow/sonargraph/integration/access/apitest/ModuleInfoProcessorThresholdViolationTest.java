@@ -31,7 +31,7 @@ import org.junit.Test;
 import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
@@ -45,7 +45,7 @@ public class ModuleInfoProcessorThresholdViolationTest
     public void validateThresholdIssues()
     {
         m_controller = ControllerAccess.createController();
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final Map<String, IModule> moduleMap = m_controller.getSoftwareSystem().getModules();
 

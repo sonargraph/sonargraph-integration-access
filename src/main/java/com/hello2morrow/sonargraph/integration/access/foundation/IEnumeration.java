@@ -19,9 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 import java.io.Serializable;
 
-public interface IResult extends Serializable
+public interface IEnumeration extends Serializable
 {
-    public boolean isSuccess();
+    /**
+     * @return the mixed case representation of the identifier
+     */
+    public String getStandardName();
 
-    public boolean isFailure();
+    /**
+     * @return the name used in user interfaces
+     */
+    public String getPresentationName();
 }

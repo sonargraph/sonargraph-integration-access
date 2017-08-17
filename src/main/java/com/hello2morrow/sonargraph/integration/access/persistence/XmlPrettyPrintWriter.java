@@ -24,10 +24,9 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
-
 final class XmlPrettyPrintWriter implements XMLStreamWriter
 {
+    private static final String DEFAULT_LINE_SEPARATOR = "\n";
     private static final int INDENTATION_LENGTH = 4;
     private static final char INDENT_CHAR = ' ';
     private static final String LINEFEED_CHAR = "\n";
@@ -39,6 +38,16 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     {
         assert writer != null : "Parameter 'writer' of method 'XmlPrettyPrintWriter' must not be null";
         m_writer = writer;
+    }
+
+    private static String harmonizeNewLineBreaks(final String text)
+    {
+        assert text != null : "Parameter 'text' of method 'harmonizeNewLineBreaks' must not be null";
+        //First replace Windows "\r\n" with default "\n"
+        String harmonizedText = text.replace("\r\n", DEFAULT_LINE_SEPARATOR);
+        //Replace MAC "\r" with default "\n"
+        harmonizedText = harmonizedText.replace("\r", DEFAULT_LINE_SEPARATOR);
+        return harmonizedText;
     }
 
     @Override
@@ -111,19 +120,19 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeAttribute(final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(localName, StringUtility.harmonizeNewLineBreaks(value));
+        m_writer.writeAttribute(localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
     public void writeAttribute(final String prefix, final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(prefix, namespaceURI, localName, StringUtility.harmonizeNewLineBreaks(value));
+        m_writer.writeAttribute(prefix, namespaceURI, localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
     public void writeAttribute(final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(namespaceURI, localName, StringUtility.harmonizeNewLineBreaks(value));
+        m_writer.writeAttribute(namespaceURI, localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
@@ -141,7 +150,7 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeComment(final String data) throws XMLStreamException
     {
-        m_writer.writeComment(StringUtility.harmonizeNewLineBreaks(data));
+        m_writer.writeComment(harmonizeNewLineBreaks(data));
     }
 
     @Override
@@ -195,13 +204,13 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final String text) throws XMLStreamException
     {
-        m_writer.writeCharacters(StringUtility.harmonizeNewLineBreaks(text));
+        m_writer.writeCharacters(harmonizeNewLineBreaks(text));
     }
 
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        m_writer.writeCharacters(StringUtility.harmonizeNewLineBreaks(new String(text)).toCharArray(), start, len);
+        m_writer.writeCharacters(harmonizeNewLineBreaks(new String(text)).toCharArray(), start, len);
     }
 
     @Override

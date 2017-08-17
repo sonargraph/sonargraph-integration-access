@@ -30,7 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -81,11 +81,11 @@ public class ReportDifferenceProcessorResolutionTest
     private IResolutionDelta createDelta(final String report1, final String report2, final Predicate<IResolution> filter)
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(report1));
+        final Result load1 = controller.loadSystemReport(new File(report1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
 
-        final OperationResult load2 = controller.loadSystemReport(new File(report2));
+        final Result load2 = controller.loadSystemReport(new File(report2));
         assertTrue(load2.toString(), load2.isSuccess());
         final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
 

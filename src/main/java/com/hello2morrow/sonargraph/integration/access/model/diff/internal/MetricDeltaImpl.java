@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
 import java.util.Map;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
@@ -38,13 +38,13 @@ public class MetricDeltaImpl implements IMetricDelta
     }
 
     @Override
-    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getWorseValues()
+    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getWorseValues()
     {
         throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }
 
     @Override
-    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Pair<IMetricValue, IMetricValue>>>> getImprovedValues()
+    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getImprovedValues()
     {
         throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }

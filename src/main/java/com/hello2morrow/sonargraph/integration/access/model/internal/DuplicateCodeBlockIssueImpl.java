@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
@@ -53,10 +53,9 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         final StringBuilder builder = new StringBuilder("Duplicate Code Block with ");
         builder.append(occurrences.size()).append(" occurrences, block size '").append(blockSize).append("', resolved '").append(hasResolution())
                 .append("'");
-        occurrences.forEach(occ -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
-                .append(StringUtility.INDENTATION).append("Occurrence in ").append(occ.getSourceFile().getPresentationName()).append(", start '")
-                .append(occ.getStartLine()).append("', block size '").append(occ.getBlockSize()).append("', tolerance '").append(occ.getTolerance())
-                .append("'"));
+        occurrences.forEach(occ -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                .append("Occurrence in ").append(occ.getSourceFile().getPresentationName()).append(", start '").append(occ.getStartLine())
+                .append("', block size '").append(occ.getBlockSize()).append("', tolerance '").append(occ.getTolerance()).append("'"));
         return builder.toString();
     }
 

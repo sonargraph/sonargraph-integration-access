@@ -19,12 +19,12 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IStandardEnumeration;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public interface IMetricId extends IElementWithDescription
 {
-    public enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IEnumeration
     {
         CORE_VIOLATIONS_PARSER_DEPENDENCIES("Number of Violations (Parser Dependencies)"),
         CORE_COMPONENTS("Number of Components"),
@@ -43,7 +43,7 @@ public interface IMetricId extends IElementWithDescription
         @Override
         public String getStandardName()
         {
-            return StringUtility.convertConstantNameToStandardName(name());
+            return Utility.convertConstantNameToStandardName(name());
         }
 
         @Override

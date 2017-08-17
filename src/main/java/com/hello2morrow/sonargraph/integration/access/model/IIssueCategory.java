@@ -17,12 +17,12 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IStandardEnumeration;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public interface IIssueCategory extends IElement
 {
-    public enum StandardName implements IStandardEnumeration
+    public enum StandardName implements IEnumeration
     {
         ARCHITECTURE_VIOLATION("Architecture Violation"),
         ARCHITECTURE_CONSISTENCY("Architecture Consistency"),
@@ -43,7 +43,7 @@ public interface IIssueCategory extends IElement
         @Override
         public String getStandardName()
         {
-            return StringUtility.convertConstantNameToStandardName(name());
+            return Utility.convertConstantNameToStandardName(name());
         }
 
         @Override

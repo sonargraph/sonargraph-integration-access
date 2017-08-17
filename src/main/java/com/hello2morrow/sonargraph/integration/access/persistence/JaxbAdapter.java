@@ -41,7 +41,7 @@ import javax.xml.validation.SchemaFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.ExceptionUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public final class JaxbAdapter<T>
 {
@@ -77,7 +77,7 @@ public final class JaxbAdapter<T>
             LOGGER.error(INITIALIZATION_FAILED, ex);
             writer = null;
             reader = null;
-            assert false : INITIALIZATION_FAILED + ": " + ExceptionUtility.collectAll(ex);
+            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(ex);
         }
 
         this.writer = writer;
@@ -121,7 +121,7 @@ public final class JaxbAdapter<T>
             LOGGER.error(INITIALIZATION_FAILED, e);
             reader = null;
             writer = null;
-            assert false : INITIALIZATION_FAILED + ": " + ExceptionUtility.collectAll(e);
+            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(e);
         }
 
         this.reader = reader;

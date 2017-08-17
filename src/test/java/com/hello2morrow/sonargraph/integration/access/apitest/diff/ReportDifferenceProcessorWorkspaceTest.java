@@ -29,7 +29,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
@@ -45,13 +45,13 @@ public class ReportDifferenceProcessorWorkspaceTest
     public void compareWorkspaceOfReports()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(REPORT_1));
+        final Result load1 = controller.loadSystemReport(new File(REPORT_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
         assertEquals("Wrong number of modules", 2, softwareSystem.getModules().size());
 
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
-        final OperationResult load2 = controller.loadSystemReport(new File(REPORT_2));
+        final Result load2 = controller.loadSystemReport(new File(REPORT_2));
         assertTrue(load2.toString(), load2.isSuccess());
 
         final ISystemInfoProcessor systemProcessor2 = controller.createSystemInfoProcessor();

@@ -31,7 +31,7 @@ import org.junit.Test;
 import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
@@ -43,7 +43,7 @@ public class ModuleInfoProcessorDuplicatesTest
     public void processDuplicateIssuesInSameFile()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_DUPLICATES));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_DUPLICATES));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final Map<String, IModule> moduleMap = controller.getSoftwareSystem().getModules();
 

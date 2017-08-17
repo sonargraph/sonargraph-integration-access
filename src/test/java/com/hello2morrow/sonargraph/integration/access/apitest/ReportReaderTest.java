@@ -33,7 +33,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -52,7 +52,7 @@ public class ReportReaderTest
     public void processReportWithCycleGroup()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_INTEGRATION_ACCESS_WITH_CYCLE_GROUP));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_INTEGRATION_ACCESS_WITH_CYCLE_GROUP));
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issues", 11, info.getIssues(null).size());
@@ -62,7 +62,7 @@ public class ReportReaderTest
     public void processReportWithNoIssues()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITHOUT_ISSUES));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITHOUT_ISSUES));
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issues", 0, info.getIssues(null).size());
@@ -72,7 +72,7 @@ public class ReportReaderTest
     public void processReportWithoutElements()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITHOUT_ELEMENTS));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITHOUT_ELEMENTS));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 1, controller.getSoftwareSystem().getModules().size());
     }
@@ -81,7 +81,7 @@ public class ReportReaderTest
     public void processReportCreatedWith9_3()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_9_3));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_9_3));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 4, controller.getSoftwareSystem().getModules().size());
     }
@@ -95,7 +95,7 @@ public class ReportReaderTest
     public void processCSharpReport() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.CSHARP_REPORT));
+        final Result result = controller.loadSystemReport(new File(TestFixture.CSHARP_REPORT));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 4, controller.getSoftwareSystem().getModules().size());
 
@@ -119,7 +119,7 @@ public class ReportReaderTest
     public void processCppReport() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.CPP_REPORT));
+        final Result result = controller.loadSystemReport(new File(TestFixture.CPP_REPORT));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 1, controller.getSoftwareSystem().getModules().size());
 
@@ -151,7 +151,7 @@ public class ReportReaderTest
     public void processCppReportWithLogicalNamespaces() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.CPP_REPORT_HILO));
+        final Result result = controller.loadSystemReport(new File(TestFixture.CPP_REPORT_HILO));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 4, controller.getSoftwareSystem().getModules().size());
 
@@ -187,7 +187,7 @@ public class ReportReaderTest
     public void processClassFileIssuesReport()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT));
+        final Result result = controller.loadSystemReport(new File(TestFixture.ALARM_CLOCK_CLASS_FILE_ISSUES_REPORT));
         assertTrue(result.toString(), result.isSuccess());
     }
 
@@ -195,7 +195,7 @@ public class ReportReaderTest
     public void testReportStandard()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_STANDARD));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_STANDARD));
         assertTrue(result.toString(), result.isSuccess());
     }
 
@@ -203,7 +203,7 @@ public class ReportReaderTest
     public void testDirectoryIssues()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_DERIVED));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_DERIVED));
         assertTrue(result.toString(), result.isSuccess());
         assertEquals("Wrong number of modules", 2, controller.getSoftwareSystem().getModules().size());
 

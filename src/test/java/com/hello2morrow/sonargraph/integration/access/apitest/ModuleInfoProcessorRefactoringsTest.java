@@ -33,7 +33,7 @@ import org.junit.Test;
 import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
@@ -47,7 +47,7 @@ public class ModuleInfoProcessorRefactoringsTest
     public void getSourceFilesAffectedByRefactorings()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final Map<String, IModule> moduleMap = controller.getSoftwareSystem().getModules();
 
@@ -86,7 +86,7 @@ public class ModuleInfoProcessorRefactoringsTest
     public void processReportWithDuplicateFqNames()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES));
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         //TODO:
         //Check for AlarmToConsole. It is present as original in rename refactoring AlarmToConsole -> AlarmToConsole2

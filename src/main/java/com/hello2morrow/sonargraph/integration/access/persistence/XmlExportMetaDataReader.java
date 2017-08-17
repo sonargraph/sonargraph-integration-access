@@ -31,9 +31,9 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -63,7 +63,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlExportMetaDataReader.class);
 
-    public Optional<SingleExportMetaDataImpl> readMetaDataFromStream(final InputStream input, final String identifier, final OperationResult result)
+    public Optional<SingleExportMetaDataImpl> readMetaDataFromStream(final InputStream input, final String identifier, final Result result)
     {
         assert input != null : "Parameter 'input' of method 'readMetaDataFile' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'readMetaDataFromStream' must not be empty";
@@ -76,7 +76,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
         }
         catch (final Exception e)
         {
-            result.addError(IOMessageCause.READ_ERROR, "Failed to initialize JAXB", e);
+            result.addError(ResultCause.READ_ERROR, "Failed to initialize JAXB", e);
             return Optional.empty();
         }
 
@@ -94,13 +94,13 @@ public final class XmlExportMetaDataReader extends XmlAccess
         }
         catch (final Exception ex)
         {
-            result.addError(IOMessageCause.READ_ERROR, ex);
+            result.addError(ResultCause.READ_ERROR, ex);
         }
         finally
         {
             if (result.isFailure() || xmlRoot == null)
             {
-                result.addError(IOMessageCause.WRONG_FORMAT,
+                result.addError(ResultCause.WRONG_FORMAT,
                         "Report is corrupt, please ensure that versions of SonargraphBuild and Sonargraph SonarQube Plugin are compatible");
             }
         }
@@ -110,7 +110,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
     }
 
     private static Optional<SingleExportMetaDataImpl> convertXmlMetaDataToPojo(final XsdExportMetaDataRoot xsdMetaData, final String identifier,
-            final OperationResult result)
+            final Result result)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetrics' of method 'convertXmlMetricsToPojo' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'convertXmlMetricsToPojo' must not be empty";
@@ -272,7 +272,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
     }
 
     private static Map<Object, IssueTypeImpl> processIssueTypes(final XsdExportMetaData xsdMetaData, final Map<Object, IssueCategoryImpl> categories,
-            final Map<Object, IssueProviderImpl> providers, final OperationResult result)
+            final Map<Object, IssueProviderImpl> providers, final Result result)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetaData' of method 'processIssueTypes' must not be null";
         assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'processIssueTypes' must not be empty";
@@ -288,7 +288,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
             Severity severity;
             try
             {
-                severity = Severity.valueOf(StringUtility.convertStandardNameToConstantName(next.getSeverity()));
+                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
             }
             catch (final Exception e)
             {

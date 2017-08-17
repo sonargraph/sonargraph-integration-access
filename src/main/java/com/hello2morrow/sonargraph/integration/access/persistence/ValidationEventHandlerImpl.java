@@ -21,13 +21,13 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.ValidationEventLocator;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult.IMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result.ICause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 final class ValidationEventHandlerImpl implements ValidationEventHandler
 {
-    public enum ValidationMessageCauses implements IMessageCause
+    public enum ValidationMessageCauses implements ICause
     {
         XML_VALIDATION_WARNING,
         XML_VALIDATION_ERROR,
@@ -36,19 +36,19 @@ final class ValidationEventHandlerImpl implements ValidationEventHandler
         @Override
         public String getStandardName()
         {
-            return StringUtility.convertConstantNameToStandardName(name());
+            return Utility.convertConstantNameToStandardName(name());
         }
 
         @Override
         public String getPresentationName()
         {
-            return StringUtility.convertConstantNameToPresentationName(name());
+            return Utility.convertConstantNameToPresentationName(name());
         }
     }
 
-    private final OperationResult operationResult;
+    private final Result operationResult;
 
-    ValidationEventHandlerImpl(final OperationResult result)
+    ValidationEventHandlerImpl(final Result result)
     {
         assert result != null : "Parameter 'result' of method 'ValidationEventHandlerImpl' must not be null";
         operationResult = result;

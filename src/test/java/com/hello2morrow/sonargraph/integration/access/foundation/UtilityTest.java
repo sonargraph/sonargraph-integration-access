@@ -17,19 +17,21 @@
  */
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
-public final class NumberUtility
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class UtilityTest
 {
-    private NumberUtility()
+    @Test
+    public void testConvertConstantNameToMixedCaseString()
     {
-        super();
+        assertEquals("NumberOfViolations", Utility.convertConstantNameToMixedCaseString("NUMBER_OF_VIOLATIONS", true, false));
     }
 
-    public static double round(final double value, final int decimals)
+    @Test
+    public void testConvertMixedCaseStringToConstantName()
     {
-        final double decimalRounding = Math.pow(10, decimals);
-        double rounded = value * decimalRounding;
-        final double temp = Math.round(rounded);
-        rounded = temp / decimalRounding;
-        return rounded;
+        assertEquals("NUMBER_OF_VIOLATIONS", Utility.convertMixedCaseStringToConstantName("NumberOfViolations"));
     }
 }

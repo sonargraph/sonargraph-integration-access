@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 
@@ -32,11 +32,11 @@ public class IssueDeltaImpl implements IIssueDelta
     private final List<IIssue> unchanged;
     private final List<IIssue> added;
     private final List<IIssue> removed;
-    private final List<Pair<IIssue, IIssue>> improved;
-    private final List<Pair<IIssue, IIssue>> worse;
+    private final List<Couple<IIssue, IIssue>> improved;
+    private final List<Couple<IIssue, IIssue>> worse;
 
     public IssueDeltaImpl(final List<IIssue> unchanged, final List<IIssue> added, final List<IIssue> removed,
-            final List<Pair<IIssue, IIssue>> improved, final List<Pair<IIssue, IIssue>> worse)
+            final List<Couple<IIssue, IIssue>> improved, final List<Couple<IIssue, IIssue>> worse)
     {
         assert unchanged != null : "Parameter 'unchanged' of method 'IssueDeltaImpl' must not be null";
         assert added != null : "Parameter 'added' of method 'IssueDeltaImpl' must not be null";
@@ -70,13 +70,13 @@ public class IssueDeltaImpl implements IIssueDelta
     }
 
     @Override
-    public List<Pair<IIssue, IIssue>> getWorse()
+    public List<Couple<IIssue, IIssue>> getWorse()
     {
         return Collections.unmodifiableList(worse);
     }
 
     @Override
-    public List<Pair<IIssue, IIssue>> getImproved()
+    public List<Couple<IIssue, IIssue>> getImproved()
     {
         return Collections.unmodifiableList(improved);
     }
@@ -101,7 +101,7 @@ public class IssueDeltaImpl implements IIssueDelta
         final Consumer<? super IIssue> action = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append(i.toString());
         removed.forEach(action);
         builder.append(INDENTATION).append("\n").append(INDENTATION).append("Improved (").append(improved.size()).append("):");
-        final Consumer<? super Pair<IIssue, IIssue>> action2 = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append("Previous: ")
+        final Consumer<? super Couple<IIssue, IIssue>> action2 = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append("Previous: ")
                 .append(i.getFirst().toString()).append("; Now: ").append(i.getSecond().toString());
         improved.forEach(action2);
         builder.append(INDENTATION).append("\n").append(INDENTATION).append("Worsened (").append(worse.size()).append("):");

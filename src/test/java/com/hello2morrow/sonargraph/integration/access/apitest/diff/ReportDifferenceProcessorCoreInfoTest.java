@@ -28,8 +28,8 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
@@ -52,11 +52,11 @@ public class ReportDifferenceProcessorCoreInfoTest
     public void compareCoreSystemInfo()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
+        final Result load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
 
-        final OperationResult load2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_2));
+        final Result load2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_2));
         assertTrue(load2.toString(), load2.isSuccess());
         final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
 
@@ -132,7 +132,7 @@ public class ReportDifferenceProcessorCoreInfoTest
         assertEquals("Wrong removed metric threshold", "CoreCcd", thresholdDelta.getRemoved().get(0).getMetricId().getName());
         assertEquals("Wrong number of unchanged metric threshold", 4, thresholdDelta.getUnchanged().size());
         assertEquals("Wrong number of changed thresholds", 1, thresholdDelta.getChanged().size());
-        final Pair<IMetricThreshold, IMetricThreshold> changed = thresholdDelta.getChanged().get(0);
+        final Couple<IMetricThreshold, IMetricThreshold> changed = thresholdDelta.getChanged().get(0);
         assertEquals("Wrong changed metric threshold", "CoreAcd", changed.getFirst().getMetricId().getName());
         final IMetricThreshold previous = changed.getFirst();
         assertEquals("Wrong old lower threshold", 0, previous.getLowerThreshold().intValue());
@@ -153,11 +153,11 @@ public class ReportDifferenceProcessorCoreInfoTest
     public void checkEqualSystems()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
+        final Result load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
 
-        final OperationResult load2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
+        final Result load2 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
         assertTrue(load2.toString(), load2.isSuccess());
         final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
 

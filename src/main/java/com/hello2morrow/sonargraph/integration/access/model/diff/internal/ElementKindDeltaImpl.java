@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 
 public class ElementKindDeltaImpl implements IElementKindDelta
@@ -76,15 +76,14 @@ public class ElementKindDeltaImpl implements IElementKindDelta
     public String print(final boolean includeUnchanged)
     {
         final StringBuilder builder = new StringBuilder("Delta of ElementKind:");
-        builder.append("\n").append(StringUtility.INDENTATION).append("Removed (").append(removed.size()).append("):");
-        final Consumer<? super String> action = e -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
-                .append(e);
+        builder.append("\n").append(Utility.INDENTATION).append("Removed (").append(removed.size()).append("):");
+        final Consumer<? super String> action = e -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(e);
         removed.forEach(action);
-        builder.append("\n").append(StringUtility.INDENTATION).append("Added (").append(added.size()).append("):");
+        builder.append("\n").append(Utility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
         if (includeUnchanged)
         {
-            builder.append("\n").append(StringUtility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
+            builder.append("\n").append(Utility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
             unchanged.forEach(action);
         }
         return builder.toString();
