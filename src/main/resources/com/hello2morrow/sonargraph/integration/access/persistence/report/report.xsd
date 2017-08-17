@@ -259,8 +259,8 @@
         <xs:attribute name="id" type="xs:ID" use="required"/>
         <xs:attribute name="metricId" type="xs:IDREF" use="required"/>
         <xs:attribute name="metricLevel" type="xs:IDREF" use="required"/>
-        <xs:attribute name="lowerThreshold" type="xs:decimal" use="required"/>
-        <xs:attribute name="upperThreshold" type="xs:decimal" use="required"/>
+        <xs:attribute name="lowerThreshold" type="xs:decimal" default="0"/>
+        <xs:attribute name="upperThreshold" type="xs:decimal" default="0"/>
         <xs:attribute name="debugInfo" type="xs:string"/>
     </xs:complexType>
     

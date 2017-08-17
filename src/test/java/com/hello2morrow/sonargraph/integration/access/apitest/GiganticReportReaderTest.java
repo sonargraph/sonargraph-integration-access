@@ -25,7 +25,7 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
@@ -41,7 +41,7 @@ public class GiganticReportReaderTest
     @Ignore
     public void processReport()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult result = controller.loadSystemReport(new File("D:/08_test/Sonargraph.xml"));
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();

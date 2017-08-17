@@ -104,8 +104,8 @@
         <xs:attribute name="provider" type="xs:IDREF" use="required" />
         <xs:attribute name="isFloat" type="xs:boolean" use="required" />
         <xs:attribute name="levels" type="xs:IDREFS" use="required" />
-        <xs:attribute name="bestValue" type="xs:double" use="required" />
-        <xs:attribute name="worstValue" type="xs:double" use="required" />
+        <xs:attribute name="bestValue" type="xs:double" use="optional" default="NaN"/>
+        <xs:attribute name="worstValue" type="xs:double" use="optional" default="NaN"/>
     </xs:complexType>
     
     <xs:complexType name="xsdMetricIds">

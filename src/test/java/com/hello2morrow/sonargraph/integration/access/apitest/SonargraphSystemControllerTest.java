@@ -41,7 +41,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
@@ -81,7 +81,7 @@ public class SonargraphSystemControllerTest
     @Before
     public void before()
     {
-        m_controller = new ControllerFactory().createController();
+        m_controller = ControllerAccess.createController();
     }
 
     @Test

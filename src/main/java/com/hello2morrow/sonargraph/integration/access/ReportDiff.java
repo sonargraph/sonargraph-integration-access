@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
@@ -60,7 +60,7 @@ public class ReportDiff
             return result;
         }
 
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(pathToReport1));
         if (load1.isFailure())
         {

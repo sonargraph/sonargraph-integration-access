@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IMetaDataController;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
@@ -63,12 +63,12 @@ public class ModuleInfoProcessorTest
     @Before
     public void before()
     {
-        m_exportMetaDataController = new ControllerFactory().createMetaDataController();
+        m_exportMetaDataController = ControllerAccess.createMetaDataController();
         final OperationResultWithOutcome<IExportMetaData> loadMetaDataResult = m_exportMetaDataController.loadExportMetaData(new File(
                 TestFixture.META_DATA_PATH));
         assertTrue(loadMetaDataResult.toString(), loadMetaDataResult.isSuccess());
         m_exportMetaData = loadMetaDataResult.getOutcome();
-        m_controller = new ControllerFactory().createController();
+        m_controller = ControllerAccess.createController();
         final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT));
         assertTrue(result.toString(), result.isSuccess());
 

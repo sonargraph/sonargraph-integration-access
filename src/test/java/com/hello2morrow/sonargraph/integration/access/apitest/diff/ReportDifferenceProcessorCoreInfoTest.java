@@ -24,7 +24,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
@@ -51,7 +51,7 @@ public class ReportDifferenceProcessorCoreInfoTest
     @Test
     public void compareCoreSystemInfo()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
@@ -152,7 +152,7 @@ public class ReportDifferenceProcessorCoreInfoTest
     @Test
     public void checkEqualSystems()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_META_DATA_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();

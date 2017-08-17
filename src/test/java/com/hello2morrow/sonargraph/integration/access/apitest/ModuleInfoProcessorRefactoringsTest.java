@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
@@ -46,7 +46,7 @@ public class ModuleInfoProcessorRefactoringsTest
     @Test
     public void getSourceFilesAffectedByRefactorings()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final Map<String, IModule> moduleMap = controller.getSoftwareSystem().getModules();
@@ -85,7 +85,7 @@ public class ModuleInfoProcessorRefactoringsTest
     @Test
     public void processReportWithDuplicateFqNames()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         //TODO:

@@ -26,7 +26,7 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
@@ -53,7 +53,7 @@ public class ReportDifferenceProcessorIssuesTest
     @Test
     public void compareEqualReports()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(SYSTEM_REPORT));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor1 = controller.createReportDifferenceProcessor();
@@ -73,7 +73,7 @@ public class ReportDifferenceProcessorIssuesTest
     @Test
     public void compareIssuesInSmallReports()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(SYSTEM_REPORT));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor1 = controller.createReportDifferenceProcessor();
@@ -130,7 +130,7 @@ public class ReportDifferenceProcessorIssuesTest
         final String largeReport2 = LARGE_REPORT_2;
 
         final long start1 = System.currentTimeMillis();
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(largeReport1));
         System.out.println("Time needed to load first report: " + (System.currentTimeMillis() - start1));
         assertTrue(load1.toString(), load1.isSuccess());
@@ -173,7 +173,7 @@ public class ReportDifferenceProcessorIssuesTest
     @Test
     public void checkIndividualIssues()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(SYSTEM_REPORT_1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();

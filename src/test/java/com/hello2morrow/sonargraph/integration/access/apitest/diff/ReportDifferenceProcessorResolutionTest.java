@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
@@ -80,7 +80,7 @@ public class ReportDifferenceProcessorResolutionTest
 
     private IResolutionDelta createDelta(final String report1, final String report2, final Predicate<IResolution> filter)
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
+        final ISonargraphSystemController controller = ControllerAccess.createController();
         final OperationResult load1 = controller.loadSystemReport(new File(report1));
         assertTrue(load1.toString(), load1.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();

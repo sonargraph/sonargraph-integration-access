@@ -17,14 +17,19 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
-public final class ControllerFactory
+public final class ControllerAccess
 {
-    public ISonargraphSystemController createController()
+    private ControllerAccess()
+    {
+        super();
+    }
+
+    public static ISonargraphSystemController createController()
     {
         return new SonargraphSystemControllerImpl();
     }
 
-    public IMetaDataController createMetaDataController()
+    public static IMetaDataController createMetaDataController()
     {
         return new MetaDataControllerImpl();
     }
