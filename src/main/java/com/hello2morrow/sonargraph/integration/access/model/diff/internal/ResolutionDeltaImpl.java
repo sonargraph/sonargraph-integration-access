@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
 
 public class ResolutionDeltaImpl implements IResolutionDelta
 {
@@ -32,9 +32,9 @@ public class ResolutionDeltaImpl implements IResolutionDelta
     private final List<IResolution> added;
     private final List<IResolution> removed;
     private final List<IResolution> unchanged;
-    private final List<Couple<IResolution, IResolution>> changed;
+    private final List<PreviousCurrent<IResolution>> changed;
 
-    public ResolutionDeltaImpl(final List<IResolution> added, final List<IResolution> removed, final List<Couple<IResolution, IResolution>> changed,
+    public ResolutionDeltaImpl(final List<IResolution> added, final List<IResolution> removed, final List<PreviousCurrent<IResolution>> changed,
             final List<IResolution> unchanged)
     {
         assert added != null : "Parameter 'added' of method 'ResolutionDeltaImpl' must not be null";
@@ -61,7 +61,7 @@ public class ResolutionDeltaImpl implements IResolutionDelta
     }
 
     @Override
-    public List<Couple<IResolution, IResolution>> getChanged()
+    public List<PreviousCurrent<IResolution>> getChanged()
     {
         return Collections.unmodifiableList(changed);
     }
@@ -96,7 +96,7 @@ public class ResolutionDeltaImpl implements IResolutionDelta
         added.forEach(action);
         builder.append("\n").append(Utility.INDENTATION).append("Changed (").append(changed.size()).append("):");
         changed.forEach(p -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append("Previous: ")
-                .append(p.getFirst().toString()).append("; Now: ").append(p.getSecond().toString()));
+                .append(p.getPrevious().toString()).append("; Now: ").append(p.getCurrent().toString()));
         if (includeUnchanged)
         {
             builder.append("\n").append(Utility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");

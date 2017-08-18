@@ -21,14 +21,18 @@ import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
 public interface IReportDifferenceProcessor
 {
+    public ISoftwareSystem getSoftwareSystem();
+
     /**
      * Create a delta for issues using the specified issue predicate.
      * @param filter - if null, all issues are returned.
@@ -62,4 +66,6 @@ public interface IReportDifferenceProcessor
      * @return
      */
     IResolutionDelta getResolutionDelta(ISystemInfoProcessor infoProcessor, final Predicate<IResolution> filter);
+
+    public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor);
 }

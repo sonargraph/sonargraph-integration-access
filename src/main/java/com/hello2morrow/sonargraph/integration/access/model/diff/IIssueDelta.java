@@ -19,7 +19,6 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
 public interface IIssueDelta extends IDelta
@@ -30,7 +29,7 @@ public interface IIssueDelta extends IDelta
 
     List<IIssue> getAdded();
 
-    List<Couple<IIssue, IIssue>> getWorse();
+    List<PreviousCurrent<IIssue>> getWorse();
 
-    List<Couple<IIssue, IIssue>> getImproved();
+    List<PreviousCurrent<IIssue>> getImproved();
 }

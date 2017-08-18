@@ -19,16 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 
 public interface IResolutionDelta extends IDelta
 {
-    List<IResolution> getAdded();
+    public List<IResolution> getAdded();
 
-    List<IResolution> getRemoved();
+    public List<IResolution> getRemoved();
 
-    List<Couple<IResolution, IResolution>> getChanged();
+    public List<PreviousCurrent<IResolution>> getChanged();
 
-    List<IResolution> getUnchanged();
+    public List<IResolution> getUnchanged();
 }

@@ -20,21 +20,21 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
 
-public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
+public final class MetricThresholdDeltaImpl implements IMetricThresholdDelta
 {
     private static final long serialVersionUID = 173829836484799550L;
     private final List<IMetricThreshold> added;
     private final List<IMetricThreshold> removed;
-    private final List<Couple<IMetricThreshold, IMetricThreshold>> changed;
+    private final List<PreviousCurrent<IMetricThreshold>> changed;
     private final List<IMetricThreshold> unchanged;
 
     public MetricThresholdDeltaImpl(final List<IMetricThreshold> added, final List<IMetricThreshold> removed, final List<IMetricThreshold> unchanged,
-            final List<Couple<IMetricThreshold, IMetricThreshold>> changed)
+            final List<PreviousCurrent<IMetricThreshold>> changed)
     {
         assert added != null : "Parameter 'added' of method 'MetricThresholdDeltaImpl' must not be null";
         assert removed != null : "Parameter 'removed' of method 'MetricThresholdDeltaImpl' must not be null";
@@ -66,7 +66,7 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
     }
 
     @Override
-    public List<Couple<IMetricThreshold, IMetricThreshold>> getChanged()
+    public List<PreviousCurrent<IMetricThreshold>> getChanged()
     {
         return changed;
     }
@@ -95,7 +95,7 @@ public class MetricThresholdDeltaImpl implements IMetricThresholdDelta
         added.forEach(action);
         builder.append("\n").append(Utility.INDENTATION).append("Changed (").append(changed.size()).append("):");
         changed.forEach(p -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append("Previous: ")
-                .append(p.getFirst().toString()).append("; Now: ").append(p.getSecond().toString()));
+                .append(p.getPrevious().toString()).append("; Now: ").append(p.getCurrent().toString()));
         if (includeUnchanged)
         {
             builder.append("\n").append(Utility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");

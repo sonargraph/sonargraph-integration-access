@@ -19,16 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
 import java.util.Map;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
 
-public class MetricDeltaImpl implements IMetricDelta
+public final class MetricDeltaImpl implements IMetricDelta
 {
-
     private static final long serialVersionUID = -282217692085478033L;
 
     @Override
@@ -38,13 +37,13 @@ public class MetricDeltaImpl implements IMetricDelta
     }
 
     @Override
-    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getWorseValues()
+    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, PreviousCurrent<IMetricValue>>>> getWorseValues()
     {
         throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }
 
     @Override
-    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, Couple<IMetricValue, IMetricValue>>>> getImprovedValues()
+    public Map<IMetricLevel, Map<IMetricId, Map<INamedElement, PreviousCurrent<IMetricValue>>>> getImprovedValues()
     {
         throw new RuntimeException("Not yet implemented");// TODO Auto-generated method stub
     }

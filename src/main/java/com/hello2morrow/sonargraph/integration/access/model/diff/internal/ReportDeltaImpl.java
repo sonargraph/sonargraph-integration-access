@@ -30,7 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
-public class ReportDeltaImpl implements IReportDelta
+public final class ReportDeltaImpl implements IReportDelta
 {
     private static final long serialVersionUID = 5654628222750372027L;
     private final ISoftwareSystem system1;

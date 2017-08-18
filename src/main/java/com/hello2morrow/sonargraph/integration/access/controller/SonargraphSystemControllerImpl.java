@@ -21,8 +21,8 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
@@ -71,8 +71,8 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
         assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
 
-        final Result result = new Result(String.format("Load data from '%s', using baseDirectory '%s'",
-                systemReportFile.getAbsolutePath(), baseDirectory.getAbsolutePath()));
+        final Result result = new Result(String.format("Load data from '%s', using baseDirectory '%s'", systemReportFile.getAbsolutePath(),
+                baseDirectory.getAbsolutePath()));
         if (!baseDirectory.exists())
         {
             result.addError(ResultCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
@@ -129,7 +129,6 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public IReportDifferenceProcessor createReportDifferenceProcessor()
     {
         assert softwareSystem != null : "No software system available";
-
         return new ReportDifferenceProcessorImpl(new SystemInfoProcessorImpl(softwareSystem));
     }
 

@@ -19,10 +19,9 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 
 public interface IMetricThresholdDelta extends IStandardDelta<IMetricThreshold>
 {
-    List<Couple<IMetricThreshold, IMetricThreshold>> getChanged();
+    public List<PreviousCurrent<IMetricThreshold>> getChanged();
 }

@@ -87,10 +87,10 @@ public class ReportDifferenceProcessorIssuesTest
         assertEquals("Wrong number of removed issues", 6, delta.getRemoved().size());
         assertEquals("Wrong number of unchanged issues", 17, delta.getUnchanged().size());
         assertEquals("Wrong number of worsened issues", 1, delta.getWorse().size());
-        final IThresholdViolationIssue worse = (IThresholdViolationIssue) delta.getWorse().get(0).getFirst();
+        final IThresholdViolationIssue worse = (IThresholdViolationIssue) delta.getWorse().get(0).getPrevious();
         assertEquals("Wrong worse issue", PERCENTAGE_OF_DEAD_CODE, worse.getThreshold().getMetricId().getName());
         assertEquals("Wrong number of improved issues", 1, delta.getImproved().size());
-        final IThresholdViolationIssue improved = (IThresholdViolationIssue) delta.getImproved().get(0).getFirst();
+        final IThresholdViolationIssue improved = (IThresholdViolationIssue) delta.getImproved().get(0).getPrevious();
         assertEquals("Wrong improved issue", CORE_TOTAL_LINES, improved.getThreshold().getMetricId().getName());
 
         final Result load3 = controller.loadSystemReport(new File(SYSTEM_REPORT_2));
@@ -102,7 +102,7 @@ public class ReportDifferenceProcessorIssuesTest
         assertEquals("Wrong number of removed issues", 14, delta2.getRemoved().size());
         assertEquals("Wrong number of unchanged issues", 10, delta2.getUnchanged().size());
         assertEquals("Wrong number of worsened issues", 1, delta2.getWorse().size());
-        final IThresholdViolationIssue worse2 = (IThresholdViolationIssue) delta2.getWorse().get(0).getFirst();
+        final IThresholdViolationIssue worse2 = (IThresholdViolationIssue) delta2.getWorse().get(0).getPrevious();
         assertEquals("Wrong worse issue", CORE_TOTAL_LINES, worse2.getThreshold().getMetricId().getName());
         assertEquals("Wrong number of improved issues", 0, delta2.getImproved().size());
 
@@ -114,10 +114,10 @@ public class ReportDifferenceProcessorIssuesTest
         assertEquals("Wrong number of removed issues", 14, delta3.getRemoved().size());
         assertEquals("Wrong number of unchanged issues", 3, delta3.getUnchanged().size());
         assertEquals("Wrong number of worsened issues", 1, delta3.getWorse().size());
-        final IThresholdViolationIssue worse3 = (IThresholdViolationIssue) delta3.getWorse().get(0).getFirst();
+        final IThresholdViolationIssue worse3 = (IThresholdViolationIssue) delta3.getWorse().get(0).getPrevious();
         assertEquals("Wrong worse issue", CORE_TOTAL_LINES, worse3.getThreshold().getMetricId().getName());
         assertEquals("Wrong number of improved issues", 1, delta3.getImproved().size());
-        final IThresholdViolationIssue improved3 = (IThresholdViolationIssue) delta3.getImproved().get(0).getFirst();
+        final IThresholdViolationIssue improved3 = (IThresholdViolationIssue) delta3.getImproved().get(0).getPrevious();
         assertEquals("Wrong improved issue", PERCENTAGE_OF_DEAD_CODE, improved3.getThreshold().getMetricId().getName());
     }
 

@@ -29,7 +29,6 @@ import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferen
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
-import com.hello2morrow.sonargraph.integration.access.foundation.Couple;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
@@ -45,6 +44,7 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemData
 import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
+import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
 
 public class ReportDifferenceProcessorCoreInfoTest
 {
@@ -132,12 +132,12 @@ public class ReportDifferenceProcessorCoreInfoTest
         assertEquals("Wrong removed metric threshold", "CoreCcd", thresholdDelta.getRemoved().get(0).getMetricId().getName());
         assertEquals("Wrong number of unchanged metric threshold", 4, thresholdDelta.getUnchanged().size());
         assertEquals("Wrong number of changed thresholds", 1, thresholdDelta.getChanged().size());
-        final Couple<IMetricThreshold, IMetricThreshold> changed = thresholdDelta.getChanged().get(0);
-        assertEquals("Wrong changed metric threshold", "CoreAcd", changed.getFirst().getMetricId().getName());
-        final IMetricThreshold previous = changed.getFirst();
+        final PreviousCurrent<IMetricThreshold> changed = thresholdDelta.getChanged().get(0);
+        assertEquals("Wrong changed metric threshold", "CoreAcd", changed.getPrevious().getMetricId().getName());
+        final IMetricThreshold previous = changed.getPrevious();
         assertEquals("Wrong old lower threshold", 0, previous.getLowerThreshold().intValue());
         assertEquals("Wrong old upper threshold", 45, previous.getUpperThreshold().intValue());
-        final IMetricThreshold updated = changed.getSecond();
+        final IMetricThreshold updated = changed.getCurrent();
         assertEquals("Wrong new lower threshold", 1, updated.getLowerThreshold().intValue());
         assertEquals("Wrong new upper threshold", 46, updated.getUpperThreshold().intValue());
 
