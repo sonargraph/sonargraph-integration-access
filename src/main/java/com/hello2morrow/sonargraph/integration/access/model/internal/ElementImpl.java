@@ -33,18 +33,12 @@ public abstract class ElementImpl implements IElement
         this.presentationName = presentationName;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.INamedElement#getName()
-     */
     @Override
     public final String getName()
     {
         return name;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.INamedElement#getPresentationName()
-     */
     @Override
     public final String getPresentationName()
     {
@@ -54,11 +48,7 @@ public abstract class ElementImpl implements IElement
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + name.hashCode();
-        result = prime * result + presentationName.hashCode();
-        return result;
+        return name.hashCode();
     }
 
     @Override
@@ -74,7 +64,7 @@ public abstract class ElementImpl implements IElement
         }
 
         final ElementImpl other = (ElementImpl) obj;
-        return name.equals(other.name) && presentationName.equals(other.presentationName);
+        return name.equals(other.name);
     }
 
     @Override

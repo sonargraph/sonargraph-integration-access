@@ -66,9 +66,6 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((category == null) ? 0 : category.hashCode());
-        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((provider == null) ? 0 : provider.hashCode());
         return result;
     }
@@ -86,43 +83,11 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
         final IssueTypeImpl other = (IssueTypeImpl) obj;
-        if (category == null)
-        {
-            if (other.category != null)
-            {
-                return false;
-            }
-        }
-        else if (!category.equals(other.category))
-        {
-            return false;
-        }
-
-        if (description == null)
-        {
-            if (other.description != null)
-            {
-                return false;
-            }
-        }
-        else if (!description.equals(other.description))
-        {
-            return false;
-        }
-
         if (provider == null)
         {
             if (other.provider != null)
@@ -131,11 +96,6 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
             }
         }
         else if (!provider.equals(other.provider))
-        {
-            return false;
-        }
-
-        if (severity != other.severity)
         {
             return false;
         }

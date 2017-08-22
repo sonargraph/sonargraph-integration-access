@@ -42,7 +42,6 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -53,7 +52,6 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
@@ -63,7 +61,6 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.internal.IssueD
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricThresholdDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ModuleDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ReportDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ResolutionDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.StandardDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.WorkspaceDeltaImpl;
 
@@ -267,6 +264,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
     @Override
     public Diff determineChange(final IIssue issue)
     {
+        assert issue != null : "Parameter 'issue' of method 'determineChange' must not be null";
+
         if (m_issues == null)
         {
             //since the issue list does not change, we cache them here for later access.
@@ -498,50 +497,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
     }
 
     @Override
-    public IResolutionDelta getResolutionDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IResolution> predicate)
-    {
-        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'getResolutionDelta' must not be null";
-
-        final List<IResolution> removed = new ArrayList<>();
-        final List<IResolution> unchanged = new ArrayList<>();
-        final List<PreviousCurrent<IResolution>> changed = new ArrayList<>();
-        final List<IResolution> added = new ArrayList<>(infoProcessor.getResolutions(predicate));
-
-        final ArrayList<IResolution> baselineSystemResolutions = new ArrayList<>(baseSystem.getResolutions(predicate));
-        for (final IResolution next : baselineSystemResolutions)
-        {
-            if (added.remove(next))
-            {
-                unchanged.add(next);
-            }
-            else
-            {
-                final Optional<IResolution> matchOpt = added.stream().filter(r -> r.getName().equals(next.getName())).findFirst();
-                if (matchOpt.isPresent())
-                {
-                    changed.add(new PreviousCurrent<>(next, matchOpt.get()));
-                    added.remove(matchOpt.get());
-                }
-                else
-                {
-                    removed.add(next);
-                }
-            }
-        }
-
-        return new ResolutionDeltaImpl(added, removed, changed, unchanged);
-    }
-
-    @Override
     public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor)
     {
         assert systemInfoProcessor != null : "Parameter 'systemInfoProcessor' of method 'createReportDelta' must not be null";
-        final ISoftwareSystem system2 = systemInfoProcessor.getSoftwareSystem();
-
         final ICoreSystemDataDelta coreDelta = getCoreSystemDataDelta(systemInfoProcessor);
         final IWorkspaceDelta workspaceDelta = getWorkspaceDelta(systemInfoProcessor);
-        final IIssueDelta issueDelta = getIssueDelta(systemInfoProcessor, i -> !i.hasResolution());
-        final IResolutionDelta resolutionDelta = getResolutionDelta(systemInfoProcessor, null);
-        return new ReportDeltaImpl(getSoftwareSystem(), system2, coreDelta, workspaceDelta, issueDelta, resolutionDelta);
+        final IIssueDelta issueDelta = getIssueDelta(systemInfoProcessor, null);
+        return new ReportDeltaImpl(getSoftwareSystem(), systemInfoProcessor.getSoftwareSystem(), coreDelta, workspaceDelta, issueDelta);
     }
 }

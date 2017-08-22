@@ -20,13 +20,11 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
 public interface IReportDifferenceProcessor
@@ -37,35 +35,25 @@ public interface IReportDifferenceProcessor
      * Create a delta for issues using the specified issue predicate.
      * @param filter - if null, all issues are returned.
      */
-    IIssueDelta getIssueDelta(ISystemInfoProcessor infoProcessor, Predicate<IIssue> filter);
-
-    //IMetricDelta getMetricDelta(ISystemInfoProcessor infoProcessor, Predicate<IMetricId> metricFilter, Predicate<IElement> elementFilter);
+    public IIssueDelta getIssueDelta(ISystemInfoProcessor infoProcessor, Predicate<IIssue> filter);
 
     /**
      * Fast way to determine change of an issue.
      * @param issue
      */
-    Diff determineChange(IIssue issue);
+    public Diff determineChange(IIssue issue);
 
     /**
      * Compares the modules and their root directories, not taking order of modules or root directories into account.
      * @param infoProcessor
      */
-    IWorkspaceDelta getWorkspaceDelta(ISystemInfoProcessor infoProcessor);
+    public IWorkspaceDelta getWorkspaceDelta(ISystemInfoProcessor infoProcessor);
 
     /**
      * Creates a delta for the "core" system data, e.g. features, analyzers, metric categories, etc.
      * @param infoProcessor
      */
-    ICoreSystemDataDelta getCoreSystemDataDelta(ISystemInfoProcessor infoProcessor);
-
-    /**
-     * Creates a delta for the resolutions
-     * @param infoProcessor
-     * @param filter - if null, all resolutions are returned
-     * @return
-     */
-    IResolutionDelta getResolutionDelta(ISystemInfoProcessor infoProcessor, final Predicate<IResolution> filter);
+    public ICoreSystemDataDelta getCoreSystemDataDelta(ISystemInfoProcessor infoProcessor);
 
     public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor);
 }

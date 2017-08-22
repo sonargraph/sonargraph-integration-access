@@ -17,8 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff;
 
-public final class PreviousCurrent<T1>
+import java.io.Serializable;
+
+public final class PreviousCurrent<T1> implements Serializable
 {
+    private static final long serialVersionUID = 1643574306425192701L;
     private final T1 previous;
     private final T1 current;
 

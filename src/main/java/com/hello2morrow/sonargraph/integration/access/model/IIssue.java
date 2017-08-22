@@ -18,10 +18,11 @@
 package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface IIssue extends Serializable
 {
+    public String getName();
+
     public String getPresentationName();
 
     public IIssueProvider getIssueProvider();
@@ -33,8 +34,6 @@ public interface IIssue extends Serializable
     public boolean isIgnored();
 
     public String getDescription();
-
-    public List<INamedElement> getOrigins();
 
     public int getLineNumber();
 }

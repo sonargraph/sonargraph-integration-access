@@ -28,7 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class CycleGroupIssueImpl extends AbstractElementIssueImpl implements ICycleGroupIssue
+public final class CycleGroupIssueImpl extends IssueImpl implements ICycleGroupIssue
 {
     private static final long serialVersionUID = 3306324924477805018L;
     private final IAnalyzer analyzer;
@@ -39,7 +39,6 @@ public final class CycleGroupIssueImpl extends AbstractElementIssueImpl implemen
     {
         super(name, presentationName, description, issueType, provider, hasResolution, -1);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
-
         this.analyzer = analyzer;
     }
 
@@ -54,12 +53,6 @@ public final class CycleGroupIssueImpl extends AbstractElementIssueImpl implemen
     public List<INamedElement> getAffectedElements()
     {
         return Collections.unmodifiableList(cyclicElements);
-    }
-
-    @Override
-    public List<INamedElement> getOrigins()
-    {
-        return getAffectedElements();
     }
 
     @Override

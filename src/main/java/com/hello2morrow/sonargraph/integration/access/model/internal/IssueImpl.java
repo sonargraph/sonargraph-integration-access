@@ -42,18 +42,12 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         this.lineNumber = line;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#getIssueProvider()
-     */
     @Override
     public final IIssueProvider getIssueProvider()
     {
         return issueProvider;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#getIssueType()
-     */
     @Override
     public final IIssueType getIssueType()
     {
@@ -71,9 +65,6 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         return isIgnored;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IIssue#hasResolution()
-     */
     @Override
     public final boolean hasResolution()
     {
@@ -91,7 +82,6 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + (hasResolution ? 1231 : 1237);
         result = prime * result + ((issueProvider == null) ? 0 : issueProvider.hashCode());
         result = prime * result + ((issueType == null) ? 0 : issueType.hashCode());
         result = prime * result + lineNumber;
@@ -110,10 +100,6 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
             return false;
         }
         final IssueImpl other = (IssueImpl) obj;
-        if (hasResolution != other.hasResolution)
-        {
-            return false;
-        }
         if (issueProvider == null)
         {
             if (other.issueProvider != null)

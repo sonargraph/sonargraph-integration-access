@@ -39,6 +39,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
+import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -138,17 +139,20 @@ public class ModuleInfoProcessorTest
         final List<IIssue> unresolvedIssues = processor.getIssues((final IIssue issue) -> !issue.hasResolution());
         assertEquals("Wrong number of unresolved issues", 11, unresolvedIssues.size());
 
-        final IIssueCategory architectureViolation = m_exportMetaData.getIssueCategories().get("ArchitectureViolation");
+        final IIssueCategory architectureViolationCategory = m_exportMetaData.getIssueCategories().get("ArchitectureViolation");
 
         final List<IIssue> architectureViolations = processor.getIssues((final IIssue issue) ->
         {
-            final boolean matchesCategory = issue.getIssueType().getCategory().equals(architectureViolation);
+            final boolean matchesCategory = issue.getIssueType().getCategory().equals(architectureViolationCategory);
             final boolean matchesDescription = issue.getDescription().startsWith("[New]");
             return matchesCategory && matchesDescription;
         });
         assertEquals("Wrong number of architecture violations", 1, architectureViolations.size());
 
-        final Optional<ISourceFile> sourceOptional = application.getSourceForElement(architectureViolations.get(0).getOrigins().get(0));
+        final IIssue architectureViolation = architectureViolations.get(0);
+        assertTrue("Dependency issue expected - but was:" + architectureViolation.getClass().getName(),
+                architectureViolation instanceof IDependencyIssue);
+        final Optional<ISourceFile> sourceOptional = application.getSourceForElement(((IDependencyIssue) architectureViolation).getFrom());
         assertTrue("No source for element found", sourceOptional.isPresent());
         final ISourceFile source = sourceOptional.get();
         assertEquals("Wrong source of architecture violation", "./com/h2m/alarm/application/Main.java", source.getPresentationName());

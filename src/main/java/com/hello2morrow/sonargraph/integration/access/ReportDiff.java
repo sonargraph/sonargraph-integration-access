@@ -25,15 +25,14 @@ import com.hello2morrow.sonargraph.integration.access.controller.ControllerAcces
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ReportDeltaImpl;
 
@@ -82,8 +81,7 @@ public class ReportDiff
         final ICoreSystemDataDelta coreDelta = diffProcessor.getCoreSystemDataDelta(infoProcessor2);
         final IWorkspaceDelta workspaceDelta = diffProcessor.getWorkspaceDelta(infoProcessor2);
         final IIssueDelta issueDelta = diffProcessor.getIssueDelta(infoProcessor2, i -> !i.hasResolution());
-        final IResolutionDelta resolutionDelta = diffProcessor.getResolutionDelta(infoProcessor2, null);
-        final ReportDeltaImpl reportDelta = new ReportDeltaImpl(system1, system2, coreDelta, workspaceDelta, issueDelta, resolutionDelta);
+        final ReportDeltaImpl reportDelta = new ReportDeltaImpl(system1, system2, coreDelta, workspaceDelta, issueDelta);
         result.setOutcome(reportDelta);
 
         return result;

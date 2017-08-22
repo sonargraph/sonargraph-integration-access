@@ -17,16 +17,16 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
+import com.hello2morrow.sonargraph.integration.access.model.IElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public class ElementIssueImpl extends AbstractElementIssueImpl
+public class ElementIssueImpl extends IssueImpl implements IElementIssue
 {
     private static final long serialVersionUID = -3705193284431668430L;
     private final INamedElement element;
@@ -54,7 +54,7 @@ public class ElementIssueImpl extends AbstractElementIssueImpl
     @Override
     public final List<INamedElement> getAffectedElements()
     {
-        return Collections.unmodifiableList(Arrays.asList(element));
+        return Collections.singletonList(element);
     }
 
     @Override

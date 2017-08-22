@@ -21,7 +21,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface IReportDelta extends IDelta
 {
-    ISoftwareSystem getSystem2();
+    public ISoftwareSystem getBaselineSystem();
 
-    ISoftwareSystem getSystem1();
+    public ISoftwareSystem getSystem();
 }

@@ -58,27 +58,18 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.dateTime = dateTime != null ? dateTime : "";
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IResolution#getIssues()
-     */
     @Override
     public List<IIssue> getIssues()
     {
         return Collections.unmodifiableList(issues);
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IResolution#getPriority()
-     */
     @Override
     public Priority getPriority()
     {
         return priority;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IResolution#getType()
-     */
     @Override
     public ResolutionType getType()
     {

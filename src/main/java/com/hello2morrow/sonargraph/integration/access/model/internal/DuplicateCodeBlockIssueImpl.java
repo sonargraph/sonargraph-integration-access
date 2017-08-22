@@ -28,7 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
+public final class DuplicateCodeBlockIssueImpl extends IssueImpl implements IDuplicateCodeBlockIssue
 {
     private static final long serialVersionUID = 3572308291532903170L;
     private int blockSize;
@@ -65,9 +65,6 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         this.blockSize = blockSize;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue#getBlockSize()
-     */
     @Override
     public int getBlockSize()
     {
@@ -97,15 +94,7 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
         {
             return false;
         }

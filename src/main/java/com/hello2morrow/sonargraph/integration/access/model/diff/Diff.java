@@ -22,6 +22,6 @@ public enum Diff
     BETTER,
     WORSE,
     UNCHANGED,
-    CHANGED, //if a lower threshold has been violated and then an upper threshold
+    CHANGED,
     NO_MATCH_FOUND;
 }

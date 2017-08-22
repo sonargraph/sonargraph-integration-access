@@ -17,10 +17,6 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -54,12 +50,6 @@ public final class DependencyIssueImpl extends IssueImpl implements IDependencyI
     public INamedElement getTo()
     {
         return to;
-    }
-
-    @Override
-    public List<INamedElement> getOrigins()
-    {
-        return Collections.unmodifiableList(Arrays.asList(getFrom()));
     }
 
     @Override

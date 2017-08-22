@@ -32,8 +32,8 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
@@ -51,7 +51,6 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
-import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
@@ -1116,8 +1115,8 @@ public final class XmlReportReader extends XmlAccess
             final IIssueType issueType = getIssueType(softwareSystem, next);
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
 
-            final AbstractElementIssueImpl issue = new ElementIssueImpl(issueType, next.getDescription() != null ? next.getDescription() : "",
-                    issueProvider, (INamedElement) affected, next.isResolved(), next.getLine());
+            final ElementIssueImpl issue = new ElementIssueImpl(issueType, next.getDescription() != null ? next.getDescription() : "", issueProvider,
+                    (INamedElement) affected, next.isResolved(), next.getLine());
             softwareSystem.addIssue(issue);
             globalXmlIdToIssueMap.put(next, issue);
         }

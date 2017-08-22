@@ -51,27 +51,18 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         this.worstValue = worstValue;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricId#getCategories()
-     */
     @Override
     public List<IMetricCategory> getCategories()
     {
         return Collections.unmodifiableList(categories);
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricId#getProvider()
-     */
     @Override
     public IMetricProvider getProvider()
     {
         return provider;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricId#isFloat()
-     */
     @Override
     public boolean isFloat()
     {
@@ -101,9 +92,7 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((categories == null) ? 0 : categories.hashCode());
-        result = prime * result + (isFloat ? 1231 : 1237);
-        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+        result = prime * provider.hashCode();
         return result;
     }
 
@@ -114,45 +103,11 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
         final MetricIdImpl other = (MetricIdImpl) obj;
-        if (isFloat != other.isFloat)
-        {
-            return false;
-        }
-        if (provider == null)
-        {
-            if (other.provider != null)
-            {
-                return false;
-            }
-        }
-        else if (!provider.equals(other.provider))
-        {
-            return false;
-        }
-        if (categories == null)
-        {
-            if (other.categories != null)
-            {
-                return false;
-            }
-        }
-        else if (!categories.equals(other.categories))
-        {
-            return false;
-        }
-        return true;
+        return provider.equals(other.provider);
     }
 }

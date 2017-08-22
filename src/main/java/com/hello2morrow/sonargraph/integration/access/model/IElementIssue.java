@@ -21,7 +21,5 @@ import java.util.List;
 
 public interface IElementIssue extends IIssue
 {
-    public String getName();
-
     public List<INamedElement> getAffectedElements();
 }
