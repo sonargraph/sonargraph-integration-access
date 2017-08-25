@@ -26,6 +26,4 @@ public interface IStandardDelta<T extends IElement> extends IDelta
     public List<T> getAdded();
 
     public List<T> getRemoved();
-
-    public List<T> getUnchanged();
 }

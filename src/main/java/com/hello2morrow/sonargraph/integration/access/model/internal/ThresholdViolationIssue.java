@@ -23,18 +23,27 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
-public final class ThresholdViolationIssue extends ElementIssueImpl implements IThresholdViolationIssue
+public final class ThresholdViolationIssue extends NamedElementIssueImpl implements IThresholdViolationIssue
 {
     private static final long serialVersionUID = -1905279510781305516L;
     private final IMetricThreshold threshold;
     private final Number metricValue;
 
-    public ThresholdViolationIssue(final IIssueType issueType, final String description, final IIssueProvider issueProvider,
-            final INamedElement element, final boolean hasResolution, final int line, final Number metricValue, final IMetricThreshold threshold)
+    public ThresholdViolationIssue(final String name, final String presentationName, final String description, final IIssueType issueType,
+            final IIssueProvider issueProvider, final int line, final int column, final INamedElement element, final Number metricValue,
+            final IMetricThreshold threshold)
     {
-        super(issueType, description, issueProvider, element, hasResolution, line);
+        super(name, presentationName, description, issueType, issueProvider, line, column, element);
+        assert metricValue != null : "Parameter 'metricValue' of method 'ThresholdViolationIssue' must not be null";
+        assert threshold != null : "Parameter 'threshold' of method 'ThresholdViolationIssue' must not be null";
         this.metricValue = metricValue;
         this.threshold = threshold;
+    }
+
+    @Override
+    public String getKey()
+    {
+        return super.getKey() + KEY_SEPARATOR + threshold.getMetricId().getName() + KEY_SEPARATOR + threshold.getMetricLevel().getName();
     }
 
     @Override
@@ -67,10 +76,6 @@ public final class ThresholdViolationIssue extends ElementIssueImpl implements I
             return true;
         }
         if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
         {
             return false;
         }

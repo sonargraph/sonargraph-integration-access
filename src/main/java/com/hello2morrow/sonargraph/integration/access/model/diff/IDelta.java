@@ -21,7 +21,5 @@ import java.io.Serializable;
 
 public interface IDelta extends Serializable
 {
-    public String print(boolean includeUnchanged);
-
-    public boolean containsChanges();
+    public boolean isEmpty();
 }

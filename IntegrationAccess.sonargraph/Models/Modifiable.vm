@@ -1,23 +1,6 @@
 <?xml version="1.0" ?>
 <virtualModel version="9.4.4.100">
     <resolutions>
-        <ignore date="2016-12-29T16:08:03.492Z" description="Tolerated">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:./Modifiable.vm:3219bd5052d1567ed1e122bddd0c21a4|00de9f572652c35b33d5f399dc7dbcc2</elementPattern>
-            <matching info="2 occurrences with 55 line(s) found in 2 file(s)">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueCategoryImpl.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueProviderImpl.java</elementPattern>
-            </matching>
-        </ignore>
-        <ignore date="2016-12-29T16:08:03.492Z" description="Tolerated">
-            <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
-            <elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:./Modifiable.vm:618d771dc7902bc33acfae789039499e|04044c064bbcd02dfbdb465fce77c396</elementPattern>
-            <matching info="3 occurrences with 54 line(s) found in 3 file(s)">
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueCategoryImpl.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueProviderImpl.java</elementPattern>
-                <elementPattern type="FullyQualifiedName">Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:MergedIssueTypeImpl.java</elementPattern>
-            </matching>
-        </ignore>
         <ignore date="2017-06-30T11:58:14.440Z" description="Pretty sequential logic - not a problem.">
             <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ThresholdViolation" descriptor="ThresholdViolation:CoreModifiedCcn:Routine"></type>
             <elementPattern type="Wildcard"><![CDATA[Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:controller:MetaDataControllerImpl.java:MetaDataControllerImpl:mergeExportMetaDataFiles(java.util.List<java.io.File>)]]></elementPattern>

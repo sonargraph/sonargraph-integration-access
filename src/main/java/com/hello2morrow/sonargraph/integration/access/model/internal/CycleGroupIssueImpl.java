@@ -17,7 +17,6 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,25 +27,26 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class CycleGroupIssueImpl extends IssueImpl implements ICycleGroupIssue
+public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implements ICycleGroupIssue
 {
     private static final long serialVersionUID = 3306324924477805018L;
     private final IAnalyzer analyzer;
-    private final List<INamedElement> cyclicElements = new ArrayList<>();
+    private final List<INamedElement> cyclicElements;
 
     public CycleGroupIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final boolean hasResolution, final IAnalyzer analyzer)
+            final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements)
     {
-        super(name, presentationName, description, issueType, provider, hasResolution, -1);
+        super(name, presentationName, description, issueType, provider);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
+        assert cyclicElements != null && !cyclicElements.isEmpty() : "Parameter 'cyclicElements' of method 'CycleGroupIssueImpl' must not be empty";
         this.analyzer = analyzer;
+        this.cyclicElements = cyclicElements;
     }
 
-    public void setAffectedElements(final List<INamedElement> elements)
+    @Override
+    public List<INamedElement> getNamedElements()
     {
-        assert elements != null : "Parameter 'elements' of method 'setCyclicElements' must not be null";
-        assert !elements.isEmpty() : "Parameter 'elements' of method 'setCyclicElements' must not be empty";
-        cyclicElements.addAll(elements);
+        return Collections.unmodifiableList(cyclicElements);
     }
 
     @Override

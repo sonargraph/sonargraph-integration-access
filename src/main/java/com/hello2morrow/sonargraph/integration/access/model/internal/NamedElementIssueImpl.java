@@ -20,41 +20,34 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Collections;
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.IElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public class ElementIssueImpl extends IssueImpl implements IElementIssue
+public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implements IElementIssue
 {
     private static final long serialVersionUID = -3705193284431668430L;
-    private final INamedElement element;
+    private final INamedElement namedElement;
 
-    private static String createName(final IIssueType issueType, final INamedElement element, final int line)
+    public NamedElementIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
+            final IIssueProvider issueProvider, final int line, final int column, final INamedElement namedElement)
     {
-        assert issueType != null : "Parameter 'issueType' of method 'createName' must not be null";
-        assert element != null : "Parameter 'element' of method 'createName' must not be null";
-        return issueType.getName() + ":" + element.getFqName() + ":" + line;
+        super(name, presentationName, description, issueType, issueProvider, line, column);
+        assert namedElement != null : "Parameter 'namedElement' of method 'NamedElementIssueImpl' must not be null";
+        this.namedElement = namedElement;
     }
 
-    public ElementIssueImpl(final IIssueType issueType, final String description, final IIssueProvider issueProvider, final INamedElement element,
-            final boolean hasResolution, final int line)
+    @Override
+    public final INamedElement getNamedElement()
     {
-        super(createName(issueType, element, line), issueType.getPresentationName(), description, issueType, issueProvider, hasResolution, line);
-        assert element != null : "Parameter 'element' of method 'ElementIssue' must not be null";
-        this.element = element;
-    }
-
-    public final IElement getElement()
-    {
-        return element;
+        return namedElement;
     }
 
     @Override
     public final List<INamedElement> getAffectedElements()
     {
-        return Collections.singletonList(element);
+        return Collections.singletonList(namedElement);
     }
 
     @Override
@@ -62,7 +55,7 @@ public class ElementIssueImpl extends IssueImpl implements IElementIssue
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + element.hashCode();
+        result = prime * result + namedElement.hashCode();
         return result;
     }
 
@@ -77,8 +70,8 @@ public class ElementIssueImpl extends IssueImpl implements IElementIssue
         {
             return false;
         }
-        final ElementIssueImpl other = (ElementIssueImpl) obj;
-        return element.equals(other.element);
+        final NamedElementIssueImpl other = (NamedElementIssueImpl) obj;
+        return namedElement.equals(other.namedElement);
     }
 
     @Override
@@ -86,7 +79,7 @@ public class ElementIssueImpl extends IssueImpl implements IElementIssue
     {
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("\n");
-        builder.append("element:").append(element.getFqName());
+        builder.append("namedElement:").append(namedElement.getFqName());
         return builder.toString();
     }
 }

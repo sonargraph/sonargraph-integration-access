@@ -17,43 +17,12 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
-import java.util.function.Predicate;
-
-import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
-import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
-import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
 
 public interface IReportDifferenceProcessor
 {
     public ISoftwareSystem getSoftwareSystem();
-
-    /**
-     * Create a delta for issues using the specified issue predicate.
-     * @param filter - if null, all issues are returned.
-     */
-    public IIssueDelta getIssueDelta(ISystemInfoProcessor infoProcessor, Predicate<IIssue> filter);
-
-    /**
-     * Fast way to determine change of an issue.
-     * @param issue
-     */
-    public Diff determineChange(IIssue issue);
-
-    /**
-     * Compares the modules and their root directories, not taking order of modules or root directories into account.
-     * @param infoProcessor
-     */
-    public IWorkspaceDelta getWorkspaceDelta(ISystemInfoProcessor infoProcessor);
-
-    /**
-     * Creates a delta for the "core" system data, e.g. features, analyzers, metric categories, etc.
-     * @param infoProcessor
-     */
-    public ICoreSystemDataDelta getCoreSystemDataDelta(ISystemInfoProcessor infoProcessor);
 
     public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor);
 }

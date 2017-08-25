@@ -19,24 +19,24 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 
 import java.io.Serializable;
 
-public final class PreviousCurrent<T1> implements Serializable
+public final class BaselineCurrent<T1> implements Serializable
 {
     private static final long serialVersionUID = 1643574306425192701L;
-    private final T1 previous;
+    private final T1 baseline;
     private final T1 current;
 
-    public PreviousCurrent(final T1 previous, final T1 current)
+    public BaselineCurrent(final T1 baseline, final T1 current)
     {
-        assert previous != null : "Parameter 'previous' of method 'PreviousCurrent' must not be null";
-        assert current != null : "Parameter 'current' of method 'PreviousCurrent' must not be null";
-        assert previous != current : "Same instances";
-        this.previous = previous;
+        assert baseline != null : "Parameter 'baseline' of method 'BaselineCurrent' must not be null";
+        assert current != null : "Parameter 'current' of method 'BaselineCurrent' must not be null";
+        assert baseline != current : "Same instances";
+        this.baseline = baseline;
         this.current = current;
     }
 
-    public T1 getPrevious()
+    public T1 getBaseline()
     {
-        return previous;
+        return baseline;
     }
 
     public T1 getCurrent()
@@ -49,7 +49,7 @@ public final class PreviousCurrent<T1> implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + previous.hashCode();
+        result = prime * result + baseline.hashCode();
         result = prime * result + current.hashCode();
         return result;
     }
@@ -66,13 +66,13 @@ public final class PreviousCurrent<T1> implements Serializable
             return false;
         }
 
-        final PreviousCurrent<?> other = (PreviousCurrent<?>) obj;
-        return previous.equals(other.previous) && current.equals(other.current);
+        final BaselineCurrent<?> other = (BaselineCurrent<?>) obj;
+        return baseline.equals(other.baseline) && current.equals(other.current);
     }
 
     @Override
     public String toString()
     {
-        return previous + "|" + current;
+        return baseline + "|" + current;
     }
 }

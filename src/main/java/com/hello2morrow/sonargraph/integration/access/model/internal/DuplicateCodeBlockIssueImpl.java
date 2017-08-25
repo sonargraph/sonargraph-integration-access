@@ -28,17 +28,23 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class DuplicateCodeBlockIssueImpl extends IssueImpl implements IDuplicateCodeBlockIssue
+public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImpl implements IDuplicateCodeBlockIssue
 {
     private static final long serialVersionUID = 3572308291532903170L;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;
 
     public DuplicateCodeBlockIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final boolean hasResolution, final List<IDuplicateCodeBlockOccurrence> occurrences)
+            final IIssueProvider provider, final List<IDuplicateCodeBlockOccurrence> occurrences)
     {
-        super(name, presentationName, description, issueType, provider, hasResolution, -1);
+        super(name, presentationName, description, issueType, provider);
         this.occurrences = occurrences;
+    }
+
+    @Override
+    public List<INamedElement> getNamedElements()
+    {
+        return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
     }
 
     @Override

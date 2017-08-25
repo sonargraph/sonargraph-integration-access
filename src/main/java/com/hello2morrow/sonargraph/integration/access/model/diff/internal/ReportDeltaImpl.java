@@ -17,12 +17,17 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.diff.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
@@ -32,11 +37,73 @@ import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta
 public final class ReportDeltaImpl implements IReportDelta
 {
     private static final long serialVersionUID = 5654628222750372027L;
+
+    private final List<IFeature> addedFeature = new ArrayList<>();
+    private final List<IFeature> removedFeature = new ArrayList<>();
+
+    private final List<IAnalyzer> addedAnalyzer = new ArrayList<>();
+    private final List<IAnalyzer> removedAnalyzer = new ArrayList<>();
+
+    private final List<IMetricThreshold> addedThreshold = new ArrayList<>();
+    private final List<IMetricThreshold> removedThreshold = new ArrayList<>();
+    private final List<BaselineCurrent<IMetricThreshold>> changedBoundariesThreshold = new ArrayList<>();
+
     private final ISoftwareSystem baselineSystem;
     private final ISoftwareSystem system;
-    private final ICoreSystemDataDelta coreDelta;
-    private final IWorkspaceDelta workspaceDelta;
-    private final IIssueDelta issueDelta;
+
+    private ICoreSystemDataDelta coreDelta;
+    private IWorkspaceDelta workspaceDelta;
+    private IIssueDelta issueDelta;
+
+    public ReportDeltaImpl(final ISoftwareSystem baselineSystem, final ISoftwareSystem currentSystem)
+    {
+        assert baselineSystem != null : "Parameter 'baselineSystem' of method 'ReportDeltaImpl' must not be null";
+        assert currentSystem != null : "Parameter 'currentSystem' of method 'ReportDeltaImpl' must not be null";
+        this.baselineSystem = baselineSystem;
+        this.system = currentSystem;
+    }
+
+    public void removedFeature(final IFeature removed)
+    {
+        assert removed != null : "Parameter 'removed' of method 'removedFeature' must not be null";
+        removedFeature.add(removed);
+    }
+
+    public void addedFeature(final IFeature added)
+    {
+        assert added != null : "Parameter 'added' of method 'addedFeature' must not be null";
+        addedFeature.add(added);
+    }
+
+    public void removedAnalyzer(final IAnalyzer removed)
+    {
+        assert removed != null : "Parameter 'removed' of method 'removedAnalyzer' must not be null";
+        removedAnalyzer.add(removed);
+    }
+
+    public void addedAnalyzer(final IAnalyzer added)
+    {
+        assert added != null : "Parameter 'added' of method 'addedAnalyzer' must not be null";
+        addedAnalyzer.add(added);
+    }
+
+    public void changedThresholdBoundaries(final BaselineCurrent<IMetricThreshold> baselineCurrent)
+    {
+        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'changedThresholdBoundaries' must not be null";
+        changedBoundariesThreshold.add(baselineCurrent);
+    }
+
+    public void removedThreshold(final IMetricThreshold metricThreshold)
+    {
+        assert metricThreshold != null : "Parameter 'metricThreshold' of method 'removedThreshold' must not be null";
+        removedThreshold.add(metricThreshold);
+    }
+
+    public void addedThreshold(final IMetricThreshold metricThreshold)
+    {
+        assert metricThreshold != null : "Parameter 'metricThreshold' of method 'addedThreshold' must not be null";
+        addedThreshold.add(metricThreshold);
+    }
 
     public ReportDeltaImpl(final ISoftwareSystem baselineSystem, final ISoftwareSystem system, final ICoreSystemDataDelta coreDelta,
             final IWorkspaceDelta workspaceDelta, final IIssueDelta issueDelta)
@@ -82,15 +149,9 @@ public final class ReportDeltaImpl implements IReportDelta
     }
 
     @Override
-    public String toString()
+    public boolean isEmpty()
     {
-        return print(true);
-    }
-
-    @Override
-    public boolean containsChanges()
-    {
-        return coreDelta.containsChanges() || workspaceDelta.containsChanges() || issueDelta.containsChanges();
+        return coreDelta.isEmpty() && workspaceDelta.isEmpty() && issueDelta.isEmpty();
     }
 
     private String printNameAndTimestamp(final ISoftwareSystem system)
@@ -113,7 +174,7 @@ public final class ReportDeltaImpl implements IReportDelta
     }
 
     @Override
-    public String print(final boolean includeUnresolved)
+    public String toString()
     {
         final StringBuilder builder = new StringBuilder();
         if (baselineSystem.getSystemId().equals(system.getSystemId()) && baselineSystem.getPath().equals(system.getPath()))
@@ -130,7 +191,7 @@ public final class ReportDeltaImpl implements IReportDelta
             builder.append(printSystemInfo(system));
         }
 
-        if (!containsChanges())
+        if (!isEmpty())
         {
             builder.append("\n\nNo delta detected between systems:");
             builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
@@ -146,9 +207,9 @@ public final class ReportDeltaImpl implements IReportDelta
         final List<IDelta> deltas = Arrays.asList(getCoreDelta(), getWorkspaceDelta(), getIssueDelta());
         deltas.forEach(d ->
         {
-            if (d.containsChanges() || includeUnresolved)
+            if (d.isEmpty())
             {
-                builder.append("\n- ").append(d.print(includeUnresolved));
+                builder.append("\n- ").append(d);
             }
         });
 

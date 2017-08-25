@@ -17,50 +17,47 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.diff.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.PreviousCurrent;
 
-public class IssueDeltaImpl implements IIssueDelta
+public final class IssueDeltaImpl implements IIssueDelta
 {
     private static final long serialVersionUID = -3056194877234260699L;
-    private static final String INDENTATION = "    ";
-    private final List<IIssue> unchanged;
-    private final List<IIssue> added;
-    private final List<IIssue> removed;
-    private final List<PreviousCurrent<IIssue>> improved;
-    private final List<PreviousCurrent<IIssue>> worse;
 
-    public IssueDeltaImpl(final List<IIssue> unchanged, final List<IIssue> added, final List<IIssue> removed,
-            final List<PreviousCurrent<IIssue>> improved, final List<PreviousCurrent<IIssue>> worse)
+    private final List<IIssue> added = new ArrayList<>();
+    private final List<IIssue> removed = new ArrayList<>();
+
+    private final List<IIssue> addedIgnoreResolution = new ArrayList<>();
+    private final List<IIssue> addedFixResolution = new ArrayList<>();
+    private final List<IIssue> removedIgnoreResolution = new ArrayList<>();
+    private final List<IIssue> removedFixResolution = new ArrayList<>();
+
+    private final List<BaselineCurrent<IThresholdViolationIssue>> improved = new ArrayList<>();
+    private final List<BaselineCurrent<IThresholdViolationIssue>> worse = new ArrayList<>();
+
+    public IssueDeltaImpl()
     {
-        assert unchanged != null : "Parameter 'unchanged' of method 'IssueDeltaImpl' must not be null";
-        assert added != null : "Parameter 'added' of method 'IssueDeltaImpl' must not be null";
-        assert removed != null : "Parameter 'removed' of method 'IssueDeltaImpl' must not be null";
-        assert improved != null : "Parameter 'improved' of method 'IssueDeltaImpl' must not be null";
-        assert worse != null : "Parameter 'worse' of method 'IssueDeltaImpl' must not be null";
-
-        this.unchanged = unchanged;
-        this.added = added;
-        this.removed = removed;
-        this.improved = improved;
-        this.worse = worse;
+        super();
     }
 
-    @Override
-    public List<IIssue> getRemoved()
+    public void addImproved(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
     {
-        return Collections.unmodifiableList(removed);
+        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'addImproved' must not be null";
+        improved.add(baselineCurrent);
     }
 
-    @Override
-    public List<IIssue> getUnchanged()
+    public void addWorse(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
     {
-        return Collections.unmodifiableList(unchanged);
+        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'addWorse' must not be null";
+        worse.add(baselineCurrent);
     }
 
     @Override
@@ -70,49 +67,48 @@ public class IssueDeltaImpl implements IIssueDelta
     }
 
     @Override
-    public List<PreviousCurrent<IIssue>> getWorse()
+    public List<IIssue> getRemoved()
+    {
+        return Collections.unmodifiableList(removed);
+    }
+
+    @Override
+    public List<BaselineCurrent<IThresholdViolationIssue>> getWorse()
     {
         return Collections.unmodifiableList(worse);
     }
 
     @Override
-    public List<PreviousCurrent<IIssue>> getImproved()
+    public List<BaselineCurrent<IThresholdViolationIssue>> getImproved()
     {
         return Collections.unmodifiableList(improved);
     }
 
     @Override
+    public boolean isEmpty()
+    {
+        //TODO
+        return added.isEmpty() && removed.isEmpty() && improved.isEmpty() && worse.isEmpty();
+    }
+
+    @Override
     public String toString()
     {
-        return print(true);
-    }
-
-    @Override
-    public boolean containsChanges()
-    {
-        return !added.isEmpty() || !removed.isEmpty() || !improved.isEmpty() || !worse.isEmpty();
-    }
-
-    @Override
-    public String print(final boolean includeUnchanged)
-    {
-        final StringBuilder builder = new StringBuilder("Issue delta:");
-        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Removed (").append(removed.size()).append("):");
-        final Consumer<? super IIssue> action = i -> builder.append("\n").append(INDENTATION).append(INDENTATION).append(i.toString());
+        final StringBuilder builder = new StringBuilder("Issue Delta:");
+        //TODO
+        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Removed (").append(removed.size()).append("):");
+        final Consumer<? super IIssue> action = i -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION)
+                .append(i.toString());
         removed.forEach(action);
-        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Improved (").append(improved.size()).append("):");
-        final Consumer<? super PreviousCurrent<IIssue>> action2 = i -> builder.append("\n").append(INDENTATION).append(INDENTATION)
-                .append("Previous: ").append(i.getPrevious().toString()).append("; Now: ").append(i.getCurrent().toString());
+        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Improved (").append(improved.size()).append("):");
+        final Consumer<? super BaselineCurrent<IThresholdViolationIssue>> action2 = i -> builder.append("\n").append(Utility.INDENTATION)
+                .append(Utility.INDENTATION).append("Previous: ").append(i.getBaseline().toString()).append("; Now: ")
+                .append(i.getCurrent().toString());
         improved.forEach(action2);
-        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Worsened (").append(worse.size()).append("):");
+        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Worsened (").append(worse.size()).append("):");
         worse.forEach(action2);
-        builder.append(INDENTATION).append("\n").append(INDENTATION).append("Added (").append(added.size()).append("):");
+        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
-        if (includeUnchanged)
-        {
-            builder.append(INDENTATION).append("\n").append(INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
-            unchanged.forEach(action);
-        }
         return builder.toString();
     }
 }

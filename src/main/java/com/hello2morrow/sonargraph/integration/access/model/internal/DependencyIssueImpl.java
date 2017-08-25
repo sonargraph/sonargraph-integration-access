@@ -22,22 +22,28 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
+public final class DependencyIssueImpl extends SingleNamedElementIssueImpl implements IDependencyIssue
 {
     private static final long serialVersionUID = 2039911860451849412L;
     private final INamedElement from;
     private final INamedElement to;
 
-    public DependencyIssueImpl(final IIssueType issueType, final String description, final IIssueProvider provider, final boolean hasResolution,
-            final INamedElement from, final INamedElement to, final int line)
+    public DependencyIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
+            final IIssueProvider provider, final int line, final int column, final INamedElement from, final INamedElement to)
     {
-        super(issueType.getName(), issueType.getPresentationName(), description, issueType, provider, hasResolution, line);
+        super(name, presentationName, description, issueType, provider, line, column);
 
         assert from != null : "Parameter 'from' of method 'DependencyIssue' must not be null";
         assert to != null : "Parameter 'to' of method 'DependencyIssue' must not be null";
 
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public INamedElement getNamedElement()
+    {
+        return from;
     }
 
     @Override

@@ -86,10 +86,8 @@ public final class MetricThreshold implements IMetricThreshold
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((lowerThreshold == null) ? 0 : lowerThreshold.hashCode());
-        result = prime * result + ((metricId == null) ? 0 : metricId.hashCode());
-        result = prime * result + ((metricLevel == null) ? 0 : metricLevel.hashCode());
-        result = prime * result + ((upperThreshold == null) ? 0 : upperThreshold.hashCode());
+        result = prime * result + metricId.hashCode();
+        result = prime * result + metricLevel.hashCode();
         return result;
     }
 
@@ -100,60 +98,13 @@ public final class MetricThreshold implements IMetricThreshold
         {
             return true;
         }
-        if (obj == null)
+        if (obj == null || getClass() != obj.getClass())
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
+
         final MetricThreshold other = (MetricThreshold) obj;
-        if (metricId == null)
-        {
-            if (other.metricId != null)
-            {
-                return false;
-            }
-        }
-        else if (!metricId.equals(other.metricId))
-        {
-            return false;
-        }
-        if (metricLevel == null)
-        {
-            if (other.metricLevel != null)
-            {
-                return false;
-            }
-        }
-        else if (!metricLevel.equals(other.metricLevel))
-        {
-            return false;
-        }
-        if (lowerThreshold == null)
-        {
-            if (other.lowerThreshold != null)
-            {
-                return false;
-            }
-        }
-        else if (!lowerThreshold.equals(other.lowerThreshold))
-        {
-            return false;
-        }
-        if (upperThreshold == null)
-        {
-            if (other.upperThreshold != null)
-            {
-                return false;
-            }
-        }
-        else if (!upperThreshold.equals(other.upperThreshold))
-        {
-            return false;
-        }
-        return true;
+        return metricId.equals(other.metricId) && metricLevel.equals(other.metricLevel);
     }
 
     @Override

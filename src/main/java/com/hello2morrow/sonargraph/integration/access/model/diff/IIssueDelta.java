@@ -20,16 +20,15 @@ package com.hello2morrow.sonargraph.integration.access.model.diff;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
 public interface IIssueDelta extends IDelta
 {
-    List<IIssue> getRemoved();
+    public List<IIssue> getAdded();
 
-    List<IIssue> getUnchanged();
+    public List<IIssue> getRemoved();
 
-    List<IIssue> getAdded();
+    public List<BaselineCurrent<IThresholdViolationIssue>> getImproved();
 
-    List<PreviousCurrent<IIssue>> getWorse();
-
-    List<PreviousCurrent<IIssue>> getImproved();
+    public List<BaselineCurrent<IThresholdViolationIssue>> getWorse();
 }

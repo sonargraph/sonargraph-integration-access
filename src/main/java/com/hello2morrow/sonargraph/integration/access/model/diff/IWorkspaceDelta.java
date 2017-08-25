@@ -29,13 +29,9 @@ import com.hello2morrow.sonargraph.integration.access.model.IModule;
  */
 public interface IWorkspaceDelta extends IDelta
 {
-    public List<IModule> getUnchangedModules();
-
     public List<IModule> getAddedModules();
 
     public List<IModule> getRemovedModules();
 
     public List<IModuleDelta> getChangedModules();
-
-    public boolean isEmpty();
 }

@@ -21,20 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
-import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
-import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
-import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
-import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
-import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ReportDeltaImpl;
 
 public class ReportDiff
 {
@@ -54,37 +45,39 @@ public class ReportDiff
     {
         final ResultWithOutcome<IReportDelta> result = new ResultWithOutcome<>("Calculating delta");
         result.addMessagesFrom(validatePaths());
-        if (result.isFailure())
-        {
-            return result;
-        }
-
-        final ISonargraphSystemController controller = ControllerAccess.createController();
-        final Result load1 = controller.loadSystemReport(new File(pathToReport1));
-        if (load1.isFailure())
-        {
-            result.addMessagesFrom(load1);
-            return result;
-        }
-        final ISoftwareSystem system1 = controller.getSoftwareSystem();
-
-        final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
-        final Result load2 = controller.loadSystemReport(new File(pathToReport2));
-        if (load2.isFailure())
-        {
-            result.addMessagesFrom(load2);
-            return result;
-        }
-        final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
-        final ISoftwareSystem system2 = controller.getSoftwareSystem();
-
-        final ICoreSystemDataDelta coreDelta = diffProcessor.getCoreSystemDataDelta(infoProcessor2);
-        final IWorkspaceDelta workspaceDelta = diffProcessor.getWorkspaceDelta(infoProcessor2);
-        final IIssueDelta issueDelta = diffProcessor.getIssueDelta(infoProcessor2, i -> !i.hasResolution());
-        final ReportDeltaImpl reportDelta = new ReportDeltaImpl(system1, system2, coreDelta, workspaceDelta, issueDelta);
-        result.setOutcome(reportDelta);
-
+        //TODO
+        //        if (result.isFailure())
+        //        {
         return result;
+        //        }
+
+        //        
+        //        final ISonargraphSystemController controller = ControllerAccess.createController();
+        //        final Result load1 = controller.loadSystemReport(new File(pathToReport1));
+        //        if (load1.isFailure())
+        //        {
+        //            result.addMessagesFrom(load1);
+        //            return result;
+        //        }
+        //        final ISoftwareSystem system1 = controller.getSoftwareSystem();
+        //
+        //        final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
+        //        final Result load2 = controller.loadSystemReport(new File(pathToReport2));
+        //        if (load2.isFailure())
+        //        {
+        //            result.addMessagesFrom(load2);
+        //            return result;
+        //        }
+        //        final ISystemInfoProcessor infoProcessor2 = controller.createSystemInfoProcessor();
+        //        final ISoftwareSystem system2 = controller.getSoftwareSystem();
+        //
+        //        final ICoreSystemDataDelta coreDelta = diffProcessor.getCoreSystemDataDelta(infoProcessor2);
+        //        final IWorkspaceDelta workspaceDelta = diffProcessor.getWorkspaceDelta(infoProcessor2);
+        //        final IIssueDelta issueDelta = diffProcessor.getIssueDelta(infoProcessor2, i -> !i.hasResolution());
+        //        final ReportDeltaImpl reportDelta = new ReportDeltaImpl(system1, system2, coreDelta, workspaceDelta, issueDelta);
+        //        result.setOutcome(reportDelta);
+        //
+        //        return result;
     }
 
     public Result print(final IReportDelta delta, final String outputPath)
@@ -95,7 +88,7 @@ public class ReportDiff
         if (outputPath == null)
         {
             System.out.println(createPreamble());
-            System.out.println(delta.print(false));
+            System.out.println(delta);
             return result;
         }
 
@@ -112,7 +105,7 @@ public class ReportDiff
         try (PrintWriter out = new PrintWriter(file))
         {
             out.println(createPreamble());
-            out.println(delta.print(false));
+            out.println(delta);
         }
         catch (final IOException ex)
         {

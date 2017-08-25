@@ -56,7 +56,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupI
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
@@ -77,6 +76,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricValue
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementContainerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
@@ -579,15 +579,13 @@ public final class XmlReportReader extends XmlAccess
                 priority = Priority.NONE;
             }
 
-            final boolean isIgnored = ResolutionType.IGNORE.equals(type);
-
             final List<IIssue> issues = new ArrayList<>();
             for (final Object nextXsdIssue : nextResolution.getIssueIds())
             {
                 final XsdIssue xsdIssue = (XsdIssue) nextXsdIssue;
                 final IssueImpl nextIssueImpl = globalXmlIdToIssueMap.get(xsdIssue);
                 assert nextIssueImpl != null : "No issue with id '" + xsdIssue.getId() + "' exists";
-                nextIssueImpl.setIsIgnored(isIgnored);
+                nextIssueImpl.setResolutionType(type);
                 issues.add(nextIssueImpl);
             }
 
@@ -998,8 +996,12 @@ public final class XmlReportReader extends XmlAccess
             final IElement to = globalXmlToElementMap.get(nextDependencyIssue.getTo());
             assert to != null : "'to' element (" + toId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
             assert to != null && to instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + to;
-            final DependencyIssueImpl dependencyIssue = new DependencyIssueImpl(issueType, nextDependencyIssue.getDescription(), issueProvider,
-                    nextDependencyIssue.isResolved(), (INamedElement) from, (INamedElement) to, nextDependencyIssue.getLine());
+
+            final String nextName = issueType.getName();
+            final String nextPresentationName = issueType.getPresentationName();
+            final DependencyIssueImpl dependencyIssue = new DependencyIssueImpl(nextName, nextPresentationName, nextDependencyIssue.getDescription(),
+                    issueType, issueProvider, nextDependencyIssue.getLine(), nextDependencyIssue.getColumn(), (INamedElement) from,
+                    (INamedElement) to);
             softwareSystem.addIssue(dependencyIssue);
             globalXmlIdToIssueMap.put(nextDependencyIssue, dependencyIssue);
         }
@@ -1024,7 +1026,7 @@ public final class XmlReportReader extends XmlAccess
             }
 
             final DuplicateCodeBlockIssueImpl duplicate = new DuplicateCodeBlockIssueImpl(nextDuplicate.getFqName(), nextDuplicate.getName(),
-                    nextDuplicate.getDescription(), issueType, issueProvider, nextDuplicate.isResolved(), occurrences);
+                    nextDuplicate.getDescription(), issueType, issueProvider, occurrences);
             duplicate.setBlockSize(nextDuplicate.getBlockSize());
             softwareSystem.addDuplicateCodeBlock(duplicate);
 
@@ -1045,11 +1047,6 @@ public final class XmlReportReader extends XmlAccess
                 final IIssueType issueType = getIssueType(softwareSystem, nextCycle);
                 final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextCycle);
 
-                final String name = nextCycle.getName();
-                //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
-                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
-                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, nextCycle.isResolved(), analyzer);
-
                 final List<INamedElement> cyclicElements = new ArrayList<>();
                 for (final XsdCycleElement nextElement : nextCycle.getElement())
                 {
@@ -1057,7 +1054,11 @@ public final class XmlReportReader extends XmlAccess
                     assert element instanceof INamedElement : "Unexpected class " + element.getClass().getName();
                     cyclicElements.add((INamedElement) element);
                 }
-                cycleGroup.setAffectedElements(cyclicElements);
+
+                final String name = nextCycle.getName();
+                //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
+                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, analyzer, cyclicElements);
 
                 softwareSystem.addCycleGroup(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
@@ -1087,10 +1088,12 @@ public final class XmlReportReader extends XmlAccess
             assert threshold != null : "threshold has not been added to system for '" + nextXsdMetricThresholdViolationIssue.getDescription() + "'";
 
             final IMetricThreshold metricThreshold = (IMetricThreshold) threshold;
-            final ThresholdViolationIssue issue = new ThresholdViolationIssue(issueType,
+            final String nextName = issueType.getName();
+            final String nextPresentationName = issueType.getPresentationName();
+            final ThresholdViolationIssue issue = new ThresholdViolationIssue(nextName, nextPresentationName,
                     nextXsdMetricThresholdViolationIssue.getDescription() != null ? nextXsdMetricThresholdViolationIssue.getDescription() : "",
-                    issueProvider, (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.isResolved(),
-                    nextXsdMetricThresholdViolationIssue.getLine(), nextXsdMetricThresholdViolationIssue.getMetricValue(), metricThreshold);
+                    issueType, issueProvider, nextXsdMetricThresholdViolationIssue.getLine(), nextXsdMetricThresholdViolationIssue.getColumn(),
+                    (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.getMetricValue(), metricThreshold);
             softwareSystemImpl.addIssue(issue);
             globalXmlIdToIssueMap.put(nextXsdMetricThresholdViolationIssue, issue);
         }
@@ -1114,9 +1117,11 @@ public final class XmlReportReader extends XmlAccess
 
             final IIssueType issueType = getIssueType(softwareSystem, next);
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
-
-            final ElementIssueImpl issue = new ElementIssueImpl(issueType, next.getDescription() != null ? next.getDescription() : "", issueProvider,
-                    (INamedElement) affected, next.isResolved(), next.getLine());
+            final String nextName = issueType.getName();
+            final String nextPresentationName = issueType.getPresentationName();
+            final NamedElementIssueImpl issue = new NamedElementIssueImpl(nextName, nextPresentationName,
+                    next.getDescription() != null ? next.getDescription() : "", issueType, issueProvider, next.getLine(), next.getColumn(),
+                    (INamedElement) affected);
             softwareSystem.addIssue(issue);
             globalXmlIdToIssueMap.put(next, issue);
         }

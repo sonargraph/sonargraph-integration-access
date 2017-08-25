@@ -22,5 +22,6 @@ public enum ResolutionType
     TODO,
     IGNORE,
     REFACTORING,
-    FIX;
+    FIX,
+    NONE;
 }

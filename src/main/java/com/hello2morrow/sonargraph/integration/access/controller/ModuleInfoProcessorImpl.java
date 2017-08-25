@@ -241,62 +241,6 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         return Collections.unmodifiableMap(resultMap);
     }
 
-    //    private void addDirectoryForIssue(final Map<Directory, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
-    //    {
-    //        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
-    //        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
-    //        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
-    //
-    //        if (isElementContainedInModule(element))
-    //        {
-    //            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
-    //            if (!sourceFileOpt.isPresent())
-    //            {
-    //                INamedElement add = element;
-    //                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
-    //                if (namedElementOpt.isPresent())
-    //                {
-    //                    add = namedElementOpt.get();
-    //                }
-    //                List<IIssue> issues = resultMap.get(add);
-    //                if (issues == null)
-    //                {
-    //                    issues = new ArrayList<>();
-    //                    resultMap.put(add, issues);
-    //                }
-    //                issues.add(issue);
-    //            }
-    //        }
-    //    }
-
-    //    private void addNamedElementForIssue(final Map<INamedElement, List<IIssue>> resultMap, final IIssue issue, final INamedElement element)
-    //    {
-    //        assert resultMap != null : "Parameter 'resultMap' of method 'addNamedElementForIssue' must not be null";
-    //        assert issue != null : "Parameter 'issue' of method 'addNamedElementForIssue' must not be null";
-    //        assert element != null : "Parameter 'element' of method 'addNamedElementForIssue' must not be null";
-    //
-    //        if (isElementContainedInModule(element))
-    //        {
-    //            final Optional<ISourceFile> sourceFileOpt = element.getSourceFile();
-    //            if (!sourceFileOpt.isPresent())
-    //            {
-    //                INamedElement add = element;
-    //                final Optional<? extends INamedElement> namedElementOpt = element.getOriginal();
-    //                if (namedElementOpt.isPresent())
-    //                {
-    //                    add = namedElementOpt.get();
-    //                }
-    //                List<IIssue> issues = resultMap.get(add);
-    //                if (issues == null)
-    //                {
-    //                    issues = new ArrayList<>();
-    //                    resultMap.put(add, issues);
-    //                }
-    //                issues.add(issue);
-    //            }
-    //        }
-    //    }
-
     private void addDirectoryIssue(final String directory, final IIssue issue, final Map<String, List<IIssue>> resultMap)
     {
         assert directory != null && directory.length() > 0 : "Parameter 'directory' of method 'addDirectoryIssue' must not be empty";

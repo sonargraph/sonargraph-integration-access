@@ -20,26 +20,28 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
+import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public abstract class IssueImpl extends ElementWithDescriptionImpl implements IIssue
 {
     private static final long serialVersionUID = -693212815143740221L;
     private final IIssueType issueType;
     private final IIssueProvider issueProvider;
-    private final boolean hasResolution;
-    private final int lineNumber;
-    private boolean isIgnored;
+    private final int line;
+    private final int column;
+    private ResolutionType resolutionType = ResolutionType.NONE;
 
     public IssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final boolean hasResolution, final int line)
+            final IIssueProvider provider, final int line, final int column)
     {
         super(name, presentationName, description != null ? description : "");
+        assert issueType != null : "Parameter 'issueType' of method 'IssueImpl' must not be null";
         assert provider != null : "Parameter 'provider' of method 'Issue' must not be null";
 
         this.issueType = issueType;
         this.issueProvider = provider;
-        this.hasResolution = hasResolution;
-        this.lineNumber = line;
+        this.line = line;
+        this.column = column;
     }
 
     @Override
@@ -54,27 +56,46 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         return issueType;
     }
 
-    public final void setIsIgnored(final boolean isIgnored)
+    @Override
+    public String getKey()
     {
-        this.isIgnored = isIgnored;
+        return issueType.getName() + KEY_SEPARATOR + issueProvider.getName();
+    }
+
+    public final void setResolutionType(final ResolutionType resolutionType)
+    {
+        assert resolutionType != null : "Parameter 'resolutionType' of method 'setResolutionType' must not be null";
+        this.resolutionType = resolutionType;
+    }
+
+    @Override
+    public ResolutionType getResolutionType()
+    {
+        return resolutionType;
     }
 
     @Override
     public final boolean isIgnored()
     {
-        return isIgnored;
+        return ResolutionType.IGNORE.equals(resolutionType);
     }
 
     @Override
     public final boolean hasResolution()
     {
-        return hasResolution;
+        return !ResolutionType.NONE.equals(resolutionType);
     }
 
     @Override
-    public final int getLineNumber()
+    public final int getLine()
     {
-        return lineNumber;
+        return line;
+    }
+
+    @Override
+    public final int getColumn()
+    {
+        return column;
     }
 
     @Override
@@ -84,7 +105,8 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         int result = super.hashCode();
         result = prime * result + ((issueProvider == null) ? 0 : issueProvider.hashCode());
         result = prime * result + ((issueType == null) ? 0 : issueType.hashCode());
-        result = prime * result + lineNumber;
+        result = prime * result + line;
+        result = prime * result + column;
         return result;
     }
 
@@ -122,7 +144,11 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         {
             return false;
         }
-        if (lineNumber != other.lineNumber)
+        if (line != other.line)
+        {
+            return false;
+        }
+        if (column != other.column)
         {
             return false;
         }
@@ -138,11 +164,12 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         builder.append("\n");
         builder.append("provider:").append(issueProvider.getPresentationName());
         builder.append("\n");
-        builder.append("line:").append(lineNumber);
+        builder.append("line:").append(line);
         builder.append("\n");
-        builder.append("hasResolution:").append(hasResolution);
-        builder.append("\n");
-        builder.append("isIgnored:").append(isIgnored);
+        if (resolutionType != null)
+        {
+            builder.append("resolutionType:").append(resolutionType);
+        }
         return builder.toString();
     }
 }

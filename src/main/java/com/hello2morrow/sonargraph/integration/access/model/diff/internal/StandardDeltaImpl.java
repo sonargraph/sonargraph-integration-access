@@ -31,20 +31,17 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
     private static final long serialVersionUID = -7912469796001338998L;
     private final String name;
     private final List<T> added;
-    private final List<T> unchanged;
     private final List<T> removed;
 
-    private StandardDeltaImpl(final String name, final List<T> added, final List<T> removed, final List<T> unchanged)
+    private StandardDeltaImpl(final String name, final List<T> added, final List<T> removed)
     {
         assert name != null && name.length() > 0 : "Parameter 'name' of method 'StandardDeltaImpl' must not be empty";
         assert added != null : "Parameter 'added' of method 'StandardDeltaImpl' must not be null";
         assert removed != null : "Parameter 'removed' of method 'StandardDeltaImpl' must not be null";
-        assert unchanged != null : "Parameter 'unchanged' of method 'StandardDeltaImpl' must not be null";
 
         this.name = name;
         this.added = added;
         this.removed = removed;
-        this.unchanged = unchanged;
     }
 
     public static <T extends IElement> StandardDeltaImpl<T> computeDelta(final String name, final List<T> elements1, final List<T> elements2)
@@ -54,56 +51,39 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
         assert elements2 != null : "Parameter 'elements2' of method 'computeDelta' must not be null";
 
         final List<T> added = new ArrayList<>(elements2);
-        final List<T> unchanged = new ArrayList<>();
         final List<T> removed = new ArrayList<>();
 
         for (final T next : new ArrayList<>(elements1))
         {
-            if (added.remove(next))
-            {
-                unchanged.add(next);
-            }
-            else
+            if (!added.remove(next))
             {
                 removed.add(next);
             }
         }
 
-        return new StandardDeltaImpl<>(name, added, removed, unchanged);
+        return new StandardDeltaImpl<>(name, added, removed);
     }
 
     @Override
-    public List<T> getAdded()
+    public final List<T> getAdded()
     {
         return Collections.unmodifiableList(added);
     }
 
     @Override
-    public List<T> getRemoved()
+    public final List<T> getRemoved()
     {
         return Collections.unmodifiableList(removed);
     }
 
     @Override
-    public List<T> getUnchanged()
+    public boolean isEmpty()
     {
-        return Collections.unmodifiableList(unchanged);
+        return added.isEmpty() && removed.isEmpty();
     }
 
     @Override
     public String toString()
-    {
-        return print(true);
-    }
-
-    @Override
-    public boolean containsChanges()
-    {
-        return !added.isEmpty() || !removed.isEmpty();
-    }
-
-    @Override
-    public String print(final boolean includeUnchanged)
     {
         final StringBuilder builder = new StringBuilder(name);
         builder.append(" Delta");
@@ -112,11 +92,6 @@ public final class StandardDeltaImpl<T extends IElement> implements IStandardDel
         removed.forEach(action);
         builder.append("\n").append(Utility.INDENTATION).append("Added (").append(added.size()).append("):");
         added.forEach(action);
-        if (includeUnchanged)
-        {
-            builder.append("\n").append(Utility.INDENTATION).append("Unchanged (").append(unchanged.size()).append("):");
-            unchanged.forEach(action);
-        }
         return builder.toString();
     }
 }
