@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
+import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
+import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
 
 public final class WorkspaceDeltaImpl implements IWorkspaceDelta
 {

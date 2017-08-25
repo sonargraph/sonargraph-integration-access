@@ -17,8 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
+import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta;
 
 public interface IReportDifferenceProcessor
 {

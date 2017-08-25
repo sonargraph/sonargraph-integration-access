@@ -15,14 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.diff;
+package com.hello2morrow.sonargraph.integration.access.model;
 
-import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import java.io.Serializable;
+import java.util.List;
 
-public interface ICoreSystemDataDelta extends IDelta
+public interface IModuleDelta extends Serializable
 {
-    public IStandardDelta<IFeature> getFeatureDelta();
+    List<IRootDirectory> getAddedRoots();
 
-    public IStandardDelta<IAnalyzer> getAnalyzerDelta();
+    List<IRootDirectory> getRemovedRoots();
+
+    List<IRootDirectory> getUnchangedRoots();
+
+    IModule getModule();
 }

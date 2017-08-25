@@ -15,11 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.diff;
+package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.io.Serializable;
+import java.util.List;
 
-public interface IDelta extends Serializable
+public interface IReportDelta extends IDelta
 {
-    public boolean isEmpty();
+    public ISoftwareSystem getBaselineSystem();
+
+    public ISoftwareSystem getCurrentSystem();
+
+    public List<IFeature> getAddedFeatures();
+
+    public List<IFeature> getRemovedFeatures();
+
+    public List<IAnalyzer> getAddedAnalyzers();
+
+    public List<IAnalyzer> getRemovedAnalyzers();
+
+    public List<IMetricThreshold> getAddedMetricThresholds();
+
+    public List<IMetricThreshold> getRemovedMetricThresholds();
+
+    public List<BaselineCurrent<IMetricThreshold>> getChangedBoundariesMetricThresholds();
 }

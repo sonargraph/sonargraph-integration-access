@@ -15,20 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.diff;
+package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.List;
 
-import com.hello2morrow.sonargraph.integration.access.model.IIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
-
-public interface IIssueDelta extends IDelta
+/**
+ *  Currently reports added, removed modules and added, removed root directories.
+ *  Order of modules or root directories is currently not supported.
+ *
+ *  This delta focuses on structural changes, thus the modules' descriptions are ignored.
+ */
+public interface IWorkspaceDelta extends IDelta
 {
-    public List<IIssue> getAdded();
+    public List<IModule> getAddedModules();
 
-    public List<IIssue> getRemoved();
+    public List<IModule> getRemovedModules();
 
-    public List<BaselineCurrent<IThresholdViolationIssue>> getImproved();
-
-    public List<BaselineCurrent<IThresholdViolationIssue>> getWorse();
+    public List<IModuleDelta> getChangedModules();
 }

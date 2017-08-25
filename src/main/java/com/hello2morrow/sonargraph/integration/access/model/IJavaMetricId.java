@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.java;
+package com.hello2morrow.sonargraph.integration.access.model;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 
 public interface IJavaMetricId extends IMetricId
 {

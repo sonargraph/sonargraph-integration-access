@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.diff.internal;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
-import com.hello2morrow.sonargraph.integration.access.model.diff.BaselineCurrent;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
 
 public final class IssueDeltaImpl implements IIssueDelta
 {
