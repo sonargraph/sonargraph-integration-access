@@ -38,4 +38,8 @@ public interface IReportDelta extends IDelta
     public List<IMetricThreshold> getRemovedMetricThresholds();
 
     public List<BaselineCurrent<IMetricThreshold>> getChangedBoundariesMetricThresholds();
+
+    public IWorkspaceDelta getWorkspaceDelta();
+
+    public IIssueDelta getIssueDelta();
 }

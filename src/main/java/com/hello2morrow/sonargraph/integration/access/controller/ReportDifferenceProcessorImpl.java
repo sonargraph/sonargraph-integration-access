@@ -223,22 +223,22 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         {
             if (originalDouble < doubleValue)
             {
-                issueDeltaImpl.addImproved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
             }
             else
             {
-                issueDeltaImpl.addWorse(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
             }
         }
         else if (originalDouble > upperThreshold)
         {
             if (originalDouble > doubleValue)
             {
-                issueDeltaImpl.addImproved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
             }
             else
             {
-                issueDeltaImpl.addWorse(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
             }
         }
     }
@@ -254,13 +254,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         matchedIssues++;
 
-        System.out.println("ISSUE MATCHED FOR NAMED ELEMENT: " + namedElementFqName + "\n BASELINE: " + baseline.getName() + " ("
-                + baseline.getDescription() + ") [" + baseline.getLine() + "," + baseline.getColumn() + "]\n CURRENT: " + current.getName() + " ("
-                + current.getDescription() + ") [" + current.getLine() + "," + current.getColumn() + "]");
+        //        System.out.println("ISSUE MATCHED FOR NAMED ELEMENT: " + namedElementFqName + "\n BASELINE: " + baseline.getName() + " ("
+        //                + baseline.getDescription() + ") [" + baseline.getLine() + "," + baseline.getColumn() + "]\n CURRENT: " + current.getName() + " ("
+        //                + current.getDescription() + ") [" + current.getLine() + "," + current.getColumn() + "]");
         if (!current.getResolutionType().equals(baseline.getResolutionType()))
         {
-            System.out.println("Changed resolution of " + namedElementFqName);
-            //TODO
+            //TODO  
         }
 
         if (current instanceof ThresholdViolationIssue)
@@ -314,16 +313,16 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
                 if (!nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty())
                 {
-                    System.out.println("Removed " + nextBaselineIssues.size() + " issues from: " + nextNamedElementFqName);
+                    nextBaselineIssues.forEach(n -> issueDeltaImpl.removed(n));
                 }
                 else if (nextBaselineIssues.isEmpty() && !nextCurrentIssues.isEmpty())
                 {
-                    System.out.println("Added " + nextCurrentIssues.size() + " issues to: " + nextNamedElementFqName);
+                    nextCurrentIssues.forEach(n -> issueDeltaImpl.added(n));
                 }
                 else if (nextBaselineIssues.size() != nextCurrentIssues.size())
                 {
-                    System.out.println("Removed " + nextBaselineIssues.size() + " issues from: " + nextNamedElementFqName);
-                    System.out.println("Added " + nextCurrentIssues.size() + " issues to: " + nextNamedElementFqName);
+                    nextBaselineIssues.forEach(n -> issueDeltaImpl.removed(n));
+                    nextCurrentIssues.forEach(n -> issueDeltaImpl.added(n));
                 }
                 else
                 {
@@ -359,7 +358,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             //TODO
         }
 
-        System.out.println("Matched issues: " + matchedIssues);
+        //        System.out.println("Matched issues: " + matchedIssues);
         return issueDeltaImpl;
     }
 
@@ -380,7 +379,6 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             final IModule module2 = modules2.get(moduleName);
             if (modules2.containsKey(moduleName))
             {
-                //FIXME [IK] we currently cannot consider the ordering of the roots
                 boolean unchanged = true;
                 for (final IRootDirectory root1 : module1.getRootDirectories())
                 {
@@ -459,17 +457,10 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final Set<IAnalyzer> baselineAsSet = new HashSet<>(baseline);
         final Set<IAnalyzer> currentAsSet = new HashSet<>(current);
-
-        currentAsSet.removeAll(baselineAsSet);
-
-        for (final IAnalyzer nextRemoved : baselineAsSet)
-        {
-            reportDeltaImpl.removedAnalyzer(nextRemoved);
-        }
-        for (final IAnalyzer nextAdded : currentAsSet)
-        {
-            reportDeltaImpl.addedAnalyzer(nextAdded);
-        }
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedAnalyzer(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedAnalyzer(n));
     }
 
     private void processFeatures(final List<IFeature> baseline, final List<IFeature> current, final ReportDeltaImpl reportDeltaImpl)
@@ -481,17 +472,10 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final Set<IFeature> baselineAsSet = new HashSet<>(baseline);
         final Set<IFeature> currentAsSet = new HashSet<>(current);
-
-        currentAsSet.removeAll(baselineAsSet);
-
-        for (final IFeature nextRemoved : baselineAsSet)
-        {
-            reportDeltaImpl.removedFeature(nextRemoved);
-        }
-        for (final IFeature nextAdded : currentAsSet)
-        {
-            reportDeltaImpl.addedFeature(nextAdded);
-        }
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedFeature(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedFeature(n));
     }
 
     private void processThreshols(final List<IMetricThreshold> baseline, final List<IMetricThreshold> current, final ReportDeltaImpl reportDeltaImpl)
@@ -509,7 +493,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             if (nextCurrentThreshold != null)
             {
                 if (!nextBaselineThreshold.getLowerThreshold().equals(nextCurrentThreshold.getLowerThreshold())
-                        || nextBaselineThreshold.getUpperThreshold().equals(nextCurrentThreshold.getUpperThreshold()))
+                        || !nextBaselineThreshold.getUpperThreshold().equals(nextCurrentThreshold.getUpperThreshold()))
                 {
                     reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<IMetricThreshold>(nextBaselineThreshold,
                             nextCurrentThreshold));

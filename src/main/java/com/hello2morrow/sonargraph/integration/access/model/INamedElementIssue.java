@@ -17,9 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.List;
-
-public interface IElementIssue extends IIssue
+public interface INamedElementIssue extends IIssue
 {
-    public List<INamedElement> getAffectedElements();
+    //Marker
 }

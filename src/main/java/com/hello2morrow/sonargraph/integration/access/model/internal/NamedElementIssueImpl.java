@@ -17,15 +17,12 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.hello2morrow.sonargraph.integration.access.model.IElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementIssue;
 
-public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implements IElementIssue
+public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implements INamedElementIssue
 {
     private static final long serialVersionUID = -3705193284431668430L;
     private final INamedElement namedElement;
@@ -42,12 +39,6 @@ public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implement
     public final INamedElement getNamedElement()
     {
         return namedElement;
-    }
-
-    @Override
-    public final List<INamedElement> getAffectedElements()
-    {
-        return Collections.singletonList(namedElement);
     }
 
     @Override

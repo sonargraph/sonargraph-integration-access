@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface IIssue extends Serializable
 {
@@ -47,4 +48,6 @@ public interface IIssue extends Serializable
     public int getColumn();
 
     public ResolutionType getResolutionType();
+
+    public List<INamedElement> getAffectedNamedElements();
 }

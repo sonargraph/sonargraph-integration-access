@@ -26,6 +26,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
 public final class IssueDeltaImpl implements IIssueDelta
@@ -48,15 +49,27 @@ public final class IssueDeltaImpl implements IIssueDelta
         super();
     }
 
-    public void addImproved(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
+    public void added(final IIssue issue)
     {
-        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'addImproved' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'added' must not be null";
+        added.add(issue);
+    }
+
+    public void removed(final IIssue issue)
+    {
+        assert issue != null : "Parameter 'issue' of method 'removed' must not be null";
+        removed.add(issue);
+    }
+
+    public void improved(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
+    {
+        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'improved' must not be null";
         improved.add(baselineCurrent);
     }
 
-    public void addWorse(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
+    public void worsened(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
     {
-        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'addWorse' must not be null";
+        assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'worsened' must not be null";
         worse.add(baselineCurrent);
     }
 
@@ -73,7 +86,7 @@ public final class IssueDeltaImpl implements IIssueDelta
     }
 
     @Override
-    public List<BaselineCurrent<IThresholdViolationIssue>> getWorse()
+    public List<BaselineCurrent<IThresholdViolationIssue>> getWorsened()
     {
         return Collections.unmodifiableList(worse);
     }
@@ -85,30 +98,71 @@ public final class IssueDeltaImpl implements IIssueDelta
     }
 
     @Override
+    public List<IIssue> getAddedIgnoreResolution()
+    {
+        return Collections.unmodifiableList(addedIgnoreResolution);
+    }
+
+    @Override
+    public List<IIssue> getAddedFixResolution()
+    {
+        return Collections.unmodifiableList(addedFixResolution);
+    }
+
+    @Override
+    public List<IIssue> getRemovedIgnoreResolution()
+    {
+        return Collections.unmodifiableList(removedIgnoreResolution);
+    }
+
+    @Override
+    public List<IIssue> getRemovedFixResolution()
+    {
+        System.out.println("Huhu");
+        return Collections.unmodifiableList(removedFixResolution);
+    }
+
+    @Override
     public boolean isEmpty()
     {
-        //TODO
-        return added.isEmpty() && removed.isEmpty() && improved.isEmpty() && worse.isEmpty();
+        return added.isEmpty() && removed.isEmpty() && addedFixResolution.isEmpty() && addedIgnoreResolution.isEmpty()
+                && removedFixResolution.isEmpty() && removedIgnoreResolution.isEmpty() && improved.isEmpty() && worse.isEmpty();
+    }
+
+    private void addIssuesInfo(final StringBuilder builder, final List<IIssue> issues)
+    {
+        assert builder != null : "Parameter 'builder' of method 'addIssuesInfo' must not be null";
+        assert issues != null : "Parameter 'issues' of method 'addIssuesInfo' must not be null";
+
+        for (final IIssue nextIssue : issues)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(nextIssue.getKey());
+            for (final INamedElement nextNamedElement : nextIssue.getAffectedNamedElements())
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextNamedElement.getFqName());
+            }
+        }
     }
 
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder("Issue Delta:");
-        //TODO
-        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Removed (").append(removed.size()).append("):");
-        final Consumer<? super IIssue> action = i -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION)
-                .append(i.toString());
-        removed.forEach(action);
-        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Improved (").append(improved.size()).append("):");
-        final Consumer<? super BaselineCurrent<IThresholdViolationIssue>> action2 = i -> builder.append("\n").append(Utility.INDENTATION)
+        final StringBuilder builder = new StringBuilder();
+
+        builder.append("\nRemoved issues (").append(removed.size()).append(")");
+        addIssuesInfo(builder, removed);
+        builder.append("\nAdded issues (").append(added.size()).append(")");
+        addIssuesInfo(builder, added);
+
+        final Consumer<? super BaselineCurrent<IThresholdViolationIssue>> imporvedWorsened = i -> builder.append("\n").append(Utility.INDENTATION)
                 .append(Utility.INDENTATION).append("Previous: ").append(i.getBaseline().toString()).append("; Now: ")
                 .append(i.getCurrent().toString());
-        improved.forEach(action2);
-        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Worsened (").append(worse.size()).append("):");
-        worse.forEach(action2);
-        builder.append(Utility.INDENTATION).append("\n").append(Utility.INDENTATION).append("Added (").append(added.size()).append("):");
-        added.forEach(action);
+
+        builder.append("\nImproved threshold violations (").append(improved.size()).append(")");
+        improved.forEach(imporvedWorsened);
+        builder.append("\nWorsened threshold violations (").append(worse.size()).append(")");
+        worse.forEach(imporvedWorsened);
+
         return builder.toString();
     }
 }

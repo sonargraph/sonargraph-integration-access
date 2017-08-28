@@ -48,7 +48,7 @@ public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImp
     }
 
     @Override
-    public List<INamedElement> getAffectedElements()
+    public List<INamedElement> getAffectedNamedElements()
     {
         return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
     }

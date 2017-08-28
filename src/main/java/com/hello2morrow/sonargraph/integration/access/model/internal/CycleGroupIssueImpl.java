@@ -50,7 +50,7 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
     }
 
     @Override
-    public List<INamedElement> getAffectedElements()
+    public List<INamedElement> getAffectedNamedElements()
     {
         return Collections.unmodifiableList(cyclicElements);
     }

@@ -25,7 +25,15 @@ public interface IIssueDelta extends IDelta
 
     public List<IIssue> getRemoved();
 
+    public List<IIssue> getAddedIgnoreResolution();
+
+    public List<IIssue> getAddedFixResolution();
+
+    public List<IIssue> getRemovedIgnoreResolution();
+
+    public List<IIssue> getRemovedFixResolution();
+
     public List<BaselineCurrent<IThresholdViolationIssue>> getImproved();
 
-    public List<BaselineCurrent<IThresholdViolationIssue>> getWorse();
+    public List<BaselineCurrent<IThresholdViolationIssue>> getWorsened();
 }

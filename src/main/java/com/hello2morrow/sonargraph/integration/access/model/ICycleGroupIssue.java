@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface ICycleGroupIssue extends IElementIssue
+public interface ICycleGroupIssue extends INamedElementIssue
 {
     public IAnalyzer getAnalyzer();
 }

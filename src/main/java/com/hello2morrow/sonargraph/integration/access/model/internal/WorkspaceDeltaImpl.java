@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
@@ -31,7 +32,6 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
     private final List<IModuleDelta> changedModules = new ArrayList<>();
     private final List<IModule> removedModules = new ArrayList<>();
     private final List<IModule> addedModules = new ArrayList<>();
-    private final String INDENTATION = "    ";
 
     public void addRemovedModule(final IModule module)
     {
@@ -75,32 +75,34 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
         return removedModules.isEmpty() && addedModules.isEmpty() && changedModules.isEmpty();
     }
 
-    @Override
-    public String toString()
-    {
-        final StringBuilder builder = new StringBuilder("WorkspaceDelta:");
-        builder.append("\n").append(INDENTATION).append("Changed Modules (").append(changedModules.size()).append("):");
-        for (final IModuleDelta delta : changedModules)
-        {
-            builder.append("\n--").append(delta.toString());
-        }
-
-        builder.append("\n").append(INDENTATION).append("Removed Modules (").append(removedModules.size()).append("):");
-        builder.append(printModuleList(removedModules));
-
-        builder.append("\n").append(INDENTATION).append("Added Modules (").append(addedModules.size()).append("):");
-        builder.append(printModuleList(addedModules));
-
-        return builder.toString();
-    }
-
     private String printModuleList(final List<IModule> modules)
     {
         final StringBuilder builder = new StringBuilder();
         for (final IModule nextModule : modules)
         {
-            builder.append("\n").append(INDENTATION).append(INDENTATION).append(nextModule.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextModule.getName());
         }
+        return builder.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("Changed Modules (").append(changedModules.size()).append(")");
+        for (final IModuleDelta delta : changedModules)
+        {
+            builder.append("\n").append(delta.toString());
+        }
+
+        builder.append("\n").append("Removed Modules (").append(removedModules.size()).append(")");
+        builder.append(printModuleList(removedModules));
+
+        builder.append("\n").append("Added Modules (").append(addedModules.size()).append(")");
+        builder.append(printModuleList(addedModules));
+
         return builder.toString();
     }
 }

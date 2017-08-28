@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IElementIssue;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.ILogicalElement;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
@@ -80,9 +80,9 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     {
         assert issue != null : "Parameter 'issue' of method 'isModuleElementInvolved' must not be null";
 
-        if (issue instanceof IElementIssue)
+        if (issue instanceof INamedElementIssue)
         {
-            final List<INamedElement> element = ((IElementIssue) issue).getAffectedElements();
+            final List<INamedElement> element = ((INamedElementIssue) issue).getAffectedNamedElements();
             return element.stream().anyMatch(this::isElementContainedInModule);
         }
         if (issue instanceof IDependencyIssue)
@@ -223,9 +223,9 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         final Map<ISourceFile, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue issue : systemIssues)
         {
-            if (issue instanceof IElementIssue)
+            if (issue instanceof INamedElementIssue)
             {
-                final List<INamedElement> elements = ((IElementIssue) issue).getAffectedElements();
+                final List<INamedElement> elements = ((INamedElementIssue) issue).getAffectedNamedElements();
                 for (final INamedElement next : elements)
                 {
                     addSourceForIssue(resultMap, issue, next);
@@ -331,9 +331,9 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
         final Map<String, List<IIssue>> resultMap = new HashMap<>();
         for (final IIssue nextIssue : systemInfoProcessor.getIssues(filter))
         {
-            if (nextIssue instanceof IElementIssue)
+            if (nextIssue instanceof INamedElementIssue)
             {
-                final List<INamedElement> elements = ((IElementIssue) nextIssue).getAffectedElements();
+                final List<INamedElement> elements = ((INamedElementIssue) nextIssue).getAffectedNamedElements();
                 for (final INamedElement next : elements)
                 {
                     addDirectoryIssues(nextIssue, next, resultMap);

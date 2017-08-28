@@ -5,12 +5,5 @@
             <type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ThresholdViolation" descriptor="ThresholdViolation:CoreModifiedCcn:Routine"></type>
             <elementPattern type="Wildcard"><![CDATA[Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:controller:MetaDataControllerImpl.java:MetaDataControllerImpl:mergeExportMetaDataFiles(java.util.List<java.io.File>)]]></elementPattern>
         </ignore>
-        <ignore date="2017-06-30T12:17:16.046Z" description="Main-method-based types and print methods.">
-            <type class="Script" name="Reference to System.out/err" descriptor="./UsageOfSystemOutOrErr.xml:Warning"></type>
-            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:main(java.lang.String[])" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:err"></dependencyPattern>
-            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:main(java.lang.String[])" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:out"></dependencyPattern>
-            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:print(com.hello2morrow.sonargraph.integration.access.model.diff.IReportDelta,java.lang.String)" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:out"></dependencyPattern>
-            <dependencyPattern type="Wildcard" from="Workspace:com.hello2morrow\:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:ReportDiff.java:ReportDiff:printUsage()" to="Workspace:External [Java]:[Unknown]:java:lang:System:System:out"></dependencyPattern>
-        </ignore>
     </resolutions>
 </virtualModel>

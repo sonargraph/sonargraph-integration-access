@@ -17,6 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
@@ -32,4 +35,10 @@ public abstract class SingleNamedElementIssueImpl extends IssueImpl
     }
 
     public abstract INamedElement getNamedElement();
+
+    @Override
+    public final List<INamedElement> getAffectedNamedElements()
+    {
+        return Collections.singletonList(getNamedElement());
+    }
 }

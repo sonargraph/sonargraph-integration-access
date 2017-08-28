@@ -18,7 +18,6 @@
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.List;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.IDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
@@ -44,9 +42,9 @@ public final class ReportDeltaImpl implements IReportDelta
     private final List<IAnalyzer> addedAnalyzers = new ArrayList<>();
     private final List<IAnalyzer> removedAnalyzers = new ArrayList<>();
 
-    private final List<IMetricThreshold> addedThresholds = new ArrayList<>();
-    private final List<IMetricThreshold> removedThresholds = new ArrayList<>();
-    private final List<BaselineCurrent<IMetricThreshold>> changedBoundariesThresholds = new ArrayList<>();
+    private final List<IMetricThreshold> addedMetricThresholds = new ArrayList<>();
+    private final List<IMetricThreshold> removedMetricThresholds = new ArrayList<>();
+    private final List<BaselineCurrent<IMetricThreshold>> changedBoundariesMetricThresholds = new ArrayList<>();
 
     private final ISoftwareSystem baselineSystem;
     private final ISoftwareSystem currentSystem;
@@ -101,19 +99,19 @@ public final class ReportDeltaImpl implements IReportDelta
     public void changedMetricThresholdBoundaries(final BaselineCurrent<IMetricThreshold> baselineCurrent)
     {
         assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'changedMetricThresholdBoundaries' must not be null";
-        changedBoundariesThresholds.add(baselineCurrent);
+        changedBoundariesMetricThresholds.add(baselineCurrent);
     }
 
     public void removedMetricThreshold(final IMetricThreshold metricThreshold)
     {
         assert metricThreshold != null : "Parameter 'metricThreshold' of method 'removedMetricThreshold' must not be null";
-        removedThresholds.add(metricThreshold);
+        removedMetricThresholds.add(metricThreshold);
     }
 
     public void addedMetricThreshold(final IMetricThreshold metricThreshold)
     {
         assert metricThreshold != null : "Parameter 'metricThreshold' of method 'addedMetricThreshold' must not be null";
-        addedThresholds.add(metricThreshold);
+        addedMetricThresholds.add(metricThreshold);
     }
 
     @Override
@@ -143,19 +141,19 @@ public final class ReportDeltaImpl implements IReportDelta
     @Override
     public List<IMetricThreshold> getAddedMetricThresholds()
     {
-        return Collections.unmodifiableList(addedThresholds);
+        return Collections.unmodifiableList(addedMetricThresholds);
     }
 
     @Override
     public List<IMetricThreshold> getRemovedMetricThresholds()
     {
-        return Collections.unmodifiableList(removedThresholds);
+        return Collections.unmodifiableList(removedMetricThresholds);
     }
 
     @Override
     public List<BaselineCurrent<IMetricThreshold>> getChangedBoundariesMetricThresholds()
     {
-        return Collections.unmodifiableList(changedBoundariesThresholds);
+        return Collections.unmodifiableList(changedBoundariesMetricThresholds);
     }
 
     public void setWorkspaceDelta(final IWorkspaceDelta delta)
@@ -164,6 +162,7 @@ public final class ReportDeltaImpl implements IReportDelta
         workspaceDelta = delta;
     }
 
+    @Override
     public IWorkspaceDelta getWorkspaceDelta()
     {
         assert workspaceDelta != null : "'workspaceDelta' of method 'getWorkspaceDelta' must not be null";
@@ -176,6 +175,7 @@ public final class ReportDeltaImpl implements IReportDelta
         issueDelta = delta;
     }
 
+    @Override
     public IIssueDelta getIssueDelta()
     {
         assert issueDelta != null : "'issueDelta' of method 'getIssueDelta' must not be null";
@@ -185,7 +185,9 @@ public final class ReportDeltaImpl implements IReportDelta
     @Override
     public boolean isEmpty()
     {
-        return workspaceDelta.isEmpty() && issueDelta.isEmpty();
+        return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && removedAnalyzers.isEmpty()
+                && addedMetricThresholds.isEmpty() && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
+                && getWorkspaceDelta().isEmpty() && getIssueDelta().isEmpty();
     }
 
     private String printNameAndTimestamp(final ISoftwareSystem system)
@@ -213,7 +215,7 @@ public final class ReportDeltaImpl implements IReportDelta
         final StringBuilder builder = new StringBuilder();
         if (baselineSystem.getSystemId().equals(currentSystem.getSystemId()) && baselineSystem.getPath().equals(currentSystem.getPath()))
         {
-            builder.append("\n").append("System Info: ");
+            builder.append("\n").append("System info");
             builder.append(printSystemInfo(baselineSystem));
         }
         else
@@ -221,31 +223,73 @@ public final class ReportDeltaImpl implements IReportDelta
             builder.append("\nNOTE: Delta is calculated using different Systems!\n");
             builder.append("\n").append("Baseline system: ");
             builder.append(printSystemInfo(baselineSystem));
-            builder.append("\n").append("System: ");
+            builder.append("\n").append("Current system: ");
             builder.append(printSystemInfo(currentSystem));
         }
 
-        if (!isEmpty())
+        if (isEmpty())
         {
-            builder.append("\n\nNo delta detected between systems:");
+            builder.append("\n\nNo delta detected between systems");
             builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
-            builder.append("\n").append(Utility.INDENTATION).append("System         : ").append(printNameAndTimestamp(currentSystem));
+            builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
             return builder.toString();
         }
 
-        builder.append("\n\nDelta of Systems");
+        builder.append("\nDelta of Systems");
         builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
-        builder.append("\n").append(Utility.INDENTATION).append("System         : ").append(printNameAndTimestamp(currentSystem));
-        builder.append("\n");
+        builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
 
-        final List<IDelta> deltas = Arrays.asList(getWorkspaceDelta(), getIssueDelta());
-        deltas.forEach(d ->
+        builder.append("\nAdded features (").append(addedFeatures.size()).append(")");
+        for (final IFeature next : addedFeatures)
         {
-            if (d.isEmpty())
-            {
-                builder.append("\n- ").append(d);
-            }
-        });
+            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+        }
+
+        builder.append("\nRemoved features (").append(removedFeatures.size()).append(")");
+        for (final IFeature next : removedFeatures)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+        }
+
+        builder.append("\nAdded analyzers (").append(addedAnalyzers.size()).append(")");
+        for (final IAnalyzer next : addedAnalyzers)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+        }
+
+        builder.append("\nRemoved analyzers (").append(removedAnalyzers.size()).append(")");
+        for (final IAnalyzer next : removedAnalyzers)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+        }
+
+        builder.append("\nAdded metric thresholds (").append(addedMetricThresholds.size()).append(")");
+        for (final IMetricThreshold next : addedMetricThresholds)
+        {
+            builder.append("\n").append("- Added metric threshold: ").append(next.getMetricId().getName()).append(":")
+                    .append(next.getMetricLevel().getName());
+        }
+
+        builder.append("\nRemoved metric thresholds (").append(removedMetricThresholds.size()).append(")");
+        for (final IMetricThreshold next : removedMetricThresholds)
+        {
+            builder.append("\n").append("- Removed metric threshold: ").append(next.getMetricId().getName()).append(":")
+                    .append(next.getMetricLevel().getName());
+        }
+
+        builder.append("\nChanged boundaries metric thresholds (").append(changedBoundariesMetricThresholds.size()).append(")");
+        for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
+        {
+            final IMetricThreshold baseline = next.getBaseline();
+            final IMetricThreshold current = next.getCurrent();
+            builder.append("\n").append("- Added metric threshold: ").append(baseline.getMetricId().getName()).append(":")
+                    .append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
+                    .append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
+                    .append(current.getUpperThreshold()).append("]");
+        }
+
+        builder.append(getWorkspaceDelta());
+        builder.append(getIssueDelta());
 
         return builder.toString();
     }
