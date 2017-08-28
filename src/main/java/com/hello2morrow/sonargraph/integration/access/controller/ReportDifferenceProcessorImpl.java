@@ -214,11 +214,6 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final double originalDouble = originalValue.doubleValue();
         final double doubleValue = value.doubleValue();
 
-        //        if (originalDouble < lowerThreshold && doubleValue > upperThreshold || originalDouble > upperThreshold && doubleValue < lowerThreshold)
-        //        {
-        //            issueDeltaImpl.addBoundariesChanged(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
-        //        }
-
         if (originalDouble < lowerThreshold)
         {
             if (originalDouble < doubleValue)
