@@ -22,15 +22,26 @@ import java.io.Serializable;
 public final class BaselineCurrent<T1> implements Serializable
 {
     private static final long serialVersionUID = 1643574306425192701L;
-    private final T1 baseline;
-    private final T1 current;
+    private T1 baseline;
+    private T1 current;
 
     public BaselineCurrent(final T1 baseline, final T1 current)
     {
         assert baseline != null : "Parameter 'baseline' of method 'BaselineCurrent' must not be null";
         assert current != null : "Parameter 'current' of method 'BaselineCurrent' must not be null";
-        assert baseline != current : "Same instances";
         this.baseline = baseline;
+        this.current = current;
+    }
+
+    public void setBaseline(final T1 baseline)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'setBaseline' must not be null";
+        this.baseline = baseline;
+    }
+
+    public void setCurrent(final T1 current)
+    {
+        assert current != null : "Parameter 'current' of method 'setCurrent' must not be null";
         this.current = current;
     }
 
@@ -73,6 +84,6 @@ public final class BaselineCurrent<T1> implements Serializable
     @Override
     public String toString()
     {
-        return baseline + "|" + current;
+        return "Baseline: " + baseline + "\nCurrent :" + current;
     }
 }

@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -27,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
@@ -39,6 +41,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueContainer;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleDeltaImpl;
@@ -50,6 +54,12 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceDe
 
 final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 {
+    enum MultiNamedElementIssueType
+    {
+        CYCLE_GROUP,
+        DUPLICATE_CODE
+    }
+
     enum Source
     {
         BASELINE_SYSTEM,
@@ -77,12 +87,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         assert issue != null : "Parameter 'issue' of method 'processSingleElementIssue' must not be null";
         assert elementCollector != null : "Parameter 'elementCollector' of method 'processSingleElementIssue' must not be null";
 
-        final String fqName = issue.getNamedElement().getFqName();
-        Map<String, IssueContainer<SingleNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(fqName);
+        final String namedElementFqName = issue.getNamedElement().getFqName();
+        Map<String, IssueContainer<SingleNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(namedElementFqName);
         if (issueKeyToIssueContainer == null)
         {
             issueKeyToIssueContainer = new HashMap<>();
-            elementCollector.put(fqName, issueKeyToIssueContainer);
+            elementCollector.put(namedElementFqName, issueKeyToIssueContainer);
         }
 
         final String issueKey = issue.getKey();
@@ -138,12 +148,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         for (final INamedElement nextNamedElement : issue.getNamedElements())
         {
-            final String fqName = nextNamedElement.getFqName();
-            Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(fqName);
+            final String nextFqName = nextNamedElement.getFqName();
+            Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(nextFqName);
             if (issueKeyToIssueContainer == null)
             {
                 issueKeyToIssueContainer = new HashMap<>();
-                elementCollector.put(fqName, issueKeyToIssueContainer);
+                elementCollector.put(nextFqName, issueKeyToIssueContainer);
             }
 
             final String issueKey = issue.getKey();
@@ -171,19 +181,26 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
     private void process(final Source source, final List<IIssue> issues,
             final Map<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> elementSingleCollector,
-            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementMultiCollector,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCycleGroupCollector,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementDuplicateCodeCollector,
             final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueMultiCollector)
     {
         assert source != null : "Parameter 'source' of method 'process' must not be null";
         assert issues != null : "Parameter 'issues' of method 'process' must not be null";
         assert elementSingleCollector != null : "Parameter 'elementSingleCollector' of method 'process' must not be null";
-        assert elementMultiCollector != null : "Parameter 'elementMultiCollector' of method 'process' must not be null";
+        assert elementCycleGroupCollector != null : "Parameter 'elementCycleGroupCollector' of method 'process' must not be null";
+        assert elementDuplicateCodeCollector != null : "Parameter 'elementDuplicateCodeCollector' of method 'process' must not be null";
         assert issueMultiCollector != null : "Parameter 'issueMultiCollector' of method 'process' must not be null";
+
         for (final IIssue nextIssue : issues)
         {
-            if (nextIssue instanceof MultiNamedElementIssueImpl)
+            if (nextIssue instanceof CycleGroupIssueImpl)
             {
-                processMultiElementIssue(source, (MultiNamedElementIssueImpl) nextIssue, elementMultiCollector, issueMultiCollector);
+                processMultiElementIssue(source, (MultiNamedElementIssueImpl) nextIssue, elementCycleGroupCollector, issueMultiCollector);
+            }
+            else if (nextIssue instanceof DuplicateCodeBlockIssueImpl)
+            {
+                processMultiElementIssue(source, (MultiNamedElementIssueImpl) nextIssue, elementDuplicateCodeCollector, issueMultiCollector);
             }
             else
             {
@@ -192,9 +209,6 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             }
         }
     }
-
-    //TODO
-    private int matchedIssues;
 
     private void processThreshold(final ThresholdViolationIssue baseline, final ThresholdViolationIssue current, final IssueDeltaImpl issueDeltaImpl)
     {
@@ -214,47 +228,43 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final double originalDouble = originalValue.doubleValue();
         final double doubleValue = value.doubleValue();
 
-        if (originalDouble < lowerThreshold)
+        if (Utility.hasChanged(originalDouble, doubleValue, 2))
         {
-            if (originalDouble < doubleValue)
+            if (originalDouble < lowerThreshold)
             {
-                issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                if (originalDouble < doubleValue)
+                {
+                    issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
+                else
+                {
+                    issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
             }
-            else
+            else if (originalDouble > upperThreshold)
             {
-                issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
-            }
-        }
-        else if (originalDouble > upperThreshold)
-        {
-            if (originalDouble > doubleValue)
-            {
-                issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
-            }
-            else
-            {
-                issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                if (originalDouble > doubleValue)
+                {
+                    issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
+                else
+                {
+                    issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
             }
         }
     }
 
-    private void processMatchingIssue(final String namedElementFqName, final IIssue current, final IIssue baseline,
-            final IssueDeltaImpl issueDeltaImpl)
+    private void processMatchingIssue(final IIssue current, final IIssue baseline, final IssueDeltaImpl issueDeltaImpl)
     {
-        assert namedElementFqName != null && namedElementFqName.length() > 0 : "Parameter 'namedElementFqName' of method 'processMatchingIssue' must not be empty";
         assert current != null : "Parameter 'current' of method 'processMatchingIssue' must not be null";
         assert baseline != null : "Parameter 'baseline' of method 'processMatchingIssue' must not be null";
         assert current != baseline : "Same intstances";
         assert issueDeltaImpl != null : "Parameter 'issueDeltaImpl' of method 'processMatchingIssue' must not be null";
 
-        matchedIssues++;
-
-        //        System.out.println("ISSUE MATCHED FOR NAMED ELEMENT: " + namedElementFqName + "\n BASELINE: " + baseline.getName() + " ("
-        //                + baseline.getDescription() + ") [" + baseline.getLine() + "," + baseline.getColumn() + "]\n CURRENT: " + current.getName() + " ("
-        //                + current.getDescription() + ") [" + current.getLine() + "," + current.getColumn() + "]");
         if (!current.getResolutionType().equals(baseline.getResolutionType()))
         {
-            //TODO  
+            issueDeltaImpl.changedResolutionType(new BaselineCurrent<>(baseline, current));
         }
 
         if (current instanceof ThresholdViolationIssue)
@@ -266,6 +276,98 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         }
     }
 
+    private static final class IssueComparator implements Comparator<IIssue>
+    {
+        IssueComparator()
+        {
+            super();
+        }
+
+        @Override
+        public int compare(final IIssue i1, final IIssue i2)
+        {
+            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
+            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
+
+            int compared = i1.getLine() - i2.getLine();
+            if (compared == 0)
+            {
+                compared = i1.getColumn() - i2.getColumn();
+                if (compared == 0)
+                {
+                    compared = i1.getName().compareToIgnoreCase(i2.getName());
+                    if (compared == 0)
+                    {
+                        compared = 1;
+                    }
+                }
+            }
+            return compared;
+        }
+    }
+
+    private void processMultiNamedElementIssueInfo(final MultiNamedElementIssueType type,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCollector,
+            final Map<String, BaselineCurrent<Integer>> issueKeyToCount, final IssueDeltaImpl issueDeltaImpl)
+    {
+        assert type != null : "Parameter 'type' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert elementCollector != null : "Parameter 'elementCollector' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert issueKeyToCount != null : "Parameter 'issueKeyToCount' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert issueDeltaImpl != null : "Parameter 'issueDeltaImpl' of method 'processMultiNamedElementIssueInfo' must not be null";
+
+        for (final Entry<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> nextFqNameEntry : elementCollector.entrySet())
+        {
+            for (final Entry<String, IssueContainer<MultiNamedElementIssueImpl>> nextIssueKeyEntry : nextFqNameEntry.getValue().entrySet())
+            {
+                final IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = nextIssueKeyEntry.getValue();
+                final List<MultiNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
+                final List<MultiNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+
+                assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
+                final int nextBaseLineIssuesSize = nextBaselineIssues.size();
+                final int nextCurrentIssuesSize = nextCurrentIssues.size();
+
+                if (nextBaseLineIssuesSize != nextCurrentIssuesSize)
+                {
+                    final String nextIssueKey = nextIssueKeyEntry.getKey();
+                    switch (type)
+                    {
+                    case CYCLE_GROUP:
+                        if (nextBaselineIssues.isEmpty())
+                        {
+                            assert !nextCurrentIssues.isEmpty() : "'nextCurrentIssues' is not empty: " + nextCurrentIssues;
+                            issueDeltaImpl.addedToCycle(nextFqNameEntry.getKey(), nextIssueKey);
+                        }
+                        else
+                        {
+                            assert nextCurrentIssues.isEmpty() : "'nextCurrentIssues' must be empty: " + nextCurrentIssues;
+                            assert !nextBaselineIssues.isEmpty() : "'nextBaselineIssues' is not empty: " + nextBaselineIssues;
+                            issueDeltaImpl.removedFromCycle(nextFqNameEntry.getKey(), nextIssueKey);
+                        }
+                        break;
+                    case DUPLICATE_CODE:
+                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(), new BaselineCurrent<Integer>(
+                                nextBaseLineIssuesSize, nextCurrentIssuesSize));
+                        break;
+                    default:
+                        assert false : "Unhandled: " + type;
+                        break;
+                    }
+
+                    BaselineCurrent<Integer> count = issueKeyToCount.get(nextIssueKey);
+                    if (count == null)
+                    {
+                        count = new BaselineCurrent<>(0, 0);
+                        issueKeyToCount.put(nextIssueKey, count);
+                    }
+
+                    count.setBaseline(count.getBaseline() + nextBaseLineIssuesSize);
+                    count.setCurrent(count.getCurrent() + nextCurrentIssuesSize);
+                }
+            }
+        }
+    }
+
     private IssueDeltaImpl createIssueDelta(final ISystemInfoProcessor infoProcessor)
     {
         assert infoProcessor != null : "Parameter 'infoProcessor' of method 'createIssueDelta' must not be null";
@@ -273,19 +375,23 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final IssueDeltaImpl issueDeltaImpl = new IssueDeltaImpl();
 
         final Map<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> elementSingleCollector = new HashMap<>();
-        final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementMultiCollector = new HashMap<>();
+        final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCycleGroupCollector = new HashMap<>();
+        final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementDuplicateCodeCollector = new HashMap<>();
         final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueMultiCollector = new HashMap<>();
-        process(Source.BASELINE_SYSTEM, baseSystem.getIssues(null), elementSingleCollector, elementMultiCollector, issueMultiCollector);
-        process(Source.CURRENT_SYSTEM, infoProcessor.getIssues(null), elementSingleCollector, elementMultiCollector, issueMultiCollector);
+
+        process(Source.BASELINE_SYSTEM, baseSystem.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
+                elementDuplicateCodeCollector, issueMultiCollector);
+        process(Source.CURRENT_SYSTEM, infoProcessor.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
+                elementDuplicateCodeCollector, issueMultiCollector);
+
+        final IssueComparator issueComparator = new IssueComparator();
 
         for (final Entry<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> nextFqNameEntry : elementSingleCollector.entrySet())
         {
-            final String nextNamedElementFqName = nextFqNameEntry.getKey();
-
             for (final Entry<String, IssueContainer<SingleNamedElementIssueImpl>> nextIssueKeyEntry : nextFqNameEntry.getValue().entrySet())
             {
                 final IssueContainer<SingleNamedElementIssueImpl> nextIssueContainer = nextIssueKeyEntry.getValue();
-                nextIssueContainer.sort();
+                nextIssueContainer.sort(issueComparator);
                 final List<SingleNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
                 final List<SingleNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
 
@@ -298,7 +404,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                         if (nextCurrentIssue.getLine() == nextBaselineIssue.getLine()
                                 && nextCurrentIssue.getColumn() == nextBaselineIssue.getColumn())
                         {
-                            processMatchingIssue(nextNamedElementFqName, nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                            processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
                             nextCurrentIssues.remove(nextCurrentIssue);
                             nextBaselineIssues.remove(nextBaselineIssue);
                             break;
@@ -326,34 +432,68 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                     {
                         final IIssue nextCurrentIssue = nextCurrentIssues.get(i);
                         final IIssue nextBaselineIssue = nextBaselineIssues.get(i);
-                        processMatchingIssue(nextNamedElementFqName, nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                        processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
                     }
                 }
             }
         }
 
-        for (final Entry<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> nextFqNameEntry : elementMultiCollector.entrySet())
+        final Map<String, BaselineCurrent<Integer>> cycleGroupsCount = new HashMap<>();
+        final Map<String, BaselineCurrent<Integer>> duplicateCodeBlockCount = new HashMap<>();
+        processMultiNamedElementIssueInfo(MultiNamedElementIssueType.CYCLE_GROUP, elementCycleGroupCollector, cycleGroupsCount, issueDeltaImpl);
+        processMultiNamedElementIssueInfo(MultiNamedElementIssueType.DUPLICATE_CODE, elementDuplicateCodeCollector, duplicateCodeBlockCount,
+                issueDeltaImpl);
+
+        for (final Entry<String, BaselineCurrent<Integer>> nextEntry : cycleGroupsCount.entrySet())
         {
-            final String nextNamedElementFqName = nextFqNameEntry.getKey();
-
-            for (final Entry<String, IssueContainer<MultiNamedElementIssueImpl>> nextIssueKeyEntry : nextFqNameEntry.getValue().entrySet())
+            final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
+            if (nextBaselineCurrent.getBaseline() > nextBaselineCurrent.getCurrent())
             {
-                final IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = nextIssueKeyEntry.getValue();
-                nextIssueContainer.sort();
-                final List<MultiNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
-                final List<MultiNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+                issueDeltaImpl.improvedCycleParticipation(nextEntry.getKey(), nextBaselineCurrent);
+            }
+            else if (nextBaselineCurrent.getBaseline() < nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.worsenedCycleParticipation(nextEntry.getKey(), nextBaselineCurrent);
+            }
+        }
 
-                assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
-                //TODO
+        assert duplicateCodeBlockCount.size() <= 1 : "Not more than 1 entry expected: " + duplicateCodeBlockCount;
+        for (final Entry<String, BaselineCurrent<Integer>> nextEntry : duplicateCodeBlockCount.entrySet())
+        {
+            final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
+            if (nextBaselineCurrent.getBaseline() > nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.improvedDuplicateCodeParticipation(nextBaselineCurrent);
+            }
+            else if (nextBaselineCurrent.getBaseline() < nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.worsenedDuplicateCodeParticipation(nextBaselineCurrent);
             }
         }
 
         for (final Entry<String, IssueContainer<MultiNamedElementIssueImpl>> nextIssueNameEntry : issueMultiCollector.entrySet())
         {
-            //TODO
+            final IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = nextIssueNameEntry.getValue();
+            nextIssueContainer.sort(issueComparator);
+
+            final List<MultiNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
+            final List<MultiNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+
+            assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
+
+            for (final IIssue nextCurrentIssue : new ArrayList<>(nextCurrentIssues))
+            {
+                for (final IIssue nextBaselineIssue : new ArrayList<>(nextBaselineIssues))
+                {
+                    if (nextCurrentIssue.getName().equals(nextBaselineIssue.getName()))
+                    {
+                        processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                        break;
+                    }
+                }
+            }
         }
 
-        //        System.out.println("Matched issues: " + matchedIssues);
         return issueDeltaImpl;
     }
 

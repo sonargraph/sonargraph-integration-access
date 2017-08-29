@@ -220,4 +220,30 @@ public final class Utility
         }
         return builder.toString();
     }
+
+    public static double round(final double value, final int decimals)
+    {
+        final double decimalRounding = Math.pow(10, decimals);
+        double rounded = value * decimalRounding;
+        final double temp = Math.round(rounded);
+        rounded = temp / decimalRounding;
+        return rounded;
+    }
+
+    public static boolean hasChanged(final double d1, final double d2, final int decimals)
+    {
+        final double d1rounded = round(d1, decimals);
+        final double d2rounded = round(d1, decimals);
+        return d1rounded != d2rounded;
+    }
+
+    public static String getRoundedValueAsString(final Number number, final int decimals)
+    {
+        assert number != null : "Parameter 'number' of method 'getRoundedValueAsString' must not be null";
+        if (number instanceof Double || number instanceof Float)
+        {
+            return Double.toString(round(number.doubleValue(), decimals));
+        }
+        return number.toString();
+    }
 }

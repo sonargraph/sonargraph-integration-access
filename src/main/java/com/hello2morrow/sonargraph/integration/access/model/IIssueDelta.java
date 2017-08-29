@@ -18,6 +18,8 @@
 package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface IIssueDelta extends IDelta
 {
@@ -25,15 +27,23 @@ public interface IIssueDelta extends IDelta
 
     public List<IIssue> getRemoved();
 
-    public List<IIssue> getAddedIgnoreResolution();
+    public List<BaselineCurrent<IIssue>> getChangedResolutionType();
 
-    public List<IIssue> getAddedFixResolution();
+    public List<BaselineCurrent<IThresholdViolationIssue>> getImprovedThresholdViolation();
 
-    public List<IIssue> getRemovedIgnoreResolution();
+    public List<BaselineCurrent<IThresholdViolationIssue>> getWorsenedThresholdViolation();
 
-    public List<IIssue> getRemovedFixResolution();
+    public Map<String, String> getAddedToCycle();
 
-    public List<BaselineCurrent<IThresholdViolationIssue>> getImproved();
+    public Map<String, String> getRemovedFromCycle();
 
-    public List<BaselineCurrent<IThresholdViolationIssue>> getWorsened();
+    public Map<String, BaselineCurrent<Integer>> getImprovedCycleParticipation();
+
+    public Map<String, BaselineCurrent<Integer>> getWorsenedCycleParticipation();
+
+    public Map<String, BaselineCurrent<Integer>> getChangedDuplicateCodeBlockParticipation();
+
+    public Optional<BaselineCurrent<Integer>> getImprovedDuplicateCodeParticipation();
+
+    public Optional<BaselineCurrent<Integer>> getWorsenedDuplicateCodeParticipation();
 }

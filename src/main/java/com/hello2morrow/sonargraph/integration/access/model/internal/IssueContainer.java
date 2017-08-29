@@ -26,36 +26,6 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
 public final class IssueContainer<T extends IIssue>
 {
-    private static final class IssueComparator<T extends IIssue> implements Comparator<T>
-    {
-        IssueComparator()
-        {
-            super();
-        }
-
-        @Override
-        public int compare(final T i1, final T i2)
-        {
-            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
-            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
-
-            int compared = i1.getLine() - i2.getLine();
-            if (compared == 0)
-            {
-                compared = i1.getColumn() - i2.getColumn();
-                if (compared == 0)
-                {
-                    compared = i1.getResolutionType().ordinal() - i2.getResolutionType().ordinal();
-                    if (compared == 0)
-                    {
-                        compared = 1;
-                    }
-                }
-            }
-            return compared;
-        }
-    }
-
     private final List<T> baselineSystemIssues = new ArrayList<>(2);
     private final List<T> currentSystemIssues = new ArrayList<>(2);
 
@@ -76,9 +46,9 @@ public final class IssueContainer<T extends IIssue>
         currentSystemIssues.add(issue);
     }
 
-    public void sort()
+    public void sort(final Comparator<IIssue> comparator)
     {
-        final IssueComparator<T> comparator = new IssueComparator<T>();
+        assert comparator != null : "Parameter 'comparator' of method 'sort' must not be null";
         Collections.sort(baselineSystemIssues, comparator);
         Collections.sort(currentSystemIssues, comparator);
     }

@@ -193,10 +193,7 @@ public final class ReportDeltaImpl implements IReportDelta
     private String printNameAndTimestamp(final ISoftwareSystem system)
     {
         assert system != null : "Parameter 'system' of method 'printNameAndTimestamp' must not be null";
-        final StringBuilder builder = new StringBuilder();
-        final String timestamp = Utility.getDateTimeStringFromLocale(new Date(system.getTimestamp()));
-        builder.append(system.getName()).append(" from ").append(timestamp);
-        return builder.toString();
+        return system.getName() + " from " + Utility.getDateTimeStringFromLocale(new Date(system.getTimestamp()));
     }
 
     private String printSystemInfo(final ISoftwareSystem system)
@@ -221,9 +218,9 @@ public final class ReportDeltaImpl implements IReportDelta
         else
         {
             builder.append("\nNOTE: Delta is calculated using different Systems!\n");
-            builder.append("\n").append("Baseline system: ");
+            builder.append("\n").append("Baseline system info");
             builder.append(printSystemInfo(baselineSystem));
-            builder.append("\n").append("Current system: ");
+            builder.append("\n").append("Current system info");
             builder.append(printSystemInfo(currentSystem));
         }
 
@@ -235,11 +232,10 @@ public final class ReportDeltaImpl implements IReportDelta
             return builder.toString();
         }
 
-        builder.append("\nDelta of Systems");
         builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
         builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
 
-        builder.append("\nAdded features (").append(addedFeatures.size()).append(")");
+        builder.append("\n\nAdded features (").append(addedFeatures.size()).append(")");
         for (final IFeature next : addedFeatures)
         {
             builder.append("\n").append(Utility.INDENTATION).append(next.getName());
@@ -266,14 +262,14 @@ public final class ReportDeltaImpl implements IReportDelta
         builder.append("\nAdded metric thresholds (").append(addedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : addedMetricThresholds)
         {
-            builder.append("\n").append("- Added metric threshold: ").append(next.getMetricId().getName()).append(":")
+            builder.append("\n").append(Utility.INDENTATION).append("Added metric threshold: ").append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
 
         builder.append("\nRemoved metric thresholds (").append(removedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : removedMetricThresholds)
         {
-            builder.append("\n").append("- Removed metric threshold: ").append(next.getMetricId().getName()).append(":")
+            builder.append("\n").append(Utility.INDENTATION).append("Removed metric threshold: ").append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
 
@@ -282,8 +278,8 @@ public final class ReportDeltaImpl implements IReportDelta
         {
             final IMetricThreshold baseline = next.getBaseline();
             final IMetricThreshold current = next.getCurrent();
-            builder.append("\n").append("- Added metric threshold: ").append(baseline.getMetricId().getName()).append(":")
-                    .append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
+            builder.append("\n").append(Utility.INDENTATION).append("Changed metric threshold boundaries: ").append(baseline.getMetricId().getName())
+                    .append(":").append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
                     .append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
                     .append(current.getUpperThreshold()).append("]");
         }
