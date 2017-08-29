@@ -190,42 +190,44 @@ public final class ReportDeltaImpl implements IReportDelta
                 && getWorkspaceDelta().isEmpty() && getIssueDelta().isEmpty();
     }
 
-    private String printNameAndTimestamp(final ISoftwareSystem system)
+    private void addSystemInfo(final StringBuilder builder, final ISoftwareSystem system, final boolean includingTimestamp)
     {
-        assert system != null : "Parameter 'system' of method 'printNameAndTimestamp' must not be null";
-        return system.getName() + " from " + Utility.getDateTimeStringFromLocale(new Date(system.getTimestamp()));
-    }
+        assert builder != null : "Parameter 'builder' of method 'addSystemInfo' must not be null";
+        assert system != null : "Parameter 'system' of method 'addSystemInfo' must not be null";
 
-    private String printSystemInfo(final ISoftwareSystem system)
-    {
-        assert system != null : "Parameter 'system' of method 'printSystemInfo' must not be null";
-        final StringBuilder builder = new StringBuilder();
         builder.append("\n").append(Utility.INDENTATION).append("Name: ").append(system.getName());
         builder.append("\n").append(Utility.INDENTATION).append("ID: ").append(system.getSystemId());
         builder.append("\n").append(Utility.INDENTATION).append("Path: ").append(system.getPath());
-        return builder.toString();
+        if (includingTimestamp)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Timestamp: ")
+                    .append(Utility.getDateTimeStringFromLocale(new Date(system.getTimestamp())));
+        }
     }
 
     @Override
     public String toString()
     {
         final StringBuilder builder = new StringBuilder();
+
         if (baselineSystem.getSystemId().equals(currentSystem.getSystemId()) && baselineSystem.getPath().equals(currentSystem.getPath()))
         {
-            builder.append("\n").append("System info");
-            builder.append(printSystemInfo(baselineSystem));
+            builder.append("System info");
+            addSystemInfo(builder, baselineSystem, false);
+            builder.append("\n").append(Utility.INDENTATION).append("Timestamp baseline system: ")
+                    .append(Utility.getDateTimeStringFromLocale(new Date(baselineSystem.getTimestamp())));
+            builder.append("\n").append(Utility.INDENTATION).append("Timestamp current system : ")
+                    .append(Utility.getDateTimeStringFromLocale(new Date(currentSystem.getTimestamp())));
         }
         else
         {
-            builder.append("\nNOTE: Delta is calculated using different Systems!\n");
+            builder.append("WARNING: Delta calculated using different Systems!\n");
             builder.append("\n").append("Baseline system info");
-            builder.append(printSystemInfo(baselineSystem));
+            addSystemInfo(builder, baselineSystem, true);
             builder.append("\n").append("Current system info");
-            builder.append(printSystemInfo(currentSystem));
+            addSystemInfo(builder, currentSystem, true);
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
-        builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
         builder.append("\n");
 
         if (isEmpty())
