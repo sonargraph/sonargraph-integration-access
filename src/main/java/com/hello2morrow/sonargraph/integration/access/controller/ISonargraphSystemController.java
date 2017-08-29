@@ -43,9 +43,9 @@ public interface ISonargraphSystemController
      */
     public Result loadSystemReport(File systemReportFile, File baseDirectory);
 
-    public ISoftwareSystem getSoftwareSystem();
-
     public boolean hasSoftwareSystem();
+
+    public ISoftwareSystem getSoftwareSystem();
 
     public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 
@@ -55,10 +55,4 @@ public interface ISonargraphSystemController
      * Creates a difference processor based on the software system previously loaded by the controller.
      */
     public IReportDifferenceProcessor createReportDifferenceProcessor();
-
-    /**
-     * Writes a system report and can be used to reduce the size of huge XML report files.
-     * NOTE: This is currently not completed and only includes meta-data and workspace info of a SoftwareSystem.
-     */
-    public Result writeSystemReport(File file);
 }

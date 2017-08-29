@@ -224,67 +224,71 @@ public final class ReportDeltaImpl implements IReportDelta
             builder.append(printSystemInfo(currentSystem));
         }
 
+        builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
+        builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
+        builder.append("\n");
+
         if (isEmpty())
         {
-            builder.append("\n\nNo delta detected between systems");
-            builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
-            builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
+            builder.append("\nNo delta detected.");
             return builder.toString();
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Baseline system: ").append(printNameAndTimestamp(baselineSystem));
-        builder.append("\n").append(Utility.INDENTATION).append("Current system : ").append(printNameAndTimestamp(currentSystem));
+        builder.append("\nSystem delta");
 
-        builder.append("\n\nAdded features (").append(addedFeatures.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Added features (").append(addedFeatures.size()).append(")");
         for (final IFeature next : addedFeatures)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
-        builder.append("\nRemoved features (").append(removedFeatures.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Removed features (").append(removedFeatures.size()).append(")");
         for (final IFeature next : removedFeatures)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
-        builder.append("\nAdded analyzers (").append(addedAnalyzers.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Added analyzers (").append(addedAnalyzers.size()).append(")");
         for (final IAnalyzer next : addedAnalyzers)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
-        builder.append("\nRemoved analyzers (").append(removedAnalyzers.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Removed analyzers (").append(removedAnalyzers.size()).append(")");
         for (final IAnalyzer next : removedAnalyzers)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
-        builder.append("\nAdded metric thresholds (").append(addedMetricThresholds.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Added metric thresholds (").append(addedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : addedMetricThresholds)
         {
-            builder.append("\n").append(Utility.INDENTATION).append("Added metric threshold: ").append(next.getMetricId().getName()).append(": ")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
 
-        builder.append("\nRemoved metric thresholds (").append(removedMetricThresholds.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Removed metric thresholds (").append(removedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : removedMetricThresholds)
         {
-            builder.append("\n").append(Utility.INDENTATION).append("Removed metric threshold: ").append(next.getMetricId().getName()).append(": ")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
 
-        builder.append("\nChanged boundaries metric thresholds (").append(changedBoundariesMetricThresholds.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
+                .append(changedBoundariesMetricThresholds.size()).append(")");
         for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
         {
             final IMetricThreshold baseline = next.getBaseline();
             final IMetricThreshold current = next.getCurrent();
-            builder.append("\n").append(Utility.INDENTATION).append("Changed metric threshold boundaries: ").append(baseline.getMetricId().getName())
-                    .append(":").append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(baseline.getMetricId().getName()).append(":")
+                    .append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
                     .append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
                     .append(current.getUpperThreshold()).append("]");
         }
 
+        builder.append("\n\nWorkspace delta");
         builder.append(getWorkspaceDelta());
+        builder.append("\n\nIssue delta");
         builder.append(getIssueDelta());
 
         return builder.toString();

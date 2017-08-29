@@ -77,10 +77,12 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
 
     private String printModuleList(final List<IModule> modules)
     {
+        assert modules != null : "Parameter 'modules' of method 'printModuleList' must not be null";
         final StringBuilder builder = new StringBuilder();
         for (final IModule nextModule : modules)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextModule.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextModule.getName()).append(" [")
+                    .append(nextModule.getLanguage()).append("]");
         }
         return builder.toString();
     }
@@ -90,18 +92,17 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("\n");
-        builder.append("Changed Modules (").append(changedModules.size()).append(")");
-        for (final IModuleDelta delta : changedModules)
-        {
-            builder.append("\n").append(delta.toString());
-        }
+        builder.append("\n").append(Utility.INDENTATION).append("Added Modules (").append(addedModules.size()).append(")");
+        builder.append(printModuleList(addedModules));
 
-        builder.append("\n").append("Removed Modules (").append(removedModules.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Removed Modules (").append(removedModules.size()).append(")");
         builder.append(printModuleList(removedModules));
 
-        builder.append("\n").append("Added Modules (").append(addedModules.size()).append(")");
-        builder.append(printModuleList(addedModules));
+        builder.append("\n").append(Utility.INDENTATION).append("Changed Modules (").append(changedModules.size()).append(")");
+        for (final IModuleDelta delta : changedModules)
+        {
+            builder.append("\n").append(delta);
+        }
 
         return builder.toString();
     }

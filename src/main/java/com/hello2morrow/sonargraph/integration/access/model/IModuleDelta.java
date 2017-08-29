@@ -17,16 +17,13 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface IModuleDelta extends Serializable
+public interface IModuleDelta extends IDelta
 {
-    List<IRootDirectory> getAddedRoots();
+    public IModule getModule();
 
-    List<IRootDirectory> getRemovedRoots();
+    public List<IRootDirectory> getAddedRootDirectories();
 
-    List<IRootDirectory> getUnchangedRoots();
-
-    IModule getModule();
+    public List<IRootDirectory> getRemovedRootDirectories();
 }

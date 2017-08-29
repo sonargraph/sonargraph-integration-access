@@ -19,49 +19,38 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 
-public class ModuleDeltaImpl implements IModuleDelta
+public final class ModuleDeltaImpl implements IModuleDelta
 {
     private static final long serialVersionUID = 1127361649841021407L;
     private final IModule module;
-    private final List<IRootDirectory> unchanged;
     private final List<IRootDirectory> added;
     private final List<IRootDirectory> removed;
 
-    public ModuleDeltaImpl(final IModule module, final List<IRootDirectory> unchanged, final List<IRootDirectory> added,
-            final List<IRootDirectory> removed)
+    public ModuleDeltaImpl(final IModule module, final List<IRootDirectory> added, final List<IRootDirectory> removed)
     {
         assert module != null : "Parameter 'module' of method 'ModuleDeltaImpl' must not be null";
-        assert unchanged != null : "Parameter 'unchanged' of method 'ModuleDeltaImpl' must not be null";
         assert added != null : "Parameter 'added' of method 'ModuleDeltaImpl' must not be null";
         assert removed != null : "Parameter 'removed' of method 'ModuleDeltaImpl' must not be null";
 
         this.module = module;
-        this.unchanged = unchanged;
         this.added = added;
         this.removed = removed;
     }
 
     @Override
-    public List<IRootDirectory> getUnchangedRoots()
-    {
-        return Collections.unmodifiableList(unchanged);
-    }
-
-    @Override
-    public List<IRootDirectory> getAddedRoots()
+    public List<IRootDirectory> getAddedRootDirectories()
     {
         return Collections.unmodifiableList(added);
     }
 
     @Override
-    public List<IRootDirectory> getRemovedRoots()
+    public List<IRootDirectory> getRemovedRootDirectories()
     {
         return Collections.unmodifiableList(removed);
     }
@@ -73,28 +62,35 @@ public class ModuleDeltaImpl implements IModuleDelta
     }
 
     @Override
-    public String toString()
+    public boolean isEmpty()
     {
-        return print(true);
+        return added.isEmpty() && removed.isEmpty();
     }
 
-    public String print(final boolean includeUnchanged)
+    @Override
+    public String toString()
     {
-        final StringBuilder builder = new StringBuilder("  Delta of module ");
-        builder.append(module.getName());
+        final StringBuilder builder = new StringBuilder();
 
-        builder.append("\n").append(Utility.INDENTATION).append("Removed roots (").append(removed.size()).append("):");
-        final Consumer<? super IRootDirectory> action = r -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(r);
-        removed.forEach(action);
+        builder.append(Utility.INDENTATION).append(Utility.INDENTATION).append(module.getName()).append(" [").append(module.getLanguage())
+                .append("]");
 
-        builder.append("\n").append(Utility.INDENTATION).append("Added roots (").append(added.size()).append("):");
-        added.forEach(action);
-
-        if (includeUnchanged)
+        builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append("Added root directories (")
+                .append(added.size()).append(")");
+        for (final IRootDirectory next : added)
         {
-            builder.append("\n").append(Utility.INDENTATION).append("Unchanged roots (").append(unchanged.size()).append("):");
-            unchanged.forEach(action);
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                    .append(next.getRelativePath());
         }
+
+        builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append("Removed root directories (")
+                .append(removed.size()).append(")");
+        for (final IRootDirectory next : removed)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                    .append(next.getRelativePath());
+        }
+
         return builder.toString();
     }
 }

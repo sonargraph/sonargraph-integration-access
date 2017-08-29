@@ -220,10 +220,11 @@ public final class IssueDeltaImpl implements IIssueDelta
 
         for (final IIssue nextIssue : issues)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(nextIssue.getKey());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextIssue.getKey());
             for (final INamedElement nextNamedElement : nextIssue.getAffectedNamedElements())
             {
-                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextNamedElement.getFqName());
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                        .append(nextNamedElement.getFqName());
             }
         }
     }
@@ -233,80 +234,98 @@ public final class IssueDeltaImpl implements IIssueDelta
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("\nRemoved issues (").append(removed.size()).append(")");
-        addIssuesInfo(builder, removed);
-        builder.append("\nAdded issues (").append(added.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Added issues (").append(added.size()).append(")");
         addIssuesInfo(builder, added);
 
-        builder.append("\nIssues with changed resolution type (").append(changedResolutionType.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Removed issues (").append(removed.size()).append(")");
+        addIssuesInfo(builder, removed);
+
+        builder.append("\n").append(Utility.INDENTATION).append("Issues with changed resolution type (").append(changedResolutionType.size())
+                .append(")");
         for (final BaselineCurrent<IIssue> next : changedResolutionType)
         {
             final IIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append("Changed resolution of issue '").append(nextBaseline.getKey())
-                    .append("' (baseline/current): ").append(nextBaseline.getResolutionType()).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
+                    .append(" (baseline/current): ").append(nextBaseline.getResolutionType()).append("/")
                     .append(next.getCurrent().getResolutionType());
         }
 
-        builder.append("\nImproved metric values of threshold violations (").append(improved.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Improved metric values of threshold violations (").append(improved.size())
+                .append(")");
         for (final BaselineCurrent<IThresholdViolationIssue> next : improved)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append("Improved metric value of threshold violation '").append(nextBaseline.getKey())
-                    .append("' (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
+                    .append(" (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
                     .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
         }
 
-        builder.append("\nWorsened metric values of threshold violations (").append(worsened.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Worsened metric values of threshold violations (").append(worsened.size())
+                .append(")");
         for (final BaselineCurrent<IThresholdViolationIssue> next : worsened)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append("Worsened metric value of threshold violation '").append(nextBaseline.getKey())
-                    .append("' (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
+                    .append(" (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
                     .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
         }
 
-        builder.append("\nElements added to cycles (").append(addedToCycle.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Elements added to cycles (").append(addedToCycle.size()).append(")");
         for (final Entry<String, String> nextEntry : addedToCycle.entrySet())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey()).append(" [")
-                    .append(nextEntry.getValue()).append("]");
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey())
+                    .append(" [").append(nextEntry.getValue()).append("]");
         }
-        builder.append("\nElements removed from cycles (").append(removedFromCycle.size()).append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Elements removed from cycles (").append(removedFromCycle.size()).append(")");
         for (final Entry<String, String> nextEntry : removedFromCycle.entrySet())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey()).append(" [")
-                    .append(nextEntry.getValue()).append("]");
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey())
+                    .append(" [").append(nextEntry.getValue()).append("]");
         }
+        builder.append("\n").append(Utility.INDENTATION).append("Overall cycle participation improved (").append(improvedCycleParticipation.size())
+                .append(")");
         for (final Entry<String, BaselineCurrent<Integer>> nextEntry : improvedCycleParticipation.entrySet())
         {
             final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
-            builder.append("\nOverall cycle participation improved for '").append(nextEntry.getKey())
-                    .append("'. Number of cyclic elements (baseline/current): ").append(nextBaselineCurrent.getBaseline()).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey())
+                    .append(" - number of cyclic elements (baseline/current): ").append(nextBaselineCurrent.getBaseline()).append("/")
                     .append(nextBaselineCurrent.getCurrent());
         }
+        builder.append("\n").append(Utility.INDENTATION).append("Overall cycle participation worsened (").append(worsenedCycleParticipation.size())
+                .append(")");
         for (final Entry<String, BaselineCurrent<Integer>> nextEntry : worsenedCycleParticipation.entrySet())
         {
             final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
-            builder.append("\nOverall cycle participation worsened for '").append(nextEntry.getKey())
-                    .append("'. Number of cyclic elements (baseline/current): ").append(nextBaselineCurrent.getBaseline()).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey())
+                    .append(" - number of cyclic elements (baseline/current): ").append(nextBaselineCurrent.getBaseline()).append("/")
                     .append(nextBaselineCurrent.getCurrent());
         }
 
-        builder.append("\nElements with changed duplicate code block participation (").append(changedDuplicateCodeBlockParticipation.size())
-                .append(")");
+        builder.append("\n").append(Utility.INDENTATION).append("Elements with changed duplicate code block participation (")
+                .append(changedDuplicateCodeBlockParticipation.size()).append(")");
         for (final Entry<String, BaselineCurrent<Integer>> nextEntry : changedDuplicateCodeBlockParticipation.entrySet())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey());
         }
         if (improvedDuplicateCodeParticipation != null)
         {
-            builder.append("\nOverall duplicate code participation improved. Number of source files containing duplicate code (baseline/current): ")
+            builder.append("\n").append(Utility.INDENTATION)
+                    .append("Overall duplicate code participation improved - number of source files containing duplicate code (baseline/current): ")
                     .append(improvedDuplicateCodeParticipation.getBaseline()).append("/").append(improvedDuplicateCodeParticipation.getCurrent());
+        }
+        else
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not improved");
         }
         if (worsenedDuplicateCodeParticipation != null)
         {
-            builder.append("\nOverall duplicate code participation worsened. Number of source files containing duplicate code (baseline/current): ")
+            builder.append("\n").append(Utility.INDENTATION)
+                    .append("Overall duplicate code participation worsened - number of source files containing duplicate code (baseline/current): ")
                     .append(worsenedDuplicateCodeParticipation.getBaseline()).append("/").append(worsenedDuplicateCodeParticipation.getCurrent());
+        }
+        else
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not worsened");
         }
 
         return builder.toString();

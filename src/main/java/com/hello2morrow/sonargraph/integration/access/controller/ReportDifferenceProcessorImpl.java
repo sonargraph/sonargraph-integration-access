@@ -66,18 +66,18 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         CURRENT_SYSTEM
     }
 
-    private final ISystemInfoProcessor baseSystem;
+    private final ISystemInfoProcessor baselineSystemInfoProcessor;
 
-    public ReportDifferenceProcessorImpl(final ISystemInfoProcessor baseSystem)
+    public ReportDifferenceProcessorImpl(final ISystemInfoProcessor baselineSysteminfoProcessor)
     {
-        assert baseSystem != null : "Parameter 'baseSystem' of method 'ReportDifferenceProcessorImpl' must not be null";
-        this.baseSystem = baseSystem;
+        assert baselineSysteminfoProcessor != null : "Parameter 'baselineSysteminfoProcessor' of method 'ReportDifferenceProcessorImpl' must not be null";
+        this.baselineSystemInfoProcessor = baselineSysteminfoProcessor;
     }
 
     @Override
     public ISoftwareSystem getSoftwareSystem()
     {
-        return baseSystem.getSoftwareSystem();
+        return baselineSystemInfoProcessor.getSoftwareSystem();
     }
 
     private void processSingleElementIssue(final Source source, final SingleNamedElementIssueImpl issue,
@@ -379,7 +379,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementDuplicateCodeCollector = new HashMap<>();
         final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueMultiCollector = new HashMap<>();
 
-        process(Source.BASELINE_SYSTEM, baseSystem.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
+        process(Source.BASELINE_SYSTEM, baselineSystemInfoProcessor.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
                 elementDuplicateCodeCollector, issueMultiCollector);
         process(Source.CURRENT_SYSTEM, infoProcessor.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
                 elementDuplicateCodeCollector, issueMultiCollector);
@@ -503,45 +503,37 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final WorkspaceDeltaImpl workspaceDelta = new WorkspaceDeltaImpl();
 
-        final Map<String, IModule> modules1 = new LinkedHashMap<>(baseSystem.getModules());
-        final Map<String, IModule> modules2 = new LinkedHashMap<>(systemProcessor.getModules());
+        final Map<String, IModule> baselineModules = new LinkedHashMap<>(baselineSystemInfoProcessor.getModules());
+        final Map<String, IModule> currentModules = new LinkedHashMap<>(systemProcessor.getModules());
 
         final List<String> processedModuleNames = new ArrayList<>();
-        for (final Entry<String, IModule> next : modules1.entrySet())
+        for (final Entry<String, IModule> nextEntry : baselineModules.entrySet())
         {
-            final String moduleName = next.getKey();
-            final IModule module1 = next.getValue();
-            final IModule module2 = modules2.get(moduleName);
-            if (modules2.containsKey(moduleName))
-            {
-                boolean unchanged = true;
-                for (final IRootDirectory root1 : module1.getRootDirectories())
-                {
-                    if (!module2.getRootDirectories().stream().anyMatch(r2 -> r2.getFqName().equals(root1.getFqName())))
-                    {
-                        unchanged = false;
-                        break;
-                    }
-                }
+            final String moduleName = nextEntry.getKey();
+            final IModule nextBaselineModule = nextEntry.getValue();
+            final IModule nextCurrentModule = currentModules.get(moduleName);
 
-                if (!unchanged)
+            if (currentModules.containsKey(moduleName))
+            {
+                final IModuleDelta nextModuleDelta = computeModuleDelta(nextBaselineModule, nextCurrentModule);
+                if (!nextModuleDelta.isEmpty())
                 {
-                    workspaceDelta.addChangedModule(computeModuleDelta(module1, module2));
+                    workspaceDelta.addChangedModule(nextModuleDelta);
                 }
             }
             else
             {
-                workspaceDelta.addRemovedModule(module1);
+                workspaceDelta.addRemovedModule(nextBaselineModule);
             }
             processedModuleNames.add(moduleName);
         }
 
         for (final String nextName : processedModuleNames)
         {
-            modules2.remove(nextName);
+            currentModules.remove(nextName);
         }
 
-        for (final Entry<String, IModule> next : modules2.entrySet())
+        for (final Entry<String, IModule> next : currentModules.entrySet())
         {
             workspaceDelta.addAddedModule(next.getValue());
         }
@@ -549,38 +541,21 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         return workspaceDelta;
     }
 
-    private IModuleDelta computeModuleDelta(final IModule module1, final IModule module2)
+    private IModuleDelta computeModuleDelta(final IModule baselineModule, final IModule currentModule)
     {
-        assert module1 != null : "Parameter 'module1' of method 'computeModuleDelta' must not be null";
-        assert module2 != null : "Parameter 'module2' of method 'computeModuleDelta' must not be null";
+        assert baselineModule != null : "Parameter 'baselineModule' of method 'computeModuleDelta' must not be null";
+        assert currentModule != null : "Parameter 'currentModule' of method 'computeModuleDelta' must not be null";
 
-        final Map<String, IRootDirectory> rootPaths1 = new LinkedHashMap<>();
-        final Map<String, IRootDirectory> rootPaths2 = new LinkedHashMap<>();
-        module1.getRootDirectories().stream().forEach(r -> rootPaths1.put(r.getPresentationName(), r));
-        module2.getRootDirectories().stream().forEach(r -> rootPaths2.put(r.getPresentationName(), r));
+        final List<IRootDirectory> baselineRootDirectories = baselineModule.getRootDirectories();
+        final Set<IRootDirectory> baselineRootDirectoriesAsSet = new HashSet<>(baselineRootDirectories);
 
-        final List<IRootDirectory> added = new ArrayList<>();
-        final List<IRootDirectory> unchanged = new ArrayList<>();
-        final List<IRootDirectory> removed = new ArrayList<>();
-        for (final Map.Entry<String, IRootDirectory> next : rootPaths1.entrySet())
-        {
-            if (rootPaths2.containsKey(next.getKey()))
-            {
-                unchanged.add(next.getValue());
-            }
-            else
-            {
-                removed.add(next.getValue());
-            }
-        }
-        for (final IRootDirectory next : unchanged)
-        {
-            rootPaths2.remove(next.getPresentationName());
-        }
+        final List<IRootDirectory> currentRootDirectories = currentModule.getRootDirectories();
+        final Set<IRootDirectory> currentRootDirectoriesAsSet = new HashSet<>(currentRootDirectories);
 
-        added.addAll(rootPaths2.values());
+        currentRootDirectoriesAsSet.removeAll(baselineRootDirectories);
+        baselineRootDirectoriesAsSet.removeAll(currentRootDirectories);
 
-        return new ModuleDeltaImpl(module1, unchanged, added, removed);
+        return new ModuleDeltaImpl(baselineModule, new ArrayList<>(currentRootDirectoriesAsSet), new ArrayList<>(baselineRootDirectoriesAsSet));
     }
 
     private void processAnalyzers(final List<IAnalyzer> baseline, final List<IAnalyzer> current, final ReportDeltaImpl reportDeltaImpl)
@@ -654,9 +629,9 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         final ReportDeltaImpl reportDeltaImpl = new ReportDeltaImpl(getSoftwareSystem(), systemInfoProcessor.getSoftwareSystem());
 
-        processFeatures(baseSystem.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
-        processAnalyzers(baseSystem.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
-        processThreshols(baseSystem.getMetricThresholds(), systemInfoProcessor.getMetricThresholds(), reportDeltaImpl);
+        processFeatures(baselineSystemInfoProcessor.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
+        processAnalyzers(baselineSystemInfoProcessor.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
+        processThreshols(baselineSystemInfoProcessor.getMetricThresholds(), systemInfoProcessor.getMetricThresholds(), reportDeltaImpl);
 
         reportDeltaImpl.setWorkspaceDelta(createWorkspaceDelta(systemInfoProcessor));
         reportDeltaImpl.setIssuesDelta(createIssueDelta(systemInfoProcessor));
