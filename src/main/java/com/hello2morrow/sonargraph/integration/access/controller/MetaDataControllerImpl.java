@@ -63,12 +63,10 @@ final class MetaDataControllerImpl implements IMetaDataController
     {
         assert exportMetaDataFile != null : "Parameter 'exportMetaDataFile' of method 'loadExportMetaData' must not be null";
 
-        final ResultWithOutcome<IExportMetaData> result = new ResultWithOutcome<>("Load meta-data from '" + exportMetaDataFile
-                + "'");
+        final ResultWithOutcome<IExportMetaData> result = new ResultWithOutcome<>("Load meta-data from '" + exportMetaDataFile + "'");
         try (final FileInputStream inputStream = new FileInputStream(exportMetaDataFile))
         {
-            final ResultWithOutcome<IExportMetaData> loadExportMetaData = loadExportMetaData(inputStream,
-                    exportMetaDataFile.getCanonicalPath());
+            final ResultWithOutcome<IExportMetaData> loadExportMetaData = loadExportMetaData(inputStream, exportMetaDataFile.getCanonicalPath());
             result.addMessagesFrom(loadExportMetaData);
             result.setOutcome(loadExportMetaData.getOutcome());
         }
@@ -253,7 +251,6 @@ final class MetaDataControllerImpl implements IMetaDataController
                 }
             }
 
-            //TODO: Add further Merged* infos?
             for (final Map.Entry<String, IMetricCategory> nextCat : data.getMetricCategories().entrySet())
             {
                 if (!metricCategories.containsKey(nextCat.getKey()))
