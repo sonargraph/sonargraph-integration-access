@@ -29,3 +29,4 @@ The following lists the compatibility with Sonargraph releases.
 | 8.8.0 and newer    | 1.1 and newer              |
 | 9.1.1 and newer    | 2.0 and newer              |
 | 9.4.3 and newer    | 3.1 and newer              |
+| 9.4.5 and newer    | 3.1.2 and newer            |
