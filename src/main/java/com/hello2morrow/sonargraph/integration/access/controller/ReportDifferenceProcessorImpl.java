@@ -99,7 +99,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         IssueContainer<SingleNamedElementIssueImpl> issueContainer = issueKeyToIssueContainer.get(issueKey);
         if (issueContainer == null)
         {
-            issueContainer = new IssueContainer<SingleNamedElementIssueImpl>();
+            issueContainer = new IssueContainer<>();
             issueKeyToIssueContainer.put(issueKey, issueContainer);
         }
 
@@ -130,7 +130,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         IssueContainer<MultiNamedElementIssueImpl> issueContainer = issueCollector.get(issueName);
         if (issueContainer == null)
         {
-            issueContainer = new IssueContainer<MultiNamedElementIssueImpl>();
+            issueContainer = new IssueContainer<>();
             issueCollector.put(issueName, issueContainer);
         }
         switch (source)
@@ -160,7 +160,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = issueKeyToIssueContainer.get(issueKey);
             if (nextIssueContainer == null)
             {
-                nextIssueContainer = new IssueContainer<MultiNamedElementIssueImpl>();
+                nextIssueContainer = new IssueContainer<>();
                 issueKeyToIssueContainer.put(issueKey, nextIssueContainer);
             }
 

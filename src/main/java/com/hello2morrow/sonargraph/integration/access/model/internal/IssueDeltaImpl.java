@@ -36,6 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationI
 public final class IssueDeltaImpl implements IIssueDelta
 {
     private static final long serialVersionUID = -3056194877234260699L;
+    private static final String BASELINE_CURRENT = " (baseline/current): ";
 
     private final List<IIssue> added = new ArrayList<>();
     private final List<IIssue> removed = new ArrayList<>();
@@ -245,9 +246,8 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final BaselineCurrent<IIssue> next : changedResolutionType)
         {
             final IIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
-                    .append(" (baseline/current): ").append(nextBaseline.getResolutionType()).append("/")
-                    .append(next.getCurrent().getResolutionType());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
+                    .append(nextBaseline.getResolutionType()).append("/").append(next.getCurrent().getResolutionType());
         }
 
         builder.append("\n").append(Utility.INDENTATION).append("Improved metric values of threshold violations (").append(improved.size())
@@ -255,8 +255,8 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final BaselineCurrent<IThresholdViolationIssue> next : improved)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
-                    .append(" (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
+                    .append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
                     .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
         }
 
@@ -265,8 +265,8 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final BaselineCurrent<IThresholdViolationIssue> next : worsened)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey())
-                    .append(" (baseline/current): ").append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
+                    .append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
                     .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
         }
 
