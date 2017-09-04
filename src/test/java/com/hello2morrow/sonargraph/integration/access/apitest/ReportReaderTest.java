@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.junit.Test;
@@ -175,14 +176,6 @@ public class ReportReaderTest
                         .intValue());
     }
 
-    //    private void printLogicalElements(final Map<String, INamedElement> logicalModuleProgrammingElements)
-    //    {
-    //        for (final Map.Entry<String, INamedElement> next : logicalModuleProgrammingElements.entrySet())
-    //        {
-    //            System.out.println("fqName (key): " + next.getKey() + ", presentation name: " + next.getValue().getPresentationName());
-    //        }
-    //    }
-
     @Test
     public void processClassFileIssuesReport()
     {
@@ -224,5 +217,41 @@ public class ReportReaderTest
         final Map<String, List<IIssue>> m5IssueMap = moduleToIssues.get("M5");
         assertNotNull("Module M5 not found", m5IssueMap);
         assertTrue("1 directory with issue expected for module M5", m5IssueMap.size() == 1);
+    }
+
+    @Test
+    public void testReportWithPackageTodo()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_PACKAGE_TODO));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final Map<IModuleInfoProcessor, Map<String, List<IIssue>>> moduleToIssues = new HashMap<>();
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        for (final IModule nextModule : systemInfoProcessor.getModules().values())
+        {
+            final IModuleInfoProcessor nextModuleInfoProcessor = controller.createModuleInfoProcessor(nextModule);
+            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForDirectories(issue -> !issue.isIgnored()
+                    && !IIssueCategory.StandardName.WORKSPACE.getStandardName().equals(issue.getIssueType().getCategory().getName()));
+            moduleToIssues.put(nextModuleInfoProcessor, issueMap);
+        }
+
+        assertTrue("1 module expected", moduleToIssues.size() == 1);
+
+        for (final Entry<IModuleInfoProcessor, Map<String, List<IIssue>>> nextEntry : moduleToIssues.entrySet())
+        {
+            final Map<String, List<IIssue>> issueMap = nextEntry.getValue();
+            assertTrue("1 directory with issue expected", issueMap.size() == 1);
+            for (final Entry<String, List<IIssue>> nextIssueMapEntry : issueMap.entrySet())
+            {
+                for (final IIssue nextIssue : nextIssueMapEntry.getValue())
+                {
+                    final IResolution nextResolution = nextEntry.getKey().getResolution(nextIssue);
+                    assertNotNull("Resolution expected", nextResolution);
+                }
+            }
+
+        }
     }
 }
