@@ -324,20 +324,26 @@ public final class XmlReportReader extends XmlAccess
     {
         assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'connectSourceFiles' must not be null";
 
-        for (final Map.Entry<Object, IElement> entry : globalXmlToElementMap.entrySet())
+        for (final Map.Entry<Object, IElement> nextEntry : globalXmlToElementMap.entrySet())
         {
-            if (entry.getKey() instanceof XsdNamedElement)
+            final Object nextKey = nextEntry.getKey();
+            if (nextKey instanceof XsdNamedElement)
             {
-                final XsdNamedElement element = (XsdNamedElement) entry.getKey();
-                final Object source = element.getSource();
-                if (source != null)
+                final XsdNamedElement nextXsdNamedElement = (XsdNamedElement) nextKey;
+                final Object nextSource = nextXsdNamedElement.getSource();
+                if (nextSource != null)
                 {
-                    final IElement sourceFile = globalXmlToElementMap.get(source);
-                    if (sourceFile != null)
+                    final IElement nextSourceFile = globalXmlToElementMap.get(nextSource);
+                    if (nextSourceFile != null)
                     {
-                        assert sourceFile instanceof SourceFileImpl : "Unexpected class '" + sourceFile.getClass().getName() + "'";
-                        assert entry.getValue() instanceof NamedElementImpl : "Unexpected class '" + entry.getValue().getClass().getName() + "'";
-                        softwareSystemImpl.addSourceFile((NamedElementImpl) entry.getValue(), (SourceFileImpl) sourceFile);
+                        assert nextSourceFile instanceof SourceFileImpl : "Unexpected class '" + nextSourceFile.getClass().getName() + "'";
+                        assert nextEntry.getValue() instanceof NamedElementImpl : "Unexpected class '" + nextEntry.getValue().getClass().getName()
+                                + "'";
+                        softwareSystemImpl.addSourceFile((NamedElementImpl) nextEntry.getValue(), (SourceFileImpl) nextSourceFile);
+                    }
+                    else
+                    {
+                        LOGGER.warn("No element created for 'XsdNamedElement.getSource()' reference: " + nextSource);
                     }
                 }
             }
@@ -429,24 +435,6 @@ public final class XmlReportReader extends XmlAccess
         {
             physicalRecursiveElementImpl.setRelativeDirectory(nextRelativeDirectory);
         }
-        else
-        {
-            final Object nextSource = xsdPhysicalRecursiveElement.getSource();
-            if (nextSource != null)
-            {
-                final IElement element = globalXmlToElementMap.get(nextSource);
-                if (element != null)
-                {
-                    assert element instanceof SourceFileImpl : "Unexpected element class: " + element.getClass().getName();
-                    softwareSystemImpl.addSourceFile(physicalRecursiveElementImpl, (SourceFileImpl) element);
-                }
-                else
-                {
-                    LOGGER.warn("No element created for 'xsdPhysicalRecursiveElement.getSource()' reference: " + nextSource);
-                }
-            }
-        }
-
         if (relativeRootDirectory != null)
         {
             physicalRecursiveElementImpl.setRelativeRootDirectory(relativeRootDirectory);
