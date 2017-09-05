@@ -35,20 +35,15 @@ import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
 public final class ReportDeltaImpl implements IReportDelta
 {
     private static final long serialVersionUID = 5654628222750372027L;
-
     private final List<IFeature> addedFeatures = new ArrayList<>();
     private final List<IFeature> removedFeatures = new ArrayList<>();
-
     private final List<IAnalyzer> addedAnalyzers = new ArrayList<>();
     private final List<IAnalyzer> removedAnalyzers = new ArrayList<>();
-
     private final List<IMetricThreshold> addedMetricThresholds = new ArrayList<>();
     private final List<IMetricThreshold> removedMetricThresholds = new ArrayList<>();
     private final List<BaselineCurrent<IMetricThreshold>> changedBoundariesMetricThresholds = new ArrayList<>();
-
     private final ISoftwareSystem baselineSystem;
     private final ISoftwareSystem currentSystem;
-
     private IWorkspaceDelta workspaceDelta;
     private IIssueDelta issueDelta;
 
@@ -216,7 +211,7 @@ public final class ReportDeltaImpl implements IReportDelta
             addSystemInfo(builder, baselineSystem, false);
             builder.append("\n").append(Utility.INDENTATION).append("Timestamp baseline system: ")
                     .append(Utility.getDateTimeStringFromLocale(new Date(baselineSystem.getTimestamp())));
-            builder.append("\n").append(Utility.INDENTATION).append("Timestamp current system : ")
+            builder.append("\n").append(Utility.INDENTATION).append("Timestamp current system: ")
                     .append(Utility.getDateTimeStringFromLocale(new Date(currentSystem.getTimestamp())));
         }
         else
