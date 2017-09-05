@@ -66,7 +66,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
-    private final List<IMetricThreshold> m_thresholds = new ArrayList<>();
+    private final List<IMetricThreshold> thresholds = new ArrayList<>();
     private final Map<IAnalyzer, HashMap<String, ICycleGroupIssue>> cycleGroups = new HashMap<>();
     private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
@@ -401,12 +401,12 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     public void addMetricThreshold(final MetricThreshold threshold)
     {
-        m_thresholds.add(threshold);
+        thresholds.add(threshold);
     }
 
     public List<IMetricThreshold> getMetricThresholds()
     {
-        return Collections.unmodifiableList(m_thresholds);
+        return Collections.unmodifiableList(thresholds);
     }
 
     public void addSourceFile(final NamedElementImpl forNamedElement, final SourceFileImpl sourceFile)

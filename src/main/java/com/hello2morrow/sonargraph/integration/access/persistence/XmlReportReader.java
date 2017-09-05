@@ -442,7 +442,7 @@ public final class XmlReportReader extends XmlAccess
                 }
                 else
                 {
-                    //TODO warn
+                    LOGGER.warn("No element created for 'xsdPhysicalRecursiveElement.getSource()' reference: " + nextSource);
                 }
             }
         }
@@ -888,7 +888,7 @@ public final class XmlReportReader extends XmlAccess
 
         final IElement element = globalXmlToElementMap.get(elementRef);
         assert element != null : "Element " + ((XsdElement) elementRef).getName() + " not found!";
-        assert element != null && element instanceof INamedElement : "Unexpected class in method 'addMetricValue': " + element;
+        assert element instanceof INamedElement : "Unexpected class in method 'addMetricValue': " + element;
 
         final IMetricValue value = new MetricValueImpl((IMetricId) metricId, level, supplier.get());
         module.addMetricValueForElement(value, (INamedElement) element);
@@ -990,12 +990,12 @@ public final class XmlReportReader extends XmlAccess
             final String fromId = ((XsdElement) nextDependencyIssue.getFrom()).getId();
             final IElement from = globalXmlToElementMap.get(nextDependencyIssue.getFrom());
             assert from != null : "'from' element (" + fromId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
-            assert from != null && from instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + from;
+            assert from instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + from;
 
             final String toId = ((XsdElement) nextDependencyIssue.getTo()).getId();
             final IElement to = globalXmlToElementMap.get(nextDependencyIssue.getTo());
             assert to != null : "'to' element (" + toId + ") of dependency issue '" + nextDependencyIssue.getId() + "' not found";
-            assert to != null && to instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + to;
+            assert to instanceof INamedElement : "Unexpected class in method 'processDependencyIssues': " + to;
 
             final String nextName = issueType.getName();
             final String nextPresentationName = issueType.getPresentationName();
@@ -1078,8 +1078,7 @@ public final class XmlReportReader extends XmlAccess
             final IElement nextAffectedElement = globalXmlToElementMap.get(nextAffectedXsdElement);
             assert nextAffectedElement != null : "Affected element of issue '" + nextXsdMetricThresholdViolationIssue
                     + "' has not been processed - xsd element id: " + nextAffectedXsdElement.getId();
-            assert nextAffectedElement != null && nextAffectedElement instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': "
-                    + nextAffectedElement;
+            assert nextAffectedElement instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + nextAffectedElement;
 
             final IIssueType issueType = getIssueType(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
             final IIssueProvider issueProvider = getIssueProvider(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
@@ -1113,7 +1112,7 @@ public final class XmlReportReader extends XmlAccess
             final XsdElement affectedElement = (XsdElement) next.getAffectedElement();
             final IElement affected = globalXmlToElementMap.get(affectedElement);
             assert affected != null : "Affected element of issue '" + next + "' has not been processed";
-            assert affected != null && affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
+            assert affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
 
             final IIssueType issueType = getIssueType(softwareSystem, next);
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);

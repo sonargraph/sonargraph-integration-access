@@ -30,9 +30,9 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     private static final int INDENTATION_LENGTH = 4;
     private static final char INDENT_CHAR = ' ';
     private static final String LINEFEED_CHAR = "\n";
+    private final Map<Integer, Boolean> hasChildElement = new HashMap<>();
     private final XMLStreamWriter writer;
     private int currentDepth = 0;
-    private final Map<Integer, Boolean> m_hasChildElement = new HashMap<Integer, Boolean>();
 
     XmlPrettyPrintWriter(final XMLStreamWriter writer)
     {
@@ -244,7 +244,7 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     }
 
     @Override
-    public Object getProperty(final String name) throws IllegalArgumentException
+    public Object getProperty(final String name)
     {
         return writer.getProperty(name);
     }
@@ -265,11 +265,11 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
         // update state of parent node
         if (currentDepth > 0)
         {
-            m_hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
+            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
         }
 
         // reset state of current node
-        m_hasChildElement.put(currentDepth, Boolean.FALSE);
+        hasChildElement.put(currentDepth, Boolean.FALSE);
 
         // indent for current m_depth
         writer.writeCharacters(LINEFEED_CHAR);
@@ -283,9 +283,9 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
         currentDepth -= INDENTATION_LENGTH;
 
         assert currentDepth >= 0 : "m_depth must not be negative!";
-        assert m_hasChildElement.get(currentDepth) != null : "value for m_hasChildElement must exist";
+        assert hasChildElement.get(currentDepth) != null : "value for m_hasChildElement must exist";
 
-        if (m_hasChildElement.get(currentDepth).equals(Boolean.TRUE))
+        if (hasChildElement.get(currentDepth).equals(Boolean.TRUE))
         {
             writer.writeCharacters(LINEFEED_CHAR);
             writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
@@ -297,7 +297,7 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
         // update state of parent node
         if (currentDepth > 0)
         {
-            m_hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
+            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
         }
 
         // indent for current m_depth

@@ -20,7 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 public final class XmlIdGenerator
 {
     private static final String ID_FORMAT = "_%1x";
-    private int m_idCounter;
+    private int idCounter;
 
     public XmlIdGenerator()
     {
@@ -29,6 +29,6 @@ public final class XmlIdGenerator
 
     public String getNextId()
     {
-        return String.format(ID_FORMAT, m_idCounter++);
+        return String.format(ID_FORMAT, idCounter++);
     }
 }

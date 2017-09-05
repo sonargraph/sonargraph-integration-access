@@ -33,11 +33,11 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
      */
     private static final String CDATA_END_ENCODED = "]]" + CDATA_END + CDATA_START + ">";
     private static final Pattern XML_CHARS = Pattern.compile("[&<>]");
-    private final XMLStreamWriter m_xmlStreamWriter;
+    private final XMLStreamWriter xmlStreamWriter;
 
     XmlCDataStreamWriter(final XMLStreamWriter writer)
     {
-        m_xmlStreamWriter = writer;
+        xmlStreamWriter = writer;
     }
 
     @Override
@@ -46,197 +46,197 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
         final boolean useCData = XML_CHARS.matcher(text).find();
         if (useCData)
         {
-            m_xmlStreamWriter.writeCData(text.replaceAll(CDATA_END, CDATA_END_ENCODED));
+            xmlStreamWriter.writeCData(text.replaceAll(CDATA_END, CDATA_END_ENCODED));
         }
         else
         {
-            m_xmlStreamWriter.writeCharacters(text);
+            xmlStreamWriter.writeCharacters(text);
         }
     }
 
     @Override
     public void writeStartElement(final String localName) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartElement(localName);
+        xmlStreamWriter.writeStartElement(localName);
     }
 
     @Override
     public void writeStartElement(final String namespaceURI, final String localName) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartElement(namespaceURI, localName);
+        xmlStreamWriter.writeStartElement(namespaceURI, localName);
     }
 
     @Override
     public void writeStartElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartElement(prefix, localName, namespaceURI);
+        xmlStreamWriter.writeStartElement(prefix, localName, namespaceURI);
     }
 
     @Override
     public void writeEmptyElement(final String namespaceURI, final String localName) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEmptyElement(namespaceURI, localName);
+        xmlStreamWriter.writeEmptyElement(namespaceURI, localName);
     }
 
     @Override
     public void writeEmptyElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEmptyElement(prefix, localName, namespaceURI);
+        xmlStreamWriter.writeEmptyElement(prefix, localName, namespaceURI);
     }
 
     @Override
     public void writeEmptyElement(final String localName) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEmptyElement(localName);
+        xmlStreamWriter.writeEmptyElement(localName);
     }
 
     @Override
     public void writeEndElement() throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEndElement();
+        xmlStreamWriter.writeEndElement();
     }
 
     @Override
     public void writeEndDocument() throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEndDocument();
+        xmlStreamWriter.writeEndDocument();
     }
 
     @Override
     public void close() throws XMLStreamException
     {
-        m_xmlStreamWriter.close();
+        xmlStreamWriter.close();
     }
 
     @Override
     public void flush() throws XMLStreamException
     {
-        m_xmlStreamWriter.flush();
+        xmlStreamWriter.flush();
     }
 
     @Override
     public void writeAttribute(final String localName, final String value) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeAttribute(localName, value);
+        xmlStreamWriter.writeAttribute(localName, value);
     }
 
     @Override
     public void writeAttribute(final String prefix, final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeAttribute(prefix, namespaceURI, localName, value);
+        xmlStreamWriter.writeAttribute(prefix, namespaceURI, localName, value);
     }
 
     @Override
     public void writeAttribute(final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeAttribute(namespaceURI, localName, value);
+        xmlStreamWriter.writeAttribute(namespaceURI, localName, value);
     }
 
     @Override
     public void writeNamespace(final String prefix, final String namespaceURI) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeNamespace(prefix, namespaceURI);
+        xmlStreamWriter.writeNamespace(prefix, namespaceURI);
     }
 
     @Override
     public void writeDefaultNamespace(final String namespaceURI) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeDefaultNamespace(namespaceURI);
+        xmlStreamWriter.writeDefaultNamespace(namespaceURI);
     }
 
     @Override
     public void writeComment(final String data) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeComment(data);
+        xmlStreamWriter.writeComment(data);
     }
 
     @Override
     public void writeProcessingInstruction(final String target) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeProcessingInstruction(target);
+        xmlStreamWriter.writeProcessingInstruction(target);
     }
 
     @Override
     public void writeProcessingInstruction(final String target, final String data) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeProcessingInstruction(target, data);
+        xmlStreamWriter.writeProcessingInstruction(target, data);
     }
 
     @Override
     public void writeCData(final String data) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeCData(data);
+        xmlStreamWriter.writeCData(data);
     }
 
     @Override
     public void writeDTD(final String dtd) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeDTD(dtd);
+        xmlStreamWriter.writeDTD(dtd);
     }
 
     @Override
     public void writeEntityRef(final String name) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeEntityRef(name);
+        xmlStreamWriter.writeEntityRef(name);
     }
 
     @Override
     public void writeStartDocument() throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartDocument();
+        xmlStreamWriter.writeStartDocument();
     }
 
     @Override
     public void writeStartDocument(final String version) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartDocument(version);
+        xmlStreamWriter.writeStartDocument(version);
     }
 
     @Override
     public void writeStartDocument(final String encoding, final String version) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeStartDocument(encoding, version);
+        xmlStreamWriter.writeStartDocument(encoding, version);
     }
 
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        m_xmlStreamWriter.writeCharacters(text, start, len);
+        xmlStreamWriter.writeCharacters(text, start, len);
     }
 
     @Override
     public String getPrefix(final String uri) throws XMLStreamException
     {
-        return m_xmlStreamWriter.getPrefix(uri);
+        return xmlStreamWriter.getPrefix(uri);
     }
 
     @Override
     public void setPrefix(final String prefix, final String uri) throws XMLStreamException
     {
-        m_xmlStreamWriter.setPrefix(prefix, uri);
+        xmlStreamWriter.setPrefix(prefix, uri);
     }
 
     @Override
     public void setDefaultNamespace(final String uri) throws XMLStreamException
     {
-        m_xmlStreamWriter.setDefaultNamespace(uri);
+        xmlStreamWriter.setDefaultNamespace(uri);
     }
 
     @Override
     public void setNamespaceContext(final NamespaceContext context) throws XMLStreamException
     {
-        m_xmlStreamWriter.setNamespaceContext(context);
+        xmlStreamWriter.setNamespaceContext(context);
     }
 
     @Override
     public NamespaceContext getNamespaceContext()
     {
-        return m_xmlStreamWriter.getNamespaceContext();
+        return xmlStreamWriter.getNamespaceContext();
     }
 
     @Override
-    public Object getProperty(final String name) throws IllegalArgumentException
+    public Object getProperty(final String name)
     {
-        return m_xmlStreamWriter.getProperty(name);
+        return xmlStreamWriter.getProperty(name);
     }
 }

@@ -112,7 +112,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public IModuleInfoProcessor createModuleInfoProcessor(final IModule module)
     {
         assert module != null : "Parameter 'module' of method 'createModuleInfoProcessor' must not be null";
-        assert module != null && module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module;
+        assert module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module;
         return new ModuleInfoProcessorImpl(softwareSystem, (ModuleImpl) module);
     }
 

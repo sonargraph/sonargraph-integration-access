@@ -233,7 +233,7 @@ public final class Utility
     public static boolean hasChanged(final double d1, final double d2, final int decimals)
     {
         final double d1rounded = round(d1, decimals);
-        final double d2rounded = round(d1, decimals);
+        final double d2rounded = round(d2, decimals);
         return d1rounded != d2rounded;
     }
 

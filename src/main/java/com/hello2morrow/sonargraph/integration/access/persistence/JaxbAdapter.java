@@ -61,27 +61,27 @@ public final class JaxbAdapter<T>
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
 
-        Marshaller writer;
-        Unmarshaller reader;
+        Marshaller createdWriter;
+        Unmarshaller createdReader;
 
         try
         {
             final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader);
-            writer = jaxbContext.createMarshaller();
-            writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            writer.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
-            reader = jaxbContext.createUnmarshaller();
+            createdWriter = jaxbContext.createMarshaller();
+            createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+            createdReader = jaxbContext.createUnmarshaller();
         }
         catch (final Exception ex)
         {
             LOGGER.error(INITIALIZATION_FAILED, ex);
-            writer = null;
-            reader = null;
+            createdWriter = null;
+            createdReader = null;
             assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(ex);
         }
 
-        this.writer = writer;
-        this.reader = reader;
+        this.writer = createdWriter;
+        this.reader = createdReader;
     }
 
     /**
@@ -94,17 +94,17 @@ public final class JaxbAdapter<T>
         assert persistentContext != null : "Parameter 'persistentContext' of method 'JaxbAdapter' must not be null";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
 
-        Marshaller writer;
-        Unmarshaller reader;
+        Marshaller createdWriter;
+        Unmarshaller createdReader;
 
         try
         {
             final JAXBContext jaxbContext = JAXBContext.newInstance(persistentContext.getNamespaceList(), classLoader);
-            writer = jaxbContext.createMarshaller();
-            writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            writer.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+            createdWriter = jaxbContext.createMarshaller();
+            createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
 
-            reader = jaxbContext.createUnmarshaller();
+            createdReader = jaxbContext.createUnmarshaller();
             final Set<URL> schemaUrls = persistentContext.getSchemaUrls();
             final Source[] sources = new Source[schemaUrls.size()];
             int i = 0;
@@ -114,18 +114,18 @@ public final class JaxbAdapter<T>
                 sources[i] = new StreamSource(nextSchemaUrl.openStream());
                 i++;
             }
-            reader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
+            createdReader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
         }
-        catch (final Throwable e)
+        catch (final Exception e)
         {
             LOGGER.error(INITIALIZATION_FAILED, e);
-            reader = null;
-            writer = null;
+            createdReader = null;
+            createdWriter = null;
             assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(e);
         }
 
-        this.reader = reader;
-        this.writer = writer;
+        this.reader = createdReader;
+        this.writer = createdWriter;
     }
 
     public void setMarshalListener(final Marshaller.Listener listener)

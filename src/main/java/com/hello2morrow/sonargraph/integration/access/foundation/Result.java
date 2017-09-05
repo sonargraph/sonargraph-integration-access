@@ -95,7 +95,6 @@ public class Result implements Serializable
 
     private final List<Message> messages = new ArrayList<>();
     private final String description;
-    private final Boolean isSuccess = null;
 
     public Result(final String description)
     {
@@ -124,19 +123,14 @@ public class Result implements Serializable
 
     public final boolean isSuccess()
     {
-        if (isSuccess == null)
+        for (final Message nextMessage : messages)
         {
-            for (final Message nextMessage : messages)
+            if (nextMessage.getLevel() == Level.ERROR)
             {
-                if (nextMessage.getLevel() == Level.ERROR)
-                {
-                    return false;
-                }
+                return false;
             }
-            return true;
         }
-
-        return isSuccess.booleanValue();
+        return true;
     }
 
     public final boolean isFailure()
