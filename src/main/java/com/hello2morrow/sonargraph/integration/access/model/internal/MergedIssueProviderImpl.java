@@ -24,7 +24,7 @@ import java.util.List;
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider;
 
-public class MergedIssueProviderImpl extends IssueProviderImpl implements IMergedIssueProvider
+public final class MergedIssueProviderImpl extends IssueProviderImpl implements IMergedIssueProvider
 {
     private static final long serialVersionUID = -4879664023613931247L;
     private final List<IBasicSoftwareSystemInfo> systems = new ArrayList<>();
@@ -54,7 +54,7 @@ public class MergedIssueProviderImpl extends IssueProviderImpl implements IMerge
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((systems == null) ? 0 : systems.hashCode());
+        result = prime * result + systems.hashCode();
         return result;
     }
 
@@ -69,23 +69,7 @@ public class MergedIssueProviderImpl extends IssueProviderImpl implements IMerge
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
         final MergedIssueProviderImpl other = (MergedIssueProviderImpl) obj;
-        if (systems == null)
-        {
-            if (other.systems != null)
-            {
-                return false;
-            }
-        }
-        else if (!systems.equals(other.systems))
-        {
-            return false;
-        }
-        return true;
+        return systems.equals(other.systems);
     }
-
 }

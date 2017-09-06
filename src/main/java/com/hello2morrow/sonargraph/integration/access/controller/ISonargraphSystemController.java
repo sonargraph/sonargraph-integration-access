@@ -19,40 +19,33 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface ISonargraphSystemController
 {
-    public OperationResult loadSystemReport(File systemReportFile, boolean enableSchemaValidation);
-
     /**
-     * Loads an XML report file without XML schema validation.
+     * Loads an XML report file.
      * @param systemReportFile
-     * @return {@link OperationResult} containing info about any errors.
+     * @return {@link Result} containing info about any errors.
      */
-    public OperationResult loadSystemReport(File systemReportFile);
-
-    public OperationResult loadSystemReport(File systemReportFile, INamedElementAdjuster adjuster);
+    public Result loadSystemReport(File systemReportFile);
 
     /**
-     * Loads an XML report file without validation, generated on a different machine.
+     * Loads an XML report file, generated on a different machine.
      * Useful for clients that are just interested in the report's results and have the same workspace on disk.
      * For example, running the Sonargraph analysis on one machine, the SonarQube analysis on another.
      *
      * @param systemReportFile
      * @param baseDirectory the parent directory of the Sonargraph system, i.e. parent of xyz.sonargraph directory
-     * @return {@link OperationResult} containing info about any errors.
+     * @return {@link Result} containing info about any errors.
      */
-    public OperationResult loadSystemReport(File systemReportFile, File baseDirectory);
-
-    public OperationResult loadSystemReport(File systemReportFile, File baseDirectory, boolean enableSchemaValidation);
-
-    public ISoftwareSystem getSoftwareSystem();
+    public Result loadSystemReport(File systemReportFile, File baseDirectory);
 
     public boolean hasSoftwareSystem();
+
+    public ISoftwareSystem getSoftwareSystem();
 
     public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 
@@ -62,10 +55,4 @@ public interface ISonargraphSystemController
      * Creates a difference processor based on the software system previously loaded by the controller.
      */
     public IReportDifferenceProcessor createReportDifferenceProcessor();
-
-    /**
-     * Writes a system report and can be used to reduce the size of huge XML report files.
-     * NOTE: This is currently not completed and only includes meta-data and workspace info of a SoftwareSystem.
-     */
-    public OperationResult writeSystemReport(File file);
 }

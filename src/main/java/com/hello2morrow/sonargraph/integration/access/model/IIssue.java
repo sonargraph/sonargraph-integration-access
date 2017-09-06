@@ -22,6 +22,15 @@ import java.util.List;
 
 public interface IIssue extends Serializable
 {
+    public static final String KEY_SEPARATOR = ":";
+
+    /**
+     * @return the key that identifies the issue regardless of it's line/column and the element(s) it is attached to
+     */
+    public String getKey();
+
+    public String getName();
+
     public String getPresentationName();
 
     public IIssueProvider getIssueProvider();
@@ -34,7 +43,11 @@ public interface IIssue extends Serializable
 
     public String getDescription();
 
-    public List<INamedElement> getOrigins();
+    public int getLine();
 
-    public int getLineNumber();
+    public int getColumn();
+
+    public ResolutionType getResolutionType();
+
+    public List<INamedElement> getAffectedNamedElements();
 }

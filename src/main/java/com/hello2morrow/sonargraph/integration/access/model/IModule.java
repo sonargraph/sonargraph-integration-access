@@ -17,14 +17,12 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public interface IModule extends IElementContainer
+public interface IModule extends ILanguageBasedContainer
 {
-    public String getLanguage();
-
-    public List<IRootDirectory> getRootDirectories();
+    public Map<String, IMetricLevel> getMetricLevels();
 
     public Optional<ISourceFile> getSourceForElement(INamedElement namedElement);
 }

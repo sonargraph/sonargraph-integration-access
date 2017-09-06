@@ -19,22 +19,16 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.Optional;
+import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Marshaller.Listener;
-import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.stream.XMLOutputFactory;
@@ -42,73 +36,105 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.FileUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
-final class JaxbAdapter<T>
+public final class JaxbAdapter<T>
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaxbAdapter.class);
-
-    @FunctionalInterface
-    private interface JAXBContextCreator
-    {
-        JAXBContext get() throws JAXBException;
-    }
-
+    private static final String INITIALIZATION_FAILED = "Initialization failed";
+    private static final String UTF8_ENCODING = "UTF-8";
     private final Unmarshaller reader;
     private final Marshaller writer;
-    private Listener marshallListener;
 
-    private JaxbAdapter(final JAXBContextCreator creator, final URL... schemaUrl) throws XmlProcessingException
+    /**
+     * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation) 
+     * @param namespace the namespace - must not be 'empty'
+     * @param classLoader the class loader - must not be 'null'
+     */
+    public JaxbAdapter(final String namespace, final ClassLoader classLoader)
     {
-        assert schemaUrl != null : "Parameter 'schemaUrl' of method 'JaxbAdapter' must not be null";
+        assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
+        assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
 
-        final Source[] sources = new Source[schemaUrl.length];
+        Marshaller createdWriter;
+        Unmarshaller createdReader;
+
         try
         {
-            for (int i = 0; i < schemaUrl.length; i++)
-            {
-                sources[i] = new StreamSource(schemaUrl[i].openStream());
-            }
-
-            final JAXBContext jaxbContextProject = creator.get();
-            final Schema schema = sources.length == 0 ? null : SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources);
-
-        reader = createReader(jaxbContextProject, schema);
-        writer = createWriter(jaxbContextProject);
-
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader);
+            createdWriter = jaxbContext.createMarshaller();
+            createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+            createdReader = jaxbContext.createUnmarshaller();
         }
-        catch (final SAXException | IOException | JAXBException ex)
+        catch (final Exception ex)
         {
-            throw new XmlProcessingException("Failed to initialize JaxbAdapter", ex);
+            LOGGER.error(INITIALIZATION_FAILED, ex);
+            createdWriter = null;
+            createdReader = null;
+            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(ex);
         }
+
+        this.writer = createdWriter;
+        this.reader = createdReader;
     }
 
-    public JaxbAdapter(final Class<T> jaxbClass, final URL... schemaUrl) throws XmlProcessingException
+    /**
+     * Creates a JaxbAdapter - a writer and a reader (reader with XSD validation)
+     * @param persistentContext the persistent context - must not be 'null'
+     * @param classLoader the class loader - must not be 'null'
+     */
+    public JaxbAdapter(final XmlPersistenceContext persistentContext, final ClassLoader classLoader)
     {
-        this(() -> JAXBContext.newInstance(jaxbClass), schemaUrl);
+        assert persistentContext != null : "Parameter 'persistentContext' of method 'JaxbAdapter' must not be null";
+        assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
+
+        Marshaller createdWriter;
+        Unmarshaller createdReader;
+
+        try
+        {
+            final JAXBContext jaxbContext = JAXBContext.newInstance(persistentContext.getNamespaceList(), classLoader);
+            createdWriter = jaxbContext.createMarshaller();
+            createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+
+            createdReader = jaxbContext.createUnmarshaller();
+            final Set<URL> schemaUrls = persistentContext.getSchemaUrls();
+            final Source[] sources = new Source[schemaUrls.size()];
+            int i = 0;
+            for (final URL nextSchemaUrl : schemaUrls)
+            {
+                assert nextSchemaUrl != null : " 'nextSchemaUrl' of method 'getSchema' must not be null";
+                sources[i] = new StreamSource(nextSchemaUrl.openStream());
+                i++;
+            }
+            createdReader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
+        }
+        catch (final Exception e)
+        {
+            LOGGER.error(INITIALIZATION_FAILED, e);
+            createdReader = null;
+            createdWriter = null;
+            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(e);
+        }
+
+        this.reader = createdReader;
+        this.writer = createdWriter;
     }
 
-    public JaxbAdapter(final String namespace, final URL... schemaUrl) throws XmlProcessingException
+    public void setMarshalListener(final Marshaller.Listener listener)
     {
-        this(() -> JAXBContext.newInstance(namespace, JaxbAdapter.class.getClassLoader()), schemaUrl);
-    }
-
-    private static Unmarshaller createReader(final JAXBContext jaxbContext, final Schema schema) throws JAXBException
-    {
-        final Unmarshaller reader = jaxbContext.createUnmarshaller();
-        reader.setSchema(schema);
-        return reader;
+        writer.setListener(listener);
     }
 
     @SuppressWarnings("unchecked")
-    public final Optional<T> load(final InputStream from, final ValidationEventHandler validationHandler)
+    public final T load(final InputStream from, final ValidationEventHandler validationHandler)
     {
         assert from != null : "'from' must not be null";
         assert validationHandler != null : "'validationHandler' must not be null";
@@ -116,55 +142,13 @@ final class JaxbAdapter<T>
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
             reader.setEventHandler(validationHandler);
-            final T jaxbRoot = (T) reader.unmarshal(bufferedIn);
-            return Optional.of(jaxbRoot);
+            return (T) reader.unmarshal(bufferedIn);
         }
         catch (final IOException | JAXBException e)
         {
             LOGGER.error("Failed to load xml file", e);
-            return Optional.empty();
         }
-    }
-
-    private static Marshaller createWriter(final JAXBContext jaxbContext) throws JAXBException, PropertyException
-    {
-        final Marshaller writer = jaxbContext.createMarshaller();
-        writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        writer.setProperty(Marshaller.JAXB_ENCODING, FileUtility.UTF8_ENCODING);
-        return writer;
-    }
-
-    public void save(final T jaxbRoot, final File toFile) throws IOException
-    {
-        assert jaxbRoot != null : "'jaxbRoot' must not be null";
-        assert toFile != null : "'toFile' must not be null";
-        assert !toFile.exists() || toFile.isFile() : "'toFile' must be an existing file:" + toFile;
-
-        int i = 1;
-        File tmpFile = toFile;
-        while (tmpFile.exists())
-        {
-            tmpFile = new File(toFile.getAbsolutePath() + "." + i);
-            ++i;
-        }
-
-        try (OutputStream out = new FileOutputStream(tmpFile))
-        {
-            save(jaxbRoot, out);
-        }
-        finally
-        {
-            if (tmpFile.exists() && !tmpFile.equals(toFile))
-            {
-                Files.move(tmpFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-        }
-    }
-
-    public void setMarshalListener(final Marshaller.Listener listener)
-    {
-        assert listener != null : "Parameter 'listener' of method 'setMarshallListener' must not be null";
-        marshallListener = listener;
+        return null;
     }
 
     public void save(final T jaxbRoot, final OutputStream out) throws IOException
@@ -175,10 +159,9 @@ final class JaxbAdapter<T>
         {
             //Using two decorators to correctly handle CDATA sections and output formatting.
             //The output formatting property set on the JAXB marshaller is not respected when using XMLStreamWriters.
-            final XMLStreamWriter streamWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(bufferedOut, FileUtility.UTF8_ENCODING);
+            final XMLStreamWriter streamWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
             final XmlCDataStreamWriter cdataStreamWriter = new XmlCDataStreamWriter(streamWriter);
             final XmlPrettyPrintWriter xmlPrettyWriter = new XmlPrettyPrintWriter(cdataStreamWriter);
-            writer.setListener(marshallListener);
             writer.marshal(jaxbRoot, xmlPrettyWriter);
         }
         catch (final JAXBException e)

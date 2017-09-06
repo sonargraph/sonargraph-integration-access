@@ -31,9 +31,6 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
         this.orderNumber = orderNumber;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IMetricLevel#getOrderNumber()
-     */
     @Override
     public int getOrderNumber()
     {
@@ -41,38 +38,8 @@ public final class MetricLevelImpl extends ElementImpl implements IMetricLevel
     }
 
     @Override
-    public int hashCode()
+    public String toString()
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + orderNumber;
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final MetricLevelImpl other = (MetricLevelImpl) obj;
-        if (orderNumber != other.orderNumber)
-        {
-            return false;
-        }
-        return true;
+        return super.toString() + "\norderNumber:" + orderNumber;
     }
 }

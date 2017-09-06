@@ -41,13 +41,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
+import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -80,13 +81,13 @@ public class SonargraphSystemControllerTest
     @Before
     public void before()
     {
-        m_controller = new ControllerFactory().createController();
+        m_controller = ControllerAccess.createController();
     }
 
     @Test
     public void validateThresholdIssues()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_THRESHOLD_VIOLATIONS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISystemInfoProcessor processor = m_controller.createSystemInfoProcessor();
         final List<IThresholdViolationIssue> thresholdIssues = processor.getThresholdViolationIssues(null);
@@ -101,7 +102,7 @@ public class SonargraphSystemControllerTest
     @Test
     public void validateRefactorings()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
+        final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISystemInfoProcessor systemProcessor = m_controller.createSystemInfoProcessor();
         final List<IIssue> issues = systemProcessor.getIssues(i -> i.getIssueType().getCategory().getName().equals("Refactoring"));
@@ -112,7 +113,7 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong number of originals", 1, refactoredElements.size());
         assertEquals("Wrong refactored element", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock2.java",
                 refactoredElements.get(0).getFqName());
-        final Optional<ISourceFile> originalSourceFileOpt = refactoredElements.get(0).getOriginal();
+        final Optional<ISourceFile> originalSourceFileOpt = refactoredElements.get(0).getOriginalLocation();
         assertTrue("Original source file expected '" + refactoredElements.get(0).getFqName() + "'", originalSourceFileOpt.isPresent());
         assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java", originalSourceFileOpt
                 .get().getFqName());
@@ -122,7 +123,7 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong number of originals", 1, refactoredElements2.size());
         assertEquals("Wrong refactored element", "Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java", refactoredElements2
                 .get(0).getFqName());
-        final Optional<ISourceFile> originalSourceFileOpt2 = refactoredElements2.get(0).getOriginal();
+        final Optional<ISourceFile> originalSourceFileOpt2 = refactoredElements2.get(0).getOriginalLocation();
         assertTrue("Original source file expected for '" + refactoredElements2.get(0).getFqName() + "'", originalSourceFileOpt2.isPresent());
         assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java", originalSourceFileOpt2.get()
                 .getFqName());
@@ -130,14 +131,14 @@ public class SonargraphSystemControllerTest
 
     private List<ISourceFile> getRefactoredSourceElements(final IModule module)
     {
-        final Map<String, INamedElement> sourceFiles = new HashMap<>(module.getElements("JavaSourceFile"));
-        sourceFiles.putAll(module.getElements("JavaInternalCompilationUnit"));
+        final Map<String, INamedElement> sourceFiles = new HashMap<>(TestUtility.getFqNameToNamedElement(module, "JavaSourceFile"));
+        sourceFiles.putAll(TestUtility.getFqNameToNamedElement(module, "JavaInternalCompilationUnit"));
         final List<ISourceFile> refactoredElements = new ArrayList<>();
         for (final INamedElement next : sourceFiles.values())
         {
             assertTrue("Unexpected class '" + next.getClass().getCanonicalName() + "' for element: " + next.toString(), next instanceof ISourceFile);
             final ISourceFile sourceFile = (ISourceFile) next;
-            final Optional<ISourceFile> originalOpt = sourceFile.getOriginal();
+            final Optional<ISourceFile> originalOpt = sourceFile.getOriginalLocation();
             if (originalOpt.isPresent())
             {
                 refactoredElements.add(sourceFile);
@@ -149,7 +150,7 @@ public class SonargraphSystemControllerTest
     @Test
     public void testReadValidReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH));
+        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
@@ -166,7 +167,7 @@ public class SonargraphSystemControllerTest
     public void testReadValidReportAndOverrideSystemBaseDir()
     {
         final String baseDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        final OperationResult result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
+        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
@@ -443,14 +444,14 @@ public class SonargraphSystemControllerTest
     @Test
     public void testReadInvalidReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File(INVALID_REPORT));
+        final Result result = m_controller.loadSystemReport(new File(INVALID_REPORT));
         assertTrue("Expect failure, but got success", result.isFailure());
     }
 
     @Test
     public void testReadNotExistingReport()
     {
-        final OperationResult result = m_controller.loadSystemReport(new File("./fantasyDir/fantasyReport.xml"));
+        final Result result = m_controller.loadSystemReport(new File("./fantasyDir/fantasyReport.xml"));
         assertTrue("Expect failure, but got success", result.isFailure());
     }
 }

@@ -20,32 +20,25 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public final class SourceFileImpl extends NamedElementImpl implements ISourceFile
+public final class SourceFileImpl extends PhysicalElementImpl implements ISourceFile
 {
     private static final long serialVersionUID = -2940999235312739954L;
-    private final IRootDirectory rootDirectory;
+    private final String relativeRootDirectory;
 
-    public SourceFileImpl(final IRootDirectory rootDirectory, final String kind, final String presentationKind, final String name,
-            final String presentationName, final String fqName)
+    public SourceFileImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
+            final boolean isLocationOnly, final String relativeRootDirectory)
     {
-        super(kind, presentationKind, name, presentationName, fqName, -1);
-        assert rootDirectory != null : "Parameter 'rootDirectory' of method 'SourceFileImpl' must not be null";
-        this.rootDirectory = rootDirectory;
-        setSourceFile(this);
+        super(kind, presentationKind, name, presentationName, fqName, isLocationOnly);
+        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'SourceFileImpl' must not be empty";
+        this.relativeRootDirectory = relativeRootDirectory;
     }
 
     @Override
-    public String getRelativeRootDirectoryPath()
+    public final String getRelativeRootDirectory()
     {
-        return rootDirectory.getRelativePath();
-    }
-
-    public IRootDirectory getRootDirectory()
-    {
-        return rootDirectory;
+        return relativeRootDirectory;
     }
 
     @Override
@@ -55,9 +48,9 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     }
 
     @Override
-    public Optional<ISourceFile> getOriginal()
+    public Optional<ISourceFile> getOriginalLocation()
     {
-        final Optional<? extends INamedElement> optOriginal = super.getOriginal();
+        final Optional<? extends INamedElement> optOriginal = super.getOriginalLocation();
         if (optOriginal.isPresent())
         {
             final INamedElement original = optOriginal.get();
@@ -68,43 +61,16 @@ public final class SourceFileImpl extends NamedElementImpl implements ISourceFil
     }
 
     @Override
-    public void setOriginal(final NamedElementImpl original)
+    public void setOriginalLocation(final PhysicalElementImpl physicalElementImpl)
     {
-        assert original != null && original instanceof SourceFileImpl : "Unexpected class in method 'setOriginal': " + original;
-        super.setOriginal(original);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + rootDirectory.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-
-        final SourceFileImpl other = (SourceFileImpl) obj;
-        return rootDirectory.equals(other.rootDirectory);
+        assert physicalElementImpl != null && physicalElementImpl instanceof SourceFileImpl : "Unexpected class in method 'setOriginalLOcation': "
+                + physicalElementImpl;
+        super.setOriginalLocation(physicalElementImpl);
     }
 
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder(super.toString());
-        builder.append("\n");
-        builder.append("In root directory: ").append(rootDirectory.getRelativePath());
-        return builder.toString();
+        return super.toString() + "\nrelativeRootDirectory:" + relativeRootDirectory;
     }
 }

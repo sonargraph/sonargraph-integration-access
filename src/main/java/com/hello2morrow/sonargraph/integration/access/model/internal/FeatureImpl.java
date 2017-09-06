@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 
-public class FeatureImpl extends ElementImpl implements IFeature
+public final class FeatureImpl extends ElementImpl implements IFeature
 {
     private static final long serialVersionUID = -3224356251801166252L;
     private final boolean isLicensed;
@@ -37,35 +37,8 @@ public class FeatureImpl extends ElementImpl implements IFeature
     }
 
     @Override
-    public int hashCode()
+    public String toString()
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + (isLicensed ? 1231 : 1237);
-        return result;
+        return super.toString() + "\nisLicensed:" + isLicensed;
     }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final FeatureImpl other = (FeatureImpl) obj;
-        if (isLicensed != other.isLicensed)
-        {
-            return false;
-        }
-        return true;
-    }
-
 }

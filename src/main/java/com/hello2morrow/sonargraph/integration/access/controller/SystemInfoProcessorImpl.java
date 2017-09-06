@@ -43,6 +43,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 
@@ -54,6 +55,12 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         assert system != null : "Parameter 'system' of method 'SystemInfoProcessorImpl' must not be null";
         softwareSystem = system;
+    }
+
+    @Override
+    public ISoftwareSystem getSoftwareSystem()
+    {
+        return softwareSystem;
     }
 
     @Override

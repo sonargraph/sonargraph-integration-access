@@ -1,0 +1,21 @@
+Sonargraph 8 Integration Access
+===============================
+
+3.1.2
+=====
+
+Improvements
+------------
+- Issues on directories are now accessible.
+- Issues on namespaces are mapped to directories where possible.
+- The created model now reflects the 'external' state of the elements.
+
+
+3.1.0
+=====
+
+Improvements
+------------
+- Better support for refactored elements (i.e. the 'original' physical location info of an element affected by a refactoring is also added).
+- Cycle groups may now be identified by their generated id.
+- Resolutions contain more information.

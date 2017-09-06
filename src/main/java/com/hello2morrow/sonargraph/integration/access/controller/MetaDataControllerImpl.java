@@ -31,8 +31,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResultWithOutcome;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
@@ -59,53 +59,51 @@ final class MetaDataControllerImpl implements IMetaDataController
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataControllerImpl.class);
 
     @Override
-    public OperationResultWithOutcome<IExportMetaData> loadExportMetaData(final File exportMetaDataFile)
+    public ResultWithOutcome<IExportMetaData> loadExportMetaData(final File exportMetaDataFile)
     {
         assert exportMetaDataFile != null : "Parameter 'exportMetaDataFile' of method 'loadExportMetaData' must not be null";
 
-        final OperationResultWithOutcome<IExportMetaData> result = new OperationResultWithOutcome<>("Load meta-data from '" + exportMetaDataFile
-                + "'");
+        final ResultWithOutcome<IExportMetaData> result = new ResultWithOutcome<>("Load meta-data from '" + exportMetaDataFile + "'");
         try (final FileInputStream inputStream = new FileInputStream(exportMetaDataFile))
         {
-            final OperationResultWithOutcome<IExportMetaData> loadExportMetaData = loadExportMetaData(inputStream,
-                    exportMetaDataFile.getCanonicalPath());
+            final ResultWithOutcome<IExportMetaData> loadExportMetaData = loadExportMetaData(inputStream, exportMetaDataFile.getCanonicalPath());
             result.addMessagesFrom(loadExportMetaData);
             result.setOutcome(loadExportMetaData.getOutcome());
         }
         catch (final FileNotFoundException ex)
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND, ex);
+            result.addError(ResultCause.FILE_NOT_FOUND, ex);
         }
         catch (final IOException ex)
         {
-            result.addError(IOMessageCause.IO_EXCEPTION, ex);
+            result.addError(ResultCause.IO_EXCEPTION, ex);
         }
         return result;
     }
 
     @Override
-    public OperationResultWithOutcome<IExportMetaData> loadExportMetaData(final InputStream inputStream, final String identifier)
+    public ResultWithOutcome<IExportMetaData> loadExportMetaData(final InputStream inputStream, final String identifier)
     {
         assert inputStream != null : "Parameter 'inputStream' of method 'loadExportMetaData' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'loadExportMetaData' must not be empty";
 
-        final OperationResultWithOutcome<IExportMetaData> result = new OperationResultWithOutcome<>("Load data from stream");
-        final OperationResultWithOutcome<ISingleExportMetaData> readResult = internLoadExportMetaData(inputStream, identifier);
+        final ResultWithOutcome<IExportMetaData> result = new ResultWithOutcome<>("Load data from stream");
+        final ResultWithOutcome<ISingleExportMetaData> readResult = internLoadExportMetaData(inputStream, identifier);
         result.addMessagesFrom(readResult);
         result.setOutcome(readResult.getOutcome());
         return result;
     }
 
-    private static OperationResultWithOutcome<ISingleExportMetaData> internLoadExportMetaData(final InputStream inputStream, final String identifier)
+    private static ResultWithOutcome<ISingleExportMetaData> internLoadExportMetaData(final InputStream inputStream, final String identifier)
     {
         assert inputStream != null : "Parameter 'inputStream' of method 'loadExportMetaData' must not be null";
 
-        final OperationResultWithOutcome<ISingleExportMetaData> result = new OperationResultWithOutcome<>("Load data from stream");
+        final ResultWithOutcome<ISingleExportMetaData> result = new ResultWithOutcome<>("Load data from stream");
         final XmlExportMetaDataReader persistence = new XmlExportMetaDataReader();
         final Optional<SingleExportMetaDataImpl> readResult = persistence.readMetaDataFromStream(inputStream, identifier, result);
         if (!readResult.isPresent() && result.isSuccess())
         {
-            result.addError(IOMessageCause.READ_ERROR, "Failed to read meta-data from stream");
+            result.addError(ResultCause.READ_ERROR, "Failed to read meta-data from stream");
         }
 
         if (result.isFailure())
@@ -121,11 +119,11 @@ final class MetaDataControllerImpl implements IMetaDataController
     }
 
     @Override
-    public OperationResultWithOutcome<IMergedExportMetaData> mergeExportMetaDataFiles(final List<File> files)
+    public ResultWithOutcome<IMergedExportMetaData> mergeExportMetaDataFiles(final List<File> files)
     {
         assert files != null && !files.isEmpty() : "Parameter 'files' of method 'mergeExportMetaDataFiles' must not be empty";
 
-        final OperationResultWithOutcome<IMergedExportMetaData> result = new OperationResultWithOutcome<>("Merge meta-data from files");
+        final ResultWithOutcome<IMergedExportMetaData> result = new ResultWithOutcome<>("Merge meta-data from files");
 
         final Map<String, ISingleExportMetaData> exportDataMap = new LinkedHashMap<>();
         final Map<String, IBasicSoftwareSystemInfo> systemMap = new HashMap<>();
@@ -134,19 +132,19 @@ final class MetaDataControllerImpl implements IMetaDataController
         {
             if (!file.exists())
             {
-                result.addWarning(IOMessageCause.FILE_NOT_FOUND, "File '" + file.getAbsolutePath() + "' does not exist.");
+                result.addWarning(ResultCause.FILE_NOT_FOUND, "File '" + file.getAbsolutePath() + "' does not exist.");
                 continue;
             }
 
             if (!file.canRead())
             {
-                result.addWarning(IOMessageCause.NO_PERMISSION, "No permission to read file '" + file.getAbsolutePath() + "'");
+                result.addWarning(ResultCause.NO_PERMISSION, "No permission to read file '" + file.getAbsolutePath() + "'");
                 continue;
             }
 
             try (FileInputStream inputStream = new FileInputStream(file))
             {
-                final OperationResultWithOutcome<ISingleExportMetaData> readResult = internLoadExportMetaData(inputStream, file.getCanonicalPath());
+                final ResultWithOutcome<ISingleExportMetaData> readResult = internLoadExportMetaData(inputStream, file.getCanonicalPath());
                 if (readResult.isSuccess())
                 {
                     final ISingleExportMetaData metaData = readResult.getOutcome();
@@ -175,20 +173,20 @@ final class MetaDataControllerImpl implements IMetaDataController
                 else
                 {
                     LOGGER.warn("Failed to process file: {}", file.getAbsolutePath());
-                    result.addWarning(IOMessageCause.READ_ERROR, "Failed to process file '" + file.getAbsolutePath()
+                    result.addWarning(ResultCause.READ_ERROR, "Failed to process file '" + file.getAbsolutePath()
                             + "'. Check the log file for details.");
                 }
             }
             catch (final IOException e)
             {
-                result.addError(IOMessageCause.READ_ERROR, e);
+                result.addError(ResultCause.READ_ERROR, e);
                 return result;
             }
         }
 
         if (exportDataMap.isEmpty())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND, "No valid meta-data file(s) provided");
+            result.addError(ResultCause.FILE_NOT_FOUND, "No valid meta-data file(s) provided");
             return result;
         }
 
@@ -253,7 +251,6 @@ final class MetaDataControllerImpl implements IMetaDataController
                 }
             }
 
-            //TODO: Add further Merged* infos?
             for (final Map.Entry<String, IMetricCategory> nextCat : data.getMetricCategories().entrySet())
             {
                 if (!metricCategories.containsKey(nextCat.getKey()))

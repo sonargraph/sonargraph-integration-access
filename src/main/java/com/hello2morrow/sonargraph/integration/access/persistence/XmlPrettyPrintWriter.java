@@ -24,231 +24,229 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
-
-/**
- * Decorator of an XMLStreamWriter implementation that produces formatted XML output.
- *
- * @author Ingmar
- *
- * @see http://www.ewernli.com/web/guest/47
- */
-public class XmlPrettyPrintWriter implements XMLStreamWriter
+final class XmlPrettyPrintWriter implements XMLStreamWriter
 {
-    public static final int INDENTATION_LENGTH = 4;
-
+    private static final String DEFAULT_LINE_SEPARATOR = "\n";
+    private static final int INDENTATION_LENGTH = 4;
     private static final char INDENT_CHAR = ' ';
-
-    //We don't use StringUtility.LINE_SEPARATOR, because we want the same output format on all platforms.
     private static final String LINEFEED_CHAR = "\n";
+    private final Map<Integer, Boolean> hasChildElement = new HashMap<>();
+    private final XMLStreamWriter writer;
+    private int currentDepth = 0;
 
-    private final XMLStreamWriter m_writer;
-    private int m_depth = 0;
-    private final Map<Integer, Boolean> m_hasChildElement = new HashMap<Integer, Boolean>();
-
-    public XmlPrettyPrintWriter(final XMLStreamWriter writer)
+    XmlPrettyPrintWriter(final XMLStreamWriter writer)
     {
         assert writer != null : "Parameter 'writer' of method 'XmlPrettyPrintWriter' must not be null";
-        m_writer = writer;
+        this.writer = writer;
+    }
+
+    private static String harmonizeNewLineBreaks(final String text)
+    {
+        assert text != null : "Parameter 'text' of method 'harmonizeNewLineBreaks' must not be null";
+        //First replace Windows "\r\n" with default "\n"
+        String harmonizedText = text.replace("\r\n", DEFAULT_LINE_SEPARATOR);
+        //Replace MAC "\r" with default "\n"
+        harmonizedText = harmonizedText.replace("\r", DEFAULT_LINE_SEPARATOR);
+        return harmonizedText;
     }
 
     @Override
     public void writeStartElement(final String localName) throws XMLStreamException
     {
         writeStartElementPretty();
-        m_writer.writeStartElement(localName);
+        writer.writeStartElement(localName);
     }
 
     @Override
     public void writeStartElement(final String namespaceURI, final String localName) throws XMLStreamException
     {
         writeStartElementPretty();
-        m_writer.writeStartElement(namespaceURI, localName);
+        writer.writeStartElement(namespaceURI, localName);
     }
 
     @Override
     public void writeStartElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException
     {
         writeStartElementPretty();
-        m_writer.writeStartElement(prefix, localName, namespaceURI);
+        writer.writeStartElement(prefix, localName, namespaceURI);
     }
 
     @Override
     public void writeEmptyElement(final String namespaceURI, final String localName) throws XMLStreamException
     {
         writeEmptyElementPretty();
-        m_writer.writeEmptyElement(namespaceURI, localName);
+        writer.writeEmptyElement(namespaceURI, localName);
     }
 
     @Override
     public void writeEmptyElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException
     {
         writeEmptyElementPretty();
-        m_writer.writeEmptyElement(prefix, localName, namespaceURI);
+        writer.writeEmptyElement(prefix, localName, namespaceURI);
     }
 
     @Override
     public void writeEmptyElement(final String localName) throws XMLStreamException
     {
         writeEmptyElementPretty();
-        m_writer.writeEmptyElement(localName);
+        writer.writeEmptyElement(localName);
     }
 
     @Override
     public void writeEndElement() throws XMLStreamException
     {
         writeEndElementPretty();
-        m_writer.writeEndElement();
+        writer.writeEndElement();
     }
 
     @Override
     public void writeEndDocument() throws XMLStreamException
     {
-        m_writer.writeEndDocument();
+        writer.writeEndDocument();
     }
 
     @Override
     public void close() throws XMLStreamException
     {
-        m_writer.close();
+        writer.close();
     }
 
     @Override
     public void flush() throws XMLStreamException
     {
-        m_writer.flush();
+        writer.flush();
     }
 
     @Override
     public void writeAttribute(final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(localName, StringUtility.harmonizeNewLineBreaks(value));
+        writer.writeAttribute(localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
     public void writeAttribute(final String prefix, final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(prefix, namespaceURI, localName, StringUtility.harmonizeNewLineBreaks(value));
+        writer.writeAttribute(prefix, namespaceURI, localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
     public void writeAttribute(final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        m_writer.writeAttribute(namespaceURI, localName, StringUtility.harmonizeNewLineBreaks(value));
+        writer.writeAttribute(namespaceURI, localName, harmonizeNewLineBreaks(value));
     }
 
     @Override
     public void writeNamespace(final String prefix, final String namespaceURI) throws XMLStreamException
     {
-        m_writer.writeNamespace(prefix, namespaceURI);
+        writer.writeNamespace(prefix, namespaceURI);
     }
 
     @Override
     public void writeDefaultNamespace(final String namespaceURI) throws XMLStreamException
     {
-        m_writer.writeDefaultNamespace(namespaceURI);
+        writer.writeDefaultNamespace(namespaceURI);
     }
 
     @Override
     public void writeComment(final String data) throws XMLStreamException
     {
-        m_writer.writeComment(StringUtility.harmonizeNewLineBreaks(data));
+        writer.writeComment(harmonizeNewLineBreaks(data));
     }
 
     @Override
     public void writeProcessingInstruction(final String target) throws XMLStreamException
     {
-        m_writer.writeProcessingInstruction(target);
+        writer.writeProcessingInstruction(target);
     }
 
     @Override
     public void writeProcessingInstruction(final String target, final String data) throws XMLStreamException
     {
-        m_writer.writeProcessingInstruction(target, data);
+        writer.writeProcessingInstruction(target, data);
     }
 
     @Override
     public void writeCData(final String data) throws XMLStreamException
     {
-        m_writer.writeCData(data);
+        writer.writeCData(data);
     }
 
     @Override
     public void writeDTD(final String dtd) throws XMLStreamException
     {
-        m_writer.writeDTD(dtd);
+        writer.writeDTD(dtd);
     }
 
     @Override
     public void writeEntityRef(final String name) throws XMLStreamException
     {
-        m_writer.writeEntityRef(name);
+        writer.writeEntityRef(name);
     }
 
     @Override
     public void writeStartDocument() throws XMLStreamException
     {
-        m_writer.writeStartDocument();
+        writer.writeStartDocument();
     }
 
     @Override
     public void writeStartDocument(final String version) throws XMLStreamException
     {
-        m_writer.writeStartDocument(version);
+        writer.writeStartDocument(version);
     }
 
     @Override
     public void writeStartDocument(final String encoding, final String version) throws XMLStreamException
     {
-        m_writer.writeStartDocument(encoding, version);
+        writer.writeStartDocument(encoding, version);
     }
 
     @Override
     public void writeCharacters(final String text) throws XMLStreamException
     {
-        m_writer.writeCharacters(StringUtility.harmonizeNewLineBreaks(text));
+        writer.writeCharacters(harmonizeNewLineBreaks(text));
     }
 
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        m_writer.writeCharacters(StringUtility.harmonizeNewLineBreaks(new String(text)).toCharArray(), start, len);
+        writer.writeCharacters(harmonizeNewLineBreaks(new String(text)).toCharArray(), start, len);
     }
 
     @Override
     public String getPrefix(final String uri) throws XMLStreamException
     {
-        return m_writer.getPrefix(uri);
+        return writer.getPrefix(uri);
     }
 
     @Override
     public void setPrefix(final String prefix, final String uri) throws XMLStreamException
     {
-        m_writer.setPrefix(prefix, uri);
+        writer.setPrefix(prefix, uri);
     }
 
     @Override
     public void setDefaultNamespace(final String uri) throws XMLStreamException
     {
-        m_writer.setDefaultNamespace(uri);
+        writer.setDefaultNamespace(uri);
     }
 
     @Override
     public void setNamespaceContext(final NamespaceContext context) throws XMLStreamException
     {
-        m_writer.setNamespaceContext(context);
+        writer.setNamespaceContext(context);
     }
 
     @Override
     public NamespaceContext getNamespaceContext()
     {
-        return m_writer.getNamespaceContext();
+        return writer.getNamespaceContext();
     }
 
     @Override
-    public Object getProperty(final String name) throws IllegalArgumentException
+    public Object getProperty(final String name)
     {
-        return m_writer.getProperty(name);
+        return writer.getProperty(name);
     }
 
     private String repeat(final int d, final char s)
@@ -265,45 +263,45 @@ public class XmlPrettyPrintWriter implements XMLStreamWriter
     private void writeStartElementPretty() throws XMLStreamException
     {
         // update state of parent node
-        if (m_depth > 0)
+        if (currentDepth > 0)
         {
-            m_hasChildElement.put(m_depth - INDENTATION_LENGTH, Boolean.TRUE);
+            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
         }
 
         // reset state of current node
-        m_hasChildElement.put(m_depth, Boolean.FALSE);
+        hasChildElement.put(currentDepth, Boolean.FALSE);
 
         // indent for current m_depth
-        m_writer.writeCharacters(LINEFEED_CHAR);
-        m_writer.writeCharacters(repeat(m_depth, INDENT_CHAR));
+        writer.writeCharacters(LINEFEED_CHAR);
+        writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
 
-        m_depth += INDENTATION_LENGTH;
+        currentDepth += INDENTATION_LENGTH;
     }
 
     private void writeEndElementPretty() throws XMLStreamException
     {
-        m_depth -= INDENTATION_LENGTH;
+        currentDepth -= INDENTATION_LENGTH;
 
-        assert m_depth >= 0 : "m_depth must not be negative!";
-        assert m_hasChildElement.get(m_depth) != null : "value for m_hasChildElement must exist";
+        assert currentDepth >= 0 : "m_depth must not be negative!";
+        assert hasChildElement.get(currentDepth) != null : "value for m_hasChildElement must exist";
 
-        if (m_hasChildElement.get(m_depth).equals(Boolean.TRUE))
+        if (hasChildElement.get(currentDepth).equals(Boolean.TRUE))
         {
-            m_writer.writeCharacters(LINEFEED_CHAR);
-            m_writer.writeCharacters(repeat(m_depth, INDENT_CHAR));
+            writer.writeCharacters(LINEFEED_CHAR);
+            writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
         }
     }
 
     private void writeEmptyElementPretty() throws XMLStreamException
     {
         // update state of parent node
-        if (m_depth > 0)
+        if (currentDepth > 0)
         {
-            m_hasChildElement.put(m_depth - INDENTATION_LENGTH, Boolean.TRUE);
+            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
         }
 
         // indent for current m_depth
-        m_writer.writeCharacters(LINEFEED_CHAR);
-        m_writer.writeCharacters(repeat(m_depth, INDENT_CHAR));
+        writer.writeCharacters(LINEFEED_CHAR);
+        writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
     }
 }

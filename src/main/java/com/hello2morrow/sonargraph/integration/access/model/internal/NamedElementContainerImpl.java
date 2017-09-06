@@ -20,84 +20,66 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
-import com.hello2morrow.sonargraph.integration.access.model.IElementContainer;
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalNamespace;
+import com.hello2morrow.sonargraph.integration.access.model.ILogicalProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementContainer;
 
-public abstract class NamedElementContainerImpl extends NamedElementImpl implements IElementContainer
+public abstract class NamedElementContainerImpl extends NamedElementImpl implements INamedElementContainer
 {
     private static final long serialVersionUID = 995206422502257231L;
-    private final Map<String, HashMap<String, INamedElement>> kindToFqNameToElementMap = new HashMap<>();
     private final Map<IMetricLevel, HashMap<IMetricId, HashMap<INamedElement, IMetricValue>>> metricValues = new HashMap<>();
-    private final Set<ISourceFile> originalSourceFiles = new HashSet<>();
-    private MetaDataAccessImpl metricsAccess;
-    private ElementRegistryImpl elementRegistry;
+    private final Map<String, Set<INamedElement>> kindToNamedElements = new HashMap<>();
+    private final Set<LogicalNamespaceImpl> logicalNamespaces = new TreeSet<>(new NamedElementComparator());
+    private final Set<LogicalProgrammingElementImpl> logicalProgrammingElements = new TreeSet<>(new NamedElementComparator());
+    private final MetaDataAccessImpl metaDataAccessImpl;
+    private final NamedElementRegistry elementRegistryImpl;
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String description)
+            final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl)
     {
-        super(kind, presentationKind, name, presentationName, fqName, -1, description);
+        super(kind, presentationKind, name, presentationName, fqName, description);
+        assert metaDataAccessImpl != null : "Parameter 'metaDataAccessImpl' of method 'NamedElementContainerImpl' must not be null";
+        assert elementRegistryImpl != null : "Parameter 'elementRegistryImpl' of method 'NamedElementContainerImpl' must not be null";
+        this.metaDataAccessImpl = metaDataAccessImpl;
+        this.elementRegistryImpl = elementRegistryImpl;
     }
 
-    protected final void setMetricsAccess(final MetaDataAccessImpl metricsAccess)
+    public final MetaDataAccessImpl getMetaDataAccess()
     {
-        assert metricsAccess != null : "Parameter 'metricsAccess' of method 'setMetricsAccess' must not be null";
-        assert this.metricsAccess == null : "metricsAccess must be null!";
-        this.metricsAccess = metricsAccess;
+        return metaDataAccessImpl;
     }
 
-    protected final MetaDataAccessImpl getMetricsAccess()
+    public final NamedElementRegistry getElementRegistry()
     {
-        assert metricsAccess != null : "'setMetricsAccess() must be called first!";
-        return metricsAccess;
-    }
-
-    protected final void setElementRegistry(final ElementRegistryImpl elementRegistry)
-    {
-        assert elementRegistry != null : "Parameter 'elementRegistry' of method 'setElementRegistry' must not be null";
-        assert this.elementRegistry == null : "elementRegistry must be null!";
-        this.elementRegistry = elementRegistry;
-    }
-
-    protected final ElementRegistryImpl getElementRegistry()
-    {
-        assert elementRegistry != null : "'setElementRegistry() must be called first!";
-        return elementRegistry;
+        return elementRegistryImpl;
     }
 
     public final void addElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'addElement' must not be null";
 
-        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
+        Set<INamedElement> namedElements = kindToNamedElements.get(element.getKind());
+        if (namedElements == null)
         {
-            originalSourceFiles.add((ISourceFile) element);
+            namedElements = new LinkedHashSet<>();
+            kindToNamedElements.put(element.getKind(), namedElements);
         }
-        else if (acceptElementKind(element.getKind()))
+        namedElements.add(element);
+        if (!element.isLocationOnly())
         {
-            final HashMap<String, INamedElement> elementsOfKind;
-            if (!kindToFqNameToElementMap.containsKey(element.getKind()))
-            {
-                elementsOfKind = new HashMap<>();
-                kindToFqNameToElementMap.put(element.getKind(), elementsOfKind);
-            }
-            else
-            {
-                elementsOfKind = kindToFqNameToElementMap.get(element.getKind());
-            }
-
-            assert !elementsOfKind.containsKey(element.getFqName()) : "Element '" + element.getFqName() + "' has already been added";
-            elementsOfKind.put(element.getFqName(), element);
+            //'location-only' elements are never added to the registry - they are reachable through their refactored  counterparts and never have issues nor metrics 
             getElementRegistry().addElement(element);
         }
     }
@@ -105,55 +87,59 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public boolean hasElement(final INamedElement element)
     {
         assert element != null : "Parameter 'element' of method 'hasElement' must not be null";
-
-        if (element instanceof ISourceFile && ((ISourceFile) element).isOriginal())
-        {
-            return originalSourceFiles.contains(element);
-        }
-
-        final INamedElement fqNamedElement = element;
-        if (!kindToFqNameToElementMap.containsKey(fqNamedElement.getKind()))
-        {
-            return false;
-        }
-        return kindToFqNameToElementMap.get(fqNamedElement.getKind()).containsKey(fqNamedElement.getFqName());
+        final Set<INamedElement> namedElements = kindToNamedElements.get(element.getKind());
+        return namedElements != null ? namedElements.contains(element) : false;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IElementContainer#getElements(java.lang.String)
-     */
     @Override
-    public final Map<String, INamedElement> getElements(final String elementKind)
+    public final Set<INamedElement> getElements(final String elementKind)
     {
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'getElements' must not be empty";
-        if (kindToFqNameToElementMap.containsKey(elementKind))
-        {
-            return Collections.unmodifiableMap(kindToFqNameToElementMap.get(elementKind));
-        }
-
-        return Collections.emptyMap();
+        final Set<INamedElement> namedElements = kindToNamedElements.get(elementKind);
+        return namedElements != null ? Collections.unmodifiableSet(namedElements) : Collections.emptySet();
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IElementContainer#getElementKinds()
-     */
     @Override
     public final Set<String> getElementKinds()
     {
-        final Set<String> kinds = new HashSet<>(kindToFqNameToElementMap.keySet());
-        kinds.add(this.getKind());
-        return Collections.unmodifiableSet(kinds);
+        return Collections.unmodifiableSet(kindToNamedElements.keySet());
+    }
+
+    public final void addLogicalNamespace(final LogicalNamespaceImpl logicalNamespaceImpl)
+    {
+        assert logicalNamespaceImpl != null : "Parameter 'logicalNamespaceImpl' of method 'addLogicalNamespace' must not be null";
+        final boolean success = logicalNamespaces.add(logicalNamespaceImpl);
+        assert success : "Logical namespace already added: " + logicalNamespaceImpl;
+    }
+
+    public final void addLogicalProgrammingElement(final LogicalProgrammingElementImpl logicalProgrammingElementImpl)
+    {
+        assert logicalProgrammingElementImpl != null : "Parameter 'logicalProgrammingElementImpl' of method 'addLogicalProgrammingElement' must not be null";
+        final boolean success = logicalProgrammingElements.add(logicalProgrammingElementImpl);
+        assert success : "Logical programming element already added: " + logicalProgrammingElementImpl;
+    }
+
+    @Override
+    public final Set<ILogicalNamespace> getLogicalNamespaces()
+    {
+        return Collections.unmodifiableSet(logicalNamespaces);
+    }
+
+    @Override
+    public final Set<ILogicalProgrammingElement> getLogicalProgrammingElements()
+    {
+        return Collections.unmodifiableSet(logicalProgrammingElements);
     }
 
     public final void addMetricValueForElement(final IMetricValue value, final INamedElement element)
     {
         assert value != null : "Parameter 'value' of method 'addMetricValue' must not be null";
         final IMetricId metricId = value.getId();
-        assert metricsAccess.getMetricIds().containsKey(metricId.getName()) : "MetricId '" + metricId.getName() + "'has not been added";
+        assert metaDataAccessImpl.getMetricIds().containsKey(metricId.getName()) : "MetricId '" + metricId.getName() + "'has not been added";
         assert element != null : "Parameter 'element' of method 'addMetricValueForElement' must not be null";
 
         final IMetricLevel level = value.getLevel();
-        assert metricsAccess.getMetricLevels().containsKey(level.getName()) : "Level '" + level.getName() + "' has not been added";
+        assert metaDataAccessImpl.getMetricLevels().containsKey(level.getName()) : "Level '" + level.getName() + "' has not been added";
 
         final HashMap<IMetricId, HashMap<INamedElement, IMetricValue>> valuesOfLevel;
         if (!metricValues.containsKey(level))
@@ -215,15 +201,13 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     public final void addMetricLevel(final IMetricLevel level)
     {
         assert level != null : "Parameter 'level' of method 'addMetricLevel' must not be null";
-        metricsAccess.addMetricLevel(level);
+        metaDataAccessImpl.addMetricLevel(level);
     }
 
     public final Map<String, IMetricLevel> getAllMetricLevels()
     {
-        return metricsAccess.getMetricLevels();
+        return metaDataAccessImpl.getMetricLevels();
     }
-
-    public abstract Map<String, IMetricLevel> getMetricLevels();
 
     public List<IMetricId> getMetricIdsForLevel(final IMetricLevel metricLevel)
     {
@@ -278,6 +262,4 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
 
         return Collections.unmodifiableMap(metricIdValueMap.get(metricId));
     }
-
-    protected abstract boolean acceptElementKind(String elementKind);
 }

@@ -21,33 +21,36 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementAdjuster;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportReader;
-import com.hello2morrow.sonargraph.integration.access.persistence.XmlReportWriter;
 
 final class SonargraphSystemControllerImpl implements ISonargraphSystemController
 {
     private SoftwareSystemImpl softwareSystem;
 
+    public SonargraphSystemControllerImpl()
+    {
+        super();
+    }
+
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final boolean enableSchemaValidation)
+    public Result loadSystemReport(final File systemReportFile)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
 
-        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
+        final Result result = new Result("Load data from '" + systemReportFile.getAbsolutePath() + "'");
         if (!systemReportFile.exists())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND);
+            result.addError(ResultCause.FILE_NOT_FOUND);
         }
         else if (!systemReportFile.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSION);
+            result.addError(ResultCause.NO_PERMISSION);
         }
 
         if (result.isFailure())
@@ -56,7 +59,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         }
 
         final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, enableSchemaValidation);
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result);
         if (!readResult.isPresent() || result.isFailure())
         {
             return result;
@@ -67,58 +70,20 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     }
 
     @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final INamedElementAdjuster adjuster)
-    {
-        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
-        assert adjuster != null : "Parameter 'adjuster' of method 'loadSystemReport' must not be null";
-
-        final OperationResult result = new OperationResult("Load data from '" + systemReportFile.getAbsolutePath() + "'");
-        if (!systemReportFile.exists())
-        {
-            result.addError(IOMessageCause.FILE_NOT_FOUND);
-        }
-        else if (!systemReportFile.canRead())
-        {
-            result.addError(IOMessageCause.NO_PERMISSION);
-        }
-
-        if (result.isFailure())
-        {
-            return result;
-        }
-
-        final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result, adjuster);
-        if (!readResult.isPresent() || result.isFailure())
-        {
-            return result;
-        }
-
-        softwareSystem = readResult.get();
-        return result;
-    }
-
-    @Override
-    public OperationResult loadSystemReport(final File systemReportFile)
-    {
-        return loadSystemReport(systemReportFile, false);
-    }
-
-    @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory, final boolean enableSchemaValidation)
+    public Result loadSystemReport(final File systemReportFile, final File baseDirectory)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
         assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
 
-        final OperationResult result = new OperationResult(String.format("Load data from '%s', using baseDirectory '%s'",
-                systemReportFile.getAbsolutePath(), baseDirectory.getAbsolutePath()));
+        final Result result = new Result(String.format("Load data from '%s', using baseDirectory '%s'", systemReportFile.getAbsolutePath(),
+                baseDirectory.getAbsolutePath()));
         if (!baseDirectory.exists())
         {
-            result.addError(IOMessageCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
+            result.addError(ResultCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
         }
         else if (!baseDirectory.canRead())
         {
-            result.addError(IOMessageCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
+            result.addError(ResultCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
         }
 
         if (result.isFailure())
@@ -126,7 +91,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
             return result;
         }
 
-        result.addMessagesFrom(loadSystemReport(systemReportFile, enableSchemaValidation));
+        result.addMessagesFrom(loadSystemReport(systemReportFile));
         if (result.isFailure())
         {
             return result;
@@ -134,12 +99,6 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         softwareSystem.setBaseDir(Paths.get(baseDirectory.getAbsolutePath()).normalize().toString());
 
         return result;
-    }
-
-    @Override
-    public OperationResult loadSystemReport(final File systemReportFile, final File baseDirectory)
-    {
-        return loadSystemReport(systemReportFile, baseDirectory, false);
     }
 
     @Override
@@ -153,7 +112,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public IModuleInfoProcessor createModuleInfoProcessor(final IModule module)
     {
         assert module != null : "Parameter 'module' of method 'createModuleInfoProcessor' must not be null";
-        assert module != null && module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module;
+        assert module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module;
         return new ModuleInfoProcessorImpl(softwareSystem, (ModuleImpl) module);
     }
 
@@ -174,27 +133,6 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public IReportDifferenceProcessor createReportDifferenceProcessor()
     {
         assert softwareSystem != null : "No software system available";
-
         return new ReportDifferenceProcessorImpl(new SystemInfoProcessorImpl(softwareSystem));
-    }
-
-    @Override
-    public OperationResult writeSystemReport(final File file)
-    {
-        assert file != null : "Parameter 'file' of method 'writeSystemReport' must not be null";
-        assert softwareSystem != null : "No software system available";
-
-        final OperationResult result = new OperationResult("Writing XML report");
-        final XmlReportWriter writer = new XmlReportWriter();
-        try
-        {
-            writer.writeReport(softwareSystem, file);
-        }
-        catch (final Exception ex)
-        {
-            result.addError(IOMessageCause.WRITE_ERROR, ex);
-        }
-
-        return result;
     }
 }

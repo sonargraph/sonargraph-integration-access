@@ -18,325 +18,522 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.Pair;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
-import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
-import com.hello2morrow.sonargraph.integration.access.model.diff.Diff;
-import com.hello2morrow.sonargraph.integration.access.model.diff.ICoreSystemDataDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IElementKindDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IIssueDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IMetricThresholdDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IModuleDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IResolutionDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IStandardDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.IWorkspaceDelta;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.CoreSystemDataDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ElementKindDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.IssueDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.MetricThresholdDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ModuleDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.ResolutionDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.StandardDeltaImpl;
-import com.hello2morrow.sonargraph.integration.access.model.diff.internal.WorkspaceDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IssueContainer;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IssueDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.MultiNamedElementIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ReportDeltaImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.SingleNamedElementIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceDeltaImpl;
 
 final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 {
-    private final ISystemInfoProcessor baseSystem;
-    //initialized on first request
-    private Set<IIssue> m_issues;
-
-    public ReportDifferenceProcessorImpl(final ISystemInfoProcessor baseSystem)
+    enum MultiNamedElementIssueType
     {
-        assert baseSystem != null : "Parameter 'baseSystem' of method 'ReportDifferenceProcessorImpl' must not be null";
-        this.baseSystem = baseSystem;
+        CYCLE_GROUP,
+        DUPLICATE_CODE
+    }
+
+    enum Source
+    {
+        BASELINE_SYSTEM,
+        CURRENT_SYSTEM
+    }
+
+    private final ISystemInfoProcessor baselineSystemInfoProcessor;
+
+    public ReportDifferenceProcessorImpl(final ISystemInfoProcessor baselineSysteminfoProcessor)
+    {
+        assert baselineSysteminfoProcessor != null : "Parameter 'baselineSysteminfoProcessor' of method 'ReportDifferenceProcessorImpl' must not be null";
+        this.baselineSystemInfoProcessor = baselineSysteminfoProcessor;
     }
 
     @Override
-    public IIssueDelta getIssueDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IIssue> filter)
+    public ISoftwareSystem getSoftwareSystem()
     {
-        assert infoProcessor != null : "Parameter 'infoProcessor2' of method 'getIssueDelta' must not be null";
-        //filter can be null
+        return baselineSystemInfoProcessor.getSoftwareSystem();
+    }
 
-        //final long start = System.currentTimeMillis();
-        final List<IIssue> originalIssueList = baseSystem.getIssues(filter);
-        final Map<IIssue, IIssue> originalIssues = originalIssueList.stream().collect(Collectors.toMap(i -> i, i -> i));
-        final List<IIssue> issues = infoProcessor.getIssues(filter);
-        //System.out.println("Time needed to retrieve issues: " + (System.currentTimeMillis() - start));
-        final Set<IIssue> removed = new HashSet<>(originalIssueList);
-        final List<IIssue> added = new ArrayList<>();
-        final List<IIssue> unchanged = new ArrayList<>();
-        final List<Pair<IIssue, IIssue>> improved = new ArrayList<>();
-        final List<Pair<IIssue, IIssue>> worse = new ArrayList<>();
+    private void processSingleElementIssue(final Source source, final SingleNamedElementIssueImpl issue,
+            final Map<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> elementCollector)
+    {
+        assert source != null : "Parameter 'source' of method 'processSingleElementIssue' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'processSingleElementIssue' must not be null";
+        assert elementCollector != null : "Parameter 'elementCollector' of method 'processSingleElementIssue' must not be null";
 
-        for (final IIssue next : issues)
+        final String namedElementFqName = issue.getNamedElement().getFqName();
+        Map<String, IssueContainer<SingleNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(namedElementFqName);
+        if (issueKeyToIssueContainer == null)
         {
-            final IIssue original = originalIssues.get(next);
-            if (original != null)
+            issueKeyToIssueContainer = new HashMap<>();
+            elementCollector.put(namedElementFqName, issueKeyToIssueContainer);
+        }
+
+        final String issueKey = issue.getKey();
+        IssueContainer<SingleNamedElementIssueImpl> issueContainer = issueKeyToIssueContainer.get(issueKey);
+        if (issueContainer == null)
+        {
+            issueContainer = new IssueContainer<>();
+            issueKeyToIssueContainer.put(issueKey, issueContainer);
+        }
+
+        switch (source)
+        {
+        case BASELINE_SYSTEM:
+            issueContainer.addBaselineSystemIssue(issue);
+            break;
+        case CURRENT_SYSTEM:
+            issueContainer.addCurrentSystemIssue(issue);
+            break;
+        default:
+            assert false : "Unhandled: " + source;
+            break;
+        }
+    }
+
+    private void processMultiElementIssue(final Source source, final MultiNamedElementIssueImpl issue,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCollector,
+            final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueCollector)
+    {
+        assert source != null : "Parameter 'source' of method 'processMultiElementIssue' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'processMultiElementIssue' must not be null";
+        assert elementCollector != null : "Parameter 'elementCollector' of method 'processMultiElementIssue' must not be null";
+        assert issueCollector != null : "Parameter 'issueCollector' of method 'processMultiElementIssue' must not be null";
+
+        final String issueName = issue.getName();
+        IssueContainer<MultiNamedElementIssueImpl> issueContainer = issueCollector.get(issueName);
+        if (issueContainer == null)
+        {
+            issueContainer = new IssueContainer<>();
+            issueCollector.put(issueName, issueContainer);
+        }
+        switch (source)
+        {
+        case BASELINE_SYSTEM:
+            issueContainer.addBaselineSystemIssue(issue);
+            break;
+        case CURRENT_SYSTEM:
+            issueContainer.addCurrentSystemIssue(issue);
+            break;
+        default:
+            assert false : "Unhandled: " + source;
+            break;
+        }
+
+        for (final INamedElement nextNamedElement : issue.getNamedElements())
+        {
+            final String nextFqName = nextNamedElement.getFqName();
+            Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueKeyToIssueContainer = elementCollector.get(nextFqName);
+            if (issueKeyToIssueContainer == null)
             {
-                unchanged.add(next);
+                issueKeyToIssueContainer = new HashMap<>();
+                elementCollector.put(nextFqName, issueKeyToIssueContainer);
+            }
+
+            final String issueKey = issue.getKey();
+            IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = issueKeyToIssueContainer.get(issueKey);
+            if (nextIssueContainer == null)
+            {
+                nextIssueContainer = new IssueContainer<>();
+                issueKeyToIssueContainer.put(issueKey, nextIssueContainer);
+            }
+
+            switch (source)
+            {
+            case BASELINE_SYSTEM:
+                nextIssueContainer.addBaselineSystemIssue(issue);
+                break;
+            case CURRENT_SYSTEM:
+                nextIssueContainer.addCurrentSystemIssue(issue);
+                break;
+            default:
+                assert false : "Unhandled: " + source;
+                break;
+            }
+        }
+    }
+
+    private void process(final Source source, final List<IIssue> issues,
+            final Map<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> elementSingleCollector,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCycleGroupCollector,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementDuplicateCodeCollector,
+            final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueMultiCollector)
+    {
+        assert source != null : "Parameter 'source' of method 'process' must not be null";
+        assert issues != null : "Parameter 'issues' of method 'process' must not be null";
+        assert elementSingleCollector != null : "Parameter 'elementSingleCollector' of method 'process' must not be null";
+        assert elementCycleGroupCollector != null : "Parameter 'elementCycleGroupCollector' of method 'process' must not be null";
+        assert elementDuplicateCodeCollector != null : "Parameter 'elementDuplicateCodeCollector' of method 'process' must not be null";
+        assert issueMultiCollector != null : "Parameter 'issueMultiCollector' of method 'process' must not be null";
+
+        for (final IIssue nextIssue : issues)
+        {
+            if (nextIssue instanceof CycleGroupIssueImpl)
+            {
+                processMultiElementIssue(source, (MultiNamedElementIssueImpl) nextIssue, elementCycleGroupCollector, issueMultiCollector);
+            }
+            else if (nextIssue instanceof DuplicateCodeBlockIssueImpl)
+            {
+                processMultiElementIssue(source, (MultiNamedElementIssueImpl) nextIssue, elementDuplicateCodeCollector, issueMultiCollector);
             }
             else
             {
-                added.add(next);
+                assert nextIssue instanceof SingleNamedElementIssueImpl : "Unexpected class in method 'process': " + nextIssue;
+                processSingleElementIssue(source, (SingleNamedElementIssueImpl) nextIssue, elementSingleCollector);
             }
-            removed.remove(next);
         }
-
-        processThresholdIssues(unchanged, added, removed, improved, worse);
-        processCycleGroups(added, removed, improved, worse);
-        processDuplicates(added, removed, improved, worse);
-
-        return new IssueDeltaImpl(unchanged, added, new ArrayList<>(removed), improved, worse);
     }
 
-    private void processThresholdIssues(final List<IIssue> unchanged, final Collection<IIssue> added, final Collection<IIssue> removed,
-            final List<Pair<IIssue, IIssue>> improved, final List<Pair<IIssue, IIssue>> worse)
+    private void processThreshold(final ThresholdViolationIssue baseline, final ThresholdViolationIssue current, final IssueDeltaImpl issueDeltaImpl)
     {
-        assert unchanged != null : "Parameter 'unchanged' of method 'processThresholdIssues' must not be null";
-        assert added != null : "Parameter 'added' of method 'processThresholdIssues' must not be null";
-        assert removed != null : "Parameter 'removed' of method 'processThresholdIssues' must not be null";
-        assert improved != null : "Parameter 'improved' of method 'processThresholdIssues' must not be null";
-        assert worse != null : "Parameter 'worse' of method 'processThresholdIssues' must not be null";
+        assert baseline != null : "Parameter 'baseline' of method 'processThreshold' must not be null";
+        assert current != null : "Parameter 'current' of method 'processThreshold' must not be null";
+        assert issueDeltaImpl != null : "Parameter 'issueDeltaImpl' of method 'processThreshold' must not be null";
 
-        final Predicate<? super IIssue> thresholdFilter = i -> i instanceof IThresholdViolationIssue;
-        final Function<? super IIssue, ? extends IThresholdViolationIssue> mapper = i -> (IThresholdViolationIssue) i;
-
-        final List<IThresholdViolationIssue> addedThresholdIssues = added.stream().filter(thresholdFilter).map(mapper).collect(Collectors.toList());
-        final List<IThresholdViolationIssue> removeThresholdIssues = removed.stream().filter(thresholdFilter).map(mapper)
-                .collect(Collectors.toList());
-        if (addedThresholdIssues.isEmpty() || removeThresholdIssues.isEmpty())
+        final Number originalValue = baseline.getMetricValue();
+        final Number value = current.getMetricValue();
+        if (originalValue.equals(value))
         {
             return;
         }
 
-        final List<Pair<IThresholdViolationIssue, IThresholdViolationIssue>> changed = new ArrayList<>();
-        for (final IThresholdViolationIssue previous : removeThresholdIssues)
-        {
-            addedThresholdIssues.stream().filter(createSameThresholdPredicate(previous)).findAny()
-                    .ifPresent(i -> changed.add(new Pair<>(previous, i)));
-        }
-
-        for (final Pair<IThresholdViolationIssue, IThresholdViolationIssue> next : changed)
-        {
-            final IThresholdViolationIssue originalTh = next.getFirst();
-            final IThresholdViolationIssue th = next.getSecond();
-            final Diff diff = determineThresholdDiff(originalTh, th);
-            switch (diff)
-            {
-            case UNCHANGED:
-                unchanged.add(th);
-                break;
-            case BETTER:
-                improved.add(new Pair<IIssue, IIssue>(originalTh, th));
-                break;
-            case WORSE:
-                worse.add(new Pair<IIssue, IIssue>(originalTh, th));
-                break;
-            case CHANGED:
-                //handled by removing the previous and adding the new
-                break;
-            case NO_MATCH_FOUND:
-                assert false : "Unmatched threshold violation issue must have been handled previously";
-                break;
-            default:
-                assert false : "unhandled diff '" + diff.name() + "'";
-            }
-            removed.remove(originalTh);
-            added.remove(th);
-        }
-    }
-
-    private Predicate<? super IThresholdViolationIssue> createSameThresholdPredicate(final IThresholdViolationIssue thresholdIssue)
-    {
-        return a -> a.getThreshold().equals(thresholdIssue.getThreshold()) && a.getAffectedElements().equals(thresholdIssue.getAffectedElements());
-    }
-
-    //    @Override
-    //    public IMetricDelta getMetricDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IMetricId> metricFilter,
-    //            final Predicate<IElement> elementFilter)
-    //    {
-    //TODO
-    //      final IMetricId metricId = original.getThreshold().getMetricId();
-    //        final Double bestValue = metricId.getBestValue();
-    //        if (bestValue.equals(Double.POSITIVE_INFINITY))
-    //        {
-    //            return originalDouble < doubleValue ? Diff.IMPROVED : Diff.WORSE;
-    //        }
-    //        if (bestValue.equals(Double.NEGATIVE_INFINITY))
-    //        {
-    //            return originalDouble > doubleValue ? Diff.IMPROVED : Diff.WORSE;
-    //        }
-    //
-    //        if (!bestValue.equals(Double.NaN))
-    //        {
-    //            final double diff1 = Math.abs(bestValue.doubleValue() - originalDouble);
-    //            final double diff2 = Math.abs(bestValue.doubleValue() - doubleValue);
-    //            return diff1 > diff2 ? Diff.IMPROVED : Diff.WORSE;
-    //        }
-    //return new MetricDeltaImpl();
-    //    }
-
-    //Check in removed if there are any cycle groups that match more or less any in added.
-    private void processCycleGroups(final List<IIssue> added, final Set<IIssue> removed, final List<Pair<IIssue, IIssue>> improved,
-            final List<Pair<IIssue, IIssue>> worse)
-    {
-        //TODO
-        //1. if there is a removed cycle group where all involved elements are present in an added, then it is likely that it has been made worse
-        //   (check for special case where 2 or more cycle groups are now combined into a single new one.
-        //2. if there is an added cycle group where all involved elements are present in a removed, then it is likely that it has been improved
-        //   (check for special case where cycle group is broken into two or more smaller cycle groups)
-    }
-
-    private void processDuplicates(final List<IIssue> added, final Set<IIssue> removed, final List<Pair<IIssue, IIssue>> improved,
-            final List<Pair<IIssue, IIssue>> worse)
-    {
-        //TODO
-        //same as for cycles: check if there are duplicates that contain exact matches and more to detect improved / worse
-        //also: check if there are probable matches, e.g. where only less than a threshold of elements have been changed.
-    }
-
-    private Diff determineThresholdDiff(final IThresholdViolationIssue original, final IThresholdViolationIssue th)
-    {
-        assert original != null : "Parameter 'original' of method 'determineThresholdDiff' must not be null";
-        assert th != null : "Parameter 'th' of method 'determineThresholdDiff' must not be null";
-
-        final Number originalValue = original.getMetricValue();
-        final Number value = th.getMetricValue();
-        if (originalValue.equals(value))
-        {
-            return Diff.UNCHANGED;
-        }
-
-        final double lowerThreshold = original.getThreshold().getLowerThreshold().doubleValue();
-        final double upperThreshold = original.getThreshold().getUpperThreshold().doubleValue();
+        final double lowerThreshold = baseline.getThreshold().getLowerThreshold().doubleValue();
+        final double upperThreshold = baseline.getThreshold().getUpperThreshold().doubleValue();
         final double originalDouble = originalValue.doubleValue();
         final double doubleValue = value.doubleValue();
-        if (originalDouble < lowerThreshold && doubleValue > upperThreshold || originalDouble > upperThreshold && doubleValue < lowerThreshold)
-        {
-            return Diff.CHANGED;
-        }
 
-        if (originalDouble < lowerThreshold)
+        if (Utility.hasChanged(originalDouble, doubleValue, 2))
         {
-            return originalDouble < doubleValue ? Diff.BETTER : Diff.WORSE;
-        }
-
-        if (originalDouble > upperThreshold)
-        {
-            return originalDouble > doubleValue ? Diff.BETTER : Diff.WORSE;
-        }
-
-        assert false : "Unprocessed change of threshold violation (original|new): " + original + "|" + th;
-        return null;
-    }
-
-    @Override
-    public Diff determineChange(final IIssue issue)
-    {
-        if (m_issues == null)
-        {
-            //since the issue list does not change, we cache them here for later access.
-            m_issues = new HashSet<>(baseSystem.getIssues(null));
-        }
-
-        if (m_issues.contains(issue))
-        {
-            return Diff.UNCHANGED;
-        }
-
-        if (issue instanceof IThresholdViolationIssue)
-        {
-            final IThresholdViolationIssue thresholdIssue = (IThresholdViolationIssue) issue;
-            final Optional<IThresholdViolationIssue> previous = m_issues.stream().filter(i -> i instanceof IThresholdViolationIssue)
-                    .map(i -> (IThresholdViolationIssue) i).filter(createSameThresholdPredicate(thresholdIssue)).findAny();
-            if (previous.isPresent())
+            if (originalDouble < lowerThreshold)
             {
-                return determineThresholdDiff(previous.get(), thresholdIssue);
-            }
-            return Diff.NO_MATCH_FOUND;
-        }
-
-        //TODO: Handle duplicate and check if worse or better, based on involved files and size of individual blocks.
-        //TODO: Check cycle and check if worse or better, based on number of involved elements.
-
-        return Diff.NO_MATCH_FOUND;
-    }
-
-    @Override
-    public IWorkspaceDelta getWorkspaceDelta(final ISystemInfoProcessor systemProcessor2)
-    {
-        assert systemProcessor2 != null : "Parameter 'systemProcessor2' of method 'getWorkspaceDelta' must not be null";
-        final WorkspaceDeltaImpl workspaceDelta = new WorkspaceDeltaImpl();
-
-        final Map<String, IModule> modules1 = new LinkedHashMap<>(baseSystem.getModules());
-        final Map<String, IModule> modules2 = new LinkedHashMap<>(systemProcessor2.getModules());
-
-        final List<String> processedModuleNames = new ArrayList<>();
-        for (final Entry<String, IModule> next : modules1.entrySet())
-        {
-            final String moduleName = next.getKey();
-            final IModule module1 = next.getValue();
-            final IModule module2 = modules2.get(moduleName);
-            if (modules2.containsKey(moduleName))
-            {
-                //FIXME [IK] we currently cannot consider the ordering of the roots
-                boolean unchanged = true;
-                for (final IRootDirectory root1 : module1.getRootDirectories())
+                if (originalDouble < doubleValue)
                 {
-                    if (!module2.getRootDirectories().stream().anyMatch(r2 -> r2.getFqName().equals(root1.getFqName())))
-                    {
-                        unchanged = false;
-                        break;
-                    }
-                }
-
-                if (unchanged)
-                {
-                    workspaceDelta.addUnchangedModule(module1);
+                    issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
                 }
                 else
                 {
-                    workspaceDelta.addChangedModule(computeModuleDelta(module1, module2));
+                    issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
+            }
+            else if (originalDouble > upperThreshold)
+            {
+                if (originalDouble > doubleValue)
+                {
+                    issueDeltaImpl.improved(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
+                else
+                {
+                    issueDeltaImpl.worsened(new BaselineCurrent<IThresholdViolationIssue>(baseline, current));
+                }
+            }
+        }
+    }
+
+    private void processMatchingIssue(final IIssue current, final IIssue baseline, final IssueDeltaImpl issueDeltaImpl)
+    {
+        assert current != null : "Parameter 'current' of method 'processMatchingIssue' must not be null";
+        assert baseline != null : "Parameter 'baseline' of method 'processMatchingIssue' must not be null";
+        assert current != baseline : "Same intstances";
+        assert issueDeltaImpl != null : "Parameter 'issueDeltaImpl' of method 'processMatchingIssue' must not be null";
+
+        if (!current.getResolutionType().equals(baseline.getResolutionType()))
+        {
+            issueDeltaImpl.changedResolutionType(new BaselineCurrent<>(baseline, current));
+        }
+
+        if (current instanceof ThresholdViolationIssue)
+        {
+            assert baseline instanceof ThresholdViolationIssue : "Unexpected class in method 'processMatchingIssue': " + baseline;
+            final ThresholdViolationIssue baselineThresholdViolationIssue = (ThresholdViolationIssue) baseline;
+            final ThresholdViolationIssue currentThresholdViolationIssue = (ThresholdViolationIssue) current;
+            processThreshold(baselineThresholdViolationIssue, currentThresholdViolationIssue, issueDeltaImpl);
+        }
+    }
+
+    private static final class IssueComparator implements Comparator<IIssue>
+    {
+        IssueComparator()
+        {
+            super();
+        }
+
+        @Override
+        public int compare(final IIssue i1, final IIssue i2)
+        {
+            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
+            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
+
+            int compared = i1.getLine() - i2.getLine();
+            if (compared == 0)
+            {
+                compared = i1.getColumn() - i2.getColumn();
+                if (compared == 0)
+                {
+                    compared = i1.getName().compareToIgnoreCase(i2.getName());
+                    if (compared == 0)
+                    {
+                        compared = 1;
+                    }
+                }
+            }
+            return compared;
+        }
+    }
+
+    private void processMultiNamedElementIssueInfo(final MultiNamedElementIssueType type,
+            final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCollector,
+            final Map<String, BaselineCurrent<Integer>> issueKeyToCount, final IssueDeltaImpl issueDeltaImpl)
+    {
+        assert type != null : "Parameter 'type' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert elementCollector != null : "Parameter 'elementCollector' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert issueKeyToCount != null : "Parameter 'issueKeyToCount' of method 'processMultiNamedElementIssueInfo' must not be null";
+        assert issueDeltaImpl != null : "Parameter 'issueDeltaImpl' of method 'processMultiNamedElementIssueInfo' must not be null";
+
+        for (final Entry<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> nextFqNameEntry : elementCollector.entrySet())
+        {
+            for (final Entry<String, IssueContainer<MultiNamedElementIssueImpl>> nextIssueKeyEntry : nextFqNameEntry.getValue().entrySet())
+            {
+                final IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = nextIssueKeyEntry.getValue();
+                final List<MultiNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
+                final List<MultiNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+
+                assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
+                final int nextBaseLineIssuesSize = nextBaselineIssues.size();
+                final int nextCurrentIssuesSize = nextCurrentIssues.size();
+
+                if (nextBaseLineIssuesSize != nextCurrentIssuesSize)
+                {
+                    final String nextIssueKey = nextIssueKeyEntry.getKey();
+                    switch (type)
+                    {
+                    case CYCLE_GROUP:
+                        if (nextBaselineIssues.isEmpty())
+                        {
+                            assert !nextCurrentIssues.isEmpty() : "'nextCurrentIssues' is not empty: " + nextCurrentIssues;
+                            issueDeltaImpl.addedToCycle(nextFqNameEntry.getKey(), nextIssueKey);
+                        }
+                        else
+                        {
+                            assert nextCurrentIssues.isEmpty() : "'nextCurrentIssues' must be empty: " + nextCurrentIssues;
+                            assert !nextBaselineIssues.isEmpty() : "'nextBaselineIssues' is not empty: " + nextBaselineIssues;
+                            issueDeltaImpl.removedFromCycle(nextFqNameEntry.getKey(), nextIssueKey);
+                        }
+                        break;
+                    case DUPLICATE_CODE:
+                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(), new BaselineCurrent<Integer>(
+                                nextBaseLineIssuesSize, nextCurrentIssuesSize));
+                        break;
+                    default:
+                        assert false : "Unhandled: " + type;
+                        break;
+                    }
+
+                    BaselineCurrent<Integer> count = issueKeyToCount.get(nextIssueKey);
+                    if (count == null)
+                    {
+                        count = new BaselineCurrent<>(0, 0);
+                        issueKeyToCount.put(nextIssueKey, count);
+                    }
+
+                    count.setBaseline(count.getBaseline() + nextBaseLineIssuesSize);
+                    count.setCurrent(count.getCurrent() + nextCurrentIssuesSize);
+                }
+            }
+        }
+    }
+
+    private IssueDeltaImpl createIssueDelta(final ISystemInfoProcessor infoProcessor)
+    {
+        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'createIssueDelta' must not be null";
+
+        final IssueDeltaImpl issueDeltaImpl = new IssueDeltaImpl();
+
+        final Map<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> elementSingleCollector = new HashMap<>();
+        final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementCycleGroupCollector = new HashMap<>();
+        final Map<String, Map<String, IssueContainer<MultiNamedElementIssueImpl>>> elementDuplicateCodeCollector = new HashMap<>();
+        final Map<String, IssueContainer<MultiNamedElementIssueImpl>> issueMultiCollector = new HashMap<>();
+
+        process(Source.BASELINE_SYSTEM, baselineSystemInfoProcessor.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
+                elementDuplicateCodeCollector, issueMultiCollector);
+        process(Source.CURRENT_SYSTEM, infoProcessor.getIssues(null), elementSingleCollector, elementCycleGroupCollector,
+                elementDuplicateCodeCollector, issueMultiCollector);
+
+        final IssueComparator issueComparator = new IssueComparator();
+
+        for (final Entry<String, Map<String, IssueContainer<SingleNamedElementIssueImpl>>> nextFqNameEntry : elementSingleCollector.entrySet())
+        {
+            for (final Entry<String, IssueContainer<SingleNamedElementIssueImpl>> nextIssueKeyEntry : nextFqNameEntry.getValue().entrySet())
+            {
+                final IssueContainer<SingleNamedElementIssueImpl> nextIssueContainer = nextIssueKeyEntry.getValue();
+                nextIssueContainer.sort(issueComparator);
+                final List<SingleNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
+                final List<SingleNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+
+                assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
+
+                for (final IIssue nextCurrentIssue : new ArrayList<>(nextCurrentIssues))
+                {
+                    for (final IIssue nextBaselineIssue : new ArrayList<>(nextBaselineIssues))
+                    {
+                        if (nextCurrentIssue.getLine() == nextBaselineIssue.getLine()
+                                && nextCurrentIssue.getColumn() == nextBaselineIssue.getColumn())
+                        {
+                            processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                            nextCurrentIssues.remove(nextCurrentIssue);
+                            nextBaselineIssues.remove(nextBaselineIssue);
+                            break;
+                        }
+                    }
+                }
+
+                if (!nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty())
+                {
+                    nextBaselineIssues.forEach(n -> issueDeltaImpl.removed(n));
+                }
+                else if (nextBaselineIssues.isEmpty() && !nextCurrentIssues.isEmpty())
+                {
+                    nextCurrentIssues.forEach(n -> issueDeltaImpl.added(n));
+                }
+                else if (nextBaselineIssues.size() != nextCurrentIssues.size())
+                {
+                    nextBaselineIssues.forEach(n -> issueDeltaImpl.removed(n));
+                    nextCurrentIssues.forEach(n -> issueDeltaImpl.added(n));
+                }
+                else
+                {
+                    //If baseline/current issues have the same size we suppose that only line/column has changed
+                    for (int i = 0; i < nextCurrentIssues.size(); i++)
+                    {
+                        final IIssue nextCurrentIssue = nextCurrentIssues.get(i);
+                        final IIssue nextBaselineIssue = nextBaselineIssues.get(i);
+                        processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                    }
+                }
+            }
+        }
+
+        final Map<String, BaselineCurrent<Integer>> cycleGroupsCount = new HashMap<>();
+        final Map<String, BaselineCurrent<Integer>> duplicateCodeBlockCount = new HashMap<>();
+        processMultiNamedElementIssueInfo(MultiNamedElementIssueType.CYCLE_GROUP, elementCycleGroupCollector, cycleGroupsCount, issueDeltaImpl);
+        processMultiNamedElementIssueInfo(MultiNamedElementIssueType.DUPLICATE_CODE, elementDuplicateCodeCollector, duplicateCodeBlockCount,
+                issueDeltaImpl);
+
+        for (final Entry<String, BaselineCurrent<Integer>> nextEntry : cycleGroupsCount.entrySet())
+        {
+            final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
+            if (nextBaselineCurrent.getBaseline() > nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.improvedCycleParticipation(nextEntry.getKey(), nextBaselineCurrent);
+            }
+            else if (nextBaselineCurrent.getBaseline() < nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.worsenedCycleParticipation(nextEntry.getKey(), nextBaselineCurrent);
+            }
+        }
+
+        assert duplicateCodeBlockCount.size() <= 1 : "Not more than 1 entry expected: " + duplicateCodeBlockCount;
+        for (final Entry<String, BaselineCurrent<Integer>> nextEntry : duplicateCodeBlockCount.entrySet())
+        {
+            final BaselineCurrent<Integer> nextBaselineCurrent = nextEntry.getValue();
+            if (nextBaselineCurrent.getBaseline() > nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.improvedDuplicateCodeParticipation(nextBaselineCurrent);
+            }
+            else if (nextBaselineCurrent.getBaseline() < nextBaselineCurrent.getCurrent())
+            {
+                issueDeltaImpl.worsenedDuplicateCodeParticipation(nextBaselineCurrent);
+            }
+        }
+
+        for (final Entry<String, IssueContainer<MultiNamedElementIssueImpl>> nextIssueNameEntry : issueMultiCollector.entrySet())
+        {
+            final IssueContainer<MultiNamedElementIssueImpl> nextIssueContainer = nextIssueNameEntry.getValue();
+            nextIssueContainer.sort(issueComparator);
+
+            final List<MultiNamedElementIssueImpl> nextBaselineIssues = nextIssueContainer.getBaselineSystemIssues();
+            final List<MultiNamedElementIssueImpl> nextCurrentIssues = nextIssueContainer.getCurrentSystemIssues();
+
+            assert (nextBaselineIssues.isEmpty() && nextCurrentIssues.isEmpty()) == false : "No issues at all";
+
+            for (final IIssue nextCurrentIssue : new ArrayList<>(nextCurrentIssues))
+            {
+                for (final IIssue nextBaselineIssue : new ArrayList<>(nextBaselineIssues))
+                {
+                    if (nextCurrentIssue.getName().equals(nextBaselineIssue.getName()))
+                    {
+                        processMatchingIssue(nextCurrentIssue, nextBaselineIssue, issueDeltaImpl);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return issueDeltaImpl;
+    }
+
+    private WorkspaceDeltaImpl createWorkspaceDelta(final ISystemInfoProcessor systemProcessor)
+    {
+        assert systemProcessor != null : "Parameter 'systemProcessor' of method 'createWorkspaceDelta' must not be null";
+
+        final WorkspaceDeltaImpl workspaceDelta = new WorkspaceDeltaImpl();
+
+        final Map<String, IModule> baselineModules = new LinkedHashMap<>(baselineSystemInfoProcessor.getModules());
+        final Map<String, IModule> currentModules = new LinkedHashMap<>(systemProcessor.getModules());
+
+        final List<String> processedModuleNames = new ArrayList<>();
+        for (final Entry<String, IModule> nextEntry : baselineModules.entrySet())
+        {
+            final String moduleName = nextEntry.getKey();
+            final IModule nextBaselineModule = nextEntry.getValue();
+            final IModule nextCurrentModule = currentModules.get(moduleName);
+
+            if (currentModules.containsKey(moduleName))
+            {
+                final IModuleDelta nextModuleDelta = computeModuleDelta(nextBaselineModule, nextCurrentModule);
+                if (!nextModuleDelta.isEmpty())
+                {
+                    workspaceDelta.addChangedModule(nextModuleDelta);
                 }
             }
             else
             {
-                workspaceDelta.addRemovedModule(module1);
+                workspaceDelta.addRemovedModule(nextBaselineModule);
             }
             processedModuleNames.add(moduleName);
         }
 
         for (final String nextName : processedModuleNames)
         {
-            modules2.remove(nextName);
+            currentModules.remove(nextName);
         }
 
-        for (final Entry<String, IModule> next : modules2.entrySet())
+        for (final Entry<String, IModule> next : currentModules.entrySet())
         {
             workspaceDelta.addAddedModule(next.getValue());
         }
@@ -344,181 +541,101 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         return workspaceDelta;
     }
 
-    private IModuleDelta computeModuleDelta(final IModule module1, final IModule module2)
+    private IModuleDelta computeModuleDelta(final IModule baselineModule, final IModule currentModule)
     {
-        assert module1 != null : "Parameter 'module1' of method 'computeModuleDelta' must not be null";
-        assert module2 != null : "Parameter 'module2' of method 'computeModuleDelta' must not be null";
+        assert baselineModule != null : "Parameter 'baselineModule' of method 'computeModuleDelta' must not be null";
+        assert currentModule != null : "Parameter 'currentModule' of method 'computeModuleDelta' must not be null";
 
-        final Map<String, IRootDirectory> rootPaths1 = new LinkedHashMap<>();
-        final Map<String, IRootDirectory> rootPaths2 = new LinkedHashMap<>();
-        module1.getRootDirectories().stream().forEach(r -> rootPaths1.put(r.getPresentationName(), r));
-        module2.getRootDirectories().stream().forEach(r -> rootPaths2.put(r.getPresentationName(), r));
+        final List<IRootDirectory> baselineRootDirectories = baselineModule.getRootDirectories();
+        final Set<IRootDirectory> baselineRootDirectoriesAsSet = new HashSet<>(baselineRootDirectories);
 
-        final List<IRootDirectory> added = new ArrayList<>();
-        final List<IRootDirectory> unchanged = new ArrayList<>();
-        final List<IRootDirectory> removed = new ArrayList<>();
-        for (final Map.Entry<String, IRootDirectory> next : rootPaths1.entrySet())
+        final List<IRootDirectory> currentRootDirectories = currentModule.getRootDirectories();
+        final Set<IRootDirectory> currentRootDirectoriesAsSet = new HashSet<>(currentRootDirectories);
+
+        currentRootDirectoriesAsSet.removeAll(baselineRootDirectories);
+        baselineRootDirectoriesAsSet.removeAll(currentRootDirectories);
+
+        return new ModuleDeltaImpl(baselineModule, new ArrayList<>(currentRootDirectoriesAsSet), new ArrayList<>(baselineRootDirectoriesAsSet));
+    }
+
+    private void processAnalyzers(final List<IAnalyzer> baseline, final List<IAnalyzer> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processAnalyzers' must not be null";
+        assert current != null : "Parameter 'current' of method 'processAnalyzers' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processAnalyzers' must not be null";
+
+        final Set<IAnalyzer> baselineAsSet = new HashSet<>(baseline);
+        final Set<IAnalyzer> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedAnalyzer(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedAnalyzer(n));
+    }
+
+    private void processFeatures(final List<IFeature> baseline, final List<IFeature> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processFeatures' must not be null";
+        assert current != null : "Parameter 'current' of method 'processFeatures' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processFeatures' must not be null";
+
+        final Set<IFeature> baselineAsSet = new HashSet<>(baseline);
+        final Set<IFeature> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedFeature(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedFeature(n));
+    }
+
+    private void processThreshols(final List<IMetricThreshold> baseline, final List<IMetricThreshold> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processThreshols' must not be null";
+        assert current != null : "Parameter 'current' of method 'processThreshols' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processThreshols' must not be null";
+
+        final Map<IMetricThreshold, IMetricThreshold> currentAsMap = current.stream().collect(Collectors.toMap(next -> next, next -> next));
+
+        for (final IMetricThreshold nextBaselineThreshold : baseline)
         {
-            if (rootPaths2.containsKey(next.getKey()))
+            final IMetricThreshold nextCurrentThreshold = currentAsMap.remove(nextBaselineThreshold);
+            if (nextCurrentThreshold != null)
             {
-                unchanged.add(next.getValue());
+                if (!nextBaselineThreshold.getLowerThreshold().equals(nextCurrentThreshold.getLowerThreshold())
+                        || !nextBaselineThreshold.getUpperThreshold().equals(nextCurrentThreshold.getUpperThreshold()))
+                {
+                    reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<IMetricThreshold>(nextBaselineThreshold,
+                            nextCurrentThreshold));
+                }
             }
             else
             {
-                removed.add(next.getValue());
+                //Not found in current 
+                reportDeltaImpl.removedMetricThreshold(nextBaselineThreshold);
             }
         }
-        for (final IRootDirectory next : unchanged)
+
+        for (final IMetricThreshold nextCurrentThreshold : currentAsMap.values())
         {
-            rootPaths2.remove(next.getPresentationName());
+            reportDeltaImpl.addedMetricThreshold(nextCurrentThreshold);
         }
-
-        added.addAll(rootPaths2.values());
-
-        return new ModuleDeltaImpl(module1, unchanged, added, removed);
     }
 
     @Override
-    public ICoreSystemDataDelta getCoreSystemDataDelta(final ISystemInfoProcessor infoProcessor)
+    public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor)
     {
-        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'getMetaDataDelta' must not be null";
-        final CoreSystemDataDeltaImpl delta = new CoreSystemDataDeltaImpl();
+        assert systemInfoProcessor != null : "Parameter 'systemInfoProcessor' of method 'createReportDelta' must not be null";
 
-        final IStandardDelta<IIssueProvider> issueProviderDelta = StandardDeltaImpl.<IIssueProvider> computeDelta("Issue Providers",
-                baseSystem.getIssueProviders(), infoProcessor.getIssueProviders());
-        delta.setIssueProviderDelta(issueProviderDelta);
+        final ReportDeltaImpl reportDeltaImpl = new ReportDeltaImpl(getSoftwareSystem(), systemInfoProcessor.getSoftwareSystem());
 
-        final IStandardDelta<IIssueCategory> issueCategoryDelta = StandardDeltaImpl.<IIssueCategory> computeDelta("Issue Categories",
-                baseSystem.getIssueCategories(), infoProcessor.getIssueCategories());
-        delta.setIssueCategoryDelta(issueCategoryDelta);
+        processFeatures(baselineSystemInfoProcessor.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
+        processAnalyzers(baselineSystemInfoProcessor.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
+        processThreshols(baselineSystemInfoProcessor.getMetricThresholds(), systemInfoProcessor.getMetricThresholds(), reportDeltaImpl);
 
-        final IStandardDelta<IIssueType> issueTypeDelta = StandardDeltaImpl.<IIssueType> computeDelta("Issue Types", baseSystem.getIssueTypes(),
-                infoProcessor.getIssueTypes());
-        delta.setIssueTypeDelta(issueTypeDelta);
+        reportDeltaImpl.setWorkspaceDelta(createWorkspaceDelta(systemInfoProcessor));
+        reportDeltaImpl.setIssuesDelta(createIssueDelta(systemInfoProcessor));
 
-        final IStandardDelta<IMetricProvider> metricProviderDelta = StandardDeltaImpl.<IMetricProvider> computeDelta("Metric Providers",
-                baseSystem.getMetricProviders(), infoProcessor.getMetricProviders());
-        delta.setMetricProviderDelta(metricProviderDelta);
-
-        final IStandardDelta<IMetricCategory> metricCategoryDelta = StandardDeltaImpl.<IMetricCategory> computeDelta("Metric Categories",
-                baseSystem.getMetricCategories(), infoProcessor.getMetricCategories());
-        delta.setMetricCategoryDelta(metricCategoryDelta);
-
-        final IStandardDelta<IMetricLevel> metricLevelDelta = StandardDeltaImpl.<IMetricLevel> computeDelta("Metric Levels",
-                baseSystem.getMetricLevels(), infoProcessor.getMetricLevels());
-        delta.setMetricLevelDelta(metricLevelDelta);
-
-        final IStandardDelta<IMetricId> metricIdDelta = StandardDeltaImpl.<IMetricId> computeDelta("Metric Ids", baseSystem.getMetricIds(),
-                infoProcessor.getMetricIds());
-        delta.setMetricIdDelta(metricIdDelta);
-
-        final IStandardDelta<IFeature> featureDelta = StandardDeltaImpl.<IFeature> computeDelta("Features", baseSystem.getFeatures(),
-                infoProcessor.getFeatures());
-        delta.setFeatureDelta(featureDelta);
-
-        final IStandardDelta<IAnalyzer> analyzerDelta = StandardDeltaImpl.<IAnalyzer> computeDelta("Analyzers", baseSystem.getAnalyzers(),
-                infoProcessor.getAnalyzers());
-        delta.setAnalyzerDelta(analyzerDelta);
-
-        delta.setMetricThresholdDelta(computeMetricThresholdDelta(baseSystem.getMetricThresholds(), infoProcessor.getMetricThresholds()));
-
-        final IElementKindDelta elementKindDelta = computeElementKindDelta(baseSystem.getElementKinds(), infoProcessor.getElementKinds());
-        delta.setElementKindDelta(elementKindDelta);
-
-        return delta;
-    }
-
-    private IElementKindDelta computeElementKindDelta(final List<String> elementKinds, final List<String> elementKinds2)
-    {
-        assert elementKinds != null : "Parameter 'elementKinds' of method 'computeElementKindDelta' must not be null";
-        assert elementKinds2 != null : "Parameter 'elementKinds2' of method 'computeElementKindDelta' must not be null";
-
-        final List<String> added = new ArrayList<>(elementKinds2);
-        final List<String> unchanged = new ArrayList<>();
-        final List<String> removed = new ArrayList<>();
-
-        for (final String next : elementKinds)
-        {
-            if (added.remove(next))
-            {
-                unchanged.add(next);
-            }
-            else
-            {
-                removed.add(next);
-            }
-        }
-
-        return new ElementKindDeltaImpl(added, removed, unchanged);
-    }
-
-    private IMetricThresholdDelta computeMetricThresholdDelta(final List<IMetricThreshold> thresholds1, final List<IMetricThreshold> thresholds2)
-    {
-        assert thresholds1 != null : "Parameter 'thresholds1' of method 'computeMetricThresholdDelta' must not be null";
-        assert thresholds2 != null : "Parameter 'thresholds2' of method 'computeMetricThresholdDelta' must not be null";
-
-        final List<IMetricThreshold> removed = new ArrayList<>();
-        final List<IMetricThreshold> unchanged = new ArrayList<>();
-        final List<Pair<IMetricThreshold, IMetricThreshold>> changed = new ArrayList<>();
-        final List<IMetricThreshold> added = new ArrayList<>(thresholds2);
-
-        for (final IMetricThreshold next : new ArrayList<>(thresholds1))
-        {
-            if (added.remove(next))
-            {
-                unchanged.add(next);
-            }
-            else
-            {
-                final Optional<IMetricThreshold> changedOpt = added.stream()
-                        .filter(th -> th.getMetricId().equals(next.getMetricId()) && th.getMetricLevel().equals(next.getMetricLevel())).findFirst();
-                if (changedOpt.isPresent())
-                {
-                    final IMetricThreshold changedTh = changedOpt.get();
-                    changed.add(new Pair<IMetricThreshold, IMetricThreshold>(next, changedTh));
-                    added.remove(changedTh);
-                }
-                else
-                {
-                    removed.add(next);
-                }
-            }
-        }
-
-        return new MetricThresholdDeltaImpl(added, removed, unchanged, changed);
-    }
-
-    @Override
-    public IResolutionDelta getResolutionDelta(final ISystemInfoProcessor infoProcessor, final Predicate<IResolution> predicate)
-    {
-        assert infoProcessor != null : "Parameter 'infoProcessor' of method 'getResolutionDelta' must not be null";
-
-        final List<IResolution> removed = new ArrayList<>();
-        final List<IResolution> unchanged = new ArrayList<>();
-        final List<Pair<IResolution, IResolution>> changed = new ArrayList<>();
-        final List<IResolution> added = new ArrayList<>(infoProcessor.getResolutions(predicate));
-
-        for (final IResolution next : new ArrayList<>(baseSystem.getResolutions(predicate)))
-        {
-            if (added.remove(next))
-            {
-                unchanged.add(next);
-            }
-            else
-            {
-                final Optional<IResolution> matchOpt = added.stream().filter(r -> r.getName().equals(next.getName())).findFirst();
-                if (matchOpt.isPresent())
-                {
-                    changed.add(new Pair<>(next, matchOpt.get()));
-                    added.remove(matchOpt.get());
-                }
-                else
-                {
-                    removed.add(next);
-                }
-            }
-        }
-
-        return new ResolutionDeltaImpl(added, removed, changed, unchanged);
+        return reportDeltaImpl;
     }
 }

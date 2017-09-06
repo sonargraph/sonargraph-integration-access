@@ -17,31 +17,33 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class DependencyIssueImpl extends IssueImpl implements IDependencyIssue
+public final class DependencyIssueImpl extends SingleNamedElementIssueImpl implements IDependencyIssue
 {
     private static final long serialVersionUID = 2039911860451849412L;
     private final INamedElement from;
     private final INamedElement to;
 
-    public DependencyIssueImpl(final IIssueType issueType, final String description, final IIssueProvider provider, final boolean hasResolution,
-            final INamedElement from, final INamedElement to, final int line)
+    public DependencyIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
+            final IIssueProvider provider, final int line, final int column, final INamedElement from, final INamedElement to)
     {
-        super(issueType.getName(), issueType.getPresentationName(), description, issueType, provider, hasResolution, line);
+        super(name, presentationName, description, issueType, provider, line, column);
 
         assert from != null : "Parameter 'from' of method 'DependencyIssue' must not be null";
         assert to != null : "Parameter 'to' of method 'DependencyIssue' must not be null";
 
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public INamedElement getNamedElement()
+    {
+        return from;
     }
 
     @Override
@@ -57,20 +59,12 @@ public final class DependencyIssueImpl extends IssueImpl implements IDependencyI
     }
 
     @Override
-    public List<INamedElement> getOrigins()
-    {
-        return Collections.unmodifiableList(Arrays.asList(getFrom()));
-    }
-
-    //TODO: Add further info
-
-    @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((from == null) ? 0 : from.hashCode());
-        result = prime * result + ((to == null) ? 0 : to.hashCode());
+        result = prime * result + from.hashCode();
+        result = prime * result + to.hashCode();
         return result;
     }
 
@@ -81,41 +75,22 @@ public final class DependencyIssueImpl extends IssueImpl implements IDependencyI
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
         {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
         final DependencyIssueImpl other = (DependencyIssueImpl) obj;
-        if (from == null)
-        {
-            if (other.from != null)
-            {
-                return false;
-            }
-        }
-        else if (!from.equals(other.from))
-        {
-            return false;
-        }
-        if (to == null)
-        {
-            if (other.to != null)
-            {
-                return false;
-            }
-        }
-        else if (!to.equals(other.to))
-        {
-            return false;
-        }
-        return true;
+        return from.equals(other.from) && to.equals(other.to);
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append("\n");
+        builder.append("from:").append(from.getFqName());
+        builder.append("\n");
+        builder.append("to:").append(to.getFqName());
+        return builder.toString();
     }
 }

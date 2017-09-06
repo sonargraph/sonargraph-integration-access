@@ -34,9 +34,10 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IMetaDataController;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResultWithOutcome;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result.Level;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
@@ -58,14 +59,14 @@ public class ExportMetaDataControllerTest
     @Before
     public void before()
     {
-        m_controller = new ControllerFactory().createMetaDataController();
+        m_controller = ControllerAccess.createMetaDataController();
     }
 
     @Test
     public void testReadExportMetaData() throws IOException
     {
         final File exportMetaDataFile = new File(META_DATA_PATH);
-        final OperationResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
+        final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
         assertTrue("Failed to load metric meta-data file: " + result.toString(), result.isSuccess());
 
         final IExportMetaData metaData = result.getOutcome();
@@ -115,7 +116,7 @@ public class ExportMetaDataControllerTest
         files.add(new File(META_DATA_PATH2));
         files.add(new File(META_DATA_PATH_OUTDATED));
 
-        final OperationResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
+        final ResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
 
         assertTrue("Success expected", result.isSuccess());
         final IMergedExportMetaData metaData = result.getOutcome();
@@ -140,7 +141,7 @@ public class ExportMetaDataControllerTest
     public void testWrongEncoding()
     {
         final File exportMetaDataFile = new File(WRONG_ENCODING);
-        final OperationResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
+        final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
         assertFalse("Failure expected: " + result.toString(), result.isSuccess());
     }
 
@@ -151,8 +152,8 @@ public class ExportMetaDataControllerTest
         files.add(new File(META_DATA_PATH1));
         files.add(new File(WRONG_ENCODING));
 
-        final OperationResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
+        final ResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
 
-        assertEquals("Warning expected: " + result.toString(), 1, result.getWarningMessages().size());
+        assertEquals("Warning expected: " + result.toString(), 1, result.getMessages(Level.WARNING).size());
     }
 }

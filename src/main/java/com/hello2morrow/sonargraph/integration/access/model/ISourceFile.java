@@ -19,11 +19,10 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.Optional;
 
-public interface ISourceFile extends IFilePathElement
+public interface ISourceFile extends IFilePathElement, IPhysicalElement
 {
-    public String getRelativeRootDirectoryPath();
+    public String getRelativeRootDirectory();
 
-    public Optional<ISourceFile> getOriginal();
-
-    public boolean isOriginal();
+    @Override
+    public Optional<ISourceFile> getOriginalLocation();
 }

@@ -19,7 +19,6 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -32,18 +31,9 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.core.persistence.report.XsdExportMetaData;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdExportMetaDataRoot;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueCategory;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueProvider;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdIssueType;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricCategory;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricId;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricLevel;
-import com.hello2morrow.sonargraph.core.persistence.report.XsdMetricProvider;
-import com.hello2morrow.sonargraph.integration.access.foundation.IOMessageCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -59,59 +49,58 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevel
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SingleExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaData;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaDataRoot;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueCategory;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricCategory;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricLevel;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricProvider;
 
-public final class XmlExportMetaDataReader
+public final class XmlExportMetaDataReader extends XmlAccess
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlExportMetaDataReader.class);
-    private static final String METADATA_SCHEMA = "com/hello2morrow/sonargraph/core/persistence/report/exportMetaData.xsd";
-    private static final String METADATA_NAMESPACE = "com.hello2morrow.sonargraph.core.persistence.report";
 
-    private JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createJaxbAdapter() throws XmlProcessingException
-    {
-        final URL metricsXsd = getClass().getClassLoader().getResource(METADATA_SCHEMA);
-        return new JaxbAdapter<>(METADATA_NAMESPACE, metricsXsd);
-    }
-
-    public Optional<SingleExportMetaDataImpl> readMetaDataFromStream(final InputStream input, final String identifier, final OperationResult result)
+    public Optional<SingleExportMetaDataImpl> readMetaDataFromStream(final InputStream input, final String identifier, final Result result)
     {
         assert input != null : "Parameter 'input' of method 'readMetaDataFile' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'readMetaDataFromStream' must not be empty";
         assert result != null : "Parameter 'result' of method 'readMetaDataFile' must not be null";
 
-        //TODO: Check for version in xml file
-
         JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> jaxbAdapter;
         try
         {
-            jaxbAdapter = createJaxbAdapter();
+            jaxbAdapter = createExportMetaDataJaxbAdapter();
         }
         catch (final Exception e)
         {
-            result.addError(IOMessageCause.READ_ERROR, "Failed to initialize JAXB", e);
+            result.addError(ResultCause.READ_ERROR, "Failed to initialize JAXB", e);
             return Optional.empty();
         }
 
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
 
-        Optional<JAXBElement<XsdExportMetaDataRoot>> xmlRoot = Optional.empty();
+        JAXBElement<XsdExportMetaDataRoot> xmlRoot = null;
         try (BufferedInputStream in = new BufferedInputStream(input))
         {
             xmlRoot = jaxbAdapter.load(in, eventHandler);
-            if (xmlRoot.isPresent())
+            if (xmlRoot != null)
             {
-                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.get().getValue();
+                final XsdExportMetaDataRoot xsdMetricsRoot = xmlRoot.getValue();
                 return convertXmlMetaDataToPojo(xsdMetricsRoot, identifier, result);
             }
         }
         catch (final Exception ex)
         {
-            result.addError(IOMessageCause.IO_EXCEPTION, ex);
+            result.addError(ResultCause.READ_ERROR, ex);
         }
         finally
         {
-            if (result.isFailure() || !xmlRoot.isPresent())
+            if (result.isFailure() || xmlRoot == null)
             {
-                result.addError(IOMessageCause.WRONG_FORMAT,
+                result.addError(ResultCause.WRONG_FORMAT,
                         "Report is corrupt, please ensure that versions of SonargraphBuild and Sonargraph SonarQube Plugin are compatible");
             }
         }
@@ -121,7 +110,7 @@ public final class XmlExportMetaDataReader
     }
 
     private static Optional<SingleExportMetaDataImpl> convertXmlMetaDataToPojo(final XsdExportMetaDataRoot xsdMetaData, final String identifier,
-            final OperationResult result)
+            final Result result)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetrics' of method 'convertXmlMetricsToPojo' must not be null";
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'convertXmlMetricsToPojo' must not be empty";
@@ -283,7 +272,7 @@ public final class XmlExportMetaDataReader
     }
 
     private static Map<Object, IssueTypeImpl> processIssueTypes(final XsdExportMetaData xsdMetaData, final Map<Object, IssueCategoryImpl> categories,
-            final Map<Object, IssueProviderImpl> providers, final OperationResult result)
+            final Map<Object, IssueProviderImpl> providers, final Result result)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetaData' of method 'processIssueTypes' must not be null";
         assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'processIssueTypes' must not be empty";
@@ -299,7 +288,7 @@ public final class XmlExportMetaDataReader
             Severity severity;
             try
             {
-                severity = Severity.valueOf(StringUtility.convertStandardNameToConstantName(next.getSeverity()));
+                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
             }
             catch (final Exception e)
             {

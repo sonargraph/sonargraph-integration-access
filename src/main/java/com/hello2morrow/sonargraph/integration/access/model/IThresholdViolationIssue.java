@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IThresholdViolationIssue extends IElementIssue
+public interface IThresholdViolationIssue extends INamedElementIssue
 {
     public Number getMetricValue();
 

@@ -17,64 +17,29 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISourceFileLookup;
 
-public final class ModuleImpl extends NamedElementContainerImpl implements IModule
+public final class ModuleImpl extends LanguageBasedContainerImpl implements IModule
 {
     private static final long serialVersionUID = -4617725409511641491L;
-    private final List<IRootDirectory> rootDirectories = new ArrayList<>(2);
-    private final String language;
+    private final ISourceFileLookup sourceFileLookup;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final String language)
+            final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
+            final String language, final ISourceFileLookup sourceFileLookup)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description);
-        assert language != null : "Parameter 'language' of method 'ModuleImpl' must not be null";
-        this.language = language;
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IModule#getLanguage()
-     */
-    @Override
-    public String getLanguage()
-    {
-        return language;
-    }
-
-    public void addRootDirectory(final RootDirectoryImpl root)
-    {
-        assert root != null : "Parameter 'root' of method 'addRootDirectory' must not be null";
-        assert !rootDirectories.contains(root) : "root '" + root.getName() + "' has already been added";
-        rootDirectories.add(root);
-        addElement(root);
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IModule#getRootDirectories()
-     */
-    @Override
-    public List<IRootDirectory> getRootDirectories()
-    {
-        return Collections.unmodifiableList(rootDirectories);
-    }
-
-    @Override
-    protected boolean acceptElementKind(final String elementKind)
-    {
-        assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'acceptElementKind' must not be empty";
-        return !elementKind.endsWith("Module");
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
+        assert sourceFileLookup != null : "Parameter 'sourceFileLookup' of method 'ModuleImpl' must not be null";
+        this.sourceFileLookup = sourceFileLookup;
     }
 
     @Override
@@ -90,45 +55,20 @@ public final class ModuleImpl extends NamedElementContainerImpl implements IModu
     public Optional<ISourceFile> getSourceForElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceForElement' must not be null";
-        final Optional<ISourceFile> sourceFileOpt = namedElement.getSourceFile();
+        final Optional<? extends ISourceFile> sourceFileOpt = sourceFileLookup.getSourceFile(namedElement);
         if (sourceFileOpt.isPresent())
         {
             final ISourceFile sourceFile = sourceFileOpt.get();
-            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginal();
+            final Optional<ISourceFile> originalSourceFileOpt = sourceFile.getOriginalLocation();
             if (originalSourceFileOpt.isPresent())
             {
                 final ISourceFile originalSourceFile = originalSourceFileOpt.get();
-                return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == originalSourceFile).findFirst();
+                return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == originalSourceFile).findFirst();
             }
 
-            return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == sourceFile).findFirst();
+            return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream()).filter(s -> s == sourceFile).findFirst();
         }
-        return rootDirectories.stream().flatMap(r -> r.getSourceFiles().stream())
+        return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + language.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (this == obj)
-        {
-            return true;
-        }
-
-        final ModuleImpl other = (ModuleImpl) obj;
-        return language.equals(other.language);
     }
 }

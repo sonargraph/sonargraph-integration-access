@@ -20,21 +20,17 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
-import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
 public class NamedElementImpl extends ElementWithDescriptionImpl implements INamedElement
 {
     private static final long serialVersionUID = 7897215356427497745L;
+
     private final String kind;
     private final String presentationKind;
-    private final int line;
     private final String fqName;
-    private ISourceFile m_source;
-    private boolean isOriginal;
-    private NamedElementImpl original;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final int line, final String description)
+            final String fqName, final String description)
     {
         super(name, presentationName, description);
 
@@ -42,49 +38,26 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 
         this.kind = kind;
         this.presentationKind = presentationKind;
-        this.line = line;
         this.fqName = fqName;
     }
 
-    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final int line)
+    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
     {
-        this(kind, presentationKind, name, presentationName, fqName, line, "");
+        this(kind, presentationKind, name, presentationName, fqName, "");
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getKind()
-     */
     @Override
     public final String getKind()
     {
         return kind;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getFqName()
-     */
     @Override
     public final String getFqName()
     {
         return fqName;
     }
 
-    public final void setSourceFile(final ISourceFile source)
-    {
-        assert source != null : "Parameter 'source' of method 'setSourceFile' must not be null";
-        m_source = source;
-    }
-
-    @Override
-    public final Optional<ISourceFile> getSourceFile()
-    {
-        return Optional.ofNullable(m_source);
-    }
-
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IFqNamedElement#getPresentationKind()
-     */
     @Override
     public final String getPresentationKind()
     {
@@ -92,48 +65,29 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     }
 
     @Override
-    public final int getLineNumber()
+    public Optional<? extends INamedElement> getOriginalLocation()
     {
-        return line;
+        return Optional.empty();
     }
 
     @Override
-    public Optional<? extends INamedElement> getOriginal()
+    public boolean isLocationOnly()
     {
-        return Optional.ofNullable(original);
-    }
-
-    public void setOriginal(final NamedElementImpl original)
-    {
-        this.original = original;
-    }
-
-    public final void setIsOriginal(final boolean isOriginal)
-    {
-        this.isOriginal = isOriginal;
+        return false;
     }
 
     @Override
-    public final boolean isOriginal()
-    {
-        return isOriginal;
-    }
-
-    @Override
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + fqName.hashCode();
-        result = prime * result + ((kind == null) ? 0 : kind.hashCode());
-        result = prime * result + line;
-        result = prime * result + ((presentationKind == null) ? 0 : presentationKind.hashCode());
-        result = prime * result + ((original == null) ? 0 : original.hashCode());
+        result = prime * result + (isLocationOnly() ? 1 : 0);
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -145,48 +99,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         }
 
         final NamedElementImpl other = (NamedElementImpl) obj;
-        if (!fqName.equals(other.fqName))
-        {
-            return false;
-        }
-        if (kind == null)
-        {
-            if (other.kind != null)
-            {
-                return false;
-            }
-        }
-        else if (!kind.equals(other.kind))
-        {
-            return false;
-        }
-        if (line != other.line)
-        {
-            return false;
-        }
-        if (presentationKind == null)
-        {
-            if (other.presentationKind != null)
-            {
-                return false;
-            }
-        }
-        else if (!presentationKind.equals(other.presentationKind))
-        {
-            return false;
-        }
-        if (original == null)
-        {
-            if (other.original != null)
-            {
-                return false;
-            }
-        }
-        else if (!original.equals(other.original))
-        {
-            return false;
-        }
-        return true;
+        return fqName.equals(other.fqName) && isLocationOnly() == other.isLocationOnly();
     }
 
     @Override
@@ -194,16 +107,17 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     {
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("\n");
-        builder.append("Fq name: ").append(fqName);
-        if (original != null)
+        builder.append("kind:").append(kind);
+        builder.append("\n");
+        builder.append("fqName:").append(fqName);
+        builder.append("\n");
+        builder.append("isLocationOnly:").append(isLocationOnly());
+
+        final Optional<? extends INamedElement> optOriginalLocation = getOriginalLocation();
+        if (optOriginalLocation.isPresent())
         {
             builder.append("\n");
-            builder.append("Has original with fq name: ").append(original.getFqName());
-        }
-        if (isOriginal)
-        {
-            builder.append("\n");
-            builder.append("Is Original");
+            builder.append("originalFqName:").append(optOriginalLocation.get().getFqName());
         }
         return builder.toString();
     }

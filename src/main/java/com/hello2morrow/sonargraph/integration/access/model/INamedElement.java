@@ -27,11 +27,7 @@ public interface INamedElement extends IElement
 
     public String getFqName();
 
-    public int getLineNumber();
+    public boolean isLocationOnly();
 
-    public boolean isOriginal();
-
-    public Optional<? extends INamedElement> getOriginal();
-
-    public Optional<ISourceFile> getSourceFile();
+    public Optional<? extends INamedElement> getOriginalLocation();
 }

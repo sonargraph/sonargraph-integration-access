@@ -21,28 +21,34 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.StringUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl implements IDuplicateCodeBlockIssue
+public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImpl implements IDuplicateCodeBlockIssue
 {
     private static final long serialVersionUID = 3572308291532903170L;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;
 
     public DuplicateCodeBlockIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final boolean hasResolution, final List<IDuplicateCodeBlockOccurrence> occurrences)
+            final IIssueProvider provider, final List<IDuplicateCodeBlockOccurrence> occurrences)
     {
-        super(name, presentationName, description, issueType, provider, hasResolution, -1);
+        super(name, presentationName, description, issueType, provider);
         this.occurrences = occurrences;
     }
 
     @Override
-    public List<INamedElement> getAffectedElements()
+    public List<INamedElement> getNamedElements()
+    {
+        return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
+    }
+
+    @Override
+    public List<INamedElement> getAffectedNamedElements()
     {
         return Collections.unmodifiableList(occurrences.stream().map(o -> o.getSourceFile()).distinct().collect(Collectors.toList()));
     }
@@ -53,10 +59,9 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         final StringBuilder builder = new StringBuilder("Duplicate Code Block with ");
         builder.append(occurrences.size()).append(" occurrences, block size '").append(blockSize).append("', resolved '").append(hasResolution())
                 .append("'");
-        occurrences.forEach(occ -> builder.append("\n").append(StringUtility.INDENTATION).append(StringUtility.INDENTATION)
-                .append(StringUtility.INDENTATION).append("Occurrence in ").append(occ.getSourceFile().getPresentationName()).append(", start '")
-                .append(occ.getStartLine()).append("', block size '").append(occ.getBlockSize()).append("', tolerance '").append(occ.getTolerance())
-                .append("'"));
+        occurrences.forEach(occ -> builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                .append("Occurrence in ").append(occ.getSourceFile().getPresentationName()).append(", start '").append(occ.getStartLine())
+                .append("', block size '").append(occ.getBlockSize()).append("', tolerance '").append(occ.getTolerance()).append("'"));
         return builder.toString();
     }
 
@@ -66,9 +71,6 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         this.blockSize = blockSize;
     }
 
-    /* (non-Javadoc)
-     * @see com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue#getBlockSize()
-     */
     @Override
     public int getBlockSize()
     {
@@ -98,15 +100,7 @@ public final class DuplicateCodeBlockIssueImpl extends AbstractElementIssueImpl 
         {
             return true;
         }
-        if (obj == null)
-        {
-            return false;
-        }
         if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
         {
             return false;
         }

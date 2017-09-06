@@ -25,10 +25,10 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
-import com.hello2morrow.sonargraph.integration.access.foundation.OperationResult;
+import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
 public class GiganticReportReaderTest
@@ -41,8 +41,8 @@ public class GiganticReportReaderTest
     @Ignore
     public void processReport()
     {
-        final ISonargraphSystemController controller = new ControllerFactory().createController();
-        final OperationResult result = controller.loadSystemReport(new File("D:/08_test/Sonargraph.xml"));
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File("D:/08_test/Sonargraph.xml"));
         assertTrue(result.toString(), result.isSuccess());
         final ISystemInfoProcessor info = controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issues", 1061991, info.getIssues((final IIssue i) -> true).size());
