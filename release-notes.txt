@@ -1,0 +1,11 @@
+Sonargraph 8 Integration Access
+===============================
+
+3.1.2
+=====
+
+Improvements
+------------
+- Issues on directories are now accessible.
+- Issues on namespaces are mapped to directories where possible.
+- The created model now reflects the 'external' state of the elements.
