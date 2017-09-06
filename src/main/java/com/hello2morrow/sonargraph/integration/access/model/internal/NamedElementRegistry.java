@@ -24,15 +24,12 @@ import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 
-/**
- * Global map of elements of a Software system.
- */
-final class ElementRegistryImpl implements Serializable
+final class NamedElementRegistry implements Serializable
 {
     private static final long serialVersionUID = -947650961500421692L;
     private final Map<String, INamedElement> fqNameToElementMap = new HashMap<>();
 
-    ElementRegistryImpl()
+    NamedElementRegistry()
     {
         super();
     }

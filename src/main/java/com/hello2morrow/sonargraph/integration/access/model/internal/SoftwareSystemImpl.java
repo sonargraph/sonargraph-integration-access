@@ -28,8 +28,6 @@ import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -53,11 +51,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private static final long serialVersionUID = -4666348701032432246L;
     private final String systemId;
     private final String path;
-    private String baseDir;
     private final String version;
     private final String virtualModel;
     private final long timestamp;
     private int numberOfIssues = 0;
+    private String baseDir;
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
@@ -67,8 +65,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
     private final List<IMetricThreshold> thresholds = new ArrayList<>();
-    private final Map<IAnalyzer, HashMap<String, ICycleGroupIssue>> cycleGroups = new HashMap<>();
-    private final Map<String, IDuplicateCodeBlockIssue> duplicateCodeBlockIssueMap = new HashMap<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
     private final Map<NamedElementImpl, SourceFileImpl> namedElementToSourceFile = new HashMap<>();
@@ -77,7 +73,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
             final String path, final String version, final long timestamp, final String virtualModel)
     {
         super(kind, presentationKind, name, name, name, description, new MetaDataAccessImpl(path, systemId, version, timestamp),
-                new ElementRegistryImpl());
+                new NamedElementRegistry());
 
         assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'SoftwareSystem' must not be empty";
         assert path != null && path.length() > 0 : "Parameter 'path' of method 'SoftwareSystem' must not be empty";
@@ -266,46 +262,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<String, IFeature> getFeatures()
     {
         return Collections.unmodifiableMap(featuresMap);
-    }
-
-    public Map<String, ICycleGroupIssue> getCycleGroups(final String analyzerId)
-    {
-        assert analyzerId != null && analyzerId.length() > 0 : "Parameter 'analyzerId' of method 'getCycleGroups' must not be empty";
-        assert analyzerMap.containsKey(analyzerId) : "analyzerId '" + analyzerId + "' has not been added";
-        final IAnalyzer analyzer = analyzerMap.get(analyzerId);
-        assert cycleGroups.containsKey(analyzer) : "'" + analyzerId + "' has not been added for cycleGroups";
-        return Collections.unmodifiableMap(cycleGroups.get(analyzer));
-    }
-
-    public void addCycleGroup(final ICycleGroupIssue cycle)
-    {
-        assert cycle != null : "Parameter 'cycle' of method 'addCycleGroup' must not be null";
-
-        final HashMap<String, ICycleGroupIssue> cycleGroupMap;
-        final IAnalyzer analyzer = cycle.getAnalyzer();
-        assert analyzerMap.containsKey(analyzer.getName()) : "Analyzer '" + analyzer.getName() + "' has not been added";
-
-        if (cycleGroups.containsKey(analyzer))
-        {
-            cycleGroupMap = cycleGroups.get(analyzer);
-        }
-        else
-        {
-            cycleGroupMap = new HashMap<>();
-            cycleGroups.put(analyzer, cycleGroupMap);
-        }
-
-        assert !cycleGroupMap.containsKey(cycle.getName()) : "CycleGroup has already been added!";
-        cycleGroupMap.put(cycle.getName(), cycle);
-        addIssue(cycle);
-    }
-
-    public void addDuplicateCodeBlock(final IDuplicateCodeBlockIssue duplicate)
-    {
-        assert duplicate != null : "Parameter 'duplicate' of method 'addDuplicateCodeBlock' must not be null";
-        assert !duplicateCodeBlockIssueMap.containsKey(duplicate.getName()) : "Duplicate has already been added";
-        duplicateCodeBlockIssueMap.put(duplicate.getName(), duplicate);
-        addIssue(duplicate);
     }
 
     public void addResolution(final IResolution resolution)

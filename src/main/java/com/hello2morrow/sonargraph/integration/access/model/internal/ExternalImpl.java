@@ -32,7 +32,7 @@ public final class ExternalImpl extends LanguageBasedContainerImpl implements IP
     private final Set<ProgrammingElementImpl> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
 
     public ExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl,
+            final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
             final String language)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);

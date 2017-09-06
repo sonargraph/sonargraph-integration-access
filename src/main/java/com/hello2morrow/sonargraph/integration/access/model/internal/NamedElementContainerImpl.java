@@ -44,10 +44,10 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     private final Set<LogicalNamespaceImpl> logicalNamespaces = new TreeSet<>(new NamedElementComparator());
     private final Set<LogicalProgrammingElementImpl> logicalProgrammingElements = new TreeSet<>(new NamedElementComparator());
     private final MetaDataAccessImpl metaDataAccessImpl;
-    private final ElementRegistryImpl elementRegistryImpl;
+    private final NamedElementRegistry elementRegistryImpl;
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl)
+            final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl)
     {
         super(kind, presentationKind, name, presentationName, fqName, description);
         assert metaDataAccessImpl != null : "Parameter 'metaDataAccessImpl' of method 'NamedElementContainerImpl' must not be null";
@@ -61,7 +61,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         return metaDataAccessImpl;
     }
 
-    public final ElementRegistryImpl getElementRegistry()
+    public final NamedElementRegistry getElementRegistry()
     {
         return elementRegistryImpl;
     }

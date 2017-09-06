@@ -1016,7 +1016,7 @@ public final class XmlReportReader extends XmlAccess
             final DuplicateCodeBlockIssueImpl duplicate = new DuplicateCodeBlockIssueImpl(nextDuplicate.getFqName(), nextDuplicate.getName(),
                     nextDuplicate.getDescription(), issueType, issueProvider, occurrences);
             duplicate.setBlockSize(nextDuplicate.getBlockSize());
-            softwareSystem.addDuplicateCodeBlock(duplicate);
+            softwareSystem.addIssue(duplicate);
 
             globalXmlIdToIssueMap.put(nextDuplicate, duplicate);
         }
@@ -1048,7 +1048,7 @@ public final class XmlReportReader extends XmlAccess
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
                         : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, analyzer, cyclicElements);
 
-                softwareSystem.addCycleGroup(cycleGroup);
+                softwareSystem.addIssue(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
             }
         }

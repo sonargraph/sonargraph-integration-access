@@ -32,7 +32,7 @@ public abstract class LanguageBasedContainerImpl extends NamedElementContainerIm
 
     public LanguageBasedContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl,
-            final ElementRegistryImpl elementRegistryImpl, final String language)
+            final NamedElementRegistry elementRegistryImpl, final String language)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl);
         assert language != null : "Parameter 'language' of method 'LanguageBasedContainerImpl' must not be null";

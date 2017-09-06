@@ -34,7 +34,7 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
     private final ISourceFileLookup sourceFileLookup;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final MetaDataAccessImpl metaDataAccessImpl, final ElementRegistryImpl elementRegistryImpl,
+            final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
             final String language, final ISourceFileLookup sourceFileLookup)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
