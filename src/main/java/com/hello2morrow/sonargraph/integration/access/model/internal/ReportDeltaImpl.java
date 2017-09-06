@@ -205,7 +205,7 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         final StringBuilder builder = new StringBuilder();
 
-        if (baselineSystem.getSystemId().equals(currentSystem.getSystemId()) && baselineSystem.getPath().equals(currentSystem.getPath()))
+        if (baselineSystem.getSystemId().equals(currentSystem.getSystemId()))
         {
             builder.append("System info");
             addSystemInfo(builder, baselineSystem, false);
