@@ -214,6 +214,18 @@ public final class IssueDeltaImpl implements IIssueDelta
                 && improvedDuplicateCodeParticipation == null && worsenedDuplicateCodeParticipation == null;
     }
 
+    private void addAffectedNamedElementsInfo(final StringBuilder builder, final IIssue issue)
+    {
+        assert builder != null : "Parameter 'builder' of method 'addAffectedNamedElementsInfo' must not be null";
+        assert issue != null : "Parameter 'issue' of method 'addAffectedNamedElementsInfo' must not be null";
+
+        for (final INamedElement nextNamedElement : issue.getAffectedNamedElements())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
+                    .append(nextNamedElement.getFqName()).append(" [").append(nextNamedElement.getKind()).append("]");
+        }
+    }
+
     private void addIssuesInfo(final StringBuilder builder, final List<IIssue> issues)
     {
         assert builder != null : "Parameter 'builder' of method 'addIssuesInfo' must not be null";
@@ -222,11 +234,7 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final IIssue nextIssue : issues)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextIssue.getKey());
-            for (final INamedElement nextNamedElement : nextIssue.getAffectedNamedElements())
-            {
-                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION)
-                        .append(nextNamedElement.getFqName());
-            }
+            addAffectedNamedElementsInfo(builder, nextIssue);
         }
     }
 
@@ -255,9 +263,11 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final BaselineCurrent<IThresholdViolationIssue> next : improved)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
+            final IThresholdViolationIssue nextCurrent = next.getCurrent();
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
                     .append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
-                    .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
+                    .append(Utility.getRoundedValueAsString(nextCurrent.getMetricValue(), 2));
+            addAffectedNamedElementsInfo(builder, nextCurrent);
         }
 
         builder.append("\n").append(Utility.INDENTATION).append("Worsened metric values of threshold violations (").append(worsened.size())
@@ -265,9 +275,11 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final BaselineCurrent<IThresholdViolationIssue> next : worsened)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
+            final IThresholdViolationIssue nextCurrent = next.getCurrent();
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
                     .append(Utility.getRoundedValueAsString(nextBaseline.getMetricValue(), 2)).append("/")
-                    .append(Utility.getRoundedValueAsString(next.getCurrent().getMetricValue(), 2));
+                    .append(Utility.getRoundedValueAsString(nextCurrent.getMetricValue(), 2));
+            addAffectedNamedElementsInfo(builder, nextCurrent);
         }
 
         builder.append("\n").append(Utility.INDENTATION).append("Elements added to cycles (").append(addedToCycle.size()).append(")");
@@ -306,6 +318,15 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final Entry<String, BaselineCurrent<Integer>> nextEntry : changedDuplicateCodeBlockParticipation.entrySet())
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey());
+            final BaselineCurrent<Integer> nextValue = nextEntry.getValue();
+            if (nextValue.getBaseline() < nextValue.getCurrent())
+            {
+                builder.append(" [now participates]");
+            }
+            else
+            {
+                builder.append(" [no longer participates]");
+            }
         }
         if (improvedDuplicateCodeParticipation != null)
         {
@@ -313,7 +334,7 @@ public final class IssueDeltaImpl implements IIssueDelta
                     .append("Overall duplicate code participation improved - number of source files containing duplicate code (baseline/current): ")
                     .append(improvedDuplicateCodeParticipation.getBaseline()).append("/").append(improvedDuplicateCodeParticipation.getCurrent());
         }
-        else
+        else if (worsenedDuplicateCodeParticipation == null)
         {
             builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not improved");
         }
@@ -323,7 +344,7 @@ public final class IssueDeltaImpl implements IIssueDelta
                     .append("Overall duplicate code participation worsened - number of source files containing duplicate code (baseline/current): ")
                     .append(worsenedDuplicateCodeParticipation.getBaseline()).append("/").append(worsenedDuplicateCodeParticipation.getCurrent());
         }
-        else
+        else if (improvedDuplicateCodeParticipation == null)
         {
             builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not worsened");
         }
