@@ -313,40 +313,33 @@ public final class IssueDeltaImpl implements IIssueDelta
                     .append(nextBaselineCurrent.getCurrent());
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Elements with changed duplicate code block participation (")
+        builder.append("\n").append(Utility.INDENTATION).append("Elements with changed number of duplicate code block occurrences (")
                 .append(changedDuplicateCodeBlockParticipation.size()).append(")");
         for (final Entry<String, BaselineCurrent<Integer>> nextEntry : changedDuplicateCodeBlockParticipation.entrySet())
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextEntry.getKey());
             final BaselineCurrent<Integer> nextValue = nextEntry.getValue();
-            if (nextValue.getBaseline() < nextValue.getCurrent())
-            {
-                builder.append(" [now participates]");
-            }
-            else
-            {
-                builder.append(" [no longer participates]");
-            }
+            builder.append(" (baseline/current): ").append(nextValue.getBaseline()).append("/").append(nextValue.getCurrent());
         }
         if (improvedDuplicateCodeParticipation != null)
         {
             builder.append("\n").append(Utility.INDENTATION)
-                    .append("Overall duplicate code participation improved - number of source files containing duplicate code (baseline/current): ")
+                    .append("Overall number of duplicate code block occurrences improved (baseline/current): ")
                     .append(improvedDuplicateCodeParticipation.getBaseline()).append("/").append(improvedDuplicateCodeParticipation.getCurrent());
         }
         else if (worsenedDuplicateCodeParticipation == null)
         {
-            builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not improved");
+            builder.append("\n").append(Utility.INDENTATION).append("Overall number of duplicate code block occurences not improved");
         }
         if (worsenedDuplicateCodeParticipation != null)
         {
             builder.append("\n").append(Utility.INDENTATION)
-                    .append("Overall duplicate code participation worsened - number of source files containing duplicate code (baseline/current): ")
+                    .append("Overall number of duplicate code block occurrences worsened (baseline/current): ")
                     .append(worsenedDuplicateCodeParticipation.getBaseline()).append("/").append(worsenedDuplicateCodeParticipation.getCurrent());
         }
         else if (improvedDuplicateCodeParticipation == null)
         {
-            builder.append("\n").append(Utility.INDENTATION).append("Overall duplicate code participation not worsened");
+            builder.append("\n").append(Utility.INDENTATION).append("Overall number of duplicate code block occurences not worsened");
         }
 
         return builder.toString();
