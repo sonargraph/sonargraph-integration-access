@@ -10,13 +10,6 @@
 	<xs:import schemaLocation="./exportMetaData.xsd"
 		namespace="http://www.hello2morrow.com/sonargraph/core/export" />
 
-	<xs:complexType name="xsdFeatures">
-		<xs:sequence>
-			<xs:element name="feature" type="xsdFeature" minOccurs="0"
-				maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
-
 	<xs:complexType name="xsdFeature">
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="presentationName" type="xs:string"
@@ -24,9 +17,9 @@
 		<xs:attribute name="licensed" type="xs:boolean" default="false" />
 	</xs:complexType>
 
-	<xs:complexType name="xsdAnalyzers">
+	<xs:complexType name="xsdFeatures">
 		<xs:sequence>
-			<xs:element name="analyzer" type="xsdAnalyzer" minOccurs="0"
+			<xs:element name="feature" type="xsdFeature" minOccurs="0"
 				maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
@@ -39,6 +32,34 @@
 					default="false" />
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdAnalyzers">
+		<xs:sequence>
+			<xs:element name="analyzer" type="xsdAnalyzer" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdDuplicateCodeConfiguration">
+		<xs:sequence>
+			<xs:element name="entry" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdScriptRunnerConfiguration">
+        <xs:sequence>
+            <xs:element name="entry" type="xs:string" minOccurs="0"
+                maxOccurs="unbounded" />
+        </xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdArchitectureCheckConfiguration">
+        <xs:sequence>
+            <xs:element name="entry" type="xs:string" minOccurs="0"
+                maxOccurs="unbounded" />
+        </xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="xsdNamedElement">
@@ -457,6 +478,12 @@
 			<xs:element name="features" type="xsdFeatures" minOccurs="1"
 				maxOccurs="1" />
 			<xs:element name="analyzers" type="xsdAnalyzers"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="duplicateCodeConfiguration" type="xsdDuplicateCodeConfiguration"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="scriptRunnerConfiguration" type="xsdScriptRunnerConfiguration"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="architectureCheckConfiguration" type="xsdArchitectureCheckConfiguration"
 				minOccurs="1" maxOccurs="1" />
 			<xs:element name="metricThresholds" type="xsdMetricThresholds"
 				minOccurs="0" maxOccurs="1" />
