@@ -87,12 +87,14 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileI
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdArchitectureCheckConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeBlockOccurrence;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
@@ -124,6 +126,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhys
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdScriptRunnerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
@@ -292,6 +295,9 @@ public final class XmlReportReader extends XmlAccess
 
         processAnalyzers(softwareSystemImpl, report);
         processFeatures(softwareSystemImpl, report);
+        processDuplicateCodeConfiguration(softwareSystemImpl, report);
+        processScriptRunnerConfiguration(softwareSystemImpl, report);
+        processArchitectureCheckConfiguration(softwareSystemImpl, report);
 
         final XsdWorkspace xsdWorkspace = report.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -603,6 +609,51 @@ public final class XmlReportReader extends XmlAccess
         for (final XsdFeature next : report.getFeatures().getFeature())
         {
             softwareSystem.addFeature(new FeatureImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
+        }
+    }
+
+    private static void processDuplicateCodeConfiguration(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processDuplicateCodeConfiguration' must not be null";
+        assert report != null : "Parameter 'report' of method 'processDuplicateCodeConfiguration' must not be null";
+
+        final XsdDuplicateCodeConfiguration duplicateCodeConfiguration = report.getDuplicateCodeConfiguration();
+        if (duplicateCodeConfiguration != null)
+        {
+            for (final String next : duplicateCodeConfiguration.getEntry())
+            {
+                softwareSystem.addDuplicateCodeConfigurationEntry(next);
+            }
+        }
+    }
+
+    private static void processScriptRunnerConfiguration(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processScriptRunnerConfiguration' must not be null";
+        assert report != null : "Parameter 'report' of method 'processScriptRunnerConfiguration' must not be null";
+
+        final XsdScriptRunnerConfiguration scriptRunnerConfiguration = report.getScriptRunnerConfiguration();
+        if (scriptRunnerConfiguration != null)
+        {
+            for (final String next : scriptRunnerConfiguration.getEntry())
+            {
+                softwareSystem.addScriptRunnerConfigurationEntry(next);
+            }
+        }
+    }
+
+    private static void processArchitectureCheckConfiguration(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processArchitectureCheckConfiguration' must not be null";
+        assert report != null : "Parameter 'report' of method 'processArchitectureCheckConfiguration' must not be null";
+
+        final XsdArchitectureCheckConfiguration architectureCheckConfiguration = report.getArchitectureCheckConfiguration();
+        if (architectureCheckConfiguration != null)
+        {
+            for (final String next : architectureCheckConfiguration.getEntry())
+            {
+                softwareSystem.addArchitectureCheckConfigurationEntry(next);
+            }
         }
     }
 

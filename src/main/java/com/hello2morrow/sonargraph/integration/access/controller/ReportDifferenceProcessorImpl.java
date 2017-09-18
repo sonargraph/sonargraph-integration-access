@@ -588,12 +588,57 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         currentAsSet.forEach(n -> reportDeltaImpl.addedFeature(n));
     }
 
-    private void processThreshols(final List<IMetricThreshold> baseline, final List<IMetricThreshold> current, final ReportDeltaImpl reportDeltaImpl)
+    private void processDuplicateCodeConfiguration(final List<String> baseline, final List<String> current, final ReportDeltaImpl reportDeltaImpl)
     {
-        assert baseline != null : "Parameter 'baseline' of method 'processThreshols' must not be null";
-        assert current != null : "Parameter 'current' of method 'processThreshols' must not be null";
+        assert baseline != null : "Parameter 'baseline' of method 'processDuplicateCodeConfiguration' must not be null";
+        assert current != null : "Parameter 'current' of method 'processDuplicateCodeConfiguration' must not be null";
         assert baseline != current : "Same instances";
-        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processThreshols' must not be null";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processDuplicateCodeConfiguration' must not be null";
+
+        final Set<String> baselineAsSet = new HashSet<>(baseline);
+        final Set<String> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedDuplicateCodeConfigurationEntry(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedDuplicateCodeConfigurationEntry(n));
+    }
+
+    private void processScriptRunnerConfiguration(final List<String> baseline, final List<String> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processScriptRunnerConfiguration' must not be null";
+        assert current != null : "Parameter 'current' of method 'processScriptRunnerConfiguration' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processScriptRunnerConfiguration' must not be null";
+
+        final Set<String> baselineAsSet = new HashSet<>(baseline);
+        final Set<String> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedScriptRunnerConfigurationEntry(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedScriptRunnerConfigurationEntry(n));
+    }
+
+    private void processArchitectureCheckConfiguration(final List<String> baseline, final List<String> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processArchitectureCheckConfiguration' must not be null";
+        assert current != null : "Parameter 'current' of method 'processArchitectureCheckConfiguration' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processArchitectureCheckConfiguration' must not be null";
+
+        final Set<String> baselineAsSet = new HashSet<>(baseline);
+        final Set<String> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedArchitectureCheckConfigurationEntry(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedArchitectureCheckConfigurationEntry(n));
+    }
+
+    private void processThresholds(final List<IMetricThreshold> baseline, final List<IMetricThreshold> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processThresholds' must not be null";
+        assert current != null : "Parameter 'current' of method 'processThresholds' must not be null";
+        assert baseline != current : "Same instances";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processThresholds' must not be null";
 
         final Map<IMetricThreshold, IMetricThreshold> currentAsMap = current.stream().collect(Collectors.toMap(next -> next, next -> next));
 
@@ -631,7 +676,13 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         processFeatures(baselineSystemInfoProcessor.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
         processAnalyzers(baselineSystemInfoProcessor.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
-        processThreshols(baselineSystemInfoProcessor.getMetricThresholds(), systemInfoProcessor.getMetricThresholds(), reportDeltaImpl);
+        processDuplicateCodeConfiguration(baselineSystemInfoProcessor.getDuplicateCodeConfigurationEntries(),
+                systemInfoProcessor.getDuplicateCodeConfigurationEntries(), reportDeltaImpl);
+        processScriptRunnerConfiguration(baselineSystemInfoProcessor.getScriptRunnerConfigurationEntries(),
+                systemInfoProcessor.getScriptRunnerConfigurationEntries(), reportDeltaImpl);
+        processArchitectureCheckConfiguration(baselineSystemInfoProcessor.getArchitectureCheckConfigurationEntries(),
+                systemInfoProcessor.getArchitectureCheckConfigurationEntries(), reportDeltaImpl);
+        processThresholds(baselineSystemInfoProcessor.getMetricThresholds(), systemInfoProcessor.getMetricThresholds(), reportDeltaImpl);
 
         reportDeltaImpl.setWorkspaceDelta(createWorkspaceDelta(systemInfoProcessor));
         reportDeltaImpl.setIssuesDelta(createIssueDelta(systemInfoProcessor));

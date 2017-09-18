@@ -39,6 +39,12 @@ public final class ReportDeltaImpl implements IReportDelta
     private final List<IFeature> removedFeatures = new ArrayList<>();
     private final List<IAnalyzer> addedAnalyzers = new ArrayList<>();
     private final List<IAnalyzer> removedAnalyzers = new ArrayList<>();
+    private final List<String> removedDuplicateCodeConfigurationEntries = new ArrayList<>();
+    private final List<String> addedDuplicateCodeConfigurationEntries = new ArrayList<>();
+    private final List<String> removedScriptRunnerConfigurationEntries = new ArrayList<>();
+    private final List<String> addedScriptRunnerConfigurationEntries = new ArrayList<>();
+    private final List<String> removedArchitectureCheckConfigurationEntries = new ArrayList<>();
+    private final List<String> addedArchitectureCheckConfigurationEntries = new ArrayList<>();
     private final List<IMetricThreshold> addedMetricThresholds = new ArrayList<>();
     private final List<IMetricThreshold> removedMetricThresholds = new ArrayList<>();
     private final List<BaselineCurrent<IMetricThreshold>> changedBoundariesMetricThresholds = new ArrayList<>();
@@ -89,6 +95,42 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         assert added != null : "Parameter 'added' of method 'addedAnalyzer' must not be null";
         addedAnalyzers.add(added);
+    }
+
+    public void removedDuplicateCodeConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'removedDuplicateCodeConfigurationEntry' must not be empty";
+        removedDuplicateCodeConfigurationEntries.add(entry);
+    }
+
+    public void addedDuplicateCodeConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addedDuplicateCodeConfigurationEntry' must not be empty";
+        addedDuplicateCodeConfigurationEntries.add(entry);
+    }
+
+    public void removedScriptRunnerConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'removedScriptRunnerConfigurationEntry' must not be empty";
+        removedScriptRunnerConfigurationEntries.add(entry);
+    }
+
+    public void addedScriptRunnerConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addedScriptRunnerConfigurationEntry' must not be empty";
+        addedScriptRunnerConfigurationEntries.add(entry);
+    }
+
+    public void removedArchitectureCheckConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'removedArchitectureCheckConfigurationEntry' must not be empty";
+        removedArchitectureCheckConfigurationEntries.add(entry);
+    }
+
+    public void addedArchitectureCheckConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addedArchitectureCheckConfigurationEntry' must not be empty";
+        addedArchitectureCheckConfigurationEntries.add(entry);
     }
 
     public void changedMetricThresholdBoundaries(final BaselineCurrent<IMetricThreshold> baselineCurrent)
@@ -182,6 +224,9 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && removedAnalyzers.isEmpty()
                 && addedMetricThresholds.isEmpty() && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
+                && addedDuplicateCodeConfigurationEntries.isEmpty() && removedDuplicateCodeConfigurationEntries.isEmpty()
+                && addedScriptRunnerConfigurationEntries.isEmpty() && removedScriptRunnerConfigurationEntries.isEmpty()
+                && addedArchitectureCheckConfigurationEntries.isEmpty() && removedArchitectureCheckConfigurationEntries.isEmpty()
                 && getWorkspaceDelta().isEmpty() && getIssueDelta().isEmpty();
     }
 
@@ -247,44 +292,85 @@ public final class ReportDeltaImpl implements IReportDelta
 
         builder.append("\nSystem delta");
 
+        //Features
         builder.append("\n").append(Utility.INDENTATION).append("Added features (").append(addedFeatures.size()).append(")");
         for (final IFeature next : addedFeatures)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
-
         builder.append("\n").append(Utility.INDENTATION).append("Removed features (").append(removedFeatures.size()).append(")");
         for (final IFeature next : removedFeatures)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
+        //Analyzers
         builder.append("\n").append(Utility.INDENTATION).append("Added analyzers (").append(addedAnalyzers.size()).append(")");
         for (final IAnalyzer next : addedAnalyzers)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
-
         builder.append("\n").append(Utility.INDENTATION).append("Removed analyzers (").append(removedAnalyzers.size()).append(")");
         for (final IAnalyzer next : removedAnalyzers)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
         }
 
+        //Duplicate code configuration
+        builder.append("\n").append(Utility.INDENTATION).append("Added duplicate code configuration entries (")
+                .append(addedDuplicateCodeConfigurationEntries.size()).append(")");
+        for (final String next : addedDuplicateCodeConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+        builder.append("\n").append(Utility.INDENTATION).append("Removed duplicate code configuration entries (")
+                .append(removedDuplicateCodeConfigurationEntries.size()).append(")");
+        for (final String next : removedDuplicateCodeConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+
+        //Script runner configuration
+        builder.append("\n").append(Utility.INDENTATION).append("Added script runner configuration entries (")
+                .append(addedScriptRunnerConfigurationEntries.size()).append(")");
+        for (final String next : addedScriptRunnerConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+        builder.append("\n").append(Utility.INDENTATION).append("Removed script runner configuration entries (")
+                .append(removedScriptRunnerConfigurationEntries.size()).append(")");
+        for (final String next : removedScriptRunnerConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+
+        //Architecture check configuration
+        builder.append("\n").append(Utility.INDENTATION).append("Added architecture check configuration entries (")
+                .append(addedArchitectureCheckConfigurationEntries.size()).append(")");
+        for (final String next : addedArchitectureCheckConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+        builder.append("\n").append(Utility.INDENTATION).append("Removed architecture check configuration entries (")
+                .append(removedArchitectureCheckConfigurationEntries.size()).append(")");
+        for (final String next : removedArchitectureCheckConfigurationEntries)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+        }
+
+        //Metric thresholds
         builder.append("\n").append(Utility.INDENTATION).append("Added metric thresholds (").append(addedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : addedMetricThresholds)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
-
         builder.append("\n").append(Utility.INDENTATION).append("Removed metric thresholds (").append(removedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : removedMetricThresholds)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
                     .append(next.getMetricLevel().getName());
         }
-
         builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
                 .append(changedBoundariesMetricThresholds.size()).append(")");
         for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)

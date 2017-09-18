@@ -1,6 +1,16 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.1.4
+=====
+
+Improvements
+------------
+- Corrected some diff messages.
+- Report changes in duplicate code, script runner and architecture check configuration.
+- Report the resolution type status (fix, ignore, ...) of an added/removed issue. 
+
+
 3.1.3
 =====
 

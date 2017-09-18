@@ -50,13 +50,19 @@ public interface ISystemInfoProcessor extends IInfoProcessor
 
     public List<IMetricId> getMetricIds();
 
+    public List<IFeature> getFeatures();
+
     public List<IAnalyzer> getAnalyzers();
+
+    public List<String> getDuplicateCodeConfigurationEntries();
+
+    public List<String> getScriptRunnerConfigurationEntries();
+
+    public List<String> getArchitectureCheckConfigurationEntries();
 
     public List<IMetricCategory> getMetricCategories();
 
     public List<IMetricProvider> getMetricProviders();
-
-    public List<IFeature> getFeatures();
 
     public boolean hasIssue(Predicate<IIssue> filter);
 

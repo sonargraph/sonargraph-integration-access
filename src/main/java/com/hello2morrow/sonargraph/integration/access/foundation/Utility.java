@@ -70,39 +70,6 @@ public final class Utility
         return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault()).format(date);
     }
 
-    public static String convertMixedCaseStringToPresentationName(final String input)
-    {
-        assert input != null : "'input' must not be null";
-
-        if (input.isEmpty())
-        {
-            return input;
-        }
-
-        final StringBuilder builder = new StringBuilder();
-
-        char previousChar = input.charAt(0);
-        builder.append(Character.toUpperCase(previousChar));
-
-        for (int i = 1; i < input.length(); i++)
-        {
-            final char nextChar = input.charAt(i);
-            if (Character.isUpperCase(nextChar) || Character.isDigit(nextChar) && !Character.isDigit(previousChar) || Character.isDigit(previousChar)
-                    && !Character.isDigit(nextChar))
-            {
-                builder.append(' ');
-                builder.append(Character.toUpperCase(nextChar));
-            }
-            else
-            {
-                builder.append(nextChar);
-            }
-
-            previousChar = nextChar;
-        }
-        return builder.toString();
-    }
-
     public static String convertConstantNameToMixedCaseString(final String input, final boolean capitalizeFirstLetter, final boolean insertSpace)
     {
         assert input != null : "'input' must not be null";

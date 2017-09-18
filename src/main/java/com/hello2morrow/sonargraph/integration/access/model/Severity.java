@@ -17,10 +17,25 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public enum Severity
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+
+public enum Severity implements IEnumeration
 {
     ERROR,
     WARNING,
     INFO,
     NONE;
+
+    @Override
+    public String getStandardName()
+    {
+        return Utility.convertConstantNameToStandardName(name());
+    }
+
+    @Override
+    public String getPresentationName()
+    {
+        return Utility.convertConstantNameToPresentationName(name());
+    }
 }

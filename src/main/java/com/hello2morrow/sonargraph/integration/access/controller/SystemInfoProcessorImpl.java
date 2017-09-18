@@ -185,6 +185,24 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     }
 
     @Override
+    public List<String> getDuplicateCodeConfigurationEntries()
+    {
+        return softwareSystem.getDuplicateCodeConfigurationEntries();
+    }
+
+    @Override
+    public List<String> getScriptRunnerConfigurationEntries()
+    {
+        return softwareSystem.getScriptRunnerConfigurationEntries();
+    }
+
+    @Override
+    public List<String> getArchitectureCheckConfigurationEntries()
+    {
+        return softwareSystem.getArchitectureCheckConfigurationEntries();
+    }
+
+    @Override
     public List<IMetricCategory> getMetricCategories()
     {
         return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getMetricCategories().values()));

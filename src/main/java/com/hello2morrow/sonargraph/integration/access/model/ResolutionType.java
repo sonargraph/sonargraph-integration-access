@@ -17,11 +17,26 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public enum ResolutionType
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+
+public enum ResolutionType implements IEnumeration
 {
     TODO,
     IGNORE,
     REFACTORING,
     FIX,
     NONE;
+
+    @Override
+    public String getStandardName()
+    {
+        return Utility.convertConstantNameToStandardName(name());
+    }
+
+    @Override
+    public String getPresentationName()
+    {
+        return Utility.convertConstantNameToPresentationName(name());
+    }
 }

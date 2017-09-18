@@ -32,17 +32,18 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class IssueDeltaImpl implements IIssueDelta
 {
     private static final long serialVersionUID = -3056194877234260699L;
     private static final String BASELINE_CURRENT = " (baseline/current): ";
 
-    private final List<IIssue> added = new ArrayList<>();
-    private final List<IIssue> removed = new ArrayList<>();
-    private final List<BaselineCurrent<IIssue>> changedResolutionType = new ArrayList<>();
-    private final List<BaselineCurrent<IThresholdViolationIssue>> improved = new ArrayList<>();
-    private final List<BaselineCurrent<IThresholdViolationIssue>> worsened = new ArrayList<>();
+    private final List<IIssue> addedIssues = new ArrayList<>();
+    private final List<IIssue> removedIssues = new ArrayList<>();
+    private final List<BaselineCurrent<IIssue>> issuesWithChangedResolutionType = new ArrayList<>();
+    private final List<BaselineCurrent<IThresholdViolationIssue>> improvedThresholdViolationIssues = new ArrayList<>();
+    private final List<BaselineCurrent<IThresholdViolationIssue>> worsenedThresholdViolationIssues = new ArrayList<>();
     private final Map<String, String> addedToCycle = new TreeMap<>();
     private final Map<String, String> removedFromCycle = new TreeMap<>();
     private final Map<String, BaselineCurrent<Integer>> improvedCycleParticipation = new TreeMap<>();
@@ -59,31 +60,31 @@ public final class IssueDeltaImpl implements IIssueDelta
     public void added(final IIssue issue)
     {
         assert issue != null : "Parameter 'issue' of method 'added' must not be null";
-        added.add(issue);
+        addedIssues.add(issue);
     }
 
     public void removed(final IIssue issue)
     {
         assert issue != null : "Parameter 'issue' of method 'removed' must not be null";
-        removed.add(issue);
+        removedIssues.add(issue);
     }
 
     public void changedResolutionType(final BaselineCurrent<IIssue> baselineCurrent)
     {
         assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'changedResolutionType' must not be null";
-        changedResolutionType.add(baselineCurrent);
+        issuesWithChangedResolutionType.add(baselineCurrent);
     }
 
     public void improved(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
     {
         assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'improved' must not be null";
-        improved.add(baselineCurrent);
+        improvedThresholdViolationIssues.add(baselineCurrent);
     }
 
     public void worsened(final BaselineCurrent<IThresholdViolationIssue> baselineCurrent)
     {
         assert baselineCurrent != null : "Parameter 'baselineCurrent' of method 'worsened' must not be null";
-        worsened.add(baselineCurrent);
+        worsenedThresholdViolationIssues.add(baselineCurrent);
     }
 
     public void addedToCycle(final String namedElementFqName, final String cycleInfo)
@@ -136,31 +137,31 @@ public final class IssueDeltaImpl implements IIssueDelta
     @Override
     public List<IIssue> getAdded()
     {
-        return Collections.unmodifiableList(added);
+        return Collections.unmodifiableList(addedIssues);
     }
 
     @Override
     public List<IIssue> getRemoved()
     {
-        return Collections.unmodifiableList(removed);
+        return Collections.unmodifiableList(removedIssues);
     }
 
     @Override
     public List<BaselineCurrent<IIssue>> getChangedResolutionType()
     {
-        return Collections.unmodifiableList(changedResolutionType);
+        return Collections.unmodifiableList(issuesWithChangedResolutionType);
     }
 
     @Override
     public List<BaselineCurrent<IThresholdViolationIssue>> getWorsenedThresholdViolation()
     {
-        return Collections.unmodifiableList(worsened);
+        return Collections.unmodifiableList(worsenedThresholdViolationIssues);
     }
 
     @Override
     public List<BaselineCurrent<IThresholdViolationIssue>> getImprovedThresholdViolation()
     {
-        return Collections.unmodifiableList(improved);
+        return Collections.unmodifiableList(improvedThresholdViolationIssues);
     }
 
     @Override
@@ -208,10 +209,11 @@ public final class IssueDeltaImpl implements IIssueDelta
     @Override
     public boolean isEmpty()
     {
-        return added.isEmpty() && removed.isEmpty() && changedResolutionType.isEmpty() && improved.isEmpty() && worsened.isEmpty()
-                && addedToCycle.isEmpty() && removedFromCycle.isEmpty() && improvedCycleParticipation.isEmpty()
-                && worsenedCycleParticipation.isEmpty() && changedDuplicateCodeBlockParticipation.isEmpty()
-                && improvedDuplicateCodeParticipation == null && worsenedDuplicateCodeParticipation == null;
+        return addedIssues.isEmpty() && removedIssues.isEmpty() && issuesWithChangedResolutionType.isEmpty()
+                && improvedThresholdViolationIssues.isEmpty() && worsenedThresholdViolationIssues.isEmpty() && addedToCycle.isEmpty()
+                && removedFromCycle.isEmpty() && improvedCycleParticipation.isEmpty() && worsenedCycleParticipation.isEmpty()
+                && changedDuplicateCodeBlockParticipation.isEmpty() && improvedDuplicateCodeParticipation == null
+                && worsenedDuplicateCodeParticipation == null;
     }
 
     private void addAffectedNamedElementsInfo(final StringBuilder builder, final IIssue issue)
@@ -234,6 +236,11 @@ public final class IssueDeltaImpl implements IIssueDelta
         for (final IIssue nextIssue : issues)
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextIssue.getKey());
+            final ResolutionType nextResolutionType = nextIssue.getResolutionType();
+            if (!ResolutionType.NONE.equals(nextResolutionType))
+            {
+                builder.append(" [").append(nextResolutionType.getPresentationName()).append("]");
+            }
             addAffectedNamedElementsInfo(builder, nextIssue);
         }
     }
@@ -243,24 +250,25 @@ public final class IssueDeltaImpl implements IIssueDelta
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("\n").append(Utility.INDENTATION).append("Added issues (").append(added.size()).append(")");
-        addIssuesInfo(builder, added);
+        builder.append("\n").append(Utility.INDENTATION).append("Added issues (").append(addedIssues.size()).append(")");
+        addIssuesInfo(builder, addedIssues);
 
-        builder.append("\n").append(Utility.INDENTATION).append("Removed issues (").append(removed.size()).append(")");
-        addIssuesInfo(builder, removed);
+        builder.append("\n").append(Utility.INDENTATION).append("Removed issues (").append(removedIssues.size()).append(")");
+        addIssuesInfo(builder, removedIssues);
 
-        builder.append("\n").append(Utility.INDENTATION).append("Issues with changed resolution type (").append(changedResolutionType.size())
-                .append(")");
-        for (final BaselineCurrent<IIssue> next : changedResolutionType)
+        builder.append("\n").append(Utility.INDENTATION).append("Issues with changed resolution type (")
+                .append(issuesWithChangedResolutionType.size()).append(")");
+        for (final BaselineCurrent<IIssue> next : issuesWithChangedResolutionType)
         {
             final IIssue nextBaseline = next.getBaseline();
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(nextBaseline.getKey()).append(BASELINE_CURRENT)
-                    .append(nextBaseline.getResolutionType()).append("/").append(next.getCurrent().getResolutionType());
+                    .append(nextBaseline.getResolutionType().getPresentationName()).append("/")
+                    .append(next.getCurrent().getResolutionType().getPresentationName());
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Improved metric values of threshold violations (").append(improved.size())
-                .append(")");
-        for (final BaselineCurrent<IThresholdViolationIssue> next : improved)
+        builder.append("\n").append(Utility.INDENTATION).append("Improved metric values of threshold violations (")
+                .append(improvedThresholdViolationIssues.size()).append(")");
+        for (final BaselineCurrent<IThresholdViolationIssue> next : improvedThresholdViolationIssues)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
             final IThresholdViolationIssue nextCurrent = next.getCurrent();
@@ -270,9 +278,9 @@ public final class IssueDeltaImpl implements IIssueDelta
             addAffectedNamedElementsInfo(builder, nextCurrent);
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Worsened metric values of threshold violations (").append(worsened.size())
-                .append(")");
-        for (final BaselineCurrent<IThresholdViolationIssue> next : worsened)
+        builder.append("\n").append(Utility.INDENTATION).append("Worsened metric values of threshold violations (")
+                .append(worsenedThresholdViolationIssues.size()).append(")");
+        for (final BaselineCurrent<IThresholdViolationIssue> next : worsenedThresholdViolationIssues)
         {
             final IThresholdViolationIssue nextBaseline = next.getBaseline();
             final IThresholdViolationIssue nextCurrent = next.getCurrent();

@@ -64,6 +64,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
+    private final List<String> duplicateCodeConfigurationEntries = new ArrayList<>();
+    private final List<String> scriptRunnerConfigurationEntries = new ArrayList<>();
+    private final List<String> architectureCheckConfigurationEntries = new ArrayList<>();
     private final List<IMetricThreshold> thresholds = new ArrayList<>();
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
@@ -262,6 +265,39 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<String, IFeature> getFeatures()
     {
         return Collections.unmodifiableMap(featuresMap);
+    }
+
+    public void addDuplicateCodeConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addDuplicateCodeConfigurationEntry' must not be empty";
+        duplicateCodeConfigurationEntries.add(entry);
+    }
+
+    public List<String> getDuplicateCodeConfigurationEntries()
+    {
+        return Collections.unmodifiableList(duplicateCodeConfigurationEntries);
+    }
+
+    public void addScriptRunnerConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addScriptRunnerConfigurationEntry' must not be empty";
+        scriptRunnerConfigurationEntries.add(entry);
+    }
+
+    public List<String> getScriptRunnerConfigurationEntries()
+    {
+        return Collections.unmodifiableList(scriptRunnerConfigurationEntries);
+    }
+
+    public void addArchitectureCheckConfigurationEntry(final String entry)
+    {
+        assert entry != null && entry.length() > 0 : "Parameter 'entry' of method 'addArchitectureCheckConfigurationEntry' must not be empty";
+        architectureCheckConfigurationEntries.add(entry);
+    }
+
+    public List<String> getArchitectureCheckConfigurationEntries()
+    {
+        return Collections.unmodifiableList(architectureCheckConfigurationEntries);
     }
 
     public void addResolution(final IResolution resolution)
