@@ -207,10 +207,16 @@ public final class Utility
     public static String getRoundedValueAsString(final Number number, final int decimals)
     {
         assert number != null : "Parameter 'number' of method 'getRoundedValueAsString' must not be null";
-        if (number instanceof Double || number instanceof Float)
+
+        String rep = Double.toString(round(number.doubleValue(), decimals));
+        if (rep.endsWith(".0") || rep.endsWith(",0"))
         {
-            return Double.toString(round(number.doubleValue(), decimals));
+            rep = rep.substring(0, rep.length() - 2);
         }
-        return number.toString();
+        else if (rep.endsWith(".00") || rep.endsWith(",00"))
+        {
+            rep = rep.substring(0, rep.length() - 3);
+        }
+        return rep;
     }
 }
