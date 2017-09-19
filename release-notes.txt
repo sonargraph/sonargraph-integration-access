@@ -1,6 +1,14 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.1.5
+=====
+
+Improvements
+------------
+- Diff now uses rounded values.
+
+
 3.1.4
 =====
 
