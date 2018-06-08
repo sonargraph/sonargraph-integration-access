@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="xsdInclude">
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="isStrong" type="xs:boolean" default="false"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="xsdConnection">
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="viaParentConnector" type="xs:string"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="xsdExclude">
+      <xs:restriction base="xs:string" />
+    </xs:simpleType>
+
+    <xs:simpleType name="xsdIncludedConnector">
+      <xs:restriction base="xs:string" />
+    </xs:simpleType>
+
+    <xs:simpleType name="xsdExport">
+      <xs:restriction base="xs:string" />
+    </xs:simpleType>
+
+    <xs:simpleType name="xsdStereotype">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="PUBLIC"/>
+        <xs:enumeration value="HIDDEN"/>
+        <xs:enumeration value="LOCAL"/>
+        <xs:enumeration value="EXPOSED"/>
+        <xs:enumeration value="OPTIONAL"/>
+        <xs:enumeration value="DEPRECATED"/>
+        <xs:enumeration value="UNRESTRICTED"/>
+        <xs:enumeration value="RELAXED"/>
+        <xs:enumeration value="STRICT"/>
+      </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="xsdDependencyType">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="CALL"/>
+        <xs:enumeration value="EXTENDS"/>
+        <xs:enumeration value="IMPLEMENTS"/>
+        <xs:enumeration value="READ"/>
+        <xs:enumeration value="WRITE"/>
+        <xs:enumeration value="USES"/>
+        <xs:enumeration value="NEW"/>
+      </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="xsdDependencyRestrictions">
+      <xs:sequence>
+        <xs:element name="allowedDependencyType" type="xsdDependencyType" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdInterface">
+      <xs:sequence>
+        <xs:element name="include" type="xsdInclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="exclude" type="xsdExclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="export" type="xsdExport" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="dependencyRestrictions" type="xsdDependencyRestrictions" maxOccurs="1" minOccurs="0"/>        
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="isOptional" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="xsdConnector">
+      <xs:sequence>
+        <xs:element name="include" type="xsdInclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="exclude" type="xsdExclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="includedConnector" type="xsdIncludedConnector" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="connectTo" type="xsdConnection" maxOccurs="unbounded" minOccurs="0"/>        
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="isOptional" type="xs:boolean" default="false"/>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdArtifact">   
+      <xs:sequence>
+        <xs:element name="stereotype" type="xsdStereotype" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="include" type="xsdInclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="exclude" type="xsdExclude" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="artifact" type="xsdArtifact" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="interface" type="xsdInterface" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="connector" type="xsdConnector" maxOccurs="unbounded" minOccurs="0"/>        
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="architecture">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="artifact" type="xsdArtifact" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="model" type="xs:string" use="required"/>
+      </xs:complexType>
+    </xs:element>
+
+</xs:schema>

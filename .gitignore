@@ -7,3 +7,4 @@
 /classes/
 /target/
 *_access*.log
+*.DS_Store

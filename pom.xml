@@ -49,6 +49,7 @@
         <version>0.12.3</version>
         <executions>
           <execution>
+            <id>report</id>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -57,6 +58,20 @@
                 <include>com/hello2morrow/sonargraph/integration/access/persistence/report/report.xsd</include>
               </schemaIncludes> 
               <generatePackage>com.hello2morrow.sonargraph.integration.access.persistence.report</generatePackage>
+              <generateDirectory>${project.build.directory}/generated-sources/report</generateDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>architecture</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>com/hello2morrow/sonargraph/integration/architecture/persistence/architecture.xsd</include>
+              </schemaIncludes>
+              <generatePackage>com.hello2morrow.sonargraph.integration.architecture.persistence</generatePackage>
+              <generateDirectory>${project.build.directory}/generated-sources/architecture</generateDirectory>
             </configuration>
           </execution>
         </executions>
