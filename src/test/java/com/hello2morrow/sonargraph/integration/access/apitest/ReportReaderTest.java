@@ -38,7 +38,6 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
@@ -47,7 +46,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-public class ReportReaderTest
+public final class ReportReaderTest
 {
     @Test
     public void processReportWithCycleGroup()
@@ -171,9 +170,8 @@ public class ReportReaderTest
         final IModuleInfoProcessor moduleInfoProcessor = controller.createModuleInfoProcessor(browser);
         final IMetricLevel level = moduleInfoProcessor.getMetricLevel("CppNamespace").orElseThrow(() -> new Exception("Metric level not found"));
         final IMetricId metricId = moduleInfoProcessor.getMetricId(level, "CoreTypesModule").orElseThrow(() -> new Exception("Metric not found"));
-        assertEquals("Wrong number of types for module namespace", 22,
-                moduleInfoProcessor.getMetricValueForElement(metricId, level, "Logical module namespaces:Browser:Hilo:AsyncLoader").get().getValue()
-                        .intValue());
+        assertEquals("Wrong number of types for module namespace", 22, moduleInfoProcessor
+                .getMetricValueForElement(metricId, level, "Logical module namespaces:Browser:Hilo:AsyncLoader").get().getValue().intValue());
     }
 
     @Test
@@ -206,8 +204,8 @@ public class ReportReaderTest
         for (final IModule nextModule : systemInfoProcessor.getModules().values())
         {
             final IModuleInfoProcessor nextModuleInfoProcessor = controller.createModuleInfoProcessor(nextModule);
-            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForDirectories(issue -> !issue.isIgnored()
-                    && !IIssueCategory.StandardName.WORKSPACE.getStandardName().equals(issue.getIssueType().getCategory().getName()));
+            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor
+                    .getIssuesForDirectories(issue -> !issue.isIgnored() && !"Workspace".equals(issue.getIssueType().getCategory().getName()));
             moduleToIssues.put(nextModule.getName(), issueMap);
         }
 
@@ -232,8 +230,8 @@ public class ReportReaderTest
         for (final IModule nextModule : systemInfoProcessor.getModules().values())
         {
             final IModuleInfoProcessor nextModuleInfoProcessor = controller.createModuleInfoProcessor(nextModule);
-            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor.getIssuesForDirectories(issue -> !issue.isIgnored()
-                    && !IIssueCategory.StandardName.WORKSPACE.getStandardName().equals(issue.getIssueType().getCategory().getName()));
+            final Map<String, List<IIssue>> issueMap = nextModuleInfoProcessor
+                    .getIssuesForDirectories(issue -> !issue.isIgnored() && !"Workspace".equals(issue.getIssueType().getCategory().getName()));
             moduleToIssues.put(nextModuleInfoProcessor, issueMap);
         }
 

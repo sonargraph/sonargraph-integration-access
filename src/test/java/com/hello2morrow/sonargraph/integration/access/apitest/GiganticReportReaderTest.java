@@ -31,7 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
-public class GiganticReportReaderTest
+public final class GiganticReportReaderTest
 {
     /**
      * Usable only with a gigantic report being created locally that is > 100 MB.

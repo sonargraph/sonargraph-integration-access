@@ -36,7 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public class ModuleInfoProcessorClassFileIssueTest
+public final class ModuleInfoProcessorClassFileIssueTest
 {
     ISonargraphSystemController m_controller;
 

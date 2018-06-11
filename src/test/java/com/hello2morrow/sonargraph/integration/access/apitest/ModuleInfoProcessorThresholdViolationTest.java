@@ -37,7 +37,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 
-public class ModuleInfoProcessorThresholdViolationTest
+public final class ModuleInfoProcessorThresholdViolationTest
 {
     ISonargraphSystemController m_controller;
 
@@ -72,9 +72,9 @@ public class ModuleInfoProcessorThresholdViolationTest
         final Optional<IMetricLevel> sourceFileLevel = processor.getMetricLevel("SourceFile");
         assertTrue("Source file metric level does not exist", sourceFileLevel.isPresent());
 
-        final List<IThresholdViolationIssue> linesOfCodeViolations = processor.getThresholdViolationIssues(th -> th.getThreshold().getMetricId()
-                .getName().equals("CoreLinesOfCode")
-                && th.getThreshold().getMetricLevel().getName().equals("SourceFile"));
+        final List<IThresholdViolationIssue> linesOfCodeViolations = processor
+                .getThresholdViolationIssues(th -> th.getThreshold().getMetricId().getName().equals("CoreLinesOfCode")
+                        && th.getThreshold().getMetricLevel().getName().equals("SourceFile"));
         assertEquals("Wrong number of metric threshold issue", numberOfLocSourceFileViolations, linesOfCodeViolations.size());
         if (numberOfLocSourceFileViolations > 0)
         {
