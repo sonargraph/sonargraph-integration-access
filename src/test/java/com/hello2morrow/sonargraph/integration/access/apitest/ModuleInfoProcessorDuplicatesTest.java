@@ -37,7 +37,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 
-public class ModuleInfoProcessorDuplicatesTest
+public final class ModuleInfoProcessorDuplicatesTest
 {
     @Test
     public void processDuplicateIssuesInSameFile()
@@ -51,8 +51,8 @@ public class ModuleInfoProcessorDuplicatesTest
         assertNotNull("Module 'AlarmClock' not found", alarmClock);
 
         final IModuleInfoProcessor processor = controller.createModuleInfoProcessor(alarmClock);
-        final Map<ISourceFile, List<IIssue>> issueMap = processor.getIssuesForSourceFiles(issue -> issue.getIssueType().getName()
-                .equals("DuplicateCodeBlock"));
+        final Map<ISourceFile, List<IIssue>> issueMap = processor
+                .getIssuesForSourceFiles(issue -> issue.getIssueType().getName().equals("DuplicateCodeBlock"));
         assertNotNull(issueMap);
         assertEquals(2, issueMap.size());
         List<IIssue> duplicateIssues = null;
