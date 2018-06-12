@@ -25,7 +25,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +73,6 @@ public final class SonargraphSystemControllerTest
     private static final String APPLICATION_MODULE = TestFixture.APPLICATION_MODULE;
     private static final String INVALID_REPORT = TestFixture.INVALID_TEST_REPORT;
     private static final String REPORT_PATH = TestFixture.TEST_REPORT;
-    private static final String REPORT_PATH_NOT_EXISTING_BASE_PATH = TestFixture.TEST_REPORT_NOT_EXISTING_BASE_PATH;
 
     private ISonargraphSystemController m_controller;
 
@@ -162,38 +160,12 @@ public final class SonargraphSystemControllerTest
         verifyMetrics(softwareSystem);
     }
 
-    @Test
-    public void testReadValidReportAndOverrideSystemBaseDir()
-    {
-        final String baseDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
-        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
-        final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
-
-        assertEquals("Wrong baseDirectory", baseDir, softwareSystem.getBaseDir());
-        final Optional<IModule> module = softwareSystem.getModule(APPLICATION_MODULE);
-        assertTrue("Module not found: " + APPLICATION_MODULE, module.isPresent());
-        final IModuleInfoProcessor moduleProcessor = m_controller.createModuleInfoProcessor(module.get());
-        assertEquals("Wrong baseDirectory", baseDir, moduleProcessor.getBaseDirectory());
-
-        verifySystem(softwareSystem,
-                "D:\\NOT_EXISTING\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
-
-        verifyModule(softwareSystem);
-        verifyIssues(softwareSystem);
-        verifyResolutions(softwareSystem);
-        verifyMetrics(softwareSystem);
-
-    }
-
     private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)
     {
         assertEquals("Wrong id", "4df288656010188b4d84a2a03bb0ecb9", softwareSystem.getSystemId());
         assertEquals("Wrong system name", "AlarmClock", softwareSystem.getPresentationName());
         assertEquals("Wrong path", systemPath, softwareSystem.getPath());
         assertEquals("Wrong version", "9.1.0.100", softwareSystem.getVersion());
-        //TODO: Activate this check. De-activated now, because the test file needs to be re-generated too often.
-        //assertEquals("Wrong timestamp", 1444285242759L, softwareSystem.getTimestamp());
         assertEquals("Wrong description", "", softwareSystem.getDescription());
         assertEquals("Wrong virtual model", "Modifiable.vm", softwareSystem.getVirtualModel());
         assertEquals("Wrong number of modules", 4, softwareSystem.getModules().size());

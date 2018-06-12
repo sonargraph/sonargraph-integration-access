@@ -32,17 +32,6 @@ public interface ISonargraphSystemController
      */
     public Result loadSystemReport(File systemReportFile);
 
-    /**
-     * Loads an XML report file, generated on a different machine.
-     * Useful for clients that are just interested in the report's results and have the same workspace on disk.
-     * For example, running the Sonargraph analysis on one machine, the SonarQube analysis on another.
-     *
-     * @param systemReportFile
-     * @param baseDirectory the parent directory of the Sonargraph system, i.e. parent of xyz.sonargraph directory
-     * @return {@link Result} containing info about any errors.
-     */
-    public Result loadSystemReport(File systemReportFile, File baseDirectory);
-
     public boolean hasSoftwareSystem();
 
     public ISoftwareSystem getSoftwareSystem();
