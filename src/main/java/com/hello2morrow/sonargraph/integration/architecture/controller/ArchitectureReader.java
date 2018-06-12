@@ -34,14 +34,13 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.persistence.JaxbAdapter;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl;
-import com.hello2morrow.sonargraph.integration.access.persistence.XmlPersistenceContext;
 import com.hello2morrow.sonargraph.integration.architecture.model.ArchitecturalModel;
 import com.hello2morrow.sonargraph.integration.architecture.model.ArchitectureElement;
 import com.hello2morrow.sonargraph.integration.architecture.model.Artifact;
 import com.hello2morrow.sonargraph.integration.architecture.model.Connector;
 import com.hello2morrow.sonargraph.integration.architecture.model.Interface;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.Architecture;
-import com.hello2morrow.sonargraph.integration.architecture.persistence.ObjectFactory;
+import com.hello2morrow.sonargraph.integration.architecture.persistence.ArchitectureJaxbAdapter;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdArtifact;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdConnection;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdConnector;
@@ -51,11 +50,9 @@ import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdInclu
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdInterface;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdStereotype;
 
-public class XmlArchitectureAccess
+public class ArchitectureReader
 {
-    private static final String ARCHITECTURE_NAMESPACE = "com.hello2morrow.sonargraph.integration.architecture.persistence";
-    private static final String ARCHITECTURE_XSD = "com/hello2morrow/sonargraph/integration/architecture/persistence/architecture.xsd";
-    private static final Logger LOGGER = LoggerFactory.getLogger(XmlArchitectureAccess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureReader.class);
 
     private final Map<String, Connector> m_connectorMap = new HashMap<>();
     private final Map<String, Interface> m_interfaceMap = new HashMap<>();
@@ -70,7 +67,7 @@ public class XmlArchitectureAccess
         assert modelFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
         assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
 
-        final JaxbAdapter<Architecture> jaxbAdapter = createArchitectureJaxbAdapter();
+        final JaxbAdapter<Architecture> jaxbAdapter = ArchitectureJaxbAdapter.create();
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
 
         ArchitecturalModel model = null;
@@ -112,7 +109,7 @@ public class XmlArchitectureAccess
     private void addFilters(ArchitectureElement element, List<XsdInclude> includeFilters, List<String> excludeFilter)
     {
         includeFilters.forEach(inc -> element.addIncludeFilter(inc.getValue(), inc.isIsStrong()));
-        excludeFilter.forEach(pat -> element.addExcludeFilter(pat));
+        excludeFilter.forEach(element::addExcludeFilter);
     }
 
     private Artifact convertXmlArtifact(Artifact parent, XsdArtifact xmlArtifact)
@@ -227,11 +224,5 @@ public class XmlArchitectureAccess
             assert exportedInterface != null;
             iface.addExportedInterface(exportedInterface);
         }
-    }
-
-    public static JaxbAdapter<Architecture> createArchitectureJaxbAdapter()
-    {
-        final ClassLoader classLoader = ObjectFactory.class.getClassLoader();
-        return new JaxbAdapter<>(new XmlPersistenceContext(ARCHITECTURE_NAMESPACE, classLoader.getResource(ARCHITECTURE_XSD)), classLoader);
     }
 }

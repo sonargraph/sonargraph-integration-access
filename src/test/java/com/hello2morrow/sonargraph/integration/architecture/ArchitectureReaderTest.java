@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.architecture.model.ArchitecturalModel;
-import com.hello2morrow.sonargraph.integration.architecture.controller.XmlArchitectureAccess;
+import com.hello2morrow.sonargraph.integration.architecture.controller.ArchitectureReader;
 
 public class ArchitectureReaderTest
 {
@@ -35,7 +35,7 @@ public class ArchitectureReaderTest
     public void readArchitectureTest()
     {
         Result result = new Result("Reading Architecture");
-        XmlArchitectureAccess reader = new XmlArchitectureAccess();
+        ArchitectureReader reader = new ArchitectureReader();
         Optional<ArchitecturalModel> modelOptional;
 
         modelOptional = reader.readArchitectureFile(new File("src/test/data/architecture/sonargraph.xml"), result);
