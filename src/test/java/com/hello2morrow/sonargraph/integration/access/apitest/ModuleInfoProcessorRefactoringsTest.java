@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-public class ModuleInfoProcessorRefactoringsTest
+public final class ModuleInfoProcessorRefactoringsTest
 {
     @Test
     public void getSourceFilesAffectedByRefactorings()
@@ -88,8 +88,5 @@ public class ModuleInfoProcessorRefactoringsTest
         final ISonargraphSystemController controller = ControllerAccess.createController();
         final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
-        //TODO:
-        //Check for AlarmToConsole. It is present as original in rename refactoring AlarmToConsole -> AlarmToConsole2
-        // It is also present as target of rename refactoring: AlarmToFile -> AlarmToConsole
     }
 }

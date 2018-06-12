@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result.ICause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
-final class ValidationEventHandlerImpl implements ValidationEventHandler
+public final class ValidationEventHandlerImpl implements ValidationEventHandler
 {
     public enum ValidationMessageCauses implements ICause
     {
@@ -48,7 +48,7 @@ final class ValidationEventHandlerImpl implements ValidationEventHandler
 
     private final Result operationResult;
 
-    ValidationEventHandlerImpl(final Result result)
+    public ValidationEventHandlerImpl(final Result result)
     {
         assert result != null : "Parameter 'result' of method 'ValidationEventHandlerImpl' must not be null";
         operationResult = result;

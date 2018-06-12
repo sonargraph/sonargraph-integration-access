@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
 
+package com.hello2morrow.sonargraph.integration.architecture.model;
 
-public interface IMergedIssueProvider extends IIssueProvider, IMergedInfo
+public class Filter
 {
-    //empty
+    private final String m_pattern;
+    private final boolean m_isStrong;
+
+    Filter(String pattern, boolean isStrong)
+    {
+        m_pattern = pattern;
+        m_isStrong = isStrong;
+    }
+
+    public String getPattern()
+    {
+        return m_pattern;
+    }
+
+    public boolean isStrong()
+    {
+        return m_isStrong;
+    }
 }

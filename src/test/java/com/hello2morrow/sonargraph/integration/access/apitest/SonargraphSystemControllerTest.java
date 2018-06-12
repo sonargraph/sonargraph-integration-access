@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,12 +68,11 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
  * This class is deliberately put into a different package than the {@link #SonargraphController()},
  * so there is no chance to test non-public controller functionality.
  */
-public class SonargraphSystemControllerTest
+public final class SonargraphSystemControllerTest
 {
     private static final String APPLICATION_MODULE = TestFixture.APPLICATION_MODULE;
     private static final String INVALID_REPORT = TestFixture.INVALID_TEST_REPORT;
     private static final String REPORT_PATH = TestFixture.TEST_REPORT;
-    private static final String REPORT_PATH_NOT_EXISTING_BASE_PATH = TestFixture.TEST_REPORT_NOT_EXISTING_BASE_PATH;
 
     private ISonargraphSystemController m_controller;
 
@@ -93,8 +91,8 @@ public class SonargraphSystemControllerTest
         final List<IThresholdViolationIssue> thresholdIssues = processor.getThresholdViolationIssues(null);
         assertEquals("Wrong number of issues", 3, thresholdIssues.size());
 
-        final List<IThresholdViolationIssue> unusedTypeThresholds = processor.getThresholdViolationIssues(th -> th.getThreshold().getMetricId()
-                .getName().equals("Unused Types"));
+        final List<IThresholdViolationIssue> unusedTypeThresholds = processor
+                .getThresholdViolationIssues(th -> th.getThreshold().getMetricId().getName().equals("Unused Types"));
         assertEquals("Wrong number of metric threshold issue", 1, unusedTypeThresholds.size());
         assertEquals("Wrong metric value", 4, unusedTypeThresholds.get(0).getMetricValue().intValue());
     }
@@ -115,18 +113,18 @@ public class SonargraphSystemControllerTest
                 refactoredElements.get(0).getFqName());
         final Optional<ISourceFile> originalSourceFileOpt = refactoredElements.get(0).getOriginalLocation();
         assertTrue("Original source file expected '" + refactoredElements.get(0).getFqName() + "'", originalSourceFileOpt.isPresent());
-        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java", originalSourceFileOpt
-                .get().getFqName());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:model:AlarmClock.java",
+                originalSourceFileOpt.get().getFqName());
 
         final IModule foundation = systemProcessor.getModules().get("Foundation");
         final List<ISourceFile> refactoredElements2 = getRefactoredSourceElements(foundation);
         assertEquals("Wrong number of originals", 1, refactoredElements2.size());
-        assertEquals("Wrong refactored element", "Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java", refactoredElements2
-                .get(0).getFqName());
+        assertEquals("Wrong refactored element", "Workspace:Foundation:./Foundation/src/main/java:com:h2m:alarm:p1:C1_2.java",
+                refactoredElements2.get(0).getFqName());
         final Optional<ISourceFile> originalSourceFileOpt2 = refactoredElements2.get(0).getOriginalLocation();
         assertTrue("Original source file expected for '" + refactoredElements2.get(0).getFqName() + "'", originalSourceFileOpt2.isPresent());
-        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java", originalSourceFileOpt2.get()
-                .getFqName());
+        assertEquals("Wrong original", "Workspace:AlarmClock:./AlarmClock/src/main/java:com:h2m:alarm:p1:C1.java",
+                originalSourceFileOpt2.get().getFqName());
     }
 
     private List<ISourceFile> getRefactoredSourceElements(final IModule module)
@@ -154,38 +152,12 @@ public class SonargraphSystemControllerTest
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
 
-        verifySystem(
-                softwareSystem,
+        verifySystem(softwareSystem,
                 "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
         verifyModule(softwareSystem);
         verifyIssues(softwareSystem);
         verifyResolutions(softwareSystem);
         verifyMetrics(softwareSystem);
-    }
-
-    @Test
-    public void testReadValidReportAndOverrideSystemBaseDir()
-    {
-        final String baseDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        final Result result = m_controller.loadSystemReport(new File(REPORT_PATH_NOT_EXISTING_BASE_PATH), new File(baseDir));
-        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
-        final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
-
-        assertEquals("Wrong baseDirectory", baseDir, softwareSystem.getBaseDir());
-        final Optional<IModule> module = softwareSystem.getModule(APPLICATION_MODULE);
-        assertTrue("Module not found: " + APPLICATION_MODULE, module.isPresent());
-        final IModuleInfoProcessor moduleProcessor = m_controller.createModuleInfoProcessor(module.get());
-        assertEquals("Wrong baseDirectory", baseDir, moduleProcessor.getBaseDirectory());
-
-        verifySystem(
-                softwareSystem,
-                "D:\\NOT_EXISTING\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
-
-        verifyModule(softwareSystem);
-        verifyIssues(softwareSystem);
-        verifyResolutions(softwareSystem);
-        verifyMetrics(softwareSystem);
-
     }
 
     private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)
@@ -194,14 +166,12 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong system name", "AlarmClock", softwareSystem.getPresentationName());
         assertEquals("Wrong path", systemPath, softwareSystem.getPath());
         assertEquals("Wrong version", "9.1.0.100", softwareSystem.getVersion());
-        //TODO: Activate this check. De-activated now, because the test file needs to be re-generated too often.
-        //assertEquals("Wrong timestamp", 1444285242759L, softwareSystem.getTimestamp());
         assertEquals("Wrong description", "", softwareSystem.getDescription());
         assertEquals("Wrong virtual model", "Modifiable.vm", softwareSystem.getVirtualModel());
         assertEquals("Wrong number of modules", 4, softwareSystem.getModules().size());
 
-        final Set<String> expectedSystemElementKinds = new HashSet<>(Arrays.asList("GroovyScript", "JavaLogicalSystemNamespace",
-                "LogicalSystemProgrammingElement", "SoftwareSystem"));
+        final Set<String> expectedSystemElementKinds = new HashSet<>(
+                Arrays.asList("GroovyScript", "JavaLogicalSystemNamespace", "LogicalSystemProgrammingElement", "SoftwareSystem"));
         Assert.assertThat("Wrong system element kinds", softwareSystem.getElementKinds(), is(equalTo(expectedSystemElementKinds)));
     }
 
@@ -281,66 +251,56 @@ public class SonargraphSystemControllerTest
         final IMetricId coreAbstractnessModule = systemProcessor.getMetricId("CoreAbstractnessModule").get();
         final Map<String, IMetricValue> packageMetricValueMap = packageLevelMetricValueMap.get(coreAbstractnessModule);
         assertEquals("Wrong number of metric values", 3, packageMetricValueMap.size());
-        assertEquals("Wrong metric value", 1.0, packageMetricValueMap.get("Logical module namespaces:View:com:h2m:alarm:presentation").getValue()
-                .floatValue(), 0.01);
+        assertEquals("Wrong metric value", 1.0,
+                packageMetricValueMap.get("Logical module namespaces:View:com:h2m:alarm:presentation").getValue().floatValue(), 0.01);
 
         //Component
         final Map<IMetricId, Map<String, IMetricValue>> componentLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels.get("Component"));
         final IMetricId coreInstabilitySystem = systemProcessor.getMetricId("CoreInstabilitySysytem").get();
         final Map<String, IMetricValue> componentMetricValueMap = componentLevelMetricValueMap.get(coreInstabilitySystem);
         assertEquals("Wrong number of metric values", 3, componentMetricValueMap.size());
-        assertEquals(
-                "Wrong metric value",
-                0.33,
+        assertEquals("Wrong metric value", 0.33,
                 componentMetricValueMap
                         .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java")
-                        .getValue().floatValue(), 0.01);
+                        .getValue().floatValue(),
+                0.01);
 
         //Source File
         final Map<IMetricId, Map<String, IMetricValue>> sourceFileLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels.get("SourceFile"));
         final IMetricId coreSourceElementCount = systemProcessor.getMetricId("CoreSourceElementCount").get();
         final Map<String, IMetricValue> sourceFileMetricValueMap = sourceFileLevelMetricValueMap.get(coreSourceElementCount);
         assertEquals("Wrong number of metric values", 3, sourceFileMetricValueMap.size());
-        assertEquals(
-                "Wrong metric value",
-                13,
+        assertEquals("Wrong metric value", 13,
                 sourceFileMetricValueMap
                         .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java")
                         .getValue().intValue());
 
         //LogicalProgrammingElement
-        final Map<IMetricId, Map<String, IMetricValue>> logicalProgElementLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels
-                .get("LogicalProgrammingElement"));
+        final Map<IMetricId, Map<String, IMetricValue>> logicalProgElementLevelMetricValueMap = elementMetricValueMap
+                .get(allMetricLevels.get("LogicalProgrammingElement"));
         final IMetricId coreLogicalCouplingModule = systemProcessor.getMetricId("CoreLogicalCouplingModule").get();
         final Map<String, IMetricValue> logicalProgElementMetricValueMap = logicalProgElementLevelMetricValueMap.get(coreLogicalCouplingModule);
         assertEquals("Wrong number of metric values", 3, logicalProgElementMetricValueMap.size());
-        assertEquals("Wrong metric value", 4,
-                logicalProgElementMetricValueMap.get("Logical module namespaces:View:com:h2m:alarm:presentation:console:AlarmToConsole").getValue()
-                        .intValue());
+        assertEquals("Wrong metric value", 4, logicalProgElementMetricValueMap
+                .get("Logical module namespaces:View:com:h2m:alarm:presentation:console:AlarmToConsole").getValue().intValue());
 
         //Type
         final Map<IMetricId, Map<String, IMetricValue>> typeLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels.get("Type"));
         final IMetricId coreStatements = systemProcessor.getMetricId("CoreStatements").get();
         final Map<String, IMetricValue> typeMetricValueMap = typeLevelMetricValueMap.get(coreStatements);
         assertEquals("Wrong number of metric values", 3, typeMetricValueMap.size());
-        assertEquals(
-                "Wrong metric value",
-                9,
-                typeMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile")
-                        .getValue().intValue());
+        assertEquals("Wrong metric value", 9, typeMetricValueMap.get(
+                "Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile")
+                .getValue().intValue());
 
         //Routine
         final Map<IMetricId, Map<String, IMetricValue>> routineLevelMetricValueMap = elementMetricValueMap.get(allMetricLevels.get("Routine"));
         final IMetricId coreCyclomaticComplexity = systemProcessor.getMetricId("CoreCcn").get();
         final Map<String, IMetricValue> routineMetricValueMap = routineLevelMetricValueMap.get(coreCyclomaticComplexity);
         assertEquals("Wrong number of metric values", 8, routineMetricValueMap.size());
-        assertEquals(
-                "Wrong metric value",
-                2,
-                routineMetricValueMap
-                        .get("Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:handleAlarm()")
-                        .getValue().intValue());
+        assertEquals("Wrong metric value", 2, routineMetricValueMap.get(
+                "Workspace:View:../../smallTestProject/AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:handleAlarm()")
+                .getValue().intValue());
     }
 
     private void verifyIssues(final ISoftwareSystem softwareSystem)
@@ -373,19 +333,19 @@ public class SonargraphSystemControllerTest
         assertEquals("Wrong number of duplicate blocks", 3,
                 infoProcessor.getIssues((final IIssue issue) -> issue.getIssueType().getCategory().getName().equals("DuplicateCode")).size());
 
-        assertEquals(
-                "Wrong number of issues matching predicate filter",
-                7,
-                infoProcessor.getIssues(
-                        (final IIssue issue) -> !issue.hasResolution() && issue.getIssueProvider().getName().equals("./createViolations.arc")).size());
+        assertEquals("Wrong number of issues matching predicate filter", 7,
+                infoProcessor
+                        .getIssues(
+                                (final IIssue issue) -> !issue.hasResolution() && issue.getIssueProvider().getName().equals("./createViolations.arc"))
+                        .size());
     }
 
     private void verifyResolutions(final ISoftwareSystem softwareSystem)
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();
         assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions(null).size());
-        assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions((final IResolution r) -> r.getType() == ResolutionType.TODO)
-                .size());
+        assertEquals("Wrong number of resolutions", 1,
+                infoProcessor.getResolutions((final IResolution r) -> r.getType() == ResolutionType.TODO).size());
         assertEquals("Wrong number of applicable resolutions", 1, infoProcessor.getResolutions((final IResolution r) -> r.isApplicable()).size());
     }
 
@@ -403,9 +363,8 @@ public class SonargraphSystemControllerTest
         final List<IMetricProvider> metricProviders = infoProcessor.getMetricProviders();
         assertEquals("Wrong number of metric providers", 3, metricProviders.size());
         assertEquals("Wrong first provider", "Core", metricProviders.get(0).getName());
-        assertEquals("Wrong presentation name", "Java",
-                metricProviders.stream().filter((final IMetricProvider p) -> p.getName().equals("JavaLanguageProvider")).findFirst().get()
-                        .getPresentationName());
+        assertEquals("Wrong presentation name", "Java", metricProviders.stream()
+                .filter((final IMetricProvider p) -> p.getName().equals("JavaLanguageProvider")).findFirst().get().getPresentationName());
 
         assertEquals("Wrong number of metric ids", 76, infoProcessor.getMetricIds().size());
 
@@ -421,24 +380,16 @@ public class SonargraphSystemControllerTest
         final IModule viewModule = softwareSystem.getModules().get("View");
         final IInfoProcessor moduleInfoProcessor = m_controller.createModuleInfoProcessor(viewModule);
         final IMetricLevel packageLevel = allMetricLevels.get("Package");
-        assertEquals(
-                "Wrong module metric value",
-                1,
-                moduleInfoProcessor
-                        .getMetricValueForElement(infoProcessor.getMetricId("CoreIncomingDependenciesModule").get(), packageLevel,
-                                "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().intValue());
-        assertEquals(
-                "Wrong module metric value",
-                2,
-                moduleInfoProcessor
-                        .getMetricValueForElement(infoProcessor.getMetricId("CoreOutgoingDependenciesModule").get(), packageLevel,
-                                "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().intValue());
-        assertEquals(
-                "Wrong module metric value",
-                0.67,
-                moduleInfoProcessor
-                        .getMetricValueForElement(infoProcessor.getMetricId("CoreInstabilityModule").get(), packageLevel,
-                                "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().floatValue(), 0.01f);
+        assertEquals("Wrong module metric value", 1,
+                moduleInfoProcessor.getMetricValueForElement(infoProcessor.getMetricId("CoreIncomingDependenciesModule").get(), packageLevel,
+                        "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().intValue());
+        assertEquals("Wrong module metric value", 2,
+                moduleInfoProcessor.getMetricValueForElement(infoProcessor.getMetricId("CoreOutgoingDependenciesModule").get(), packageLevel,
+                        "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().intValue());
+        assertEquals("Wrong module metric value", 0.67,
+                moduleInfoProcessor.getMetricValueForElement(infoProcessor.getMetricId("CoreInstabilityModule").get(), packageLevel,
+                        "Logical module namespaces:View:com:h2m:alarm:presentation:file").get().getValue().floatValue(),
+                0.01f);
     }
 
     @Test

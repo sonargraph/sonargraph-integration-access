@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,42 +22,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
-import com.hello2morrow.sonargraph.integration.access.model.IBasicSoftwareSystemInfo;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
-import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueCategory;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueProvider;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedIssueType;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
-import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.ISingleExportMetaData;
-import com.hello2morrow.sonargraph.integration.access.model.internal.MergedExportMetaDataImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueCategoryImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueProviderImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.MergedIssueTypeImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SingleExportMetaDataImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlExportMetaDataReader;
 
 final class MetaDataControllerImpl implements IMetaDataController
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataControllerImpl.class);
-
     @Override
     public ResultWithOutcome<IExportMetaData> loadExportMetaData(final File exportMetaDataFile)
     {
@@ -115,181 +90,6 @@ final class MetaDataControllerImpl implements IMetaDataController
         {
             result.setOutcome(readResult.get());
         }
-        return result;
-    }
-
-    @Override
-    public ResultWithOutcome<IMergedExportMetaData> mergeExportMetaDataFiles(final List<File> files)
-    {
-        assert files != null && !files.isEmpty() : "Parameter 'files' of method 'mergeExportMetaDataFiles' must not be empty";
-
-        final ResultWithOutcome<IMergedExportMetaData> result = new ResultWithOutcome<>("Merge meta-data from files");
-
-        final Map<String, ISingleExportMetaData> exportDataMap = new LinkedHashMap<>();
-        final Map<String, IBasicSoftwareSystemInfo> systemMap = new HashMap<>();
-
-        for (final File file : files)
-        {
-            if (!file.exists())
-            {
-                result.addWarning(ResultCause.FILE_NOT_FOUND, "File '" + file.getAbsolutePath() + "' does not exist.");
-                continue;
-            }
-
-            if (!file.canRead())
-            {
-                result.addWarning(ResultCause.NO_PERMISSION, "No permission to read file '" + file.getAbsolutePath() + "'");
-                continue;
-            }
-
-            try (FileInputStream inputStream = new FileInputStream(file))
-            {
-                final ResultWithOutcome<ISingleExportMetaData> readResult = internLoadExportMetaData(inputStream, file.getCanonicalPath());
-                if (readResult.isSuccess())
-                {
-                    final ISingleExportMetaData metaData = readResult.getOutcome();
-                    assert metaData != null : "if result is success, there must be a metaData object!";
-                    final ISingleExportMetaData previouslyAdded = exportDataMap.get(metaData.getSystemInfo().getSystemId());
-                    if (previouslyAdded == null)
-                    {
-                        LOGGER.info("Successfully loaded meta-data from '" + file.getAbsolutePath() + "'");
-                        exportDataMap.put(metaData.getSystemInfo().getSystemId(), metaData);
-                    }
-                    else
-                    {
-                        if (previouslyAdded.getSystemInfo().getTimestamp() < metaData.getSystemInfo().getTimestamp())
-                        {
-                            LOGGER.warn("Replacing previously added info for system '" + previouslyAdded.getSystemInfo().getPath()
-                                    + "' with information from '" + file.getAbsolutePath() + "'");
-                            exportDataMap.put(metaData.getSystemInfo().getSystemId(), metaData);
-                        }
-                        else
-                        {
-                            LOGGER.warn("Content of export meta-data file '" + file.getAbsolutePath()
-                                    + "' is older than already added info for system '" + previouslyAdded.getSystemInfo().getPath() + "'");
-                        }
-                    }
-                }
-                else
-                {
-                    LOGGER.warn("Failed to process file: {}", file.getAbsolutePath());
-                    result.addWarning(ResultCause.READ_ERROR, "Failed to process file '" + file.getAbsolutePath()
-                            + "'. Check the log file for details.");
-                }
-            }
-            catch (final IOException e)
-            {
-                result.addError(ResultCause.READ_ERROR, e);
-                return result;
-            }
-        }
-
-        if (exportDataMap.isEmpty())
-        {
-            result.addError(ResultCause.FILE_NOT_FOUND, "No valid meta-data file(s) provided");
-            return result;
-        }
-
-        final Map<String, IMergedIssueCategory> issueCategories = new LinkedHashMap<>();
-        final Map<String, IMergedIssueProvider> issueProviders = new LinkedHashMap<>();
-        final Map<String, IMergedIssueType> issueTypes = new LinkedHashMap<>();
-
-        final Map<String, IMetricCategory> metricCategories = new LinkedHashMap<>();
-        final Map<String, IMetricProvider> metricProviders = new LinkedHashMap<>();
-        final Map<String, IMetricId> metricIds = new LinkedHashMap<>();
-        final Map<String, IMetricLevel> metricLevels = new LinkedHashMap<>();
-
-        for (final Map.Entry<String, ISingleExportMetaData> next : exportDataMap.entrySet())
-        {
-            final ISingleExportMetaData data = next.getValue();
-            systemMap.put(data.getSystemInfo().getSystemId(), data.getSystemInfo());
-
-            for (final Map.Entry<String, IIssueCategory> nextCat : data.getIssueCategories().entrySet())
-            {
-                if (!issueCategories.containsKey(nextCat.getKey()))
-                {
-                    final IIssueCategory category = nextCat.getValue();
-                    issueCategories.put(nextCat.getKey(),
-                            new MergedIssueCategoryImpl(category.getName(), category.getPresentationName(), data.getSystemInfo()));
-                }
-                else
-                {
-                    final IMergedIssueCategory category = issueCategories.get(nextCat.getKey());
-                    category.addSystem(data.getSystemInfo());
-                }
-            }
-
-            for (final Map.Entry<String, IIssueProvider> nextProvider : data.getIssueProviders().entrySet())
-            {
-                if (!issueProviders.containsKey(nextProvider.getKey()))
-                {
-                    final IIssueProvider provider = nextProvider.getValue();
-                    issueProviders.put(nextProvider.getKey(),
-                            new MergedIssueProviderImpl(provider.getName(), provider.getPresentationName(), data.getSystemInfo()));
-                }
-                else
-                {
-                    final IMergedIssueProvider provider = issueProviders.get(nextProvider.getKey());
-                    provider.addSystem(data.getSystemInfo());
-                }
-            }
-
-            for (final Map.Entry<String, IIssueType> nextType : data.getIssueTypes().entrySet())
-            {
-                if (!issueTypes.containsKey(nextType.getKey()))
-                {
-                    final IIssueType type = nextType.getValue();
-                    issueTypes.put(
-                            nextType.getKey(),
-                            new MergedIssueTypeImpl(type.getName(), type.getPresentationName(), type.getSeverity(), type.getCategory(), type
-                                    .getProvider(), type.getDescription(), data.getSystemInfo()));
-                }
-                else
-                {
-                    final IMergedIssueType type = issueTypes.get(nextType.getKey());
-                    type.addSystem(data.getSystemInfo());
-                }
-            }
-
-            for (final Map.Entry<String, IMetricCategory> nextCat : data.getMetricCategories().entrySet())
-            {
-                if (!metricCategories.containsKey(nextCat.getKey()))
-                {
-                    metricCategories.put(nextCat.getKey(), nextCat.getValue());
-                }
-            }
-
-            for (final Map.Entry<String, IMetricProvider> nextProvider : data.getMetricProviders().entrySet())
-            {
-                if (!metricProviders.containsKey(nextProvider.getKey()))
-                {
-                    metricProviders.put(nextProvider.getKey(), nextProvider.getValue());
-                }
-            }
-
-            for (final Map.Entry<String, IMetricId> nextId : data.getMetricIds().entrySet())
-            {
-                if (!metricIds.containsKey(nextId.getKey()))
-                {
-                    metricIds.put(nextId.getKey(), nextId.getValue());
-                }
-            }
-
-            for (final Map.Entry<String, IMetricLevel> nextLevel : data.getMetricLevels().entrySet())
-            {
-                if (!metricLevels.containsKey(nextLevel.getKey()))
-                {
-                    metricLevels.put(nextLevel.getKey(), nextLevel.getValue());
-                }
-            }
-        }
-
-        final String identifier = exportDataMap.values().stream().map((final ISingleExportMetaData metaData) -> metaData.getResourceIdentifier())
-                .reduce((path1, path2) -> path1 + ", " + path2).get();
-
-        final MergedExportMetaDataImpl mergedExportMetaData = new MergedExportMetaDataImpl(systemMap.values(), issueCategories, issueProviders,
-                issueTypes, metricCategories, metricProviders, metricIds, metricLevels, identifier);
-        result.setOutcome(mergedExportMetaData);
         return result;
     }
 }

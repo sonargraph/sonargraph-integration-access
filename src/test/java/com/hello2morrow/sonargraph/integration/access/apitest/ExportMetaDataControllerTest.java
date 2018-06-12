@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,13 +21,11 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,22 +34,15 @@ import org.junit.Test;
 
 import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
 import com.hello2morrow.sonargraph.integration.access.controller.IMetaDataController;
-import com.hello2morrow.sonargraph.integration.access.foundation.Result.Level;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 
-public class ExportMetaDataControllerTest
+public final class ExportMetaDataControllerTest
 {
     private static final String META_DATA_PATH = TestFixture.META_DATA_PATH;
-    private static final String META_DATA_PATH1 = TestFixture.META_DATA_PATH1;
-    private static final String META_DATA_PATH2 = TestFixture.META_DATA_PATH2;
-
-    private static final String META_DATA_PATH_OUTDATED = TestFixture.META_DATA_PATH1_OLD;
-
     private static final String WRONG_ENCODING = TestFixture.META_DATA_PATH_WRONG_ENCODING;
 
     private IMetaDataController m_controller;
@@ -109,51 +100,10 @@ public class ExportMetaDataControllerTest
     }
 
     @Test
-    public void testMergeExportMetaDataFiles() throws IOException
-    {
-        final List<File> files = new ArrayList<>();
-        files.add(new File(META_DATA_PATH1));
-        files.add(new File(META_DATA_PATH2));
-        files.add(new File(META_DATA_PATH_OUTDATED));
-
-        final ResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
-
-        assertTrue("Success expected", result.isSuccess());
-        final IMergedExportMetaData metaData = result.getOutcome();
-        assertEquals("Wrong identifier", files.get(0).getCanonicalPath() + ", " + files.get(1).getCanonicalPath(), metaData.getResourceIdentifier());
-
-        assertNotNull("Common issue category not found", metaData.getIssueCategories().get("ArchitectureViolation"));
-        assertNotNull("Individual issue category not found", metaData.getIssueCategories().get("Workspace2"));
-
-        assertNotNull("Common issue provider not found", metaData.getIssueProviders().get("./createViolations.arc"));
-        assertNotNull("Individual issue provider not found", metaData.getIssueProviders().get("./layers2.arc"));
-
-        assertNotNull("Common issue type not found", metaData.getIssueTypes().get("UnresolvedRequiredArtifact"));
-        assertNotNull("Individual issue type not found", metaData.getIssueTypes().get("WorkspaceDependencyProblematic2"));
-
-        assertNotNull("Common metric not found", metaData.getMetricIds().get("CoreLinesOfCode"));
-        assertNotNull("Individual metric of first file not found", metaData.getMetricIds().get("Unused Types"));
-        assertNotNull("Individual metric of second file not found", metaData.getMetricIds().get("Unused Types2"));
-        assertNull("Individual metric of outdated file must be omitted", metaData.getMetricIds().get("Unused Types3"));
-    }
-
-    @Test
     public void testWrongEncoding()
     {
         final File exportMetaDataFile = new File(WRONG_ENCODING);
         final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
         assertFalse("Failure expected: " + result.toString(), result.isSuccess());
-    }
-
-    @Test
-    public void testMergeFilesWithOneWrongFile()
-    {
-        final List<File> files = new ArrayList<>();
-        files.add(new File(META_DATA_PATH1));
-        files.add(new File(WRONG_ENCODING));
-
-        final ResultWithOutcome<IMergedExportMetaData> result = m_controller.mergeExportMetaDataFiles(files);
-
-        assertEquals("Warning expected: " + result.toString(), 1, result.getMessages(Level.WARNING).size());
     }
 }

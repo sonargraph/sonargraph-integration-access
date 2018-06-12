@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
@@ -66,38 +65,6 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         }
 
         softwareSystem = readResult.get();
-        return result;
-    }
-
-    @Override
-    public Result loadSystemReport(final File systemReportFile, final File baseDirectory)
-    {
-        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
-        assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
-
-        final Result result = new Result(String.format("Load data from '%s', using baseDirectory '%s'", systemReportFile.getAbsolutePath(),
-                baseDirectory.getAbsolutePath()));
-        if (!baseDirectory.exists())
-        {
-            result.addError(ResultCause.FILE_NOT_FOUND, "Parameter 'baseDirectory' does not exist: " + baseDirectory.getAbsolutePath());
-        }
-        else if (!baseDirectory.canRead())
-        {
-            result.addError(ResultCause.NO_PERMISSION, "Cannot access 'baseDirectory': " + baseDirectory.getAbsolutePath());
-        }
-
-        if (result.isFailure())
-        {
-            return result;
-        }
-
-        result.addMessagesFrom(loadSystemReport(systemReportFile));
-        if (result.isFailure())
-        {
-            return result;
-        }
-        softwareSystem.setBaseDir(Paths.get(baseDirectory.getAbsolutePath()).normalize().toString());
-
         return result;
     }
 

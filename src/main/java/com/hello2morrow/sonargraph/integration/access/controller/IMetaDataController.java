@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +19,13 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.model.IExportMetaData;
-import com.hello2morrow.sonargraph.integration.access.model.IMergedExportMetaData;
 
 public interface IMetaDataController
 {
     public ResultWithOutcome<IExportMetaData> loadExportMetaData(File exportMetaDataFile);
-
-    public ResultWithOutcome<IMergedExportMetaData> mergeExportMetaDataFiles(List<File> files);
 
     public ResultWithOutcome<IExportMetaData> loadExportMetaData(InputStream inputStream, String identifier);
 }

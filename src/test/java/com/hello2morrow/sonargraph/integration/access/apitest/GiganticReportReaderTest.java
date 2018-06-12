@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 
-public class GiganticReportReaderTest
+public final class GiganticReportReaderTest
 {
     /**
      * Usable only with a gigantic report being created locally that is > 100 MB.

@@ -1,13 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Sonargraph Report Integration
+Bundle-Name: Sonargraph Integration
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.hello2morrow.sonargraph.integration.access
-Bundle-Version: 3.1.5
+Bundle-Version: 3.1.6
 Bundle-Vendor: hello2morrow GmbH
-Export-Package: com.hello2morrow.sonargraph.integration.access.controller;version="3.1.5",
- com.hello2morrow.sonargraph.integration.access.foundation;version="3.1.5",
- com.hello2morrow.sonargraph.integration.access.model;version="3.1.5",
- com.hello2morrow.sonargraph.integration.access.persistence;version="3.1.5",
- com.hello2morrow.sonargraph.integration.access.persistence.report;version="3.1.5"
+Export-Package: com.hello2morrow.sonargraph.integration.access.controller,
+ com.hello2morrow.sonargraph.integration.access.foundation,
+ com.hello2morrow.sonargraph.integration.access.model,
+ com.hello2morrow.sonargraph.integration.access.persistence,
+ com.hello2morrow.sonargraph.integration.access.persistence.report,
+ com.hello2morrow.sonargraph.integration.architecture.persistence
 Import-Package: org.slf4j

@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 
-public class ModuleInfoProcessorTest
+public final class ModuleInfoProcessorTest
 {
     private static final String JAVA_INTERNAL_COMPILATION_UNIT = "JavaInternalCompilationUnit";
     private static final String JAVA_SOURCE_ROOT_DIRECTORY_PATH = "JavaSourceRootDirectoryPath";
@@ -65,8 +65,8 @@ public class ModuleInfoProcessorTest
     public void before()
     {
         m_exportMetaDataController = ControllerAccess.createMetaDataController();
-        final ResultWithOutcome<IExportMetaData> loadMetaDataResult = m_exportMetaDataController.loadExportMetaData(new File(
-                TestFixture.META_DATA_PATH));
+        final ResultWithOutcome<IExportMetaData> loadMetaDataResult = m_exportMetaDataController
+                .loadExportMetaData(new File(TestFixture.META_DATA_PATH));
         assertTrue(loadMetaDataResult.toString(), loadMetaDataResult.isSuccess());
         m_exportMetaData = loadMetaDataResult.getOutcome();
         m_controller = ControllerAccess.createController();
@@ -112,16 +112,16 @@ public class ModuleInfoProcessorTest
         assertNotNull("src root not found", srcRoot);
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcRoot));
 
-        final INamedElement srcFile = TestUtility.getFqNameToNamedElement(application, JAVA_INTERNAL_COMPILATION_UNIT).get(
-                "Workspace:Application:../../smallTestProject/Application/src/main/java:com:h2m:alarm:application:Main.java");
+        final INamedElement srcFile = TestUtility.getFqNameToNamedElement(application, JAVA_INTERNAL_COMPILATION_UNIT)
+                .get("Workspace:Application:../../smallTestProject/Application/src/main/java:com:h2m:alarm:application:Main.java");
         assertNotNull("src file not found", srcFile);
         assertTrue("Element must be contained in module!", processor.isElementContainedInModule(srcFile));
 
         final Optional<IModule> foundationOptional = m_controller.getSoftwareSystem().getModule("Foundation");
         assertTrue("Module not found", foundationOptional.isPresent());
         final IModule foundation = foundationOptional.get();
-        final INamedElement srcRoot2 = TestUtility.getFqNameToNamedElement(foundation, JAVA_SOURCE_ROOT_DIRECTORY_PATH).get(
-                "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java");
+        final INamedElement srcRoot2 = TestUtility.getFqNameToNamedElement(foundation, JAVA_SOURCE_ROOT_DIRECTORY_PATH)
+                .get("Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java");
         final INamedElement srcFile2 = TestUtility.getFqNameToNamedElement(foundation, JAVA_INTERNAL_COMPILATION_UNIT).get(
                 "Workspace:Foundation:../../smallTestProject/AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java");
         assertFalse("Element must not be contained in module", processor.isElementContainedInModule(srcRoot2));
@@ -183,8 +183,8 @@ public class ModuleInfoProcessorTest
         final IModule application = applicationOptional.get();
 
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
-        final Map<ISourceFile, List<IIssue>> sourceFilesWithIssueMap = processor.getIssuesForSourceFiles((final IIssue issue) -> !issue
-                .hasResolution());
+        final Map<ISourceFile, List<IIssue>> sourceFilesWithIssueMap = processor
+                .getIssuesForSourceFiles((final IIssue issue) -> !issue.hasResolution());
         assertFalse("Map must not be empty", sourceFilesWithIssueMap.isEmpty());
 
         final List<ISourceFile> files = sourceFilesWithIssueMap.keySet().stream()
@@ -209,8 +209,8 @@ public class ModuleInfoProcessorTest
         final IModule application = applicationOptional.get();
 
         final IModuleInfoProcessor processor = m_controller.createModuleInfoProcessor(application);
-        final Map<ISourceFile, List<IIssue>> sourceFilesWithIssueMap = processor.getIssuesForSourceFiles((final IIssue issue) -> !issue
-                .hasResolution());
+        final Map<ISourceFile, List<IIssue>> sourceFilesWithIssueMap = processor
+                .getIssuesForSourceFiles((final IIssue issue) -> !issue.hasResolution());
         assertFalse("Map must not be empty", sourceFilesWithIssueMap.isEmpty());
 
         final Optional<ISourceFile> duplicateInModel = sourceFilesWithIssueMap.keySet().stream()

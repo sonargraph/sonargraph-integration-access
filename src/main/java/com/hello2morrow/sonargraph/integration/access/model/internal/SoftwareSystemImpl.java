@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,13 +49,6 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
     private static final long serialVersionUID = -4666348701032432246L;
-    private final String systemId;
-    private final String path;
-    private final String version;
-    private final String virtualModel;
-    private final long timestamp;
-    private int numberOfIssues = 0;
-    private String baseDir;
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
@@ -71,6 +64,15 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
     private final Map<NamedElementImpl, SourceFileImpl> namedElementToSourceFile = new HashMap<>();
+
+    private final String systemId;
+    private final String path;
+    private final String version;
+    private final String virtualModel;
+    private final long timestamp;
+    private final String baseDir;
+
+    private int numberOfIssues = 0;
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel)
@@ -115,11 +117,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public String getBaseDir()
     {
         return baseDir;
-    }
-
-    public void setBaseDir(final String baseDirectory)
-    {
-        baseDir = baseDirectory;
     }
 
     @Override

@@ -1,6 +1,6 @@
-/**
+/*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2017 hello2morrow GmbH
+ * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@ public class TestFixture
 {
     /**Report containing all available metric levels */
     public static final String TEST_REPORT = "./src/test/resources/AlarmClock.xml";
-    public static final String TEST_REPORT_NOT_EXISTING_BASE_PATH = "./src/test/resources/AlarmClock_notExistingBaseDir.xml";
     public static final String INVALID_TEST_REPORT = "./src/test/resources/AlarmClock_invalid.xml";
 
     public static final String TEST_REPORT_THRESHOLD_VIOLATIONS = "./src/test/resources/AlarmClock_thresholdViolations.xml";
@@ -59,11 +58,5 @@ public class TestFixture
     public static final String TEST_REPORT_REFACTORINGS = "./src/test/resources/AlarmClockMain_Refactorings.xml";
     public static final String TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES = "./src/test/resources/AlarmClockMain_Refactorings_DuplicateFqName.xml";
 
-    /**
-     * Resources to test merge functionality
-     */
-    public static final String META_DATA_PATH1 = "./src/test/resources/mergeMetaData/ExportMetaData1.xml";
-    public static final String META_DATA_PATH1_OLD = "./src/test/resources/mergeMetaData/ExportMetaData1_old.xml";
-    public static final String META_DATA_PATH2 = "./src/test/resources/mergeMetaData/ExportMetaData2.xml";
     public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
 }
