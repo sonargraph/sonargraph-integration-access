@@ -1,0 +1,962 @@
+<?xml version="1.0" ?>
+<architecture name="sonargraph.arc" model="physical">
+    <artifact name="UI-Java">
+        <include>Standalone Java/**</include>
+        <interface name="UI-Java.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="UI-Java.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+            <connectTo>Core.UI</connectTo>
+            <connectTo>UI-Common.default</connectTo>
+            <connectTo>LanguageProvider-Java.UI</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="UI-CSharp">
+        <include>Standalone C#/**</include>
+        <interface name="UI-CSharp.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="UI-CSharp.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+            <connectTo>Core.UI</connectTo>
+            <connectTo>UI-Common.default</connectTo>
+            <connectTo>LanguageProvider-CSharp.UI</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="UI-CPlusPlus">
+        <include>Standalone C++/**</include>
+        <interface name="UI-CPlusPlus.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="UI-CPlusPlus.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+            <connectTo>Core.UI</connectTo>
+            <connectTo>UI-Common.default</connectTo>
+            <connectTo>LanguageProvider-CPlusPlus.UI</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="UI-Common">
+        <include>Standalone/**</include>
+        <artifact name="UI-Common.EclipseRCP">
+            <stereotype>LOCAL</stereotype>
+            <include isStrong="true">**/org/eclipse/**</include>
+            <exclude>**/org/eclipse/aether/**</exclude>
+            <interface name="UI-Common.EclipseRCP.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="UI-Common.EclipseRCP.default" isOptional="false">
+                <include>**</include>
+            </connector>
+        </artifact>
+        <interface name="UI-Common.default" isOptional="false">
+            <include>**</include>
+            <export>UI-Common.EclipseRCP.default</export>
+        </interface>
+        <connector name="UI-Common.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+            <connectTo>License.default</connectTo>
+            <connectTo>Core.UI</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="JaxB">
+        <include>**/javax/xml/bind/annotation/**</include>
+        <interface name="JaxB.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="JaxB.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="LanguageProvider-Java">
+        <include>Language Provider Java/**</include>
+        <artifact name="LanguageProvider-Java.Command">
+            <stereotype>EXPOSED</stereotype>
+            <include>**/command/**</include>
+            <interface name="LanguageProvider-Java.Command.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-Java.Command.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-Java.Model.default</connectTo>
+                <connectTo>LanguageProvider-Java.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-Java.Controller.default</connectTo>
+                <connectTo>Core.Command.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-Java.Controller">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/controller*/**</include>
+            <interface name="LanguageProvider-Java.Controller.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-Java.Controller.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-Java.Model.default</connectTo>
+                <connectTo>LanguageProvider-Java.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-Java.Persistence.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-Java.Persistence">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/persistence*/**</include>
+            <interface name="LanguageProvider-Java.Persistence.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-Java.Persistence.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-Java.Model.default</connectTo>
+                <connectTo>LanguageProvider-Java.Foundation.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>JaxB.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-Java.Model">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/model/**</include>
+            <artifact name="LanguageProvider-Java.Model.System">
+                <include>**/analysis/**</include>
+                <include>**/script/**</include>
+                <include>**/event/**</include>
+                <include>**/graph/**</include>
+                <include>**/history/**</include>
+                <include>**/metrics/**</include>
+                <include>**/representation/**</include>
+                <include>**/system/**</include>
+                <include>**/transaction/**</include>
+                <include>**/tree/**</include>
+                <include>**/architecture/**</include>
+                <include>**/dashboard/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/report/**</include>
+                <include>**/settings/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/session/**</include>
+                <interface name="LanguageProvider-Java.Model.System.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-Java.Model.System.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-Java.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-Java.Model.Path.default</connectTo>
+                    <connectTo>LanguageProvider-Java.Model.Programming.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">LanguageProvider-Java.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-Java.Model.Programming">
+                <stereotype>STRICT</stereotype>
+                <include>**/programming/**</include>
+                <include>**/ignore/**</include>
+                <include>**/generic/**</include>
+                <interface name="LanguageProvider-Java.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-Java.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-Java.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-Java.Model.Path.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">LanguageProvider-Java.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-Java.Model.Path">
+                <include>**/path/**</include>
+                <interface name="LanguageProvider-Java.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-Java.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-Java.Model.Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">LanguageProvider-Java.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-Java.Model.Common">
+                <stereotype>PUBLIC</stereotype>
+                <include>**</include>
+                <interface name="LanguageProvider-Java.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-Java.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">LanguageProvider-Java.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <interface name="LanguageProvider-Java.Model.UI" isOptional="false">
+                <export>LanguageProvider-Java.Model.System.default</export>
+                <export>LanguageProvider-Java.Model.Programming.default</export>
+                <export>LanguageProvider-Java.Model.Path.default</export>
+                <export>LanguageProvider-Java.Model.Common.default</export>
+                <dependencyRestrictions>
+                    <allowedDependencyType>CALL</allowedDependencyType>
+                    <allowedDependencyType>EXTENDS</allowedDependencyType>
+                    <allowedDependencyType>IMPLEMENTS</allowedDependencyType>
+                    <allowedDependencyType>READ</allowedDependencyType>
+                    <allowedDependencyType>USES</allowedDependencyType>
+                    <allowedDependencyType>WRITE</allowedDependencyType>
+                </dependencyRestrictions>
+            </interface>
+            <interface name="LanguageProvider-Java.Model.default" isOptional="false">
+                <include>**</include>
+                <export>LanguageProvider-Java.Model.System.default</export>
+                <export>LanguageProvider-Java.Model.Programming.default</export>
+                <export>LanguageProvider-Java.Model.Path.default</export>
+                <export>LanguageProvider-Java.Model.Common.default</export>
+            </interface>
+            <connector name="LanguageProvider-Java.Model.default" isOptional="false">
+                <include>**</include>
+                <includedConnector>LanguageProvider-Java.Model.System.default</includedConnector>
+                <includedConnector>LanguageProvider-Java.Model.Programming.default</includedConnector>
+                <includedConnector>LanguageProvider-Java.Model.Path.default</includedConnector>
+                <includedConnector>LanguageProvider-Java.Model.Common.default</includedConnector>
+                <connectTo>LanguageProvider-Java.Foundation.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-Java.Foundation">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/foundation/**</include>
+            <interface name="LanguageProvider-Java.Foundation.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-Java.Foundation.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-Java.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <interface name="LanguageProvider-Java.UI" isOptional="false">
+            <export>LanguageProvider-Java.Command.default</export>
+            <export>LanguageProvider-Java.Model.UI</export>
+            <export>LanguageProvider-Java.Foundation.default</export>
+        </interface>
+        <interface name="LanguageProvider-Java.default" isOptional="false">
+            <include>**</include>
+            <export>LanguageProvider-Java.Command.default</export>
+            <export>LanguageProvider-Java.Controller.default</export>
+            <export>LanguageProvider-Java.Persistence.default</export>
+            <export>LanguageProvider-Java.Model.default</export>
+            <export>LanguageProvider-Java.Foundation.default</export>
+        </interface>
+        <connector name="LanguageProvider-Java.default" isOptional="false">
+            <include>**</include>
+            <includedConnector>LanguageProvider-Java.Command.default</includedConnector>
+            <includedConnector>LanguageProvider-Java.Controller.default</includedConnector>
+            <includedConnector>LanguageProvider-Java.Persistence.default</includedConnector>
+            <includedConnector>LanguageProvider-Java.Model.default</includedConnector>
+            <includedConnector>LanguageProvider-Java.Foundation.default</includedConnector>
+            <connectTo>Common.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="LanguageProvider-CSharp">
+        <include>Language Provider C#/**</include>
+        <artifact name="LanguageProvider-CSharp.Command">
+            <stereotype>EXPOSED</stereotype>
+            <include>**/command/**</include>
+            <interface name="LanguageProvider-CSharp.Command.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CSharp.Command.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CSharp.Model.default</connectTo>
+                <connectTo>LanguageProvider-CSharp.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-CSharp.Controller.default</connectTo>
+                <connectTo>Core.Command.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CSharp.Controller">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/controller*/**</include>
+            <interface name="LanguageProvider-CSharp.Controller.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CSharp.Controller.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CSharp.Model.default</connectTo>
+                <connectTo>LanguageProvider-CSharp.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-CSharp.Persistence.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CSharp.Persistence">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/persistence*/**</include>
+            <interface name="LanguageProvider-CSharp.Persistence.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CSharp.Persistence.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CSharp.Model.default</connectTo>
+                <connectTo>LanguageProvider-CSharp.Foundation.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>JaxB.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CSharp.Model">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/model/**</include>
+            <artifact name="LanguageProvider-CSharp.Model.System">
+                <include>**/analysis/**</include>
+                <include>**/script/**</include>
+                <include>**/event/**</include>
+                <include>**/graph/**</include>
+                <include>**/history/**</include>
+                <include>**/metrics/**</include>
+                <include>**/representation/**</include>
+                <include>**/system/**</include>
+                <include>**/transaction/**</include>
+                <include>**/tree/**</include>
+                <include>**/architecture/**</include>
+                <include>**/dashboard/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/report/**</include>
+                <include>**/settings/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/session/**</include>
+                <interface name="LanguageProvider-CSharp.Model.System.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CSharp.Model.System.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CSharp.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-CSharp.Model.Path.default</connectTo>
+                    <connectTo>LanguageProvider-CSharp.Model.Programming.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">LanguageProvider-CSharp.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CSharp.Model.Programming">
+                <stereotype>STRICT</stereotype>
+                <include>**/programming/**</include>
+                <include>**/ignore/**</include>
+                <include>**/generic/**</include>
+                <interface name="LanguageProvider-CSharp.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CSharp.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CSharp.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-CSharp.Model.Path.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">LanguageProvider-CSharp.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CSharp.Model.Path">
+                <include>**/path/**</include>
+                <interface name="LanguageProvider-CSharp.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CSharp.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CSharp.Model.Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">LanguageProvider-CSharp.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CSharp.Model.Common">
+                <stereotype>PUBLIC</stereotype>
+                <include>**</include>
+                <interface name="LanguageProvider-CSharp.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CSharp.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">LanguageProvider-CSharp.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <interface name="LanguageProvider-CSharp.Model.UI" isOptional="false">
+                <export>LanguageProvider-CSharp.Model.System.default</export>
+                <export>LanguageProvider-CSharp.Model.Programming.default</export>
+                <export>LanguageProvider-CSharp.Model.Path.default</export>
+                <export>LanguageProvider-CSharp.Model.Common.default</export>
+                <dependencyRestrictions>
+                    <allowedDependencyType>CALL</allowedDependencyType>
+                    <allowedDependencyType>EXTENDS</allowedDependencyType>
+                    <allowedDependencyType>IMPLEMENTS</allowedDependencyType>
+                    <allowedDependencyType>READ</allowedDependencyType>
+                    <allowedDependencyType>USES</allowedDependencyType>
+                    <allowedDependencyType>WRITE</allowedDependencyType>
+                </dependencyRestrictions>
+            </interface>
+            <interface name="LanguageProvider-CSharp.Model.default" isOptional="false">
+                <include>**</include>
+                <export>LanguageProvider-CSharp.Model.System.default</export>
+                <export>LanguageProvider-CSharp.Model.Programming.default</export>
+                <export>LanguageProvider-CSharp.Model.Path.default</export>
+                <export>LanguageProvider-CSharp.Model.Common.default</export>
+            </interface>
+            <connector name="LanguageProvider-CSharp.Model.default" isOptional="false">
+                <include>**</include>
+                <includedConnector>LanguageProvider-CSharp.Model.System.default</includedConnector>
+                <includedConnector>LanguageProvider-CSharp.Model.Programming.default</includedConnector>
+                <includedConnector>LanguageProvider-CSharp.Model.Path.default</includedConnector>
+                <includedConnector>LanguageProvider-CSharp.Model.Common.default</includedConnector>
+                <connectTo>LanguageProvider-CSharp.Foundation.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CSharp.Foundation">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/foundation/**</include>
+            <interface name="LanguageProvider-CSharp.Foundation.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CSharp.Foundation.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CSharp.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <interface name="LanguageProvider-CSharp.UI" isOptional="false">
+            <export>LanguageProvider-CSharp.Command.default</export>
+            <export>LanguageProvider-CSharp.Model.UI</export>
+            <export>LanguageProvider-CSharp.Foundation.default</export>
+        </interface>
+        <interface name="LanguageProvider-CSharp.default" isOptional="false">
+            <include>**</include>
+            <export>LanguageProvider-CSharp.Command.default</export>
+            <export>LanguageProvider-CSharp.Controller.default</export>
+            <export>LanguageProvider-CSharp.Persistence.default</export>
+            <export>LanguageProvider-CSharp.Model.default</export>
+            <export>LanguageProvider-CSharp.Foundation.default</export>
+        </interface>
+        <connector name="LanguageProvider-CSharp.default" isOptional="false">
+            <include>**</include>
+            <includedConnector>LanguageProvider-CSharp.Command.default</includedConnector>
+            <includedConnector>LanguageProvider-CSharp.Controller.default</includedConnector>
+            <includedConnector>LanguageProvider-CSharp.Persistence.default</includedConnector>
+            <includedConnector>LanguageProvider-CSharp.Model.default</includedConnector>
+            <includedConnector>LanguageProvider-CSharp.Foundation.default</includedConnector>
+            <connectTo>Common.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="LanguageProvider-CPlusPlus">
+        <include>Language Provider C++/**</include>
+        <artifact name="LanguageProvider-CPlusPlus.Command">
+            <stereotype>EXPOSED</stereotype>
+            <include>**/command/**</include>
+            <interface name="LanguageProvider-CPlusPlus.Command.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CPlusPlus.Command.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CPlusPlus.Model.default</connectTo>
+                <connectTo>LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-CPlusPlus.Controller.default</connectTo>
+                <connectTo>Core.Command.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CPlusPlus.Controller">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/controller*/**</include>
+            <interface name="LanguageProvider-CPlusPlus.Controller.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CPlusPlus.Controller.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CPlusPlus.Model.default</connectTo>
+                <connectTo>LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                <connectTo>LanguageProvider-CPlusPlus.Persistence.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CPlusPlus.Persistence">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/persistence*/**</include>
+            <interface name="LanguageProvider-CPlusPlus.Persistence.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CPlusPlus.Persistence.default" isOptional="false">
+                <include>**</include>
+                <connectTo>LanguageProvider-CPlusPlus.Model.default</connectTo>
+                <connectTo>LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>JaxB.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CPlusPlus.Model">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/model/**</include>
+            <artifact name="LanguageProvider-CPlusPlus.Model.System">
+                <include>**/analysis/**</include>
+                <include>**/script/**</include>
+                <include>**/event/**</include>
+                <include>**/graph/**</include>
+                <include>**/history/**</include>
+                <include>**/metrics/**</include>
+                <include>**/representation/**</include>
+                <include>**/system/**</include>
+                <include>**/transaction/**</include>
+                <include>**/tree/**</include>
+                <include>**/architecture/**</include>
+                <include>**/dashboard/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/report/**</include>
+                <include>**/settings/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/session/**</include>
+                <interface name="LanguageProvider-CPlusPlus.Model.System.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CPlusPlus.Model.System.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Path.default</connectTo>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Programming.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CPlusPlus.Model.Programming">
+                <stereotype>STRICT</stereotype>
+                <include>**/programming/**</include>
+                <include>**/ignore/**</include>
+                <include>**/generic/**</include>
+                <interface name="LanguageProvider-CPlusPlus.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CPlusPlus.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Common.default</connectTo>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Path.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CPlusPlus.Model.Path">
+                <include>**/path/**</include>
+                <interface name="LanguageProvider-CPlusPlus.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CPlusPlus.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>LanguageProvider-CPlusPlus.Model.Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="LanguageProvider-CPlusPlus.Model.Common">
+                <stereotype>PUBLIC</stereotype>
+                <include>**</include>
+                <interface name="LanguageProvider-CPlusPlus.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="LanguageProvider-CPlusPlus.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Model.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+                </connector>
+            </artifact>
+            <interface name="LanguageProvider-CPlusPlus.Model.UI" isOptional="false">
+                <export>LanguageProvider-CPlusPlus.Model.System.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Programming.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Path.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Common.default</export>
+                <dependencyRestrictions>
+                    <allowedDependencyType>CALL</allowedDependencyType>
+                    <allowedDependencyType>EXTENDS</allowedDependencyType>
+                    <allowedDependencyType>IMPLEMENTS</allowedDependencyType>
+                    <allowedDependencyType>READ</allowedDependencyType>
+                    <allowedDependencyType>USES</allowedDependencyType>
+                    <allowedDependencyType>WRITE</allowedDependencyType>
+                </dependencyRestrictions>
+            </interface>
+            <interface name="LanguageProvider-CPlusPlus.Model.default" isOptional="false">
+                <include>**</include>
+                <export>LanguageProvider-CPlusPlus.Model.System.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Programming.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Path.default</export>
+                <export>LanguageProvider-CPlusPlus.Model.Common.default</export>
+            </interface>
+            <connector name="LanguageProvider-CPlusPlus.Model.default" isOptional="false">
+                <include>**</include>
+                <includedConnector>LanguageProvider-CPlusPlus.Model.System.default</includedConnector>
+                <includedConnector>LanguageProvider-CPlusPlus.Model.Programming.default</includedConnector>
+                <includedConnector>LanguageProvider-CPlusPlus.Model.Path.default</includedConnector>
+                <includedConnector>LanguageProvider-CPlusPlus.Model.Common.default</includedConnector>
+                <connectTo>LanguageProvider-CPlusPlus.Foundation.default</connectTo>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="LanguageProvider-CPlusPlus.Foundation">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/foundation/**</include>
+            <interface name="LanguageProvider-CPlusPlus.Foundation.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="LanguageProvider-CPlusPlus.Foundation.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="LanguageProvider-CPlusPlus.default">Common.default</connectTo>
+            </connector>
+        </artifact>
+        <interface name="LanguageProvider-CPlusPlus.UI" isOptional="false">
+            <export>LanguageProvider-CPlusPlus.Command.default</export>
+            <export>LanguageProvider-CPlusPlus.Model.UI</export>
+            <export>LanguageProvider-CPlusPlus.Foundation.default</export>
+        </interface>
+        <interface name="LanguageProvider-CPlusPlus.default" isOptional="false">
+            <include>**</include>
+            <export>LanguageProvider-CPlusPlus.Command.default</export>
+            <export>LanguageProvider-CPlusPlus.Controller.default</export>
+            <export>LanguageProvider-CPlusPlus.Persistence.default</export>
+            <export>LanguageProvider-CPlusPlus.Model.default</export>
+            <export>LanguageProvider-CPlusPlus.Foundation.default</export>
+        </interface>
+        <connector name="LanguageProvider-CPlusPlus.default" isOptional="false">
+            <include>**</include>
+            <includedConnector>LanguageProvider-CPlusPlus.Command.default</includedConnector>
+            <includedConnector>LanguageProvider-CPlusPlus.Controller.default</includedConnector>
+            <includedConnector>LanguageProvider-CPlusPlus.Persistence.default</includedConnector>
+            <includedConnector>LanguageProvider-CPlusPlus.Model.default</includedConnector>
+            <includedConnector>LanguageProvider-CPlusPlus.Foundation.default</includedConnector>
+            <connectTo>Common.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="Core">
+        <include>Core/**</include>
+        <artifact name="Core.Application">
+            <include>**/application/**</include>
+            <interface name="Core.Application.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="Core.Application.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>Core.Command.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="Core.Command">
+            <stereotype>EXPOSED</stereotype>
+            <include>**/command/**</include>
+            <interface name="Core.Command.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="Core.Command.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>Core.Controller.default</connectTo>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="Core.Controller">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/controller*/**</include>
+            <interface name="Core.Controller.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="Core.Controller.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>Core.Persistence.default</connectTo>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="Core.Persistence">
+            <stereotype>EXPOSED</stereotype>
+            <stereotype>STRICT</stereotype>
+            <include>**/persistence*/**</include>
+            <interface name="Core.Persistence.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="Core.Persistence.default" isOptional="false">
+                <include>**</include>
+                <connectTo>Core.Model.default</connectTo>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo>JaxB.default</connectTo>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="Core.Model">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/model/**</include>
+            <artifact name="Core.Model.System">
+                <include>**/analysis/**</include>
+                <include>**/script/**</include>
+                <include>**/event/**</include>
+                <include>**/graph/**</include>
+                <include>**/history/**</include>
+                <include>**/metrics/**</include>
+                <include>**/representation/**</include>
+                <include>**/system/**</include>
+                <include>**/transaction/**</include>
+                <include>**/tree/**</include>
+                <include>**/architecture/**</include>
+                <include>**/dashboard/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/report/**</include>
+                <include>**/settings/**</include>
+                <include>**/workspace/**</include>
+                <include>**/refactoring/**</include>
+                <include>**/session/**</include>
+                <interface name="Core.Model.System.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="Core.Model.System.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>Core.Model.Common.default</connectTo>
+                    <connectTo>Core.Model.Path.default</connectTo>
+                    <connectTo>Core.Model.Programming.default</connectTo>
+                    <connectTo viaParentConnector="Core.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="Core.Model.Programming">
+                <stereotype>STRICT</stereotype>
+                <include>**/programming/**</include>
+                <include>**/ignore/**</include>
+                <include>**/generic/**</include>
+                <interface name="Core.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="Core.Model.Programming.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>Core.Model.Common.default</connectTo>
+                    <connectTo>Core.Model.Path.default</connectTo>
+                    <connectTo viaParentConnector="Core.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="Core.Model.Path">
+                <include>**/path/**</include>
+                <interface name="Core.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="Core.Model.Path.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo>Core.Model.Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                </connector>
+            </artifact>
+            <artifact name="Core.Model.Common">
+                <stereotype>PUBLIC</stereotype>
+                <include>**</include>
+                <interface name="Core.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                </interface>
+                <connector name="Core.Model.Common.default" isOptional="false">
+                    <include>**</include>
+                    <connectTo viaParentConnector="Core.Model.default">Core.Foundation.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                    <connectTo viaParentConnector="Core.default">License.default</connectTo>
+                </connector>
+            </artifact>
+            <interface name="Core.Model.UI" isOptional="false">
+                <export>Core.Model.System.default</export>
+                <export>Core.Model.Programming.default</export>
+                <export>Core.Model.Path.default</export>
+                <export>Core.Model.Common.default</export>
+                <dependencyRestrictions>
+                    <allowedDependencyType>CALL</allowedDependencyType>
+                    <allowedDependencyType>EXTENDS</allowedDependencyType>
+                    <allowedDependencyType>IMPLEMENTS</allowedDependencyType>
+                    <allowedDependencyType>READ</allowedDependencyType>
+                    <allowedDependencyType>USES</allowedDependencyType>
+                    <allowedDependencyType>WRITE</allowedDependencyType>
+                </dependencyRestrictions>
+            </interface>
+            <interface name="Core.Model.default" isOptional="false">
+                <include>**</include>
+                <export>Core.Model.System.default</export>
+                <export>Core.Model.Programming.default</export>
+                <export>Core.Model.Path.default</export>
+                <export>Core.Model.Common.default</export>
+            </interface>
+            <connector name="Core.Model.default" isOptional="false">
+                <include>**</include>
+                <includedConnector>Core.Model.System.default</includedConnector>
+                <includedConnector>Core.Model.Programming.default</includedConnector>
+                <includedConnector>Core.Model.Path.default</includedConnector>
+                <includedConnector>Core.Model.Common.default</includedConnector>
+                <connectTo>Core.Foundation.default</connectTo>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <artifact name="Core.Foundation">
+            <stereotype>PUBLIC</stereotype>
+            <stereotype>EXPOSED</stereotype>
+            <include>**/foundation/**</include>
+            <interface name="Core.Foundation.default" isOptional="false">
+                <include>**</include>
+            </interface>
+            <connector name="Core.Foundation.default" isOptional="false">
+                <include>**</include>
+                <connectTo viaParentConnector="Core.default">Common.default</connectTo>
+                <connectTo viaParentConnector="Core.default">License.default</connectTo>
+            </connector>
+        </artifact>
+        <interface name="Core.UI" isOptional="false">
+            <export>Core.Command.default</export>
+            <export>Core.Model.UI</export>
+            <export>Core.Foundation.default</export>
+            <export>Core.Application.default</export>
+        </interface>
+        <interface name="Core.default" isOptional="false">
+            <include>**</include>
+            <export>Core.Application.default</export>
+            <export>Core.Command.default</export>
+            <export>Core.Controller.default</export>
+            <export>Core.Persistence.default</export>
+            <export>Core.Model.default</export>
+            <export>Core.Foundation.default</export>
+        </interface>
+        <connector name="Core.default" isOptional="false">
+            <include>**</include>
+            <includedConnector>Core.Application.default</includedConnector>
+            <includedConnector>Core.Command.default</includedConnector>
+            <includedConnector>Core.Controller.default</includedConnector>
+            <includedConnector>Core.Persistence.default</includedConnector>
+            <includedConnector>Core.Model.default</includedConnector>
+            <includedConnector>Core.Foundation.default</includedConnector>
+            <connectTo>Common.default</connectTo>
+            <connectTo>License.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="License">
+        <include>License/**</include>
+        <interface name="License.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="License.default" isOptional="false">
+            <include>**</include>
+            <connectTo>Common.default</connectTo>
+        </connector>
+    </artifact>
+    <artifact name="Common">
+        <stereotype>PUBLIC</stereotype>
+        <include>Common/**</include>
+        <interface name="Common.default" isOptional="false">
+            <include>**</include>
+        </interface>
+        <connector name="Common.default" isOptional="false">
+            <include>**</include>
+        </connector>
+    </artifact>
+</architecture>

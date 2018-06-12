@@ -215,6 +215,10 @@
       <id>dietmarmenges</id>
       <name>Dietmar Menges</name>
     </developer>
+    <developer>
+      <id>a-zitzewitz</id>
+      <name>Alexander von Zitzewitz</name>
+    </developer>
   </developers>
   <profiles>
     <profile>
