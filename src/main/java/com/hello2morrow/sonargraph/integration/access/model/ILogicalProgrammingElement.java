@@ -1,4 +1,4 @@
-/**
+/*
  * Sonargraph Integration Access
  * Copyright (C) 2016-2018 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
