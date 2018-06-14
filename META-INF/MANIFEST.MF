@@ -12,3 +12,4 @@ Export-Package: com.hello2morrow.sonargraph.integration.access.controller,
  com.hello2morrow.sonargraph.integration.access.persistence.report,
  com.hello2morrow.sonargraph.integration.architecture.persistence
 Import-Package: org.slf4j
+Automatic-Module-Name: com.hello2morrow.sonargraph.integration.access
