@@ -28,6 +28,7 @@ import java.util.Properties;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.persistence.CustomMetrics.CustomMetricsProvider.Feedback;
 
 public final class CustomMetrics
 {
@@ -35,35 +36,48 @@ public final class CustomMetrics
     private static final String CUSTOM_METRIC_INT = "INT";
     private static final String CUSTOM_METRIC_FLOAT = "FLOAT";
 
-    public interface ICustomMetricsProvider
+    public static abstract class CustomMetricsProvider
     {
         /**
-         * @return a non-null, non-empty name
+         * @return a non-null, non-empty directory name
          */
-        public abstract String getHiddenDirectoryName();
+        protected abstract String getHiddenDirectoryName();
 
-        public default String getDirectory()
+        protected String getParentDirectoryPathOfHiddenDirectory()
         {
-            return System.getProperty("user.home") + "/." + getHiddenDirectoryName();
+            //Default
+            return System.getProperty("user.home");
         }
 
-        public default String getFileName()
+        protected String getFileName()
         {
+            //Default
             return "metrics.properties";
         }
 
-        public default String getFilePath()
+        final String getDirectory()
         {
-            return getDirectory() + "/" + getFileName();
+            return getParentDirectoryPathOfHiddenDirectory() + "/." + getHiddenDirectoryName();
         }
 
-        public void error(String error, IOException exception);
+        final String getFilePath()
+        {
+            return getParentDirectoryPathOfHiddenDirectory() + "/." + getHiddenDirectoryName() + "/" + getFileName();
+        }
 
-        public void warning(String warning);
+        protected enum Feedback
+        {
+            ERROR,
+            WARNING,
+            INFO,
+            SAVED
+        }
 
-        public void info(String info);
-
-        public void customMetricsSaved(String info);
+        protected void feedback(final Feedback feedback, final String message)
+        {
+            assert feedback != null : "Parameter 'feedback' of method 'feedback' must not be null";
+            assert message != null && message.length() > 0 : "Parameter 'message' of method 'feedback' must not be empty";
+        }
     }
 
     private CustomMetrics()
@@ -71,7 +85,7 @@ public final class CustomMetrics
         super();
     }
 
-    public static Properties loadCustomMetrics(final ICustomMetricsProvider customMetricsProvider)
+    public static Properties loadCustomMetrics(final CustomMetricsProvider customMetricsProvider)
     {
         assert customMetricsProvider != null : "Parameter 'customMetricsProvider' of method 'loadCustomMetrics' must not be null";
 
@@ -80,15 +94,16 @@ public final class CustomMetrics
         try (FileInputStream fis = new FileInputStream(new File(customMetricsProvider.getFilePath())))
         {
             customMetrics.load(fis);
-            customMetricsProvider.info("Loaded custom metrics file '" + customMetricsProvider.getFilePath() + "'");
+            customMetricsProvider.feedback(Feedback.INFO, "Loaded custom metrics file '" + customMetricsProvider.getFilePath() + "'");
         }
         catch (final FileNotFoundException e)
         {
-            customMetricsProvider.info("Custom metrics file '" + customMetricsProvider.getFilePath() + "' not found");
+            customMetricsProvider.feedback(Feedback.INFO, "Custom metrics file '" + customMetricsProvider.getFilePath() + "' not found");
         }
         catch (final IOException e)
         {
-            customMetricsProvider.error("Unable to load custom metrics file '" + customMetricsProvider.getFilePath() + "'", e);
+            customMetricsProvider.feedback(Feedback.ERROR,
+                    "Unable to load custom metrics file '" + customMetricsProvider.getFilePath() + "' - " + e.getLocalizedMessage());
         }
 
         return customMetrics;
@@ -120,7 +135,7 @@ public final class CustomMetrics
                         + CUSTOM_METRIC_SEPARATOR + Utility.trimDescription(metricId.getDescription(), maxLengthDescription));
     }
 
-    public static void save(final ICustomMetricsProvider customMetricsProvider, final Properties customMetrics)
+    public static void save(final CustomMetricsProvider customMetricsProvider, final Properties customMetrics)
     {
         assert customMetricsProvider != null : "Parameter 'customMetricsProvider' of method 'save' must not be null";
         assert customMetrics != null : "Parameter 'customMetrics' of method 'save' must not be null";
@@ -130,11 +145,12 @@ public final class CustomMetrics
             final File file = new File(customMetricsProvider.getDirectory());
             file.mkdirs();
             customMetrics.store(new FileWriter(new File(file, customMetricsProvider.getFileName())), "Custom Metrics");
-            customMetricsProvider.customMetricsSaved("Custom metrics file '" + customMetricsProvider.getFilePath() + "' saved");
+            customMetricsProvider.feedback(Feedback.SAVED, "Custom metrics file '" + customMetricsProvider.getFilePath() + "' saved");
         }
         catch (final IOException e)
         {
-            customMetricsProvider.error("Unable to save custom metrics file '" + customMetricsProvider.getFilePath() + "'", e);
+            customMetricsProvider.feedback(Feedback.ERROR,
+                    "Unable to save custom metrics file '" + customMetricsProvider.getFilePath() + "' - " + e.getLocalizedMessage());
         }
     }
 
@@ -147,19 +163,23 @@ public final class CustomMetrics
         throw new IllegalArgumentException("Empty input");
     }
 
-    public interface ICustomMetricsConsumer
+    public static abstract class CustomMetricsConsumer
     {
-        public void parsedFloatMetric(String nextMetricKey, String nextMetricPresentationName, String trimDescription, Double nextBestValue,
+        protected abstract void parsedFloatMetric(String nextMetricKey, String nextMetricPresentationName, String trimDescription,
+                Double nextBestValue, Double nextWorstValue);
+
+        protected abstract void parsedIntMetric(String nextMetricKey, String nextMetricPresentationName, String trimDescription, Double nextBestValue,
                 Double nextWorstValue);
 
-        public void parsedIntMetric(String nextMetricKey, String nextMetricPresentationName, String trimDescription, Double nextBestValue,
-                Double nextWorstValue);
-
-        public void unableToParseMetric(String string);
+        protected void unableToParseMetric(final String message)
+        {
+            assert message != null && message.length() > 0 : "Parameter 'message' of method 'unableToParseMetric' must not be empty";
+            //Default
+        }
     }
 
     public static void parse(final Properties customMetrics, final String metricKeyPrefix, final int maxLengthDescription,
-            final ICustomMetricsConsumer consumer)
+            final CustomMetricsConsumer consumer)
     {
         assert customMetrics != null : "Parameter 'customMetrics' of method 'parse' must not be null";
         assert metricKeyPrefix != null : "Parameter 'metricKeyPrefix' of method 'parse' must not be null";
