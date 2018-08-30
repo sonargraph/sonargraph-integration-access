@@ -65,7 +65,7 @@ public final class CustomMetrics
             return getParentDirectoryPathOfHiddenDirectory() + "/." + getHiddenDirectoryName() + "/" + getFileName();
         }
 
-        protected enum Feedback
+        public enum Feedback
         {
             ERROR,
             WARNING,
