@@ -34,4 +34,16 @@ public class UtilityTest
     {
         assertEquals("NUMBER_OF_VIOLATIONS", Utility.convertMixedCaseStringToConstantName("NumberOfViolations"));
     }
+
+    @Test
+    public void testTrimDescription()
+    {
+        assertEquals("", Utility.trimDescription(null, 4));
+        assertEquals("", Utility.trimDescription("", 6));
+        assertEquals("Test", Utility.trimDescription("Test", 4));
+        assertEquals("T...", Utility.trimDescription("TestTest", 4));
+        assertEquals("Te", Utility.trimDescription("Te", 2));
+        assertEquals("T.", Utility.trimDescription("Tes", 2));
+        assertEquals("T", Utility.trimDescription("Te", 1));
+    }
 }

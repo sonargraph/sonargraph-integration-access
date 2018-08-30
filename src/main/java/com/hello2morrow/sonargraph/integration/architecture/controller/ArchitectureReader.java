@@ -50,12 +50,11 @@ import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdInclu
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdInterface;
 import com.hello2morrow.sonargraph.integration.architecture.persistence.XsdStereotype;
 
-public class ArchitectureReader
+public final class ArchitectureReader
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureReader.class);
-
-    private final Map<String, Connector> m_connectorMap = new HashMap<>();
-    private final Map<String, Interface> m_interfaceMap = new HashMap<>();
+    private final Map<String, Connector> connectorMap = new HashMap<>();
+    private final Map<String, Interface> interfaceMap = new HashMap<>();
 
     /**
      * Reads an XML report.
@@ -74,7 +73,7 @@ public class ArchitectureReader
 
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(modelFile)))
         {
-            Architecture xmlRoot = jaxbAdapter.load(in, eventHandler);
+            final Architecture xmlRoot = jaxbAdapter.load(in, eventHandler);
 
             if (xmlRoot != null)
             {
@@ -89,122 +88,122 @@ public class ArchitectureReader
         return Optional.ofNullable(model);
     }
 
-    private ArchitecturalModel convertXmlArchitectureToPojo(Architecture value)
+    private ArchitecturalModel convertXmlArchitectureToPojo(final Architecture value)
     {
-        ArchitecturalModel model = new ArchitecturalModel(value.getName(), value.getModel());
+        final ArchitecturalModel model = new ArchitecturalModel(value.getName(), value.getModel());
 
-        for (XsdArtifact xmlArtifact : value.getArtifact())
+        for (final XsdArtifact xmlArtifact : value.getArtifact())
         {
             model.addArtifact(convertXmlArtifact(null, xmlArtifact));
         }
 
         // Linking is done after all interfaces and connectors are known
-        for (XsdArtifact xmlArtifact : value.getArtifact())
+        for (final XsdArtifact xmlArtifact : value.getArtifact())
         {
             linkArtifact(xmlArtifact);
         }
         return model;
     }
 
-    private void addFilters(ArchitectureElement element, List<XsdInclude> includeFilters, List<String> excludeFilter)
+    private void addFilters(final ArchitectureElement element, final List<XsdInclude> includeFilters, final List<String> excludeFilter)
     {
         includeFilters.forEach(inc -> element.addIncludeFilter(inc.getValue(), inc.isIsStrong()));
         excludeFilter.forEach(element::addExcludeFilter);
     }
 
-    private Artifact convertXmlArtifact(Artifact parent, XsdArtifact xmlArtifact)
+    private Artifact convertXmlArtifact(final Artifact parent, final XsdArtifact xmlArtifact)
     {
-        Artifact artifact = new Artifact(parent, xmlArtifact.getName());
+        final Artifact artifact = new Artifact(parent, xmlArtifact.getName());
 
         addFilters(artifact, xmlArtifact.getInclude(), xmlArtifact.getExclude());
-        for (XsdStereotype xmlSt : xmlArtifact.getStereotype())
+        for (final XsdStereotype xmlSt : xmlArtifact.getStereotype())
         {
             artifact.addStereoType(Artifact.Stereotype.valueOf(xmlSt.name()));
         }
-        for (XsdArtifact child : xmlArtifact.getArtifact())
+        for (final XsdArtifact child : xmlArtifact.getArtifact())
         {
             artifact.addChild(convertXmlArtifact(artifact, child));
         }
-        for (XsdInterface xmlIface : xmlArtifact.getInterface())
+        for (final XsdInterface xmlIface : xmlArtifact.getInterface())
         {
-            Interface iface= convertXmlInterface(artifact, xmlIface);
+            final Interface iface = convertXmlInterface(artifact, xmlIface);
 
             artifact.addInterface(iface);
         }
-        for (XsdConnector xmlConn : xmlArtifact.getConnector())
+        for (final XsdConnector xmlConn : xmlArtifact.getConnector())
         {
-            Connector conn = convertXmlConnector(artifact, xmlConn);
+            final Connector conn = convertXmlConnector(artifact, xmlConn);
 
             artifact.addConnector(conn);
         }
         return artifact;
     }
 
-    private Connector convertXmlConnector(Artifact parent, XsdConnector xmlConnector)
+    private Connector convertXmlConnector(final Artifact parent, final XsdConnector xmlConnector)
     {
-        Connector connector = new Connector(parent, xmlConnector.getName(), xmlConnector.isIsOptional());
+        final Connector connector = new Connector(parent, xmlConnector.getName(), xmlConnector.isIsOptional());
 
-        m_connectorMap.put(connector.getFullName(), connector);
+        connectorMap.put(connector.getFullName(), connector);
         addFilters(connector, xmlConnector.getInclude(), xmlConnector.getExclude());
         return connector;
     }
 
-    private Interface convertXmlInterface(Artifact parent, XsdInterface xmlIface)
+    private Interface convertXmlInterface(final Artifact parent, final XsdInterface xmlIface)
     {
         EnumSet<Interface.DependencyType> allowedDependencyTypes = null;
-        XsdDependencyRestrictions restrictions = xmlIface.getDependencyRestrictions();
+        final XsdDependencyRestrictions restrictions = xmlIface.getDependencyRestrictions();
 
         if (restrictions != null)
         {
             allowedDependencyTypes = EnumSet.noneOf(Interface.DependencyType.class);
 
-            for (XsdDependencyType depType : restrictions.getAllowedDependencyType())
+            for (final XsdDependencyType depType : restrictions.getAllowedDependencyType())
             {
                 allowedDependencyTypes.add(Interface.DependencyType.valueOf(depType.name()));
             }
         }
 
-        Interface iface = new Interface(parent, xmlIface.getName(), xmlIface.isIsOptional(), allowedDependencyTypes);
+        final Interface iface = new Interface(parent, xmlIface.getName(), xmlIface.isIsOptional(), allowedDependencyTypes);
 
-        m_interfaceMap.put(iface.getFullName(), iface);
+        interfaceMap.put(iface.getFullName(), iface);
         addFilters(iface, xmlIface.getInclude(), xmlIface.getExclude());
         return iface;
     }
 
-    private void linkArtifact(XsdArtifact xmlArtifact)
+    private void linkArtifact(final XsdArtifact xmlArtifact)
     {
-        for (XsdArtifact child : xmlArtifact.getArtifact())
+        for (final XsdArtifact child : xmlArtifact.getArtifact())
         {
             linkArtifact(child);
         }
-        for (XsdInterface xmlInterface : xmlArtifact.getInterface())
+        for (final XsdInterface xmlInterface : xmlArtifact.getInterface())
         {
             linkInterface(xmlInterface);
         }
-        for (XsdConnector xmlConnector : xmlArtifact.getConnector())
+        for (final XsdConnector xmlConnector : xmlArtifact.getConnector())
         {
             linkConnector(xmlConnector);
         }
     }
 
-    private void linkConnector(XsdConnector xmlConnector)
+    private void linkConnector(final XsdConnector xmlConnector)
     {
-        Connector connector = m_connectorMap.get(xmlConnector.getName());
+        final Connector connector = connectorMap.get(xmlConnector.getName());
 
         assert connector != null;
-        for (String includedConnectorName : xmlConnector.getIncludedConnector())
+        for (final String includedConnectorName : xmlConnector.getIncludedConnector())
         {
-            Connector includedConnector = m_connectorMap.get(includedConnectorName);
+            final Connector includedConnector = connectorMap.get(includedConnectorName);
 
             assert includedConnector != null;
             connector.addIncludedConnector(includedConnector);
         }
-        for (XsdConnection connection : xmlConnector.getConnectTo())
+        for (final XsdConnection connection : xmlConnector.getConnectTo())
         {
             if (connection.getViaParentConnector() == null)
             {
                 // Only include direct connections into the model
-                Interface connectedInterface = m_interfaceMap.get(connection.getValue());
+                final Interface connectedInterface = interfaceMap.get(connection.getValue());
 
                 assert connectedInterface != null;
                 connector.addConnectedInterface(connectedInterface);
@@ -212,14 +211,14 @@ public class ArchitectureReader
         }
     }
 
-    private void linkInterface(XsdInterface xmlInterface)
+    private void linkInterface(final XsdInterface xmlInterface)
     {
-        Interface iface = m_interfaceMap.get(xmlInterface.getName());
+        final Interface iface = interfaceMap.get(xmlInterface.getName());
 
         assert iface != null;
-        for (String exportName : xmlInterface.getExport())
+        for (final String exportName : xmlInterface.getExport())
         {
-            Interface exportedInterface = m_interfaceMap.get(exportName);
+            final Interface exportedInterface = interfaceMap.get(exportName);
 
             assert exportedInterface != null;
             iface.addExportedInterface(exportedInterface);

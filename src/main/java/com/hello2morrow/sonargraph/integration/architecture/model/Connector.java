@@ -22,53 +22,52 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Connector extends ArchitectureElement
+public final class Connector extends ArchitectureElement
 {
-    private final Artifact m_parent;
-    private final boolean m_isOptional;
-    private final List<Connector> m_includedConnectors = new ArrayList<>();
-    private final List<Interface> m_connectedInterfaces = new ArrayList<>();
+    private final ArchitectureElement parent;
+    private final boolean isOptional;
+    private final List<Connector> includedConnectors = new ArrayList<>();
+    private final List<Interface> connectedInterfaces = new ArrayList<>();
 
-    public Connector(Artifact parent, String name, boolean isOptional)
+    public Connector(final ArchitectureElement parent, final String name, final boolean isOptional)
     {
         super(name);
-
         assert parent != null;
-        m_parent = parent;
-        m_isOptional = isOptional;
+        this.parent = parent;
+        this.isOptional = isOptional;
     }
 
     public boolean isOptional()
     {
-        return m_isOptional;
+        return isOptional;
     }
 
-    public Artifact getParent()
+    public ArchitectureElement getParent()
     {
-        return m_parent;
+        return parent;
     }
 
-    public void addIncludedConnector(Connector included)
+    public void addIncludedConnector(final Connector included)
     {
         assert included != null;
 
-        m_includedConnectors.add(included);
+        includedConnectors.add(included);
     }
 
     public List<Connector> getIncludedConnectors()
     {
-        return Collections.unmodifiableList(m_includedConnectors);
+        return Collections.unmodifiableList(includedConnectors);
     }
 
-    public void addConnectedInterface(Interface connection)
+    public void addConnectedInterface(final Interface connection)
     {
         assert connection != null;
 
-        m_connectedInterfaces.add(connection);
+        connectedInterfaces.add(connection);
     }
 
     public List<Interface> getConnectedInterfaces()
     {
-        return Collections.unmodifiableList(m_connectedInterfaces);
+        return Collections.unmodifiableList(connectedInterfaces);
     }
 }

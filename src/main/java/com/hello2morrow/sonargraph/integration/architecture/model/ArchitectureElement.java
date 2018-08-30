@@ -27,15 +27,14 @@ import java.util.List;
  */
 public abstract class ArchitectureElement
 {
-    private final String m_name;
-    private final List<Filter> m_inclusionFilters = new ArrayList<>();
-    private final List<Filter> m_exclusionFilters = new ArrayList<>();
+    private final String name;
+    private final List<Filter> inclusionFilters = new ArrayList<>();
+    private final List<Filter> exclusionFilters = new ArrayList<>();
 
-    protected ArchitectureElement(String fqn)
+    protected ArchitectureElement(final String fqn)
     {
         assert fqn != null && fqn.length() > 0;
-
-        m_name = fqn;
+        this.name = fqn;
     }
 
     /**
@@ -44,13 +43,13 @@ public abstract class ArchitectureElement
      */
     public String getName()
     {
-        int dotPos = m_name.lastIndexOf('.');
+        final int dotPos = name.lastIndexOf('.');
 
         if (dotPos == -1)
         {
-            return m_name;
+            return name;
         }
-        return m_name.substring(dotPos+1);
+        return name.substring(dotPos + 1);
     }
 
     /**
@@ -59,26 +58,26 @@ public abstract class ArchitectureElement
      */
     public String getFullName()
     {
-        return m_name;
+        return name;
     }
 
-    public void addIncludeFilter(String pattern, boolean isStromg)
+    public void addIncludeFilter(final String pattern, final boolean isStromg)
     {
-        m_inclusionFilters.add(new Filter(pattern, isStromg));
+        inclusionFilters.add(new Filter(pattern, isStromg));
     }
 
-    public void addExcludeFilter(String pattern)
+    public void addExcludeFilter(final String pattern)
     {
-        m_exclusionFilters.add(new Filter(pattern, false));
+        exclusionFilters.add(new Filter(pattern, false));
     }
 
     public List<Filter> getIncludeFilters()
     {
-        return Collections.unmodifiableList(m_inclusionFilters);
+        return Collections.unmodifiableList(inclusionFilters);
     }
 
     public List<Filter> getExcludeFilters()
     {
-        return Collections.unmodifiableList(m_exclusionFilters);
+        return Collections.unmodifiableList(exclusionFilters);
     }
 }

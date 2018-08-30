@@ -18,24 +18,24 @@
 
 package com.hello2morrow.sonargraph.integration.architecture.model;
 
-public class Filter
+public final class Filter
 {
-    private final String m_pattern;
-    private final boolean m_isStrong;
+    private final String pattern;
+    private final boolean isStrong;
 
-    Filter(String pattern, boolean isStrong)
+    Filter(final String pattern, final boolean isStrong)
     {
-        m_pattern = pattern;
-        m_isStrong = isStrong;
+        this.pattern = pattern;
+        this.isStrong = isStrong;
     }
 
     public String getPattern()
     {
-        return m_pattern;
+        return pattern;
     }
 
     public boolean isStrong()
     {
-        return m_isStrong;
+        return isStrong;
     }
 }

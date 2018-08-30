@@ -24,7 +24,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public class Artifact extends ArchitectureElement
+public final class Artifact extends ArchitectureElement
 {
     public enum Stereotype
     {
@@ -39,73 +39,69 @@ public class Artifact extends ArchitectureElement
         STRICT
     }
 
-    private final Artifact m_parent;
-    private EnumSet<Stereotype> m_stereotypes = EnumSet.noneOf(Stereotype.class);
-    private final List<Artifact> m_children = new ArrayList<>();
-    private final List<Interface> m_interfaces = new ArrayList<>();
-    private final List<Connector> m_connectors = new ArrayList<>();
+    private final Artifact parent;
+    private final EnumSet<Stereotype> stereotypes = EnumSet.noneOf(Stereotype.class);
+    private final List<Artifact> children = new ArrayList<>();
+    private final List<Interface> interfaces = new ArrayList<>();
+    private final List<Connector> connectors = new ArrayList<>();
 
     /**
      * Initialize new artifact element
-     * @param fqn the fully quaified name of the artifact
+     * @param fqn the fully qualified name of the artifact
      */
-    public Artifact(Artifact parent, String fqn)
+    public Artifact(final Artifact parent, final String fqn)
     {
         super(fqn);
-        m_parent = parent;
+        this.parent = parent;
     }
 
-    public void addStereoType(Stereotype st)
+    public void addStereoType(final Stereotype st)
     {
         assert st != null;
-
-        m_stereotypes.add(st);
+        stereotypes.add(st);
     }
 
-    public void addChild(Artifact child)
+    public void addChild(final Artifact child)
     {
         assert child != null;
         assert child.getParent() == this;
-
-        m_children.add(child);
+        children.add(child);
     }
 
-    public void addInterface(Interface iface)
+    public void addInterface(final Interface iface)
     {
         assert iface != null;
-
-        m_interfaces.add(iface);
+        interfaces.add(iface);
     }
 
-    public void addConnector(Connector conn)
+    public void addConnector(final Connector conn)
     {
         assert conn != null;
-
-        m_connectors.add(conn);
+        connectors.add(conn);
     }
 
     public Artifact getParent()
     {
-        return m_parent;
+        return parent;
     }
 
     public Set<Stereotype> getStereotypes()
     {
-        return Collections.unmodifiableSet(m_stereotypes);
+        return Collections.unmodifiableSet(stereotypes);
     }
 
     public List<Artifact> getChildren()
     {
-        return Collections.unmodifiableList(m_children);
+        return Collections.unmodifiableList(children);
     }
 
     public List<Interface> getInterfaces()
     {
-        return Collections.unmodifiableList(m_interfaces);
+        return Collections.unmodifiableList(interfaces);
     }
 
     public List<Connector> getConnectors()
     {
-        return Collections.unmodifiableList(m_connectors);
+        return Collections.unmodifiableList(connectors);
     }
 }
