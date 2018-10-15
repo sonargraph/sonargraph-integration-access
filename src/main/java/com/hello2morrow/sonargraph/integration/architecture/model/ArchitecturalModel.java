@@ -25,16 +25,16 @@ import java.util.List;
 /**
  * Class representing a complete architectural model.
  */
-public class ArchitecturalModel
+public final class ArchitecturalModel
 {
-    private final String m_fileName;
-    private final String m_model;
+    private final String fileName;
+    private final String model;
     private final List<Artifact> m_artifacts = new ArrayList<>();
 
-    public ArchitecturalModel(String fileName, String model)
+    public ArchitecturalModel(final String fileName, final String model)
     {
-        m_fileName = fileName;
-        m_model = model;
+        this.fileName = fileName;
+        this.model = model;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ArchitecturalModel
      */
     public String getFileName()
     {
-        return m_fileName;
+        return fileName;
     }
 
     /**
@@ -53,10 +53,10 @@ public class ArchitecturalModel
      */
     public String getModel()
     {
-        return m_model;
+        return model;
     }
 
-    public void addArtifact(Artifact artifact)
+    public void addArtifact(final Artifact artifact)
     {
         assert artifact != null;
 
@@ -80,19 +80,19 @@ public class ArchitecturalModel
      */
     public List<Artifact> getAllArtifacts()
     {
-        List<Artifact> result = new ArrayList<>();
+        final List<Artifact> result = new ArrayList<>();
 
-        for (Artifact artifact : m_artifacts)
+        for (final Artifact artifact : m_artifacts)
         {
             addArtifactAndChildrenToList(result, artifact);
         }
         return result;
     }
 
-    private void addArtifactAndChildrenToList(List<Artifact> list, Artifact artifact)
+    private void addArtifactAndChildrenToList(final List<Artifact> list, final Artifact artifact)
     {
         list.add(artifact);
-        for (Artifact child : artifact.getChildren())
+        for (final Artifact child : artifact.getChildren())
         {
             addArtifactAndChildrenToList(list, child);
         }
@@ -104,7 +104,7 @@ public class ArchitecturalModel
      * @param fullName
      * @return the artifact with the given fullName or null.
      */
-    public Artifact findArtifact(String fullName)
+    public Artifact findArtifact(final String fullName)
     {
         assert fullName != null && fullName.length() > 0;
 
@@ -117,25 +117,25 @@ public class ArchitecturalModel
      * @param fullName
      * @return the interface with the given fullName or null.
      */
-    public Interface findInterface(String fullName)
+    public Interface findInterface(final String fullName)
     {
         assert fullName != null && fullName.length() > 0;
 
-        int dotPos = fullName.lastIndexOf('.');
+        final int dotPos = fullName.lastIndexOf('.');
 
         if (dotPos <= 0)
         {
             return null;
         }
 
-        String artifactName = fullName.substring(0, dotPos);
-        String interfaceName = fullName.substring(dotPos+1);
+        final String artifactName = fullName.substring(0, dotPos);
+        final String interfaceName = fullName.substring(dotPos + 1);
 
-        Artifact artifact = findArtifact(artifactName);
+        final Artifact artifact = findArtifact(artifactName);
 
         if (artifact != null)
         {
-            return  artifact.getInterfaces().stream().filter(i -> i.getName().equals(interfaceName)).findFirst().orElse(null);
+            return artifact.getInterfaces().stream().filter(i -> i.getName().equals(interfaceName)).findFirst().orElse(null);
         }
         return null;
     }
@@ -146,21 +146,21 @@ public class ArchitecturalModel
      * @param fullName
      * @return the connector with the given fullName or null.
      */
-    public Connector findConnector(String fullName)
+    public Connector findConnector(final String fullName)
     {
         assert fullName != null && fullName.length() > 0;
 
-        int dotPos = fullName.lastIndexOf('.');
+        final int dotPos = fullName.lastIndexOf('.');
 
         if (dotPos <= 0)
         {
             return null;
         }
 
-        String artifactName = fullName.substring(0, dotPos);
-        String connectorName = fullName.substring(dotPos+1);
+        final String artifactName = fullName.substring(0, dotPos);
+        final String connectorName = fullName.substring(dotPos + 1);
 
-        Artifact artifact = findArtifact(artifactName);
+        final Artifact artifact = findArtifact(artifactName);
 
         if (artifact != null)
         {

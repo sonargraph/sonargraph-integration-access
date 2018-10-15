@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * Class representing an interface of an artifact
  */
-public class Interface extends ArchitectureElement
+public final class Interface extends ArchitectureElement
 {
     public enum DependencyType
     {
@@ -40,19 +40,20 @@ public class Interface extends ArchitectureElement
         NEW
     }
 
-    private final Artifact m_parent;
-    private final boolean m_isOptional;
-    private final EnumSet<DependencyType> m_allowedDependencyTypes; // Will be bull, if here are no restrictions
-    private final List<Interface> m_exportedInterfaces = new ArrayList<>();
+    private final ArchitectureElement parent;
+    private final boolean isOptional;
+    private final EnumSet<DependencyType> allowedDependencyTypes; // Will be bull, if here are no restrictions
+    private final List<Interface> exportedInterfaces = new ArrayList<>();
 
-    public Interface(Artifact parent, String name, boolean isOptional, EnumSet<DependencyType> allowedDependencyTypes)
+    public Interface(final ArchitectureElement parent, final String name, final boolean isOptional,
+            final EnumSet<DependencyType> allowedDependencyTypes)
     {
         super(name);
 
         assert parent != null;
-        m_parent = parent;
-        m_isOptional = isOptional;
-        m_allowedDependencyTypes = allowedDependencyTypes;
+        this.parent = parent;
+        this.isOptional = isOptional;
+        this.allowedDependencyTypes = allowedDependencyTypes;
     }
 
     /**
@@ -62,11 +63,11 @@ public class Interface extends ArchitectureElement
      */
     public boolean isRestricted()
     {
-        return m_allowedDependencyTypes != null;
+        return allowedDependencyTypes != null;
     }
 
     /**
-     * Get the set of allowed dependency types for this interface. If unresstricted all possible
+     * Get the set of allowed dependency types for this interface. If unrestricted all possible
      * dependency types will be returned.
      *
      * @return set of allowed dependency types.
@@ -75,30 +76,29 @@ public class Interface extends ArchitectureElement
     {
         if (isRestricted())
         {
-            return Collections.unmodifiableSet(m_allowedDependencyTypes);
+            return Collections.unmodifiableSet(allowedDependencyTypes);
         }
         return EnumSet.allOf(DependencyType.class);
     }
 
-    public void addExportedInterface(Interface iface)
+    public void addExportedInterface(final Interface iface)
     {
         assert iface != null;
-
-        m_exportedInterfaces.add(iface);
+        exportedInterfaces.add(iface);
     }
 
     public List<Interface> getExportedInterfaces()
     {
-        return Collections.unmodifiableList(m_exportedInterfaces);
+        return Collections.unmodifiableList(exportedInterfaces);
     }
 
     public boolean isOptional()
     {
-        return m_isOptional;
+        return isOptional;
     }
 
-    public Artifact getParent()
+    public ArchitectureElement getParent()
     {
-        return m_parent;
+        return parent;
     }
 }

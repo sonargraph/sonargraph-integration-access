@@ -21,10 +21,15 @@ package com.hello2morrow.sonargraph.integration.architecture.persistence;
 import com.hello2morrow.sonargraph.integration.access.persistence.JaxbAdapter;
 import com.hello2morrow.sonargraph.integration.access.persistence.XmlPersistenceContext;
 
-public abstract class ArchitectureJaxbAdapter
+public final class ArchitectureJaxbAdapter
 {
     private static final String ARCHITECTURE_NAMESPACE = "com.hello2morrow.sonargraph.integration.architecture.persistence";
     private static final String ARCHITECTURE_XSD = "com/hello2morrow/sonargraph/integration/architecture/persistence/architecture.xsd";
+
+    private ArchitectureJaxbAdapter()
+    {
+        super();
+    }
 
     public static JaxbAdapter<Architecture> create()
     {

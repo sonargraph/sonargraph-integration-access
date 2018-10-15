@@ -101,7 +101,6 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElem
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFeature;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
@@ -168,10 +167,8 @@ public final class XmlReportReader extends XmlAccess
             return Optional.empty();
         }
 
-        this.currentlyReading = reportFile;
-
+        currentlyReading = reportFile;
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
-
         JAXBElement<XsdSoftwareSystemReport> xmlRoot = null;
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(reportFile)))
         {
@@ -193,7 +190,7 @@ public final class XmlReportReader extends XmlAccess
                 result.addError(ResultCause.WRONG_FORMAT,
                         "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
             }
-            this.currentlyReading = null;
+            currentlyReading = null;
         }
 
         return Optional.empty();
@@ -364,14 +361,8 @@ public final class XmlReportReader extends XmlAccess
         {
             for (final XsdRootDirectory nextXsdRootDirectory : nextXsdModule.getRootDirectory())
             {
-                for (final XsdSourceFile nextXsdSourceFile : nextXsdRootDirectory.getSourceElement())
-                {
-                    connectPhysicalElementOriginal(nextXsdSourceFile);
-                }
-                for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdRootDirectory.getPhysicalRecursiveElement())
-                {
-                    connectPhysicalElementOriginal(nextXsdPhysicalRecursiveElement);
-                }
+                nextXsdRootDirectory.getSourceElement().forEach(s -> connectPhysicalElementOriginal(s));
+                nextXsdRootDirectory.getPhysicalRecursiveElement().forEach(p -> connectPhysicalElementOriginal(p));
             }
         }
     }
@@ -464,19 +455,10 @@ public final class XmlReportReader extends XmlAccess
         languageBasedContainerImpl.addElement(rootDirectoryImpl);
         globalXmlToElementMap.put(xsdRootDirectory, rootDirectoryImpl);
 
-        for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : xsdRootDirectory.getPhysicalRecursiveElement())
-        {
-            createPhysicalRecursiveElementImpl(softwareSystemImpl, languageBasedContainerImpl, rootDirectoryImpl, nextXsdPhysicalRecursiveElement,
-                    rootDirectoryImpl.getRelativePath());
-        }
-        for (final XsdSourceFile nextXsdSourceFile : xsdRootDirectory.getSourceElement())
-        {
-            createSourceFileImpl(softwareSystemImpl, languageBasedContainerImpl, rootDirectoryImpl, nextXsdSourceFile);
-        }
-        for (final XsdProgrammingElement nextXsdProgrammingElement : xsdRootDirectory.getProgrammingElement())
-        {
-            createProgrammingElementImpl(languageBasedContainerImpl, rootDirectoryImpl, nextXsdProgrammingElement);
-        }
+        xsdRootDirectory.getPhysicalRecursiveElement().forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, languageBasedContainerImpl,
+                rootDirectoryImpl, e, rootDirectoryImpl.getRelativePath()));
+        xsdRootDirectory.getSourceElement().forEach(s -> createSourceFileImpl(softwareSystemImpl, languageBasedContainerImpl, rootDirectoryImpl, s));
+        xsdRootDirectory.getProgrammingElement().forEach(p -> createProgrammingElementImpl(languageBasedContainerImpl, rootDirectoryImpl, p));
     }
 
     private void createWorkspaceElements(final SoftwareSystemImpl softwareSystemImpl, final XsdWorkspace xsdWorkspace, final Result result)
@@ -495,10 +477,7 @@ public final class XmlReportReader extends XmlAccess
             nextModuleImpl.addElement(nextModuleImpl);
             globalXmlToElementMap.put(nextXsdModule, nextModuleImpl);
 
-            for (final XsdRootDirectory nextXsdRootDirectory : nextXsdModule.getRootDirectory())
-            {
-                createRootDirectoryImpl(softwareSystemImpl, nextModuleImpl, nextXsdRootDirectory);
-            }
+            nextXsdModule.getRootDirectory().forEach(r -> createRootDirectoryImpl(softwareSystemImpl, nextModuleImpl, r));
         }
 
         for (final XsdExternal nextXsdExternal : xsdWorkspace.getExternal())
@@ -511,18 +490,10 @@ public final class XmlReportReader extends XmlAccess
             nextExternalImpl.addElement(nextExternalImpl);
             globalXmlToElementMap.put(nextXsdExternal, nextExternalImpl);
 
-            for (final XsdRootDirectory nextXsdRootDirectory : nextXsdExternal.getRootDirectory())
-            {
-                createRootDirectoryImpl(softwareSystemImpl, nextExternalImpl, nextXsdRootDirectory);
-            }
-            for (final XsdPhysicalRecursiveElement nextXsdPhysicalRecursiveElement : nextXsdExternal.getPhysicalRecursiveElement())
-            {
-                createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, nextXsdPhysicalRecursiveElement, null);
-            }
-            for (final XsdProgrammingElement nextXsdProgrammingElement : nextXsdExternal.getProgrammingElement())
-            {
-                createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, nextXsdProgrammingElement);
-            }
+            nextXsdExternal.getRootDirectory().forEach(r -> createRootDirectoryImpl(softwareSystemImpl, nextExternalImpl, r));
+            nextXsdExternal.getPhysicalRecursiveElement()
+                    .forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, e, null));
+            nextXsdExternal.getProgrammingElement().forEach(e -> createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, e));
         }
     }
 
@@ -554,8 +525,8 @@ public final class XmlReportReader extends XmlAccess
                 catch (final Exception e)
                 {
                     LOGGER.error("Failed to process resolution type '" + nextResolution.getType() + "'", e);
-                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Resolution type '" + nextResolution.getType()
-                            + "' is not supported and will be ignored.");
+                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                            "Resolution type '" + nextResolution.getType() + "' is not supported and will be ignored.");
                     continue;
                 }
             }
@@ -568,8 +539,8 @@ public final class XmlReportReader extends XmlAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process priority type '" + nextResolution.getPrio() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Priority type '" + nextResolution.getPrio()
-                        + "' is not supported, setting to '" + Priority.NONE + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Priority type '" + nextResolution.getPrio() + "' is not supported, setting to '" + Priority.NONE + "'");
                 priority = Priority.NONE;
             }
 
@@ -594,22 +565,16 @@ public final class XmlReportReader extends XmlAccess
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
-
-        for (final XsdAnalyzer next : report.getAnalyzers().getAnalyzer())
-        {
-            softwareSystem.addAnalyzer(new AnalyzerImpl(next.getName(), next.getPresentationName(), next.getDescription(), next.isLicensed()));
-        }
+        report.getAnalyzers().getAnalyzer()
+                .forEach(a -> softwareSystem.addAnalyzer(new AnalyzerImpl(a.getName(), a.getPresentationName(), a.getDescription(), a.isLicensed())));
     }
 
     private static void processFeatures(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
-
-        for (final XsdFeature next : report.getFeatures().getFeature())
-        {
-            softwareSystem.addFeature(new FeatureImpl(next.getName(), next.getPresentationName(), next.isLicensed()));
-        }
+        report.getFeatures().getFeature()
+                .forEach(f -> softwareSystem.addFeature(new FeatureImpl(f.getName(), f.getPresentationName(), f.isLicensed())));
     }
 
     private static void processDuplicateCodeConfiguration(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
@@ -620,10 +585,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdDuplicateCodeConfiguration duplicateCodeConfiguration = report.getDuplicateCodeConfiguration();
         if (duplicateCodeConfiguration != null)
         {
-            for (final String next : duplicateCodeConfiguration.getEntry())
-            {
-                softwareSystem.addDuplicateCodeConfigurationEntry(next);
-            }
+            duplicateCodeConfiguration.getEntry().forEach(e -> softwareSystem.addDuplicateCodeConfigurationEntry(e));
         }
     }
 
@@ -635,10 +597,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdScriptRunnerConfiguration scriptRunnerConfiguration = report.getScriptRunnerConfiguration();
         if (scriptRunnerConfiguration != null)
         {
-            for (final String next : scriptRunnerConfiguration.getEntry())
-            {
-                softwareSystem.addScriptRunnerConfigurationEntry(next);
-            }
+            scriptRunnerConfiguration.getEntry().forEach(e -> softwareSystem.addScriptRunnerConfigurationEntry(e));
         }
     }
 
@@ -650,10 +609,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdArchitectureCheckConfiguration architectureCheckConfiguration = report.getArchitectureCheckConfiguration();
         if (architectureCheckConfiguration != null)
         {
-            for (final String next : architectureCheckConfiguration.getEntry())
-            {
-                softwareSystem.addArchitectureCheckConfigurationEntry(next);
-            }
+            architectureCheckConfiguration.getEntry().forEach(e -> softwareSystem.addArchitectureCheckConfigurationEntry(e));
         }
     }
 
@@ -831,32 +787,20 @@ public final class XmlReportReader extends XmlAccess
         assert xsdReport != null : "Parameter 'xsdReport' of method 'processMetrics' must not be null";
 
         final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap = XmlExportMetaDataReader.processMetricCategories(xsdReport.getMetaData());
-        for (final MetricCategoryImpl category : categoryXsdToPojoMap.values())
-        {
-            softwareSystem.addMetricCategory(category);
-        }
+        categoryXsdToPojoMap.values().forEach(c -> softwareSystem.addMetricCategory(c));
         globalXmlToElementMap.putAll(categoryXsdToPojoMap);
 
         final Map<Object, MetricProviderImpl> providerXsdToPojoMap = XmlExportMetaDataReader.processProviders(xsdReport.getMetaData());
-        for (final MetricProviderImpl provider : providerXsdToPojoMap.values())
-        {
-            softwareSystem.addMetricProvider(provider);
-        }
+        providerXsdToPojoMap.values().forEach(p -> softwareSystem.addMetricProvider(p));
         globalXmlToElementMap.putAll(providerXsdToPojoMap);
 
         final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap = XmlExportMetaDataReader.processMetricLevels(xsdReport.getMetaData());
-        for (final MetricLevelImpl level : metricLevelXsdToPojoMap.values())
-        {
-            softwareSystem.addMetricLevel(level);
-        }
+        metricLevelXsdToPojoMap.values().forEach(l -> softwareSystem.addMetricLevel(l));
         globalXmlToElementMap.putAll(metricLevelXsdToPojoMap);
 
-        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(),
-                categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap);
-        for (final MetricIdImpl id : metricIdXsdToPojoMap.values())
-        {
-            softwareSystem.addMetricId(id);
-        }
+        final Map<Object, MetricIdImpl> metricIdXsdToPojoMap = XmlExportMetaDataReader.processMetricIds(xsdReport.getMetaData(), categoryXsdToPojoMap,
+                providerXsdToPojoMap, metricLevelXsdToPojoMap);
+        metricIdXsdToPojoMap.values().forEach(i -> softwareSystem.addMetricId(i));
         globalXmlToElementMap.putAll(metricIdXsdToPojoMap);
 
         final XsdSystemMetricValues xsdSystemMetricLevel = xsdReport.getSystemMetricValues();
@@ -904,14 +848,13 @@ public final class XmlReportReader extends XmlAccess
                 {
                     for (final XsdMetricIntValue nextIntValue : nextValue.getInt())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(), () -> new Integer(
-                                nextIntValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(),
+                                () -> new Integer(nextIntValue.getValue()));
                     }
-
                     for (final XsdMetricFloatValue nextFloatValue : nextValue.getFloat())
                     {
-                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(), () -> new Float(
-                                nextFloatValue.getValue()));
+                        addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(),
+                                () -> new Float(nextFloatValue.getValue()));
                     }
                 }
             }
@@ -966,10 +909,7 @@ public final class XmlReportReader extends XmlAccess
         }
 
         final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(report.getMetaData());
-        for (final IssueCategoryImpl category : issueCategoryXsdToPojoMap.values())
-        {
-            softwareSystem.addIssueCategory(category);
-        }
+        issueCategoryXsdToPojoMap.values().forEach(c -> softwareSystem.addIssueCategory(c));
         globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
 
         for (final XsdIssueType next : report.getMetaData().getIssueTypes().getIssueType())
@@ -982,8 +922,8 @@ public final class XmlReportReader extends XmlAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
-                        + "' is not supported, setting to '" + Severity.ERROR + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
             final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
@@ -1054,7 +994,6 @@ public final class XmlReportReader extends XmlAccess
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextDuplicate);
 
             final List<IDuplicateCodeBlockOccurrence> occurrences = new ArrayList<>(nextDuplicate.getNumberOfOccurrences());
-
             for (final XsdDuplicateCodeBlockOccurrence nextOccurence : nextDuplicate.getOccurrence())
             {
                 final IElement element = globalXmlToElementMap.get(nextOccurence.getSource());
@@ -1096,8 +1035,9 @@ public final class XmlReportReader extends XmlAccess
 
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
-                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(), name != null && !name.isEmpty() ? name
-                        : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType, issueProvider, analyzer, cyclicElements);
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
+                        name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
+                        issueProvider, analyzer, cyclicElements);
 
                 softwareSystem.addIssue(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);

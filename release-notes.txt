@@ -1,27 +1,28 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.1.7
+=====
+
+- Formatted a lot of classes.
+- Added support for custom metrics.
+
+
 3.1.6
 =====
 
-New Features
-------------
-- Added classes to read exported architecture xml files.
+- Added support to read exported architecture xml files.
 
 
 3.1.5
 =====
 
-Improvements
-------------
 - Diff now uses rounded values.
 
 
 3.1.4
 =====
 
-Improvements
-------------
 - Corrected some diff messages.
 - Report changes in duplicate code, script runner and architecture check configuration.
 - Report the resolution type status (fix, ignore, ...) of an added/removed issue. 
@@ -30,16 +31,12 @@ Improvements
 3.1.3
 =====
 
-Improvements
-------------
 - Only show 1 path in diff when the paths of the baseline and current system are equal.
 
 
 3.1.2
 =====
 
-Improvements
-------------
 - Issues on directories are now accessible.
 - Issues on namespaces are mapped to directories where possible.
 - The created model now reflects the 'external' state of the elements.
@@ -48,8 +45,6 @@ Improvements
 3.1.0
 =====
 
-Improvements
-------------
 - Better support for refactored elements (i.e. the 'original' physical location info of an element affected by a refactoring is also added).
 - Cycle groups may now be identified by their generated id.
 - Resolutions contain more information.

@@ -219,4 +219,34 @@ public final class Utility
         }
         return rep;
     }
+
+    public static String trimDescription(final String description, final int maxLength)
+    {
+        assert maxLength >= 0 : "'maxLength' must not be negative";
+
+        if (description != null && !description.isEmpty() && maxLength > 0)
+        {
+            final String trimmedDescription = description.replaceAll("\r", " ").replaceAll("\n", " ").trim();
+            final int length = trimmedDescription.length();
+            if (length <= maxLength)
+            {
+                return trimmedDescription;
+            }
+            if (maxLength > 3)
+            {
+                return trimmedDescription.substring(0, maxLength - 3) + "...";
+            }
+            if (maxLength > 2)
+            {
+                return trimmedDescription.substring(0, maxLength - 2) + "..";
+            }
+            if (maxLength > 1)
+            {
+                return trimmedDescription.substring(0, maxLength - 1) + ".";
+            }
+            return trimmedDescription.substring(0, maxLength);
+        }
+
+        return "";
+    }
 }
