@@ -106,4 +106,15 @@ public final class ExportMetaDataControllerTest
         final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
         assertFalse("Failure expected: " + result.toString(), result.isSuccess());
     }
+
+    @Test
+    public void testReadExportMetaDataOfFourLanguageSysten()
+    {
+        final File exportMetaDataFile = new File(TestFixture.META_DATA_PATH_OF_FOUR_LANGUAGES_SYSTEM);
+        final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);
+        assertTrue("Failed to load metric meta-data file: " + result.toString(), result.isSuccess());
+
+        final IExportMetaData metaData = result.getOutcome();
+        assertNotNull(metaData);
+    }
 }

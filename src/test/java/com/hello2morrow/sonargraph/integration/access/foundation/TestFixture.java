@@ -59,4 +59,6 @@ public class TestFixture
     public static final String TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES = "./src/test/resources/AlarmClockMain_Refactorings_DuplicateFqName.xml";
 
     public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
+
+    public static final String META_DATA_PATH_OF_FOUR_LANGUAGES_SYSTEM = "./src/test/data/multilanguage/ExportMetaDataFourLanguages.xml";
 }
