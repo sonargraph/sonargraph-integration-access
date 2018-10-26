@@ -1,6 +1,12 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.1.9
+=====
+
+- FIXED potential class cast exception.
+
+
 3.1.8
 =====
 
@@ -11,7 +17,7 @@ Sonargraph 8 Integration Access
 =====
 
 - Formatted a lot of classes.
-- Added support for custom metrics.
+- Removed component cycle.
 
 
 3.1.6

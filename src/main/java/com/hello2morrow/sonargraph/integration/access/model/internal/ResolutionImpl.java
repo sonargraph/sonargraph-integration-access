@@ -41,7 +41,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
             final boolean isApplicable, final int numberOfAffectedParserDependencies, final String description, final String assignee,
             final String dateTime)
     {
-        super(fqName, type.name());
+        super(fqName, type != null ? type.name() : "");
 
         assert type != null : "Parameter 'type' of method 'ResolutionImpl' must not be null";
         assert priority != null : "Parameter 'priority' of method 'ResolutionImpl' must not be null";
