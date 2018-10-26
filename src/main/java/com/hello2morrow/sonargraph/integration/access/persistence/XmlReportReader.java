@@ -269,7 +269,7 @@ public final class XmlReportReader extends XmlAccess
                 else
                 {
                     LOGGER.error("No named element impl found for original xsd named element '{}'.",
-                            ((PhysicalElementImpl) nextXsdOriginal).getFqName());
+                            ((XsdPhysicalElement) nextXsdOriginal).getFqName());
                 }
             }
             else
