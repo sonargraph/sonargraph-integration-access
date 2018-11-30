@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -210,7 +211,10 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        writer.writeCharacters(harmonizeNewLineBreaks(new String(text)).toCharArray(), start, len);
+        char[] slice = Arrays.copyOfRange(text, start, start+len);
+
+        slice = harmonizeNewLineBreaks(new String(slice)).toCharArray();
+        writer.writeCharacters(slice, 0, slice.length);
     }
 
     @Override

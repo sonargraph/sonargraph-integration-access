@@ -1,6 +1,12 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.1.10
+======
+
+- FIXED ArrayIndexOutOfBoundsException in XML pretty printer.
+
+
 3.1.9
 =====
 
