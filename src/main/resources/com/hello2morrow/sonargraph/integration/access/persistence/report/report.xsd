@@ -30,6 +30,7 @@
 				<xs:attribute name="description" type="xs:string" />
 				<xs:attribute name="licensed" type="xs:boolean"
 					default="false" />
+                <xs:attribute name="activated" type="xs:boolean" default="true" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -40,6 +41,25 @@
 				maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
+  
+    <xs:complexType name="xsdPlugin">
+        <xs:complexContent>
+            <xs:extension base="export:xsdElement">
+                <xs:attribute name="pluginId" type="xs:string" />
+                <xs:attribute name="description" type="xs:string" use="optional" />
+                <xs:attribute name="version" type="xs:string" />
+                <xs:attribute name="vendor" type="xs:string" />
+                <xs:attribute name="enabled" type="xs:boolean" default="false" />
+                <xs:attribute name="licensed" type="xs:boolean" default="false" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+  
+    <xs:complexType name="xsdPlugins">
+        <xs:sequence>
+            <xs:element name="plugin" type="xsdPlugin" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
 
 	<xs:complexType name="xsdDuplicateCodeConfiguration">
 		<xs:sequence>
@@ -479,6 +499,8 @@
 				maxOccurs="1" />
 			<xs:element name="analyzers" type="xsdAnalyzers"
 				minOccurs="1" maxOccurs="1" />
+            <xs:element name="plugins" type="xsdPlugins"
+                minOccurs="0" maxOccurs="1" />
 			<xs:element name="duplicateCodeConfiguration" type="xsdDuplicateCodeConfiguration"
 				minOccurs="1" maxOccurs="1" />
 			<xs:element name="scriptRunnerConfiguration" type="xsdScriptRunnerConfiguration"
