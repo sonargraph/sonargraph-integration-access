@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="77394172-64cd-41a9-9b8d-6107fc1094b7" name="Default" comment="Fixed ArrayIndexOutOfBoundsException in XML pretty printer" />
+    <list default="true" id="77394172-64cd-41a9-9b8d-6107fc1094b7" name="Default" comment="Fixed ArrayIndexOutOfBoundsException in XML pretty printer">
+      <change beforePath="$PROJECT_DIR$/release-notes.txt" afterPath="$PROJECT_DIR$/release-notes.txt" />
+    </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,21 +39,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Arrays.java" pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_141/src.zip!/java/util/Arrays.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="3659" column="25" lean-forward="false" selection-start-line="3659" selection-start-column="25" selection-end-line="3659" selection-end-column="25" />
+            <state relative-caret-position="3961">
+              <caret line="233" column="21" lean-forward="false" selection-start-line="233" selection-start-column="21" selection-end-line="233" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="release-notes.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/release-notes.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3961">
-              <caret line="233" column="21" lean-forward="false" selection-start-line="233" selection-start-column="21" selection-end-line="233" selection-end-column="21" />
+            <state relative-caret-position="136">
+              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -138,6 +140,7 @@
         <option value="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/hello2morrow/sonargraph/integration/access/persistence/XmlPrettyPrintWriter.java" />
+        <option value="$PROJECT_DIR$/release-notes.txt" />
       </list>
     </option>
   </component>
@@ -443,12 +446,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543613694045</updated>
-      <workItem from="1543613695398" duration="2468000" />
+      <workItem from="1543613695398" duration="3116000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2468000" />
+    <option name="totallyTimeSpent" value="3116000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -594,6 +597,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3961">
           <caret line="233" column="21" lean-forward="false" selection-start-line="233" selection-start-column="21" selection-end-line="233" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/release-notes.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
