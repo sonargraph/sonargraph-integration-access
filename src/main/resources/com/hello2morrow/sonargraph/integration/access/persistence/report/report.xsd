@@ -30,7 +30,8 @@
 				<xs:attribute name="description" type="xs:string" />
 				<xs:attribute name="licensed" type="xs:boolean"
 					default="false" />
-                <xs:attribute name="activated" type="xs:boolean" default="true" use="optional"/>
+                <xs:attribute name="executionLevel" type="xsdAnalyzerExecutionLevel" use="optional" />
+                <xs:attribute name="executed" type="xs:boolean" default="true" use="optional"/>                
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -51,6 +52,7 @@
                 <xs:attribute name="vendor" type="xs:string" />
                 <xs:attribute name="enabled" type="xs:boolean" default="false" />
                 <xs:attribute name="licensed" type="xs:boolean" default="false" />
+                <xs:attribute name="executed" type="xs:boolean" use="optional" /> <!-- only needed for analyzer plugins -->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -60,6 +62,15 @@
             <xs:element name="plugin" type="xsdPlugin" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
+    
+    <xs:simpleType name="xsdAnalyzerExecutionLevel" final="restriction" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="full" />
+            <xs:enumeration value="advanced" />
+            <xs:enumeration value="basic" />
+            <xs:enumeration value="minimal" />
+        </xs:restriction>
+    </xs:simpleType>
 
 	<xs:complexType name="xsdDuplicateCodeConfiguration">
 		<xs:sequence>
@@ -541,7 +552,8 @@
 		<xs:attribute name="systemDescription" type="xs:string" />
 		<xs:attribute name="workspaceProfile" type="xs:string" />
 		<xs:attribute name="qualityModel" type="xs:string" />
-	</xs:complexType>
+        <xs:attribute name="analyzerExecutionLevel" type="xsdAnalyzerExecutionLevel" use="optional"/>
+    </xs:complexType>
 
-	<xs:element name="report" type="xsdSoftwareSystemReport" />
+    <xs:element name = "report" type="xsdSoftwareSystemReport" />
 </xs:schema>
