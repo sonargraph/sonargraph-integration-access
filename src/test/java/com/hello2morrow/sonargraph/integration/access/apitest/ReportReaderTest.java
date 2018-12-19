@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -37,12 +38,14 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
@@ -147,7 +150,6 @@ public final class ReportReaderTest
     }
 
     @Test
-    //HUHU
     public void processCppReportWithLogicalNamespaces() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
@@ -249,7 +251,33 @@ public final class ReportReaderTest
                     assertNotNull("Resolution expected", nextResolution);
                 }
             }
-
         }
+    }
+
+    @Test
+    public void processReportWithPluginInfo()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_PLUGINS));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        final Map<String, IPlugin> plugins = systemInfoProcessor.getSoftwareSystem().getPlugins();
+        assertEquals("Wrong number of plugins", 2, plugins.size());
+
+        final IPlugin swagger = plugins.get("SwaggerPlugin");
+        assertNotNull("Swagger plugin not found", swagger);
+        assertEquals("Wrong name", "SwaggerPlugin", swagger.getName());
+        assertEquals("Wrong presentation name", "Swagger Plugin", swagger.getPresentationName());
+        assertEquals("Wrong description", "Plugin that exposes webresources and dependencies between them.", swagger.getDescription());
+        assertEquals("Wrong version", "9.9.2.533_2018-12-12", swagger.getVersion());
+        assertEquals("Wrong vendor", "hello2morrow GmbH", swagger.getVendor());
+        assertFalse("Must not be enabled", swagger.isEnabled());
+        assertFalse("Must not be executed", swagger.isExecuted());
+        assertTrue("Must be licensed", swagger.isLicensed());
+
+        systemInfoProcessor.getSoftwareSystem().getAnalyzerExecutionLevel();
+        final List<IAnalyzer> analyzers = systemInfoProcessor.getAnalyzers();
+
     }
 }

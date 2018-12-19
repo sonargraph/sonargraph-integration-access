@@ -33,6 +33,10 @@ public interface IReportDelta extends IDelta
 
     public List<IAnalyzer> getRemovedAnalyzers();
 
+    public List<IPlugin> getAddedPlugins();
+
+    public List<IPlugin> getRemovedPlugins();
+
     public List<IMetricThreshold> getAddedMetricThresholds();
 
     public List<IMetricThreshold> getRemovedMetricThresholds();
@@ -42,4 +46,5 @@ public interface IReportDelta extends IDelta
     public IWorkspaceDelta getWorkspaceDelta();
 
     public IIssueDelta getIssueDelta();
+
 }

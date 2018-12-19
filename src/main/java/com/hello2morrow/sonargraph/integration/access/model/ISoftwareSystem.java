@@ -22,19 +22,7 @@ import java.util.Optional;
 
 public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElementContainer, ISourceFileLookup
 {
-    @Override
-    public String getSystemId();
-
-    @Override
-    public String getPath();
-
-    @Override
-    public String getVersion();
-
     public String getVirtualModel();
-
-    @Override
-    public long getTimestamp();
 
     public String getBaseDir();
 
@@ -45,4 +33,10 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Optional<IModule> getModule(String simpleName);
 
     public Map<String, IExternal> getExternals();
+
+    public Map<String, IPlugin> getPlugins();
+
+    public Map<String, IAnalyzer> getAnalyzers();
+
+    public AnalyzerExecutionLevel getAnalyzerExecutionLevel();
 }

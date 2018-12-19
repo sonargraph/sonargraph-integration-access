@@ -31,6 +31,8 @@ public class TestFixture
     public static final String APPLICATION_MODULE = "Application";
     public static final String MODEL_MODULE = "Model";
 
+    public static final String REPORT_WITH_PLUGINS = "./src/test/resources/AlarmClock_with_plugins.xml";
+
     /** Reports for testing diff functionality */
     public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
     public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";

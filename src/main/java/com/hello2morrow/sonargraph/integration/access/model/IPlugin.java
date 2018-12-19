@@ -17,11 +17,15 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IAnalyzer extends IElementWithDescription
+public interface IPlugin extends IElementWithDescription
 {
-    public boolean isLicensed();
+    public String getVendor();
+
+    public String getVersion();
 
     public boolean isEnabled();
 
-    public AnalyzerExecutionLevel getExecutionLevel();
+    public boolean isLicensed();
+
+    public boolean isExecuted();
 }

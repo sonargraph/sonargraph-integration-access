@@ -28,6 +28,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
@@ -39,6 +40,8 @@ public final class ReportDeltaImpl implements IReportDelta
     private final List<IFeature> removedFeatures = new ArrayList<>();
     private final List<IAnalyzer> addedAnalyzers = new ArrayList<>();
     private final List<IAnalyzer> removedAnalyzers = new ArrayList<>();
+    private final List<IPlugin> addedPlugins = new ArrayList<>();
+    private final List<IPlugin> removedPlugins = new ArrayList<>();
     private final List<String> removedDuplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> addedDuplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> removedScriptRunnerConfigurationEntries = new ArrayList<>();
@@ -95,6 +98,18 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         assert added != null : "Parameter 'added' of method 'addedAnalyzer' must not be null";
         addedAnalyzers.add(added);
+    }
+
+    public void removedPlugin(final IPlugin removed)
+    {
+        assert removed != null : "Parameter 'removed' of method 'removedPlugin' must not be null";
+        removedPlugins.add(removed);
+    }
+
+    public void addedPlugin(final IPlugin added)
+    {
+        assert added != null : "Parameter 'added' of method 'addedPlugin' must not be null";
+        addedPlugins.add(added);
     }
 
     public void removedDuplicateCodeConfigurationEntry(final String entry)
@@ -173,6 +188,18 @@ public final class ReportDeltaImpl implements IReportDelta
     public List<IAnalyzer> getRemovedAnalyzers()
     {
         return Collections.unmodifiableList(removedAnalyzers);
+    }
+
+    @Override
+    public List<IPlugin> getAddedPlugins()
+    {
+        return Collections.unmodifiableList(addedPlugins);
+    }
+
+    @Override
+    public List<IPlugin> getRemovedPlugins()
+    {
+        return Collections.unmodifiableList(removedPlugins);
     }
 
     @Override

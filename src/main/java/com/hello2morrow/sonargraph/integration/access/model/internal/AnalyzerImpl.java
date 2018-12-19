@@ -17,23 +17,44 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 
 public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IAnalyzer
 {
     private static final long serialVersionUID = 2339900670007779070L;
     private final boolean isLicensed;
+    private final boolean isEnabled;
+    private final AnalyzerExecutionLevel executionLevel;
 
-    public AnalyzerImpl(final String name, final String presentationName, final String description, final boolean isLicensed)
+    public AnalyzerImpl(final String name, final String presentationName, final String description, final boolean isLicensed,
+            final AnalyzerExecutionLevel executionLevel, final boolean isEnabled)
     {
         super(name, presentationName, description);
+        assert executionLevel != null : "Parameter 'executionLevel' of method 'AnalyzerImpl' must not be null";
+
         this.isLicensed = isLicensed;
+        this.executionLevel = executionLevel;
+        this.isEnabled = isEnabled;
+
     }
 
     @Override
     public boolean isLicensed()
     {
         return isLicensed;
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return isEnabled;
+    }
+
+    @Override
+    public AnalyzerExecutionLevel getExecutionLevel()
+    {
+        return executionLevel;
     }
 
     @Override

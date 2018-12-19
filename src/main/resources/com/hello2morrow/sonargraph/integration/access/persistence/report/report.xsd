@@ -30,8 +30,9 @@
 				<xs:attribute name="description" type="xs:string" />
 				<xs:attribute name="licensed" type="xs:boolean"
 					default="false" />
-                <xs:attribute name="executionLevel" type="xsdAnalyzerExecutionLevel" use="optional" />
-                <xs:attribute name="executed" type="xs:boolean" default="true" use="optional"/>                
+                <xs:attribute name="executionLevel" type="xsdAnalyzerExecutionLevel" 
+                    use="optional" default="full"/>
+                <xs:attribute name="executed" type="xs:boolean" use="optional" default="true"/>                
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -46,13 +47,12 @@
     <xs:complexType name="xsdPlugin">
         <xs:complexContent>
             <xs:extension base="export:xsdElement">
-                <xs:attribute name="pluginId" type="xs:string" />
                 <xs:attribute name="description" type="xs:string" use="optional" />
                 <xs:attribute name="version" type="xs:string" />
                 <xs:attribute name="vendor" type="xs:string" />
-                <xs:attribute name="enabled" type="xs:boolean" default="false" />
-                <xs:attribute name="licensed" type="xs:boolean" default="false" />
-                <xs:attribute name="executed" type="xs:boolean" use="optional" /> <!-- only needed for analyzer plugins -->
+                <xs:attribute name="enabled" type="xs:boolean" />
+                <xs:attribute name="licensed" type="xs:boolean" />
+                <xs:attribute name="executed" type="xs:boolean" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -440,8 +440,7 @@
 				<xs:attribute name="name" type="xs:string" use="required" />
 				<xs:attribute name="fqName" type="xs:string" use="required" />
 				<xs:attribute name="blockSize" type="xs:int" use="required" />
-				<xs:attribute name="numberOfOccurrences" type="xs:int"
-					use="required" />
+				<xs:attribute name="numberOfOccurrences" type="xs:int" use="required" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -547,12 +546,11 @@
 		<xs:attribute name="version" type="xs:string" use="required" />
 		<xs:attribute name="systemPath" type="xs:string" use="required" />
 		<xs:attribute name="timestamp" type="xs:dateTime" use="required" />
-		<xs:attribute name="currentVirtualModel" type="xs:string"
-			use="required" />
+		<xs:attribute name="currentVirtualModel" type="xs:string" use="required" />
 		<xs:attribute name="systemDescription" type="xs:string" />
 		<xs:attribute name="workspaceProfile" type="xs:string" />
 		<xs:attribute name="qualityModel" type="xs:string" />
-        <xs:attribute name="analyzerExecutionLevel" type="xsdAnalyzerExecutionLevel" use="optional"/>
+        <xs:attribute name="analyzerExecutionLevel" type="xsdAnalyzerExecutionLevel" default="full"/>
     </xs:complexType>
 
     <xs:element name = "report" type="xsdSoftwareSystemReport" />

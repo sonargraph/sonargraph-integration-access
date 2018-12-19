@@ -34,6 +34,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface ISystemInfoProcessor extends IInfoProcessor
@@ -51,6 +52,8 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<IMetricId> getMetricIds();
 
     public List<IFeature> getFeatures();
+
+    public List<IPlugin> getPlugins();
 
     public List<IAnalyzer> getAnalyzers();
 
