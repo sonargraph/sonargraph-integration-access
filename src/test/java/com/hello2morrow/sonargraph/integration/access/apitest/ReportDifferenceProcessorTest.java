@@ -71,11 +71,11 @@ public class ReportDifferenceProcessorTest
         assertEquals("No added plugins expected", 0, delta.getAddedPlugins(null).size());
         assertEquals("No removed plugins expected", 0, delta.getRemovedPlugins(null).size());
 
-        final List<IPlugin> additionallyExecutedPlugins = delta.getAddedPlugins(p -> p.isExecuted());
+        final List<IPlugin> additionallyExecutedPlugins = delta.getAddedPlugins(p -> !p.getActiveExecutionPhases().isEmpty());
         assertEquals("Wrong number of additionally executed plugins", 1, additionallyExecutedPlugins.size());
         assertEquals("Wrong additionally executed plugin", "SpotbugsPlugin", additionallyExecutedPlugins.get(0).getName());
 
         //Summary of delta is implemented by the toString() methods of the IDelta implementations
-        //System.out.println("Delta Summary: \n" + delta);
+        System.out.println("Delta Summary: \n" + delta);
     }
 }

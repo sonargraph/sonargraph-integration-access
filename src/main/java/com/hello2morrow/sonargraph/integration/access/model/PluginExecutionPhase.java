@@ -17,19 +17,23 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Set;
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
-public interface IPlugin extends IElementWithDescription
+public enum PluginExecutionPhase implements IEnumeration
 {
-    public String getVendor();
+    MODEL,
+    ANALYZER;
 
-    public String getVersion();
+    @Override
+    public String getStandardName()
+    {
+        return Utility.convertConstantNameToStandardName(name());
+    }
 
-    public boolean isEnabled();
-
-    public boolean isLicensed();
-
-    public Set<PluginExecutionPhase> getActiveExecutionPhases();
-
-    public Set<PluginExecutionPhase> getSupportedExecutionPhases();
+    @Override
+    public String getPresentationName()
+    {
+        return Utility.convertConstantNameToPresentationName(name());
+    }
 }

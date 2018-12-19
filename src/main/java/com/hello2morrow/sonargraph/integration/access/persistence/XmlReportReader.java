@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBElement;
 
@@ -48,7 +50,9 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
@@ -100,6 +104,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDupl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
@@ -124,6 +129,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModu
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdNamedElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugin;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
@@ -598,11 +604,36 @@ public final class XmlReportReader extends XmlAccess
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPlugins' must not be null";
         assert report != null : "Parameter 'report' of method 'processPlugins' must not be null";
-        final XsdPlugins plugins = report.getPlugins();
-        if (plugins != null)
+        final XsdPlugins xsdPlugins = report.getPlugins();
+        if (xsdPlugins != null)
         {
-            plugins.getPlugin().forEach(p -> softwareSystem.addPlugin(new PluginImpl(p.getName(), p.getPresentationName(), p.getDescription(),
-                    p.getVendor(), p.getVersion(), p.isLicensed(), p.isEnabled(), p.isExecuted())));
+            for (final XsdPlugin next : xsdPlugins.getPlugin())
+            {
+                final Set<PluginExecutionPhase> supportedExecutionPhases = convertXmlPluginExecutionPhases(next.getSupportedExecutionPhase());
+                final Set<PluginExecutionPhase> activeExecutionPhases = convertXmlPluginExecutionPhases(next.getActiveExecutionPhase());
+                final IPlugin plugin = new PluginImpl(next.getName(), next.getPresentationName(), next.getDescription(), next.getVendor(),
+                        next.getVersion(), next.isLicensed(), next.isEnabled(), supportedExecutionPhases, activeExecutionPhases);
+                softwareSystem.addPlugin(plugin);
+            }
+        }
+    }
+
+    private static Set<PluginExecutionPhase> convertXmlPluginExecutionPhases(final List<XsdExecutionPhase> xsdExecutionPhases)
+    {
+        return xsdExecutionPhases.stream().map(xsd -> convertXmlPluginExecutionPhase(xsd)).collect(Collectors.toSet());
+    }
+
+    private static PluginExecutionPhase convertXmlPluginExecutionPhase(final XsdExecutionPhase xsdExecutionPhase)
+    {
+        switch (xsdExecutionPhase)
+        {
+        case ANALYZER:
+            return PluginExecutionPhase.ANALYZER;
+        case MODEL:
+            return PluginExecutionPhase.MODEL;
+        default:
+            assert false : "Unsupported execution phase: " + xsdExecutionPhase.name();
+            return null;
         }
     }
 

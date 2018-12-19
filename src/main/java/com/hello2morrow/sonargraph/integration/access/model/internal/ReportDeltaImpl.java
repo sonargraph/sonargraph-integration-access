@@ -318,8 +318,9 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && getAddedAnalyzers(a -> a.isExecuted()).isEmpty()
                 && removedAnalyzers.isEmpty() && getRemovedAnalyzers(a -> a.isExecuted()).isEmpty() && addedPlugins.isEmpty()
-                && getAddedPlugins(p -> p.isExecuted()).isEmpty() && getRemovedPlugins(p -> p.isExecuted()).isEmpty()
-                && addedMetricThresholds.isEmpty() && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
+                && getAddedPlugins(p -> !p.getActiveExecutionPhases().isEmpty()).isEmpty()
+                && getRemovedPlugins(p -> !p.getActiveExecutionPhases().isEmpty()).isEmpty() && addedMetricThresholds.isEmpty()
+                && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
                 && addedDuplicateCodeConfigurationEntries.isEmpty() && removedDuplicateCodeConfigurationEntries.isEmpty()
                 && addedScriptRunnerConfigurationEntries.isEmpty() && removedScriptRunnerConfigurationEntries.isEmpty()
                 && addedArchitectureCheckConfigurationEntries.isEmpty() && removedArchitectureCheckConfigurationEntries.isEmpty()
@@ -463,7 +464,7 @@ public final class ReportDeltaImpl implements IReportDelta
                 builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
             }
         }
-        final List<IPlugin> additionallyExecutedPlugins = getAddedPlugins(p -> p.isExecuted());
+        final List<IPlugin> additionallyExecutedPlugins = getAddedPlugins(p -> !p.getActiveExecutionPhases().isEmpty());
         if (!additionallyExecutedPlugins.isEmpty())
         {
             builder.append("\n").append(Utility.INDENTATION).append("Additionally executed plugins (").append(additionallyExecutedPlugins.size())
@@ -482,7 +483,7 @@ public final class ReportDeltaImpl implements IReportDelta
                 builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
             }
         }
-        final List<IPlugin> noLongerExecutedPlugins = getRemovedPlugins(p -> p.isExecuted());
+        final List<IPlugin> noLongerExecutedPlugins = getRemovedPlugins(p -> !p.getActiveExecutionPhases().isEmpty());
         if (!noLongerExecutedPlugins.isEmpty())
         {
             builder.append("\n").append(Utility.INDENTATION).append("No longer executed plugins (").append(noLongerExecutedPlugins.size())

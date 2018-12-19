@@ -43,15 +43,27 @@
     <xs:complexType name="xsdPlugin">
         <xs:complexContent>
             <xs:extension base="export:xsdElement">
+                <xs:sequence>
+                    <xs:element name="supportedExecutionPhase" type="xsdExecutionPhase" minOccurs="1"
+                        maxOccurs="unbounded" />
+                    <xs:element name="activeExecutionPhase" type="xsdExecutionPhase" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
                 <xs:attribute name="description" type="xs:string" use="optional" />
                 <xs:attribute name="version" type="xs:string" />
                 <xs:attribute name="vendor" type="xs:string" />
-                <xs:attribute name="enabled" type="xs:boolean" />
                 <xs:attribute name="licensed" type="xs:boolean" />
-                <xs:attribute name="executed" type="xs:boolean" />
+                <xs:attribute name="enabled" type="xs:boolean" />                
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
+    <xs:simpleType name="xsdExecutionPhase">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="analyzer" />
+            <xs:enumeration value="model" />
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="xsdPlugins">
         <xs:sequence>
@@ -59,7 +71,7 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:simpleType name="xsdAnalyzerExecutionLevel" final="restriction">
+    <xs:simpleType name="xsdAnalyzerExecutionLevel">
         <xs:restriction base="xs:string">
             <xs:enumeration value="full" />
             <xs:enumeration value="advanced" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<ns3:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/report" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/export" id="_0" systemId="2ad93d7f07e0d9358cea6162482d9d6f" name="AlarmClock" version="9.9.2.100" systemPath="D:\00_repo\sgng-master\com.hello2morrow.sonargraph.language.provider.java\src\test\smallTestProjectQmImport\AlarmClock.sonargraph" timestamp="2018-12-19T10:08:50.910+01:00" currentVirtualModel="Modifiable.vm" analyzerExecutionLevel="advanced">
+<ns3:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/report" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/export" id="_0" systemId="2ad93d7f07e0d9358cea6162482d9d6f" name="AlarmClock" version="9.9.2.100" systemPath="D:\00_repo\sgng-master\com.hello2morrow.sonargraph.language.provider.java\src\test\smallTestProjectQmImport\AlarmClock.sonargraph" timestamp="2018-12-19T16:54:08.662+01:00" currentVirtualModel="Modifiable.vm" analyzerExecutionLevel="advanced">
     <metaData>
         <issueProviders>
             <issueProvider id="_35" name="./Layers.arc" presentationName="./Layers.arc"></issueProvider>
@@ -102,7 +102,7 @@
             <metricId id="_7a" name="CoreIgnoredDuplicates" presentationName="Number of Ignored Code Duplicates" description="Number of ignored duplicated code blocks." categories="_46" provider="_40" isFloat="false" levels="_3f" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_7b" name="CoreIgnoredCyclicComponents" presentationName="Number of Ignored Cyclic Components" description="Number of components involved in ignored cycles." categories="_4b" provider="_40" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_7c" name="JavaIgnoredCyclicPackages" presentationName="Number of Ignored Cyclic Java Packages" description="Number of ignored cyclic Java packages." categories="_4b" provider="_47" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
-            <metricId id="_7d" name="CoreIgnoredThresholdViolations" presentationName="Number of Ignored Threshold Violations" description="Number of ignored threshold violations." categories="_46" provider="_40" isFloat="false" levels="_3f" bestValue="0.0" worstValue="INF"></metricId>
+            <metricId id="_7d" name="CoreIgnoredThresholdViolations" presentationName="Number of Ignored Threshold Violations" description="Number of ignored threshold violations." categories="_46" provider="_40" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_7e" name="CoreIgnoredViolationsParserDependencies" presentationName="Number of Ignored Violations (Parser Dependencies)" description="Number of parser dependencies in ignored architecture violations" categories="_6e" provider="_40" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_7f" name="CoreIncomingDependenciesModule" presentationName="Number of Incoming Dependencies (Module)" description="Number of incoming dependencies on module level." categories="_42" provider="_40" isFloat="false" levels="_43 _57" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_80" name="CoreIncomingDependenciesSystem" presentationName="Number of Incoming Dependencies (System)" description="Number of incoming dependencies on system level." categories="_42" provider="_40" isFloat="false" levels="_43 _57" bestValue="0.0" worstValue="INF"></metricId>
@@ -115,7 +115,7 @@
             <metricId id="_87" name="CoreOutgoingDependenciesSystem" presentationName="Number of Outgoing Dependencies (System)" description="Number of outgoing dependencies on system level." categories="_42" provider="_40" isFloat="false" levels="_43 _57" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_88" name="CoreParameters" presentationName="Number of Parameters" description="Number of parameters." categories="_4e" provider="_40" isFloat="false" levels="_5d"></metricId>
             <metricId id="_89" name="CoreStatements" presentationName="Number of Statements" description="Counts all statements." categories="_4e" provider="_40" isFloat="false" levels="_3f _49 _51 _66 _5d"></metricId>
-            <metricId id="_8a" name="CoreThresholdViolations" presentationName="Number of Threshold Violations" description="Number of non-ignored threshold violations." categories="_46" provider="_40" isFloat="false" levels="_3f" bestValue="0.0" worstValue="INF"></metricId>
+            <metricId id="_8a" name="CoreThresholdViolations" presentationName="Number of Threshold Violations" description="Number of non-ignored threshold violations." categories="_46" provider="_40" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
             <metricId id="_8b" name="CoreTypesModule" presentationName="Number of Types (Module)" description="Number of types (classes, enums or similar) in container on module level." categories="_4e" provider="_40" isFloat="false" levels="_43 _57"></metricId>
             <metricId id="_8c" name="CoreTypesSystem" presentationName="Number of Types (System)" description="Number of types (classes, enums or similar) in container on system level." categories="_4e" provider="_40" isFloat="false" levels="_43"></metricId>
             <metricId id="_8d" name="CoreUnassignedLogicalElements" presentationName="Number of Unassigned Logical Elements" description="Number of internal logical elements that are not assigned to any artifact" categories="_6e" provider="_40" isFloat="false" levels="_3f _49" bestValue="0.0" worstValue="INF"></metricId>
@@ -186,8 +186,12 @@
         <analyzer description="Plugin that uses Spotbugs to find issues" licensed="true" executionLevel="full" executed="false" id="_24" name="SpotbugsPlugin" presentationName="Spotbugs Plugin"></analyzer>
     </analyzers>
     <plugins>
-        <plugin description="Plugin that uses Spotbugs to find issues" version="9.9.2.531_2018-12-10" vendor="hello2morrow GmbH" enabled="true" licensed="true" executed="false" id="_1" name="SpotbugsPlugin" presentationName="Spotbugs Plugin"></plugin>
-        <plugin description="Plugin that exposes webresources and dependencies between them." version="9.9.2.533_2018-12-12" vendor="hello2morrow GmbH" enabled="false" licensed="true" executed="false" id="_3" name="SwaggerPlugin" presentationName="Swagger Plugin"></plugin>
+        <plugin description="Plugin that uses Spotbugs to find issues" version="9.9.2.531_2018-12-10" vendor="hello2morrow GmbH" licensed="true" enabled="true" id="_1" name="SpotbugsPlugin" presentationName="Spotbugs Plugin">
+            <supportedExecutionPhase>analyzer</supportedExecutionPhase>
+        </plugin>
+        <plugin description="Plugin that exposes webresources and dependencies between them." version="9.9.2.533_2018-12-12" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_3" name="SwaggerPlugin" presentationName="Swagger Plugin">
+            <supportedExecutionPhase>model</supportedExecutionPhase>
+        </plugin>
     </plugins>
     <duplicateCodeConfiguration>
         <entry>MinimalLineLength:3</entry>
@@ -312,163 +316,163 @@
     </moduleElements>
     <systemMetricValues elementRef="_0">
         <levelValues levelRef="_3f">
-            <metric ref="_50">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_75">
-                <int ref="_ed">2</int>
-            </metric>
-            <metric ref="_96">
-                <float ref="_ed">0.0</float>
-            </metric>
-            <metric ref="_90">
-                <int ref="_ed">5</int>
-            </metric>
-            <metric ref="_79">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_4d">
-                <int ref="_ed">967</int>
-            </metric>
-            <metric ref="_83">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_52">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_99">
-                <int ref="_ed">180</int>
-            </metric>
-            <metric ref="_62">
-                <float ref="_ed">0.0</float>
-            </metric>
-            <metric ref="_6d">
-                <int ref="_ed">4</int>
-            </metric>
-            <metric ref="_92">
-                <int ref="_ed">3</int>
-            </metric>
-            <metric ref="_94">
-                <float ref="_ed">0.0</float>
-            </metric>
-            <metric ref="_7d">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_7b">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_85">
-                <int ref="_ed">4</int>
-            </metric>
             <metric ref="_3c">
                 <float ref="_ed">0.0</float>
-            </metric>
-            <metric ref="_7a">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_98">
-                <float ref="_ed">33.33</float>
-            </metric>
-            <metric ref="_9b">
-                <int ref="_ed">13</int>
-            </metric>
-            <metric ref="_74">
-                <int ref="_ed">2</int>
-            </metric>
-            <metric ref="_81">
-                <int ref="_ed">1</int>
-            </metric>
-            <metric ref="_6c">
-                <float ref="_ed">0.0</float>
-            </metric>
-            <metric ref="_8f">
-                <int ref="_ed">2</int>
-            </metric>
-            <metric ref="_93">
-                <int ref="_ed">3</int>
-            </metric>
-            <metric ref="_78">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_8e">
-                <int ref="_ed">0</int>
             </metric>
             <metric ref="_4f">
                 <int ref="_ed">0</int>
             </metric>
-            <metric ref="_59">
-                <int ref="_ed">4</int>
+            <metric ref="_6f">
+                <int ref="_ed">0</int>
             </metric>
-            <metric ref="_5a">
-                <int ref="_ed">4</int>
-            </metric>
-            <metric ref="_82">
-                <int ref="_ed">6</int>
-            </metric>
-            <metric ref="_77">
+            <metric ref="_7d">
                 <int ref="_ed">0</int>
             </metric>
             <metric ref="_89">
                 <int ref="_ed">138</int>
             </metric>
-            <metric ref="_8d">
-                <int ref="_ed">0</int>
+            <metric ref="_94">
+                <float ref="_ed">0.0</float>
             </metric>
             <metric ref="_9a">
                 <int ref="_ed">13</int>
             </metric>
-            <metric ref="_69">
-                <float ref="_ed">95.71</float>
+            <metric ref="_5a">
+                <int ref="_ed">4</int>
             </metric>
-            <metric ref="_97">
-                <float ref="_ed">22.22</float>
-            </metric>
-            <metric ref="_7c">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_4a">
-                <int ref="_ed">2</int>
-            </metric>
-            <metric ref="_68">
-                <int ref="_ed">297</int>
-            </metric>
-            <metric ref="_6f">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_9c">
-                <int ref="_ed">343</int>
-            </metric>
-            <metric ref="_7e">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_53">
-                <int ref="_ed">1</int>
-            </metric>
-            <metric ref="_71">
-                <int ref="_ed">9</int>
-            </metric>
-            <metric ref="_54">
-                <int ref="_ed">1</int>
-            </metric>
-            <metric ref="_73">
-                <int ref="_ed">0</int>
-            </metric>
-            <metric ref="_4c">
-                <int ref="_ed">2</int>
-            </metric>
-            <metric ref="_8a">
+            <metric ref="_52">
                 <int ref="_ed">0</int>
             </metric>
             <metric ref="_91">
                 <int ref="_ed">2</int>
             </metric>
+            <metric ref="_7a">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_4d">
+                <int ref="_ed">967</int>
+            </metric>
+            <metric ref="_78">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_97">
+                <float ref="_ed">22.22</float>
+            </metric>
+            <metric ref="_83">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_79">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_96">
+                <float ref="_ed">0.0</float>
+            </metric>
+            <metric ref="_50">
+                <int ref="_ed">0</int>
+            </metric>
             <metric ref="_72">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_69">
+                <float ref="_ed">95.71</float>
+            </metric>
+            <metric ref="_70">
+                <int ref="_ed">1</int>
+            </metric>
+            <metric ref="_73">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_93">
+                <int ref="_ed">3</int>
+            </metric>
+            <metric ref="_90">
+                <int ref="_ed">5</int>
+            </metric>
+            <metric ref="_7b">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_6d">
+                <int ref="_ed">4</int>
+            </metric>
+            <metric ref="_8e">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_59">
+                <int ref="_ed">4</int>
+            </metric>
+            <metric ref="_8f">
+                <int ref="_ed">2</int>
+            </metric>
+            <metric ref="_8a">
                 <int ref="_ed">0</int>
             </metric>
             <metric ref="_76">
                 <int ref="_ed">2</int>
             </metric>
-            <metric ref="_70">
+            <metric ref="_62">
+                <float ref="_ed">0.0</float>
+            </metric>
+            <metric ref="_99">
+                <int ref="_ed">180</int>
+            </metric>
+            <metric ref="_74">
+                <int ref="_ed">2</int>
+            </metric>
+            <metric ref="_75">
+                <int ref="_ed">2</int>
+            </metric>
+            <metric ref="_68">
+                <int ref="_ed">297</int>
+            </metric>
+            <metric ref="_85">
+                <int ref="_ed">4</int>
+            </metric>
+            <metric ref="_98">
+                <float ref="_ed">33.33</float>
+            </metric>
+            <metric ref="_4c">
+                <int ref="_ed">2</int>
+            </metric>
+            <metric ref="_6c">
+                <float ref="_ed">0.0</float>
+            </metric>
+            <metric ref="_7c">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_92">
+                <int ref="_ed">3</int>
+            </metric>
+            <metric ref="_8d">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_77">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_82">
+                <int ref="_ed">6</int>
+            </metric>
+            <metric ref="_7e">
+                <int ref="_ed">0</int>
+            </metric>
+            <metric ref="_4a">
+                <int ref="_ed">2</int>
+            </metric>
+            <metric ref="_71">
+                <int ref="_ed">9</int>
+            </metric>
+            <metric ref="_9c">
+                <int ref="_ed">343</int>
+            </metric>
+            <metric ref="_81">
+                <int ref="_ed">1</int>
+            </metric>
+            <metric ref="_53">
+                <int ref="_ed">1</int>
+            </metric>
+            <metric ref="_9b">
+                <int ref="_ed">13</int>
+            </metric>
+            <metric ref="_54">
                 <int ref="_ed">1</int>
             </metric>
         </levelValues>
@@ -554,6 +558,12 @@
             </metric>
             <metric ref="_54">
                 <int ref="_a9">1</int>
+            </metric>
+            <metric ref="_7d">
+                <int ref="_a9">0</int>
+            </metric>
+            <metric ref="_8a">
+                <int ref="_a9">0</int>
             </metric>
             <metric ref="_92">
                 <int ref="_a9">3</int>
@@ -888,6 +898,12 @@
             <metric ref="_54">
                 <int ref="_a6">0</int>
             </metric>
+            <metric ref="_7d">
+                <int ref="_a6">0</int>
+            </metric>
+            <metric ref="_8a">
+                <int ref="_a6">0</int>
+            </metric>
             <metric ref="_92">
                 <int ref="_a6">0</int>
             </metric>
@@ -1158,6 +1174,12 @@
             <metric ref="_54">
                 <int ref="_a3">0</int>
             </metric>
+            <metric ref="_7d">
+                <int ref="_a3">0</int>
+            </metric>
+            <metric ref="_8a">
+                <int ref="_a3">0</int>
+            </metric>
             <metric ref="_92">
                 <int ref="_a3">0</int>
             </metric>
@@ -1265,12 +1287,12 @@
         </levelValues>
         <levelValues levelRef="_57">
             <metric ref="_8f">
-                <int ref="_c5">0</int>
                 <int ref="_c1">0</int>
+                <int ref="_c5">0</int>
             </metric>
             <metric ref="_90">
-                <int ref="_c5">0</int>
                 <int ref="_c1">0</int>
+                <int ref="_c5">0</int>
             </metric>
             <metric ref="_56">
                 <float ref="_c1">50.0</float>
@@ -1444,6 +1466,12 @@
             <metric ref="_54">
                 <int ref="_9d">0</int>
             </metric>
+            <metric ref="_7d">
+                <int ref="_9d">0</int>
+            </metric>
+            <metric ref="_8a">
+                <int ref="_9d">0</int>
+            </metric>
             <metric ref="_92">
                 <int ref="_9d">0</int>
             </metric>
@@ -1551,12 +1579,12 @@
         </levelValues>
         <levelValues levelRef="_57">
             <metric ref="_8f">
-                <int ref="_b8">0</int>
                 <int ref="_b2">0</int>
+                <int ref="_b8">0</int>
             </metric>
             <metric ref="_90">
-                <int ref="_b8">0</int>
                 <int ref="_b2">0</int>
+                <int ref="_b8">0</int>
             </metric>
             <metric ref="_56">
                 <float ref="_b2">50.0</float>
@@ -1685,27 +1713,27 @@
     <issues modelName="./Modifiable.vm" numberOfIssues="10" numberOfUnresolvedIssues="10">
         <elementIssues>
             <issue affectedElement="_9d" id="_f6" type="_3a" provider="_36" description="Uses 'Model'"></issue>
-            <cycleGroups analyzerRef="_12">
-                <cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:Result:ec2c67ff3133cfb08f72426d2dcc3611|3185f62aac2e0d644108f276de970dfe" id="_f7" type="_39" provider="_36" description="2 cyclic packages">
-                    <element ref="_da"></element>
-                    <element ref="_dc"></element>
-                </cycleGroup>
-            </cycleGroups>
             <cycleGroups analyzerRef="_1d">
-                <cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:4afff9e90b28a3dd3798a67a7cfb3a2a|3c2f1e036dc7c36cff32f9bad250b653" id="_f8" type="_38" provider="_36" description="2 cyclic components">
+                <cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:4afff9e90b28a3dd3798a67a7cfb3a2a|3c2f1e036dc7c36cff32f9bad250b653" id="_f7" type="_38" provider="_36" description="2 cyclic components">
                     <element ref="_e5"></element>
                     <element ref="_e9"></element>
                 </cycleGroup>
             </cycleGroups>
+            <cycleGroups analyzerRef="_12">
+                <cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:Result:ec2c67ff3133cfb08f72426d2dcc3611|3185f62aac2e0d644108f276de970dfe" id="_f8" type="_39" provider="_36" description="2 cyclic packages">
+                    <element ref="_da"></element>
+                    <element ref="_dc"></element>
+                </cycleGroup>
+            </cycleGroups>
         </elementIssues>
         <depencencyIssues>
-            <issue from="_d2" to="_cb" id="_f9" type="_37" provider="_35" description="[Virtual Method Call [Via Subtype Self]] 'Model' cannot access 'Observable.java' from 'Foundation'" line="33"></issue>
-            <issue from="_df" to="_c7" id="_fa" type="_37" provider="_35" description="[Implements] 'View' cannot access 'Observable.java' from 'Foundation'" line="9"></issue>
-            <issue from="_9d" to="_a3" id="_fb" type="_3b" provider="_36"></issue>
-            <issue from="_a9" to="_a6" id="_fc" type="_3b" provider="_36"></issue>
+            <issue from="_a9" to="_a6" id="_f9" type="_3b" provider="_36"></issue>
+            <issue from="_e3" to="_c6" id="_fa" type="_37" provider="_35" description="[Parameter] 'View' cannot access 'Observable.java' from 'Foundation'" line="27"></issue>
+            <issue from="_d1" to="_c9" id="_fb" type="_37" provider="_35" description="[Constructor Call] 'Model' cannot access 'Observable.java' from 'Foundation'" line="15"></issue>
+            <issue from="_df" to="_c7" id="_fc" type="_37" provider="_35" description="[Implements] 'View' cannot access 'Observable.java' from 'Foundation'" line="9"></issue>
             <issue from="_d0" to="_c6" id="_fd" type="_37" provider="_35" description="[Extends] 'Model' cannot access 'Observable.java' from 'Foundation'" line="5"></issue>
-            <issue from="_d1" to="_c9" id="_fe" type="_37" provider="_35" description="[Constructor Call] 'Model' cannot access 'Observable.java' from 'Foundation'" line="15"></issue>
-            <issue from="_e3" to="_c6" id="_ff" type="_37" provider="_35" description="[Parameter] 'View' cannot access 'Observable.java' from 'Foundation'" line="27"></issue>
+            <issue from="_d2" to="_cb" id="_fe" type="_37" provider="_35" description="[Virtual Method Call [Via Subtype Self]] 'Model' cannot access 'Observable.java' from 'Foundation'" line="33"></issue>
+            <issue from="_9d" to="_a3" id="_ff" type="_3b" provider="_36"></issue>
         </depencencyIssues>
     </issues>
 </ns3:report>

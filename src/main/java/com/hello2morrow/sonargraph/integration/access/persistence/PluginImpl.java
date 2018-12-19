@@ -17,7 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ElementWithDescriptionImpl;
 
 public class PluginImpl extends ElementWithDescriptionImpl implements IPlugin
@@ -27,21 +31,27 @@ public class PluginImpl extends ElementWithDescriptionImpl implements IPlugin
     private final String vendor;
     private final String version;
     private final boolean isLicensed;
-    private final boolean isExecuted;
     private final boolean isEnabled;
+    private final Set<PluginExecutionPhase> supportedExecutionPhases;
+    private final Set<PluginExecutionPhase> activeExecutionPhases;
 
     public PluginImpl(final String name, final String presentationName, final String description, final String vendor, final String version,
-            final boolean isLicensed, final boolean isEnabled, final boolean isExecuted)
+            final boolean isLicensed, final boolean isEnabled, final Set<PluginExecutionPhase> supportedExecutionPhases,
+            final Set<PluginExecutionPhase> activeExecutionPhases)
     {
         super(name, presentationName, description);
         assert vendor != null && vendor.length() > 0 : "Parameter 'vendor' of method 'PluginImpl' must not be empty";
         assert version != null : "Parameter 'version' of method 'PluginImpl' must not be null";
+        assert supportedExecutionPhases != null
+                && !supportedExecutionPhases.isEmpty() : "Parameter 'supportedExecutionPhases' of method 'PluginImpl' must not be empty";
+        assert activeExecutionPhases != null : "Parameter 'activeExecutionPhases' of method 'PluginImpl' must not be null";
 
         this.vendor = vendor;
         this.version = version;
         this.isLicensed = isLicensed;
         this.isEnabled = isEnabled;
-        this.isExecuted = isExecuted;
+        this.supportedExecutionPhases = supportedExecutionPhases;
+        this.activeExecutionPhases = activeExecutionPhases;
     }
 
     @Override
@@ -69,8 +79,14 @@ public class PluginImpl extends ElementWithDescriptionImpl implements IPlugin
     }
 
     @Override
-    public boolean isExecuted()
+    public Set<PluginExecutionPhase> getActiveExecutionPhases()
     {
-        return isExecuted;
+        return Collections.unmodifiableSet(activeExecutionPhases);
+    }
+
+    @Override
+    public Set<PluginExecutionPhase> getSupportedExecutionPhases()
+    {
+        return Collections.unmodifiableSet(supportedExecutionPhases);
     }
 }

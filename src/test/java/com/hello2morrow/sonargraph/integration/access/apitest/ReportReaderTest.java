@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ReportReaderTest
@@ -276,10 +278,14 @@ public final class ReportReaderTest
         assertEquals("Wrong version", "9.9.2.533_2018-12-12", swagger.getVersion());
         assertEquals("Wrong vendor", "hello2morrow GmbH", swagger.getVendor());
         assertFalse("Must not be enabled", swagger.isEnabled());
-        assertFalse("Must not be executed", swagger.isExecuted());
+        assertTrue("Must not be executed", swagger.getActiveExecutionPhases().isEmpty());
+        assertEquals("Wrong type of available execution phase", EnumSet.of(PluginExecutionPhase.MODEL), swagger.getSupportedExecutionPhases());
         assertTrue("Must be licensed", swagger.isLicensed());
 
-        assertNotNull("Spotbugs plugin not found", plugins.get("SpotbugsPlugin"));
+        final IPlugin spotbugsPlugin = plugins.get("SpotbugsPlugin");
+        assertNotNull("Spotbugs plugin not found", spotbugsPlugin);
+        assertEquals("Wrong type of available execution phases", EnumSet.of(PluginExecutionPhase.ANALYZER),
+                spotbugsPlugin.getSupportedExecutionPhases());
 
         assertEquals("Wrong analyzer execution level", AnalyzerExecutionLevel.ADVANCED,
                 systemInfoProcessor.getSoftwareSystem().getAnalyzerExecutionLevel());
