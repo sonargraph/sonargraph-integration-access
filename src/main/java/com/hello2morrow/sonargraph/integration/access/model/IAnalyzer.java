@@ -21,7 +21,7 @@ public interface IAnalyzer extends IElementWithDescription
 {
     public boolean isLicensed();
 
-    public boolean isEnabled();
-
     public AnalyzerExecutionLevel getExecutionLevel();
+
+    public boolean isExecuted();
 }

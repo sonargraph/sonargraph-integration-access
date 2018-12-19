@@ -24,19 +24,18 @@ public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IA
 {
     private static final long serialVersionUID = 2339900670007779070L;
     private final boolean isLicensed;
-    private final boolean isEnabled;
     private final AnalyzerExecutionLevel executionLevel;
+    private final boolean isExecuted;
 
     public AnalyzerImpl(final String name, final String presentationName, final String description, final boolean isLicensed,
-            final AnalyzerExecutionLevel executionLevel, final boolean isEnabled)
+            final AnalyzerExecutionLevel executionLevel, final boolean isExecuted)
     {
         super(name, presentationName, description);
         assert executionLevel != null : "Parameter 'executionLevel' of method 'AnalyzerImpl' must not be null";
 
         this.isLicensed = isLicensed;
         this.executionLevel = executionLevel;
-        this.isEnabled = isEnabled;
-
+        this.isExecuted = isExecuted;
     }
 
     @Override
@@ -46,9 +45,9 @@ public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IA
     }
 
     @Override
-    public boolean isEnabled()
+    public boolean isExecuted()
     {
-        return isEnabled;
+        return isExecuted;
     }
 
     @Override
@@ -60,6 +59,6 @@ public final class AnalyzerImpl extends ElementWithDescriptionImpl implements IA
     @Override
     public String toString()
     {
-        return super.toString() + "\nisLicensed:" + isLicensed;
+        return super.toString() + ", isLicensed:" + isLicensed + ", executionLevel: " + executionLevel + ", isExecuted: " + isExecuted;
     }
 }
