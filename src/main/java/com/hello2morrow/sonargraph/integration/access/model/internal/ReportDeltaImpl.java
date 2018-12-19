@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
@@ -74,6 +77,12 @@ public final class ReportDeltaImpl implements IReportDelta
     public ISoftwareSystem getCurrentSystem()
     {
         return currentSystem;
+    }
+
+    @Override
+    public BaselineCurrent<AnalyzerExecutionLevel> getAnalyzerExecutionLevelDiff()
+    {
+        return new BaselineCurrent<>(baselineSystem.getAnalyzerExecutionLevel(), currentSystem.getAnalyzerExecutionLevel());
     }
 
     public void removedFeature(final IFeature removed)
@@ -185,21 +194,79 @@ public final class ReportDeltaImpl implements IReportDelta
     }
 
     @Override
+    public List<IAnalyzer> getAddedAnalyzers(final Predicate<IAnalyzer> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(addedAnalyzers);
+        }
+
+        final List<IAnalyzer> analyzersFromBase = getFilteredAnalyzers(baselineSystem, filter);
+        final List<IAnalyzer> analyzersFromCurrent = getFilteredAnalyzers(currentSystem, filter);
+        final List<IAnalyzer> added = new ArrayList<>(analyzersFromCurrent);
+        added.removeAll(analyzersFromBase);
+        return added;
+    }
+
+    @Override
     public List<IAnalyzer> getRemovedAnalyzers()
     {
         return Collections.unmodifiableList(removedAnalyzers);
     }
 
     @Override
-    public List<IPlugin> getAddedPlugins()
+    public List<IAnalyzer> getRemovedAnalyzers(final Predicate<IAnalyzer> filter)
     {
-        return Collections.unmodifiableList(addedPlugins);
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(removedAnalyzers);
+        }
+
+        final List<IAnalyzer> analyzersFromBase = getFilteredAnalyzers(baselineSystem, filter);
+        final List<IAnalyzer> analyzersFromCurrent = getFilteredAnalyzers(currentSystem, filter);
+        final List<IAnalyzer> removed = new ArrayList<>(analyzersFromBase);
+        removed.removeAll(analyzersFromCurrent);
+        return removed;
+    }
+
+    private List<IAnalyzer> getFilteredAnalyzers(final ISoftwareSystem system, final Predicate<IAnalyzer> filter)
+    {
+        return system.getAnalyzers().entrySet().stream().map(e -> e.getValue()).filter(a -> filter.test(a)).collect(Collectors.toList());
     }
 
     @Override
-    public List<IPlugin> getRemovedPlugins()
+    public List<IPlugin> getAddedPlugins(final Predicate<IPlugin> filter)
     {
-        return Collections.unmodifiableList(removedPlugins);
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(addedPlugins);
+        }
+
+        final List<IPlugin> pluginsFromBase = getFilteredPlugins(baselineSystem, filter);
+        final List<IPlugin> pluginsFromCurrent = getFilteredPlugins(currentSystem, filter);
+        final List<IPlugin> added = new ArrayList<>(pluginsFromCurrent);
+        added.removeAll(pluginsFromBase);
+        return added;
+    }
+
+    @Override
+    public List<IPlugin> getRemovedPlugins(final Predicate<IPlugin> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(removedPlugins);
+        }
+
+        final List<IPlugin> pluginsFromBase = getFilteredPlugins(baselineSystem, filter);
+        final List<IPlugin> pluginsFromCurrent = getFilteredPlugins(currentSystem, filter);
+        final List<IPlugin> removed = new ArrayList<>(pluginsFromBase);
+        removed.removeAll(pluginsFromCurrent);
+        return removed;
+    }
+
+    private List<IPlugin> getFilteredPlugins(final ISoftwareSystem system, final Predicate<IPlugin> filter)
+    {
+        return system.getPlugins().entrySet().stream().map(e -> e.getValue()).filter(p -> filter.test(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -249,7 +316,9 @@ public final class ReportDeltaImpl implements IReportDelta
     @Override
     public boolean isEmpty()
     {
-        return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && removedAnalyzers.isEmpty()
+        return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && getAddedAnalyzers(a -> a.isExecuted()).isEmpty()
+                && removedAnalyzers.isEmpty() && getRemovedAnalyzers(a -> a.isExecuted()).isEmpty() && addedPlugins.isEmpty()
+                && getAddedPlugins(p -> p.isExecuted()).isEmpty() && getRemovedPlugins(p -> p.isExecuted()).isEmpty()
                 && addedMetricThresholds.isEmpty() && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
                 && addedDuplicateCodeConfigurationEntries.isEmpty() && removedDuplicateCodeConfigurationEntries.isEmpty()
                 && addedScriptRunnerConfigurationEntries.isEmpty() && removedScriptRunnerConfigurationEntries.isEmpty()
@@ -308,8 +377,17 @@ public final class ReportDeltaImpl implements IReportDelta
             builder.append("\n\n").append("Current system info");
             addSystemInfo(builder, currentSystem, true, true);
         }
-
-        builder.append("\n");
+        final BaselineCurrent<AnalyzerExecutionLevel> executionLevelDiff = getAnalyzerExecutionLevelDiff();
+        builder.append("\n").append(Utility.INDENTATION);
+        if (executionLevelDiff.hasChanged())
+        {
+            builder.append("Analyzer execution level changed from '").append(baselineSystem.getAnalyzerExecutionLevel().getPresentationName())
+                    .append("' to '").append(currentSystem.getAnalyzerExecutionLevel().getPresentationName()).append("'");
+        }
+        else
+        {
+            builder.append("Analyzer execution level (unchanged): ").append(baselineSystem.getAnalyzerExecutionLevel().getPresentationName());
+        }
 
         if (isEmpty())
         {
@@ -320,100 +398,210 @@ public final class ReportDeltaImpl implements IReportDelta
         builder.append("\nSystem delta");
 
         //Features
-        builder.append("\n").append(Utility.INDENTATION).append("Added features (").append(addedFeatures.size()).append(")");
-        for (final IFeature next : addedFeatures)
+        if (!addedFeatures.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append("Added features (").append(addedFeatures.size()).append(")");
+            for (final IFeature next : addedFeatures)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
         }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed features (").append(removedFeatures.size()).append(")");
-        for (final IFeature next : removedFeatures)
+        if (!removedFeatures.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append("Removed features (").append(removedFeatures.size()).append(")");
+            for (final IFeature next : removedFeatures)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
         }
 
         //Analyzers
-        builder.append("\n").append(Utility.INDENTATION).append("Added analyzers (").append(addedAnalyzers.size()).append(")");
-        for (final IAnalyzer next : addedAnalyzers)
+        if (!addedAnalyzers.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append("Added analyzers (").append(addedAnalyzers.size()).append(")");
+            for (final IAnalyzer next : addedAnalyzers)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
         }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed analyzers (").append(removedAnalyzers.size()).append(")");
-        for (final IAnalyzer next : removedAnalyzers)
+        final List<IAnalyzer> additionallyExecutedAnalyzers = getAddedAnalyzers(a -> a.isExecuted());
+        if (!additionallyExecutedAnalyzers.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append("Additionally executed analyzers (").append(additionallyExecutedAnalyzers.size())
+                    .append(")");
+            for (final IAnalyzer next : additionallyExecutedAnalyzers)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+
+        if (!removedAnalyzers.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Removed analyzers (").append(removedAnalyzers.size()).append(")");
+            for (final IAnalyzer next : removedAnalyzers)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+        final List<IAnalyzer> noLongerExecutedAnalyzers = getRemovedAnalyzers(a -> a.isExecuted());
+        if (!noLongerExecutedAnalyzers.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("No longer executed analyzers (").append(noLongerExecutedAnalyzers.size())
+                    .append(")");
+            for (final IAnalyzer next : noLongerExecutedAnalyzers)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+
+        //Plugins
+        if (!addedPlugins.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Added plugins (").append(addedPlugins.size()).append(")");
+            for (final IPlugin next : addedPlugins)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+        final List<IPlugin> additionallyExecutedPlugins = getAddedPlugins(p -> p.isExecuted());
+        if (!additionallyExecutedPlugins.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Additionally executed plugins (").append(additionallyExecutedPlugins.size())
+                    .append(")");
+            for (final IPlugin next : additionallyExecutedPlugins)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+
+        if (!removedPlugins.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Removed plugins (").append(removedPlugins.size()).append(")");
+            for (final IPlugin next : removedPlugins)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
+        }
+        final List<IPlugin> noLongerExecutedPlugins = getRemovedPlugins(p -> p.isExecuted());
+        if (!noLongerExecutedPlugins.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("No longer executed plugins (").append(noLongerExecutedPlugins.size())
+                    .append(")");
+            for (final IPlugin next : noLongerExecutedPlugins)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+            }
         }
 
         //Duplicate code configuration
-        builder.append("\n").append(Utility.INDENTATION).append("Added duplicate code configuration entries (")
-                .append(addedDuplicateCodeConfigurationEntries.size()).append(")");
-        for (final String next : addedDuplicateCodeConfigurationEntries)
+        if (!addedDuplicateCodeConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            builder.append("\n").append(Utility.INDENTATION).append("Added duplicate code configuration entries (")
+                    .append(addedDuplicateCodeConfigurationEntries.size()).append(")");
+            for (final String next : addedDuplicateCodeConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed duplicate code configuration entries (")
-                .append(removedDuplicateCodeConfigurationEntries.size()).append(")");
-        for (final String next : removedDuplicateCodeConfigurationEntries)
+        if (!removedDuplicateCodeConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            builder.append("\n").append(Utility.INDENTATION).append("Removed duplicate code configuration entries (")
+                    .append(removedDuplicateCodeConfigurationEntries.size()).append(")");
+            for (final String next : removedDuplicateCodeConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
 
-        //Script runner configuration
-        builder.append("\n").append(Utility.INDENTATION).append("Added script runner configuration entries (")
-                .append(addedScriptRunnerConfigurationEntries.size()).append(")");
-        for (final String next : addedScriptRunnerConfigurationEntries)
+        if (!addedScriptRunnerConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            //Script runner configuration
+            builder.append("\n").append(Utility.INDENTATION).append("Added script runner configuration entries (")
+                    .append(addedScriptRunnerConfigurationEntries.size()).append(")");
+            for (final String next : addedScriptRunnerConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed script runner configuration entries (")
-                .append(removedScriptRunnerConfigurationEntries.size()).append(")");
-        for (final String next : removedScriptRunnerConfigurationEntries)
+        if (!removedScriptRunnerConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            builder.append("\n").append(Utility.INDENTATION).append("Removed script runner configuration entries (")
+                    .append(removedScriptRunnerConfigurationEntries.size()).append(")");
+            for (final String next : removedScriptRunnerConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
 
         //Architecture check configuration
-        builder.append("\n").append(Utility.INDENTATION).append("Added architecture check configuration entries (")
-                .append(addedArchitectureCheckConfigurationEntries.size()).append(")");
-        for (final String next : addedArchitectureCheckConfigurationEntries)
+        if (!addedArchitectureCheckConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            builder.append("\n").append(Utility.INDENTATION).append("Added architecture check configuration entries (")
+                    .append(addedArchitectureCheckConfigurationEntries.size()).append(")");
+            for (final String next : addedArchitectureCheckConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed architecture check configuration entries (")
-                .append(removedArchitectureCheckConfigurationEntries.size()).append(")");
-        for (final String next : removedArchitectureCheckConfigurationEntries)
+        if (!removedArchitectureCheckConfigurationEntries.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            builder.append("\n").append(Utility.INDENTATION).append("Removed architecture check configuration entries (")
+                    .append(removedArchitectureCheckConfigurationEntries.size()).append(")");
+            for (final String next : removedArchitectureCheckConfigurationEntries)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
+            }
         }
 
         //Metric thresholds
-        builder.append("\n").append(Utility.INDENTATION).append("Added metric thresholds (").append(addedMetricThresholds.size()).append(")");
-        for (final IMetricThreshold next : addedMetricThresholds)
+        if (!addedMetricThresholds.isEmpty())
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
-                    .append(next.getMetricLevel().getName());
-        }
-        builder.append("\n").append(Utility.INDENTATION).append("Removed metric thresholds (").append(removedMetricThresholds.size()).append(")");
-        for (final IMetricThreshold next : removedMetricThresholds)
-        {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
-                    .append(next.getMetricLevel().getName());
-        }
-        builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
-                .append(changedBoundariesMetricThresholds.size()).append(")");
-        for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
-        {
-            final IMetricThreshold baseline = next.getBaseline();
-            final IMetricThreshold current = next.getCurrent();
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(baseline.getMetricId().getName()).append(":")
-                    .append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
-                    .append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
-                    .append(current.getUpperThreshold()).append("]");
+            builder.append("\n").append(Utility.INDENTATION).append("Added metric thresholds (").append(addedMetricThresholds.size()).append(")");
+            for (final IMetricThreshold next : addedMetricThresholds)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getPresentationName())
+                        .append(": ").append(next.getMetricLevel().getPresentationName());
+            }
         }
 
-        builder.append("\n\nWorkspace delta");
-        builder.append(getWorkspaceDelta());
-        builder.append("\n\nIssue delta");
-        builder.append(getIssueDelta());
+        if (!removedMetricThresholds.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Removed metric thresholds (").append(removedMetricThresholds.size()).append(")");
+            for (final IMetricThreshold next : removedMetricThresholds)
+            {
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getPresentationName())
+                        .append(": ").append(next.getMetricLevel().getPresentationName());
+            }
+        }
+
+        if (!changedBoundariesMetricThresholds.isEmpty())
+        {
+            builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
+                    .append(changedBoundariesMetricThresholds.size()).append(")");
+            for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
+            {
+                final IMetricThreshold baseline = next.getBaseline();
+                final IMetricThreshold current = next.getCurrent();
+                builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(baseline.getMetricId().getPresentationName())
+                        .append(":").append(baseline.getMetricLevel().getPresentationName()).append(" [").append(baseline.getLowerThreshold())
+                        .append("-").append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
+                        .append(current.getUpperThreshold()).append("]");
+            }
+        }
+
+        final IWorkspaceDelta workspaceDelta = getWorkspaceDelta();
+        if (!workspaceDelta.isEmpty())
+        {
+            builder.append("\n\nWorkspace delta");
+            builder.append(workspaceDelta);
+        }
+
+        final IIssueDelta issueDelta = getIssueDelta();
+        if (!issueDelta.isEmpty())
+        {
+            builder.append("\n\nIssue delta");
+            builder.append(issueDelta);
+        }
 
         return builder.toString();
     }
