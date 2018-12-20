@@ -21,13 +21,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
@@ -39,6 +43,8 @@ public final class ReportDeltaImpl implements IReportDelta
     private final List<IFeature> removedFeatures = new ArrayList<>();
     private final List<IAnalyzer> addedAnalyzers = new ArrayList<>();
     private final List<IAnalyzer> removedAnalyzers = new ArrayList<>();
+    private final List<IPlugin> addedPlugins = new ArrayList<>();
+    private final List<IPlugin> removedPlugins = new ArrayList<>();
     private final List<String> removedDuplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> addedDuplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> removedScriptRunnerConfigurationEntries = new ArrayList<>();
@@ -73,6 +79,12 @@ public final class ReportDeltaImpl implements IReportDelta
         return currentSystem;
     }
 
+    @Override
+    public BaselineCurrent<AnalyzerExecutionLevel> getAnalyzerExecutionLevelDiff()
+    {
+        return new BaselineCurrent<>(baselineSystem.getAnalyzerExecutionLevel(), currentSystem.getAnalyzerExecutionLevel());
+    }
+
     public void removedFeature(final IFeature removed)
     {
         assert removed != null : "Parameter 'removed' of method 'removedFeature' must not be null";
@@ -95,6 +107,18 @@ public final class ReportDeltaImpl implements IReportDelta
     {
         assert added != null : "Parameter 'added' of method 'addedAnalyzer' must not be null";
         addedAnalyzers.add(added);
+    }
+
+    public void removedPlugin(final IPlugin removed)
+    {
+        assert removed != null : "Parameter 'removed' of method 'removedPlugin' must not be null";
+        removedPlugins.add(removed);
+    }
+
+    public void addedPlugin(final IPlugin added)
+    {
+        assert added != null : "Parameter 'added' of method 'addedPlugin' must not be null";
+        addedPlugins.add(added);
     }
 
     public void removedDuplicateCodeConfigurationEntry(final String entry)
@@ -170,9 +194,79 @@ public final class ReportDeltaImpl implements IReportDelta
     }
 
     @Override
+    public List<IAnalyzer> getAddedAnalyzers(final Predicate<IAnalyzer> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(addedAnalyzers);
+        }
+
+        final List<IAnalyzer> analyzersFromBase = getFilteredAnalyzers(baselineSystem, filter);
+        final List<IAnalyzer> analyzersFromCurrent = getFilteredAnalyzers(currentSystem, filter);
+        final List<IAnalyzer> added = new ArrayList<>(analyzersFromCurrent);
+        added.removeAll(analyzersFromBase);
+        return added;
+    }
+
+    @Override
     public List<IAnalyzer> getRemovedAnalyzers()
     {
         return Collections.unmodifiableList(removedAnalyzers);
+    }
+
+    @Override
+    public List<IAnalyzer> getRemovedAnalyzers(final Predicate<IAnalyzer> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(removedAnalyzers);
+        }
+
+        final List<IAnalyzer> analyzersFromBase = getFilteredAnalyzers(baselineSystem, filter);
+        final List<IAnalyzer> analyzersFromCurrent = getFilteredAnalyzers(currentSystem, filter);
+        final List<IAnalyzer> removed = new ArrayList<>(analyzersFromBase);
+        removed.removeAll(analyzersFromCurrent);
+        return removed;
+    }
+
+    private List<IAnalyzer> getFilteredAnalyzers(final ISoftwareSystem system, final Predicate<IAnalyzer> filter)
+    {
+        return system.getAnalyzers().entrySet().stream().map(e -> e.getValue()).filter(a -> filter.test(a)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IPlugin> getAddedPlugins(final Predicate<IPlugin> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(addedPlugins);
+        }
+
+        final List<IPlugin> pluginsFromBase = getFilteredPlugins(baselineSystem, filter);
+        final List<IPlugin> pluginsFromCurrent = getFilteredPlugins(currentSystem, filter);
+        final List<IPlugin> added = new ArrayList<>(pluginsFromCurrent);
+        added.removeAll(pluginsFromBase);
+        return added;
+    }
+
+    @Override
+    public List<IPlugin> getRemovedPlugins(final Predicate<IPlugin> filter)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(removedPlugins);
+        }
+
+        final List<IPlugin> pluginsFromBase = getFilteredPlugins(baselineSystem, filter);
+        final List<IPlugin> pluginsFromCurrent = getFilteredPlugins(currentSystem, filter);
+        final List<IPlugin> removed = new ArrayList<>(pluginsFromBase);
+        removed.removeAll(pluginsFromCurrent);
+        return removed;
+    }
+
+    private List<IPlugin> getFilteredPlugins(final ISoftwareSystem system, final Predicate<IPlugin> filter)
+    {
+        return system.getPlugins().entrySet().stream().map(e -> e.getValue()).filter(p -> filter.test(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -222,8 +316,11 @@ public final class ReportDeltaImpl implements IReportDelta
     @Override
     public boolean isEmpty()
     {
-        return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && removedAnalyzers.isEmpty()
-                && addedMetricThresholds.isEmpty() && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
+        return addedFeatures.isEmpty() && removedFeatures.isEmpty() && addedAnalyzers.isEmpty() && getAddedAnalyzers(a -> a.isExecuted()).isEmpty()
+                && removedAnalyzers.isEmpty() && getRemovedAnalyzers(a -> a.isExecuted()).isEmpty() && addedPlugins.isEmpty()
+                && getAddedPlugins(p -> !p.getActiveExecutionPhases().isEmpty()).isEmpty()
+                && getRemovedPlugins(p -> !p.getActiveExecutionPhases().isEmpty()).isEmpty() && addedMetricThresholds.isEmpty()
+                && removedMetricThresholds.isEmpty() && changedBoundariesMetricThresholds.isEmpty()
                 && addedDuplicateCodeConfigurationEntries.isEmpty() && removedDuplicateCodeConfigurationEntries.isEmpty()
                 && addedScriptRunnerConfigurationEntries.isEmpty() && removedScriptRunnerConfigurationEntries.isEmpty()
                 && addedArchitectureCheckConfigurationEntries.isEmpty() && removedArchitectureCheckConfigurationEntries.isEmpty()
@@ -281,39 +378,92 @@ public final class ReportDeltaImpl implements IReportDelta
             builder.append("\n\n").append("Current system info");
             addSystemInfo(builder, currentSystem, true, true);
         }
-
-        builder.append("\n");
+        final BaselineCurrent<AnalyzerExecutionLevel> executionLevelDiff = getAnalyzerExecutionLevelDiff();
+        builder.append("\n").append(Utility.INDENTATION);
+        if (executionLevelDiff.hasChanged())
+        {
+            builder.append("Analyzer execution level changed from '").append(baselineSystem.getAnalyzerExecutionLevel().getPresentationName())
+                    .append("' to '").append(currentSystem.getAnalyzerExecutionLevel().getPresentationName()).append("'");
+        }
+        else
+        {
+            builder.append("Analyzer execution level (unchanged): ").append(baselineSystem.getAnalyzerExecutionLevel().getPresentationName());
+        }
 
         if (isEmpty())
         {
-            builder.append("\nNo delta detected.");
+            builder.append("\n\nNo delta detected.");
             return builder.toString();
         }
 
-        builder.append("\nSystem delta");
+        builder.append("\n\nSystem delta");
 
         //Features
         builder.append("\n").append(Utility.INDENTATION).append("Added features (").append(addedFeatures.size()).append(")");
         for (final IFeature next : addedFeatures)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed features (").append(removedFeatures.size()).append(")");
         for (final IFeature next : removedFeatures)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
         }
 
         //Analyzers
         builder.append("\n").append(Utility.INDENTATION).append("Added analyzers (").append(addedAnalyzers.size()).append(")");
         for (final IAnalyzer next : addedAnalyzers)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
         }
+
+        final List<IAnalyzer> additionallyExecutedAnalyzers = getAddedAnalyzers(a -> a.isExecuted());
+        builder.append("\n").append(Utility.INDENTATION).append("Additionally executed analyzers (").append(additionallyExecutedAnalyzers.size())
+                .append(")");
+        for (final IAnalyzer next : additionallyExecutedAnalyzers)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed analyzers (").append(removedAnalyzers.size()).append(")");
         for (final IAnalyzer next : removedAnalyzers)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+        final List<IAnalyzer> noLongerExecutedAnalyzers = getRemovedAnalyzers(a -> a.isExecuted());
+        builder.append("\n").append(Utility.INDENTATION).append("No longer executed analyzers (").append(noLongerExecutedAnalyzers.size())
+                .append(")");
+        for (final IAnalyzer next : noLongerExecutedAnalyzers)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+
+        //Plugins
+        builder.append("\n").append(Utility.INDENTATION).append("Added plugins (").append(addedPlugins.size()).append(")");
+        for (final IPlugin next : addedPlugins)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+        final List<IPlugin> additionallyExecutedPlugins = getAddedPlugins(p -> !p.getActiveExecutionPhases().isEmpty());
+        builder.append("\n").append(Utility.INDENTATION).append("Additionally executed plugins (").append(additionallyExecutedPlugins.size())
+                .append(")");
+        for (final IPlugin next : additionallyExecutedPlugins)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+
+        builder.append("\n").append(Utility.INDENTATION).append("Removed plugins (").append(removedPlugins.size()).append(")");
+        for (final IPlugin next : removedPlugins)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
+        }
+
+        final List<IPlugin> noLongerExecutedPlugins = getRemovedPlugins(p -> !p.getActiveExecutionPhases().isEmpty());
+        builder.append("\n").append(Utility.INDENTATION).append("No longer executed plugins (").append(noLongerExecutedPlugins.size()).append(")");
+        for (final IPlugin next : noLongerExecutedPlugins)
+        {
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getPresentationName());
         }
 
         //Duplicate code configuration
@@ -323,6 +473,7 @@ public final class ReportDeltaImpl implements IReportDelta
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed duplicate code configuration entries (")
                 .append(removedDuplicateCodeConfigurationEntries.size()).append(")");
         for (final String next : removedDuplicateCodeConfigurationEntries)
@@ -337,6 +488,7 @@ public final class ReportDeltaImpl implements IReportDelta
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed script runner configuration entries (")
                 .append(removedScriptRunnerConfigurationEntries.size()).append(")");
         for (final String next : removedScriptRunnerConfigurationEntries)
@@ -351,6 +503,7 @@ public final class ReportDeltaImpl implements IReportDelta
         {
             builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next);
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed architecture check configuration entries (")
                 .append(removedArchitectureCheckConfigurationEntries.size()).append(")");
         for (final String next : removedArchitectureCheckConfigurationEntries)
@@ -362,29 +515,32 @@ public final class ReportDeltaImpl implements IReportDelta
         builder.append("\n").append(Utility.INDENTATION).append("Added metric thresholds (").append(addedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : addedMetricThresholds)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
-                    .append(next.getMetricLevel().getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getPresentationName()).append(": ")
+                    .append(next.getMetricLevel().getPresentationName());
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Removed metric thresholds (").append(removedMetricThresholds.size()).append(")");
         for (final IMetricThreshold next : removedMetricThresholds)
         {
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getName()).append(": ")
-                    .append(next.getMetricLevel().getName());
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(next.getMetricId().getPresentationName()).append(": ")
+                    .append(next.getMetricLevel().getPresentationName());
         }
+
         builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
                 .append(changedBoundariesMetricThresholds.size()).append(")");
         for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
         {
             final IMetricThreshold baseline = next.getBaseline();
             final IMetricThreshold current = next.getCurrent();
-            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(baseline.getMetricId().getName()).append(":")
-                    .append(baseline.getMetricLevel().getName()).append(" [").append(baseline.getLowerThreshold()).append("-")
+            builder.append("\n").append(Utility.INDENTATION).append(Utility.INDENTATION).append(baseline.getMetricId().getPresentationName())
+                    .append(":").append(baseline.getMetricLevel().getPresentationName()).append(" [").append(baseline.getLowerThreshold()).append("-")
                     .append(baseline.getUpperThreshold()).append("] to [").append(current.getLowerThreshold()).append("-")
                     .append(current.getUpperThreshold()).append("]");
         }
 
         builder.append("\n\nWorkspace delta");
         builder.append(getWorkspaceDelta());
+
         builder.append("\n\nIssue delta");
         builder.append(getIssueDelta());
 

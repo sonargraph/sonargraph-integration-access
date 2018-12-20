@@ -89,14 +89,16 @@ public final class IssueDeltaImpl implements IIssueDelta
 
     public void addedToCycle(final String namedElementFqName, final String cycleInfo)
     {
-        assert namedElementFqName != null && namedElementFqName.length() > 0 : "Parameter 'namedElementFqName' of method 'addedToCycle' must not be empty";
+        assert namedElementFqName != null
+                && namedElementFqName.length() > 0 : "Parameter 'namedElementFqName' of method 'addedToCycle' must not be empty";
         assert cycleInfo != null && cycleInfo.length() > 0 : "Parameter 'cycleInfo' of method 'addedToCycle' must not be empty";
         addedToCycle.put(namedElementFqName, cycleInfo);
     }
 
     public void removedFromCycle(final String namedElementFqName, final String cycleInfo)
     {
-        assert namedElementFqName != null && namedElementFqName.length() > 0 : "Parameter 'namedElementFqName' of method 'removedFromCycle' must not be empty";
+        assert namedElementFqName != null
+                && namedElementFqName.length() > 0 : "Parameter 'namedElementFqName' of method 'removedFromCycle' must not be empty";
         assert cycleInfo != null && cycleInfo.length() > 0 : "Parameter 'cycleInfo' of method 'removedFromCycle' must not be empty";
         removedFromCycle.put(namedElementFqName, cycleInfo);
     }

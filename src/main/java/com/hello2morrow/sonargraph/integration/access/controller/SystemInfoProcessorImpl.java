@@ -42,6 +42,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -74,12 +75,12 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream())
-                    .collect(Collectors.toList()));
+            return Collections
+                    .unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).collect(Collectors.toList()));
         }
 
-        return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter)
-                .collect(Collectors.toList()));
+        return Collections.unmodifiableList(
+                softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter).collect(Collectors.toList()));
     }
 
     @Override
@@ -97,9 +98,8 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return softwareSystem.getIssues().entrySet().stream()
-                    .filter(entry -> entry.getKey().getCategory().getName().equals("ThresholdViolation")).flatMap(entry -> entry.getValue().stream())
-                    .map(issue -> (IThresholdViolationIssue) issue).collect(Collectors.toList());
+            return softwareSystem.getIssues().entrySet().stream().filter(entry -> entry.getKey().getCategory().getName().equals("ThresholdViolation"))
+                    .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).collect(Collectors.toList());
         }
         return softwareSystem.getIssues().entrySet().stream().filter(entry -> entry.getKey().getCategory().getName().equals("ThresholdViolation"))
                 .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).filter(filter)
@@ -111,8 +111,8 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
-                    .collect(Collectors.toList()));
+            return Collections.unmodifiableList(
+                    softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream()).collect(Collectors.toList()));
         }
 
         return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
@@ -176,6 +176,12 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public List<IAnalyzer> getAnalyzers()
     {
         return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getAnalyzers().values()));
+    }
+
+    @Override
+    public List<IPlugin> getPlugins()
+    {
+        return Collections.unmodifiableList(new ArrayList<>(softwareSystem.getPlugins().values()));
     }
 
     @Override

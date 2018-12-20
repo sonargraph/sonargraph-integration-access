@@ -17,26 +17,19 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
-public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElementContainer, ISourceFileLookup
+public interface IPlugin extends IElementWithDescription
 {
-    public String getVirtualModel();
+    public String getVendor();
 
-    public String getBaseDir();
+    public String getVersion();
 
-    public Map<String, IMetricLevel> getMetricLevels();
+    public boolean isEnabled();
 
-    public Map<String, IModule> getModules();
+    public boolean isLicensed();
 
-    public Optional<IModule> getModule(String simpleName);
+    public Set<PluginExecutionPhase> getActiveExecutionPhases();
 
-    public Map<String, IExternal> getExternals();
-
-    public Map<String, IPlugin> getPlugins();
-
-    public Map<String, IAnalyzer> getAnalyzers();
-
-    public AnalyzerExecutionLevel getAnalyzerExecutionLevel();
+    public Set<PluginExecutionPhase> getSupportedExecutionPhases();
 }

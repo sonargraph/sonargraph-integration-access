@@ -37,6 +37,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
@@ -346,8 +347,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                         }
                         break;
                     case DUPLICATE_CODE:
-                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(), new BaselineCurrent<Integer>(
-                                nextBaseLineIssuesSize, nextCurrentIssuesSize));
+                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(),
+                                new BaselineCurrent<>(nextBaseLineIssuesSize, nextCurrentIssuesSize));
                         break;
                     default:
                         assert false : "Unhandled: " + type;
@@ -573,6 +574,20 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         currentAsSet.forEach(n -> reportDeltaImpl.addedAnalyzer(n));
     }
 
+    private void processPlugins(final List<IPlugin> baseline, final List<IPlugin> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processPlugins' must not be null";
+        assert current != null : "Parameter 'current' of method 'processPlugins' must not be null";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processPlugins' must not be null";
+
+        final Set<IPlugin> baselineAsSet = new HashSet<>(baseline);
+        final Set<IPlugin> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedPlugin(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedPlugin(n));
+    }
+
     private void processFeatures(final List<IFeature> baseline, final List<IFeature> current, final ReportDeltaImpl reportDeltaImpl)
     {
         assert baseline != null : "Parameter 'baseline' of method 'processFeatures' must not be null";
@@ -650,13 +665,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 if (!nextBaselineThreshold.getLowerThreshold().equals(nextCurrentThreshold.getLowerThreshold())
                         || !nextBaselineThreshold.getUpperThreshold().equals(nextCurrentThreshold.getUpperThreshold()))
                 {
-                    reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<IMetricThreshold>(nextBaselineThreshold,
-                            nextCurrentThreshold));
+                    reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<>(nextBaselineThreshold, nextCurrentThreshold));
                 }
             }
             else
             {
-                //Not found in current 
+                //Not found in current
                 reportDeltaImpl.removedMetricThreshold(nextBaselineThreshold);
             }
         }
@@ -676,6 +690,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         processFeatures(baselineSystemInfoProcessor.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
         processAnalyzers(baselineSystemInfoProcessor.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
+        processPlugins(baselineSystemInfoProcessor.getPlugins(), systemInfoProcessor.getPlugins(), reportDeltaImpl);
         processDuplicateCodeConfiguration(baselineSystemInfoProcessor.getDuplicateCodeConfigurationEntries(),
                 systemInfoProcessor.getDuplicateCodeConfigurationEntries(), reportDeltaImpl);
         processScriptRunnerConfiguration(baselineSystemInfoProcessor.getScriptRunnerConfigurationEntries(),

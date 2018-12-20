@@ -31,7 +31,8 @@ public class TestFixture
     public static final String APPLICATION_MODULE = "Application";
     public static final String MODEL_MODULE = "Model";
 
-    /** Reports for testing diff functionality */
+    public static final String REPORT_WITH_PLUGINS = "./src/test/resources/AlarmClock_with_plugins.xml";
+
     public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
     public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";
 
@@ -61,4 +62,8 @@ public class TestFixture
     public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
 
     public static final String META_DATA_PATH_OF_FOUR_LANGUAGES_SYSTEM = "./src/test/data/multilanguage/ExportMetaDataFourLanguages.xml";
+
+    /** Reports for testing diff functionality */
+    public static final String ALARM_CLOCK_BASELINE_PLUGIN_NOT_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_not_executed.xml";
+    public static final String ALARM_CLOCK_PLUGIN_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_executed.xml";
 }

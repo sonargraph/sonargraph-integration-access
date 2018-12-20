@@ -17,26 +17,23 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.Map;
-import java.util.Optional;
+import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
-public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElementContainer, ISourceFileLookup
+public enum PluginExecutionPhase implements IEnumeration
 {
-    public String getVirtualModel();
+    MODEL,
+    ANALYZER;
 
-    public String getBaseDir();
+    @Override
+    public String getStandardName()
+    {
+        return Utility.convertConstantNameToStandardName(name());
+    }
 
-    public Map<String, IMetricLevel> getMetricLevels();
-
-    public Map<String, IModule> getModules();
-
-    public Optional<IModule> getModule(String simpleName);
-
-    public Map<String, IExternal> getExternals();
-
-    public Map<String, IPlugin> getPlugins();
-
-    public Map<String, IAnalyzer> getAnalyzers();
-
-    public AnalyzerExecutionLevel getAnalyzerExecutionLevel();
+    @Override
+    public String getPresentationName()
+    {
+        return Utility.convertConstantNameToPresentationName(name());
+    }
 }

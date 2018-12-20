@@ -18,10 +18,12 @@
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +39,18 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ReportReaderTest
@@ -147,7 +154,6 @@ public final class ReportReaderTest
     }
 
     @Test
-    //HUHU
     public void processCppReportWithLogicalNamespaces() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
@@ -249,7 +255,44 @@ public final class ReportReaderTest
                     assertNotNull("Resolution expected", nextResolution);
                 }
             }
-
         }
+    }
+
+    @Test
+    public void processReportWithPluginInfoAndAnalyzerExecutionLevel()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_PLUGINS));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        final ISoftwareSystem softwareSystem = systemInfoProcessor.getSoftwareSystem();
+        final Map<String, IPlugin> plugins = softwareSystem.getPlugins();
+        assertEquals("Wrong number of plugins", 2, plugins.size());
+
+        final IPlugin swagger = plugins.get("SwaggerPlugin");
+        assertNotNull("Swagger plugin not found", swagger);
+        assertEquals("Wrong name", "SwaggerPlugin", swagger.getName());
+        assertEquals("Wrong presentation name", "Swagger Plugin", swagger.getPresentationName());
+        assertEquals("Wrong description", "Plugin that exposes webresources and dependencies between them.", swagger.getDescription());
+        assertEquals("Wrong version", "9.9.2.533_2018-12-12", swagger.getVersion());
+        assertEquals("Wrong vendor", "hello2morrow GmbH", swagger.getVendor());
+        assertFalse("Must not be enabled", swagger.isEnabled());
+        assertTrue("Must not be executed", swagger.getActiveExecutionPhases().isEmpty());
+        assertEquals("Wrong type of available execution phase", EnumSet.of(PluginExecutionPhase.MODEL), swagger.getSupportedExecutionPhases());
+        assertTrue("Must be licensed", swagger.isLicensed());
+
+        final IPlugin spotbugsPlugin = plugins.get("SpotbugsPlugin");
+        assertNotNull("Spotbugs plugin not found", spotbugsPlugin);
+        assertEquals("Wrong type of available execution phases", EnumSet.of(PluginExecutionPhase.ANALYZER),
+                spotbugsPlugin.getSupportedExecutionPhases());
+
+        assertEquals("Wrong analyzer execution level", AnalyzerExecutionLevel.ADVANCED,
+                systemInfoProcessor.getSoftwareSystem().getAnalyzerExecutionLevel());
+        final Map<String, IAnalyzer> analyzers = softwareSystem.getAnalyzers();
+        final IAnalyzer spotbugs = analyzers.get("SpotbugsPlugin");
+        assertNotNull("Spotbugs analyzer must exist", spotbugs);
+        assertTrue("Must be licensed", spotbugs.isLicensed());
+        assertFalse("Must not be executed", spotbugs.isExecuted());
     }
 }

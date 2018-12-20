@@ -20,4 +20,8 @@ package com.hello2morrow.sonargraph.integration.access.model;
 public interface IAnalyzer extends IElementWithDescription
 {
     public boolean isLicensed();
+
+    public AnalyzerExecutionLevel getExecutionLevel();
+
+    public boolean isExecuted();
 }

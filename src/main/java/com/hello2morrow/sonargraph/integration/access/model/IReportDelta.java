@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface IReportDelta extends IDelta
 {
@@ -31,7 +32,15 @@ public interface IReportDelta extends IDelta
 
     public List<IAnalyzer> getAddedAnalyzers();
 
+    public List<IAnalyzer> getAddedAnalyzers(Predicate<IAnalyzer> filter);
+
     public List<IAnalyzer> getRemovedAnalyzers();
+
+    public List<IAnalyzer> getRemovedAnalyzers(Predicate<IAnalyzer> filter);
+
+    public List<IPlugin> getAddedPlugins(Predicate<IPlugin> filter);
+
+    public List<IPlugin> getRemovedPlugins(Predicate<IPlugin> filter);
 
     public List<IMetricThreshold> getAddedMetricThresholds();
 
@@ -42,4 +51,6 @@ public interface IReportDelta extends IDelta
     public IWorkspaceDelta getWorkspaceDelta();
 
     public IIssueDelta getIssueDelta();
+
+    public BaselineCurrent<AnalyzerExecutionLevel> getAnalyzerExecutionLevelDiff();
 }
