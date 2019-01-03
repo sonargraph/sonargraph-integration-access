@@ -19,25 +19,17 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.List;
 
-/**
- *  Currently reports added, removed modules and added, removed root directories.
- *  Order of modules or root directories is currently not supported.
- *  Additionally, changes in patterns are reported, but the number of matches are not taken into account and changes in
- *  description or information are not supported.
- *
- *  This delta focuses on structural changes, thus the modules' descriptions are ignored.
- */
-public interface IWorkspaceDelta extends IDelta
+public interface IFilterDelta extends IDelta
 {
-    public List<IModule> getAddedModules();
+    public String getName();
 
-    public List<IModule> getRemovedModules();
+    public String getPresentationName();
 
-    public List<IModuleDelta> getChangedModules();
+    public List<IWildcardPattern> getAddedIncludePatterns();
 
-    public IFilterDelta getWorkspaceFileFilterDelta();
+    public List<IWildcardPattern> getRemovedIncludePatterns();
 
-    public IFilterDelta getProductionCodeFilterDelta();
+    public List<IWildcardPattern> getAddedExcludePatterns();
 
-    public IFilterDelta getIssueFilterDelta();
+    public List<IWildcardPattern> getRemovedExcludePatterns();
 }

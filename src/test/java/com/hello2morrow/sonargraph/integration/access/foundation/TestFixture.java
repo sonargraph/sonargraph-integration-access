@@ -66,4 +66,7 @@ public class TestFixture
     /** Reports for testing diff functionality */
     public static final String ALARM_CLOCK_BASELINE_PLUGIN_NOT_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_not_executed.xml";
     public static final String ALARM_CLOCK_PLUGIN_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_executed.xml";
+
+    public static final String ALARM_CLOCK_WITH_WORKSPACE_FILTERS = "./src/test/resources/AlarmClock_with_workspace_filters.xml";
+    public static final String ALARM_CLOCK_WITH_WORKSPACE_FILTERS_CHANGED = "./src/test/resources/AlarmClock_with_workspace_filters_changed.xml";
 }

@@ -29,8 +29,10 @@ import java.util.Optional;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
@@ -50,7 +52,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
-    private static final long serialVersionUID = -4666348701032432246L;
+    private static final long serialVersionUID = -4666348701032432245L;
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
@@ -75,6 +77,10 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final long timestamp;
     private final String baseDir;
     private final AnalyzerExecutionLevel analyzerExecutionLevel;
+
+    private IFilter workspaceFilter;
+    private IComponentFilter productionCodeFilter;
+    private IComponentFilter issueFilter;
 
     private int numberOfIssues = 0;
 
@@ -163,6 +169,48 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert moduleImpl != null : "Parameter 'moduleImpl' of method 'addModule' must not be null";
         modules.put(moduleImpl.getFqName(), moduleImpl);
+    }
+
+    public void setWorkspaceFilter(final IFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'addWorkspaceFilter' must not be null";
+        workspaceFilter = filter;
+    }
+
+    @Override
+    public Optional<IFilter> getWorkspaceFilter()
+    {
+        return Optional.ofNullable(workspaceFilter);
+    }
+
+    public void setWorkspaceFileFilter(final IFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'addWorkspaceFileFilter' must not be null";
+        workspaceFilter = filter;
+    }
+
+    public void setProductionCodeFilter(final IComponentFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'setProductionCodeFilter' must not be null";
+        productionCodeFilter = filter;
+    }
+
+    @Override
+    public Optional<IComponentFilter> getProductionCodeFilter()
+    {
+        return Optional.ofNullable(productionCodeFilter);
+    }
+
+    public void setIssueFilter(final IComponentFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'setIssueFilter' must not be null";
+        issueFilter = filter;
+    }
+
+    @Override
+    public Optional<IComponentFilter> getIssueFilter()
+    {
+        return Optional.ofNullable(issueFilter);
     }
 
     public void addExternal(final ExternalImpl externalImpl)

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.IFilterDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IWorkspaceDelta;
@@ -32,6 +33,9 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
     private final List<IModuleDelta> changedModules = new ArrayList<>();
     private final List<IModule> removedModules = new ArrayList<>();
     private final List<IModule> addedModules = new ArrayList<>();
+    private IFilterDelta workspaceFileFilterDelta;
+    private IFilterDelta productionCodeFilterDelta;
+    private IFilterDelta issueFilterDelta;
 
     public void addRemovedModule(final IModule module)
     {
@@ -72,7 +76,8 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
     @Override
     public boolean isEmpty()
     {
-        return removedModules.isEmpty() && addedModules.isEmpty() && changedModules.isEmpty();
+        return removedModules.isEmpty() && addedModules.isEmpty() && changedModules.isEmpty() && workspaceFileFilterDelta.isEmpty()
+                && productionCodeFilterDelta.isEmpty() && issueFilterDelta.isEmpty();
     }
 
     private String printModuleList(final List<IModule> modules)
@@ -92,6 +97,10 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
     {
         final StringBuilder builder = new StringBuilder();
 
+        builder.append("\n").append(workspaceFileFilterDelta);
+        builder.append("\n").append(productionCodeFilterDelta);
+        builder.append("\n").append(issueFilterDelta);
+
         builder.append("\n").append(Utility.INDENTATION).append("Added Modules (").append(addedModules.size()).append(")");
         builder.append(printModuleList(addedModules));
 
@@ -105,5 +114,41 @@ public final class WorkspaceDeltaImpl implements IWorkspaceDelta
         }
 
         return builder.toString();
+    }
+
+    public void setWorkspaceFileFilterDelta(final IFilterDelta delta)
+    {
+        assert delta != null : "Parameter 'delta' of method 'setWorkspaceFileFilterDelta' must not be null";
+        workspaceFileFilterDelta = delta;
+    }
+
+    @Override
+    public IFilterDelta getWorkspaceFileFilterDelta()
+    {
+        return workspaceFileFilterDelta;
+    }
+
+    public void setProductionCodeFilterDelta(final IFilterDelta delta)
+    {
+        assert delta != null : "Parameter 'delta' of method 'setProductionCodeFilterDelta' must not be null";
+        productionCodeFilterDelta = delta;
+    }
+
+    @Override
+    public IFilterDelta getProductionCodeFilterDelta()
+    {
+        return productionCodeFilterDelta;
+    }
+
+    public void setIssueFilterDelta(final IFilterDelta delta)
+    {
+        assert delta != null : "Parameter 'delta' of method 'setIssueFilterDelta' must not be null";
+        issueFilterDelta = delta;
+    }
+
+    @Override
+    public IFilterDelta getIssueFilterDelta()
+    {
+        return issueFilterDelta;
     }
 }

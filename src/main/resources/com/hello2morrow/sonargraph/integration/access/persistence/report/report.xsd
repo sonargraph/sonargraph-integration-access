@@ -157,10 +157,33 @@
 
     <xs:complexType name="xsdWorkspace">
         <xs:sequence>
+            <!-- Filter elements are included since 9.9.3 -->
+            <xs:element name="workspaceFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
+            <xs:element name="productionCodeFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
+            <xs:element name="issueFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
             <xs:element name="genericRoot" type="xsdRootDirectory" minOccurs="0" maxOccurs="unbounded" /><!-- for backwards compatibility -->
             <xs:element name="module" type="xsdModule" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="external" type="xsdExternal" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdWildcardPattern">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="numberOfMatches" type="xs:int" />
+          </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdFilter">
+        <xs:sequence>
+            <xs:element name="include" type="xsdWildcardPattern" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="exclude" type="xsdWildcardPattern" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="description" type="xs:string" use="optional" />
+        <xs:attribute name="information" type="xs:string" />
+        <xs:attribute name="numberOfExcludedElements" type="xs:int" />
+        <xs:attribute name="numberOfIncludedElements" type="xs:int" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="xsdPhysicalElement" abstract="true">
