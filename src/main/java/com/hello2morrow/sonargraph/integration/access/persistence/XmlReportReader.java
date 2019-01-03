@@ -56,15 +56,19 @@ import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
+import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IncludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IssueFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
@@ -84,12 +88,14 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceFileFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
@@ -108,6 +114,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExec
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFilter;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
@@ -140,6 +147,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoft
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
 
 public final class XmlReportReader extends XmlAccess
@@ -478,6 +486,34 @@ public final class XmlReportReader extends XmlAccess
         assert xsdWorkspace != null : "Parameter 'report' of method 'createWorkspaceElements' must not be null";
         assert result != null : "Parameter 'result' of method 'createWorkspaceElements' must not be null";
 
+        final XsdFilter xsdWorkspaceFilter = xsdWorkspace.getWorkspaceFilter();
+        if (xsdWorkspaceFilter != null)
+        {
+            final WorkspaceFileFilterImpl fileFilter = new WorkspaceFileFilterImpl(xsdWorkspaceFilter.getDescription(),
+                    xsdWorkspaceFilter.getInformation(), xsdWorkspaceFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdWorkspaceFilter, fileFilter);
+            softwareSystemImpl.setWorkspaceFileFilter(fileFilter);
+        }
+
+        final XsdFilter xsdProductionCodeFilter = xsdWorkspace.getProductionCodeFilter();
+        if (xsdProductionCodeFilter != null)
+        {
+            final ProductionCodeFilterImpl productionCodeFilter = new ProductionCodeFilterImpl(xsdProductionCodeFilter.getDescription(),
+                    xsdProductionCodeFilter.getInformation(), xsdProductionCodeFilter.getNumberOfIncludedElements(),
+                    xsdProductionCodeFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdProductionCodeFilter, productionCodeFilter);
+            softwareSystemImpl.setProductionCodeFilter(productionCodeFilter);
+        }
+
+        final XsdFilter xsdIssueFilter = xsdWorkspace.getIssueFilter();
+        if (xsdIssueFilter != null)
+        {
+            final IssueFilterImpl issueFilter = new IssueFilterImpl(xsdIssueFilter.getDescription(), xsdIssueFilter.getInformation(),
+                    xsdIssueFilter.getNumberOfIncludedElements(), xsdIssueFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdIssueFilter, issueFilter);
+            softwareSystemImpl.setIssueFilter(issueFilter);
+        }
+
         for (final XsdModule nextXsdModule : xsdWorkspace.getModule())
         {
             final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
@@ -505,6 +541,23 @@ public final class XmlReportReader extends XmlAccess
             nextXsdExternal.getPhysicalRecursiveElement()
                     .forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, e, null));
             nextXsdExternal.getProgrammingElement().forEach(e -> createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, e));
+        }
+    }
+
+    private void addPatternsToFilter(final XsdFilter xsdFilter, final AbstractFilterImpl filter)
+    {
+        assert xsdFilter != null : "Parameter 'xsdFilter' of method 'addPatternsToFilter' must not be null";
+        assert filter != null : "Parameter 'filter' of method 'addPatternsToFilter' must not be null";
+
+        for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getExclude())
+        {
+            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            filter.addExcludePattern(pattern);
+        }
+        for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getInclude())
+        {
+            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            filter.addIncludePattern(pattern);
         }
     }
 

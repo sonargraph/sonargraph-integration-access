@@ -39,4 +39,10 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Map<String, IAnalyzer> getAnalyzers();
 
     public AnalyzerExecutionLevel getAnalyzerExecutionLevel();
+
+    public Optional<IFilter> getWorkspaceFilter();
+
+    public Optional<IComponentFilter> getProductionCodeFilter();
+
+    public Optional<IComponentFilter> getIssueFilter();
 }

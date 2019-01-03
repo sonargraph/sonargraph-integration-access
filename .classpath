@@ -8,12 +8,14 @@
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" output="target/classes" path="target/generated-sources/report">
 		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" output="target/classes" path="target/generated-sources/architecture">
 		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>

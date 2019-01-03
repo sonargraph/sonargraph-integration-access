@@ -526,7 +526,7 @@ public final class ReportDeltaImpl implements IReportDelta
                     .append(next.getMetricLevel().getPresentationName());
         }
 
-        builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries metric thresholds (")
+        builder.append("\n").append(Utility.INDENTATION).append("Changed boundaries of metric thresholds (")
                 .append(changedBoundariesMetricThresholds.size()).append(")");
         for (final BaselineCurrent<IMetricThreshold> next : changedBoundariesMetricThresholds)
         {
