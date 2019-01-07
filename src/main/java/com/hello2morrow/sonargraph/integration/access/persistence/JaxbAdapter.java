@@ -52,9 +52,12 @@ public final class JaxbAdapter<T>
     private final Marshaller writer;
 
     /**
-     * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation) 
-     * @param namespace the namespace - must not be 'empty'
-     * @param classLoader the class loader - must not be 'null'
+     * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation)
+     *
+     * @param namespace
+     *            the namespace - must not be 'empty'
+     * @param classLoader
+     *            the class loader - must not be 'null'
      */
     public JaxbAdapter(final String namespace, final ClassLoader classLoader)
     {
@@ -86,8 +89,11 @@ public final class JaxbAdapter<T>
 
     /**
      * Creates a JaxbAdapter - a writer and a reader (reader with XSD validation)
-     * @param persistentContext the persistent context - must not be 'null'
-     * @param classLoader the class loader - must not be 'null'
+     *
+     * @param persistentContext
+     *            the persistent context - must not be 'null'
+     * @param classLoader
+     *            the class loader - must not be 'null'
      */
     public JaxbAdapter(final XmlPersistenceContext persistentContext, final ClassLoader classLoader)
     {
