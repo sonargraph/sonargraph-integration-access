@@ -10,6 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.sources>src/main/java</sonar.sources>
+        <bundle.namespace>com.hello2morrow.sonargraph.integration</bundle.namespace>
     </properties>
     <licenses>
         <license>
@@ -29,18 +30,13 @@
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-            <!-- We only want to include the JAXB libs in the dist -->
                 <directory>.</directory>
                 <includes>
                     <include>lib/*.jar</include>
-                    <include>META-INF/MANIFEST.MF</include>
-                    <include>META-INF/services/*</include>
                 </includes>
                 <excludes>
                     <exclude>lib/hamcrest*.jar</exclude>
                     <exclude>lib/junit*.jar</exclude>
-                    <exclude>lib/slf4j*.jar</exclude>
-                    <exclude>lib/logback*.jar</exclude>
                 </excludes>
             </resource>
         </resources>
@@ -53,33 +49,18 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
-                <!-- versions >= 3 lead to problems in eclipse -->
-                <configuration>
-                    <archive>
-                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
+            -->
+            <!-- versions >= 3 lead to problems in eclipse -->
+            <!-- <configuration>
+                <archive>
+                <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>lib</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
+                </plugin -->
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
@@ -189,6 +170,64 @@
                 <execution> <id>default-report-integration</id> <goals> <goal>report-integration</goal>
                 </goals> </execution> <execution> <id>default-check</id> <goals> <goal>check</goal>
                 </goals> </execution> </executions> </plugin -->
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.5.0</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>create-bundle</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!--
+                    the following instructions build a simple set of public/private classes into an OSGi bundle
+                -->
+                <configuration>
+                    <manifestLocation>target/META-INF</manifestLocation>
+                    <instructions>
+                        <Bundle-SymbolicName>com.hello2morrow.sonargraph.integration.access</Bundle-SymbolicName>
+                        <Export-Package>com.hello2morrow.sonargraph.integration.access.controller,
+                            com.hello2morrow.sonargraph.integration.access.foundation,
+                            com.hello2morrow.sonargraph.integration.access.model,
+                            com.hello2morrow.sonargraph.integration.access.persistence,
+                            com.hello2morrow.sonargraph.integration.access.persistence.report,
+                            com.hello2morrow.sonargraph.integration.architecture.persistence,
+                            javax.xml.bind,
+                            javax.xml.bind.annotation,
+                            javax.xml.bind.annotation.adapters,
+                            javax.xml.bind.attachment,
+                            javax.xml.bind.helpers,
+                            javax.xml.bind.util</Export-Package>
+                        <Private-Package>com.hello2morrow.sonargraph.integration.*.internal</Private-Package>
+                        <Import-Package>!*</Import-Package>
+                        <Automatic-Module-Name>com.hello2morrow.sonargraph.integration.access</Automatic-Module-Name>
+                        <Embed-Dependency>*;inline=|lib/javax.activation*.jar</Embed-Dependency>
+                        <Bundle-ClassPath>.,lib/istack*.jar</Bundle-ClassPath>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
@@ -203,20 +242,23 @@
             <artifactId>logback-classic</artifactId>
             <version>1.1.3</version>
         </dependency>
-         <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.eclipse.persistence/org.eclipse.persistence.moxy -->
-        <!-- Other JAXB implementations that use the same package names as the default Oracle implementation (com.sun.xml)
-             failed to run in an OSGi environment -->
+        <!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
         <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>org.eclipse.persistence.moxy</artifactId>
-            <version>2.7.3</version>
-            <scope>compile</scope>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.sun.istack/istack-commons-runtime -->
+        <dependency>
+            <groupId>com.sun.istack</groupId>
+            <artifactId>istack-commons-runtime</artifactId>
+            <version>3.0.7</version>
         </dependency>
     </dependencies>
     <organization>

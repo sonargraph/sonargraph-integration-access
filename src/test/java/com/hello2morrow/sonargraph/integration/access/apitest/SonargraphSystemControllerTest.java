@@ -65,8 +65,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationI
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 /**
- * This class is deliberately put into a different package than the {@link #SonargraphController()},
- * so there is no chance to test non-public controller functionality.
+ * This class is deliberately put into a different package than the {@link #SonargraphController()}, so there is no chance to test non-public
+ * controller functionality.
  */
 public final class SonargraphSystemControllerTest
 {
@@ -158,6 +158,15 @@ public final class SonargraphSystemControllerTest
         verifyIssues(softwareSystem);
         verifyResolutions(softwareSystem);
         verifyMetrics(softwareSystem);
+    }
+
+    @Test
+    public void testReadMinimalReport()
+    {
+        final Result result = m_controller.loadSystemReport(new File("./src/test/resources/ReportWithOneMetric.xml"));
+        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
+        assertNotNull("No software system available", softwareSystem);
     }
 
     private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)

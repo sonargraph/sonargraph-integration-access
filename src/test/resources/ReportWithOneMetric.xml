@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<ns3:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/report" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/export" id="_0" systemId="c65885395b5d45a803262d7c84d1f81f" name="ClassFileIssues" version="9.4.0.100" systemPath="D:\00_repos\00_e4-sgng\com.hello2morrow.sonargraph.language.provider.java\src\test\report_classfileIssues\ClassFileIssues.sonargraph" timestamp="2017-05-16T14:31:03.123+02:00" currentVirtualModel="Modifiable.vm">
+    <metaData>
+        <metricProviders>
+            <provider id="_2f" name="Core" presentationName="Core"></provider>            
+        </metricProviders>
+        <metricCategories>
+            <category id="_2c" name="JohnLakos" presentationName="John Lakos" orderNumber="7"></category>
+            <category id="_31" name="RobertMartin" presentationName="Robert C. Martin" orderNumber="9"></category>            
+        </metricCategories>
+        <metricLevels>
+            <level id="_2d" name="System" presentationName="System" orderNumber="0"></level>
+            <level id="_2e" name="Module" presentationName="Module" orderNumber="10"></level>            
+        </metricLevels>
+        <metricIds>
+            <metricId id="_2b" name="CoreAcd" categories="_2c" provider="_2f" isFloat="true" levels="_2d _2e" bestValue="0.0" worstValue="INF" presentationName="ACD" description="Average component dependency according to John Lakos." ></metricId>
+        </metricIds>
+    </metaData>
+    <features>
+    </features>
+    <analyzers>       
+    </analyzers>
+    <elementKinds>
+        <elementKind id="_8a" standardKind="JavaModule" presentationKind="Java Module"></elementKind>
+        <elementKind id="_90" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+    </elementKinds>
+    <workspace>
+        <genericRoot kind="_90" fqName="ClassFileIssues" id="_8f" name="ClassFileIssues" presentationName="ClassFileIssues"></genericRoot>
+        <module description="" language="Java" kind="_8a" fqName="Workspace:m1" id="_89" name="m1" presentationName="m1">            
+        </module>
+    </workspace>
+    <systemElements ref="_0">
+        <element kind="_90" fqName="ClassFileIssues" id="_91" name="ClassFileIssues" presentationName="ClassFileIssues"></element>        
+    </systemElements>
+    <moduleElements ref="_89">        
+    </moduleElements>
+    <systemMetricValues elementRef="_0">
+        <levelValues levelRef="_2d">
+            <metric ref="_2b">
+                <float ref="_91">1.0</float>
+            </metric>
+        </levelValues>
+    </systemMetricValues>
+    <moduleMetricValues elementRef="_89">
+        <levelValues levelRef="_2e">
+            <metric ref="_2b">
+                <float ref="_89">1.0</float>
+            </metric>
+        </levelValues>    
+    </moduleMetricValues>    
+</ns3:report>
