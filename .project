@@ -25,10 +25,20 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>com.hello2morrow.sonargraph.ide.eclipse.builder</name>
+			<arguments>
+				<dictionary>
+					<key>../sgng/master/Sonargraph.sonargraph</key>
+					<value>2019-01-15 12:29:53 +0100</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>com.hello2morrow.sonargraph.ide.eclipse.nature</nature>
 	</natures>
 </projectDescription>
