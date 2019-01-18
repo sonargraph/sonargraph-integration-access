@@ -39,7 +39,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
-import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,8 +78,6 @@ public final class JaxbAdapter<T>
             createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
             createdReader = jaxbContext.createUnmarshaller();
-
-            createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
         }
         catch (final Exception ex)
         {
@@ -92,19 +89,6 @@ public final class JaxbAdapter<T>
 
         this.writer = createdWriter;
         this.reader = createdReader;
-    }
-
-    private void verifyJaxbImplementation(final JAXBContext jaxbContext) throws AssertionError
-    {
-        if (!(jaxbContext instanceof org.eclipse.persistence.jaxb.JAXBContext))
-        {
-            //The default com.sun.xml implementation is taken for a JDK1.8, if there is no jaxb.properties file found
-            //or the System property is not set. Unfortunately, it is not enough to set the System property in this class.
-            throw new AssertionError("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
-                    + " does not match the expected implementation " + "org.eclipse.persistence.jaxb.JAXBContext\n"
-                    + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
-                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=org.eclipse.persistence.jaxb.JAXBContextFactory'");
-        }
     }
 
     /**
@@ -123,7 +107,7 @@ public final class JaxbAdapter<T>
 
         try
         {
-            String namespaces = persistenceContext.getNamespaceList();
+            final String namespaces = persistenceContext.getNamespaceList();
             final JAXBContext jaxbContext = JAXBContext.newInstance(namespaces, classLoader);
             logJaxbImplementation(jaxbContext);
             verifyJaxbImplementation(jaxbContext);
@@ -144,7 +128,7 @@ public final class JaxbAdapter<T>
             }
             createdReader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
 
-            createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
+            //createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
         }
         catch (final Exception e)
         {
@@ -163,6 +147,20 @@ public final class JaxbAdapter<T>
         if (!s_hasJaxbImplementationBeenLogged.getAndSet(true))
         {
             LOGGER.info("Using JAXBContext implementation: {}", jaxbContext.getClass().getName());
+        }
+    }
+
+    /** Since JAXB is no longer contained from Java11 onwards, we supply a different implementation and check here that it is used. */
+    private void verifyJaxbImplementation(final JAXBContext jaxbContext) throws AssertionError
+    {
+        if (!(jaxbContext instanceof com.sun.xml.bind.v2.runtime.JAXBContextImpl))
+        {
+            throw new AssertionError("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
+                    + " does not match the expected implementation " + "com.sun.xml.bind.v2.runtime.JAXBContextImpl\n"
+                    + "\tCheck if the file META-INF/services/javax.xml.bind.JAXBContext exists and contains the correct entry.\n"
+                    + "\tIf used in an OSGi environment, check that the correct classloader is used.\n"
+                    + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
+                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.runtime.JAXBContextImpl'");
         }
     }
 

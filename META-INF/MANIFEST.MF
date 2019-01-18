@@ -20,11 +20,8 @@ Export-Package: com.hello2morrow.sonargraph.integration.access.controller,
 Import-Package: org.slf4j
 Bundle-ClassPath: .,
  lib/javax.activation-api-1.2.0.jar,
- lib/javax.json-api-1.1.2.jar,
  lib/jaxb-api-2.3.1.jar,
- lib/org.eclipse.persistence.asm-2.7.3.jar,
- lib/org.eclipse.persistence.core-2.7.3.jar,
- lib/org.eclipse.persistence.moxy-2.7.3.jar,
- lib/validation-api-2.0.1.Final.jar
+ lib/jaxb-impl-2.3.1.jar,
+ lib/istack-commons-runtime-3.0.7.jar
 Automatic-Module-Name: com.hello2morrow.sonargraph.integration.access
 Bundle-ActivationPolicy: lazy
