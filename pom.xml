@@ -29,21 +29,6 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-			<resource>
-				<!-- We only want to include the JAXB libs in the dist -->
-				<directory>.</directory>
-				<includes>
-					<include>lib/*.jar</include>
-					<include>META-INF/MANIFEST.MF</include>
-					<include>META-INF/services/*</include>
-				</includes>
-				<excludes>
-					<exclude>lib/hamcrest*.jar</exclude>
-					<exclude>lib/junit*.jar</exclude>
-					<exclude>lib/slf4j*.jar</exclude>
-					<exclude>lib/logback*.jar</exclude>
-				</excludes>
-			</resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -65,26 +50,11 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>lib</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.12.3</version>
+				<version>0.14.0</version>
 				<executions>
 					<execution>
 						<id>report</id>
