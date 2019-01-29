@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,6 @@ import java.util.List;
 public class AggregatingClassLoader extends ClassLoader
 {
     private final List<ClassLoader> classLoaders;
-    private ClassLoader currentClassLoader;
 
     public AggregatingClassLoader(final List<ClassLoader> classLoaders)
     {
@@ -57,56 +57,38 @@ public class AggregatingClassLoader extends ClassLoader
     }
 
     @Override
-    public Class<?> loadClass(final String name) throws ClassNotFoundException
+    public URL getResource(final String name)
+    {
+        for (final ClassLoader loader : classLoaders)
+        {
+            final URL resource = loader.getResource(name);
+            if (resource != null)
+            {
+                return resource;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected Class<?> findClass(final String name) throws ClassNotFoundException
     {
         if (classLoaders.isEmpty())
         {
             throw new ClassNotFoundException("Unable to locate class '" + name + "' - no class loaders available");
         }
 
-        Class<?> result = null;
-        ClassNotFoundException lastException = null;
-        final List<String> exceptionMessages = new ArrayList<>();
-        if (currentClassLoader != null)
-        {
-            try
-            {
-                result = currentClassLoader.loadClass(name);
-                return result;
-            }
-            catch (final ClassNotFoundException ex)
-            {
-                //Expected if a switch to another class loader occurred
-                lastException = ex;
-            }
-        }
-
         for (final ClassLoader loader : classLoaders)
         {
-            if (loader == currentClassLoader)
-            {
-                continue;
-            }
             try
             {
-                result = loader.loadClass(name);
-                currentClassLoader = loader;
-                return result;
+                return loader.loadClass(name);
             }
             catch (final ClassNotFoundException ex)
             {
                 //Expected if class comes from other class loader
-                lastException = ex;
-                exceptionMessages.add(ex.getMessage());
             }
         }
-        assert lastException != null : "No last exception set";
-        throw lastException;
-    }
-
-    @Override
-    protected Class<?> findClass(final String name) throws ClassNotFoundException
-    {
-        return loadClass(name);
+        throw new ClassNotFoundException("Unable to locate class '" + name + "' - not found by class loaders " + classLoaders);
     }
 }
