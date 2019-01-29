@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -51,13 +52,13 @@ public final class JaxbAdapter<T>
     private final Unmarshaller reader;
     private final Marshaller writer;
 
+    private static final AtomicBoolean s_hasJaxbImplementationBeenLogged = new AtomicBoolean(false);
+
     /**
      * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation)
      *
-     * @param namespace
-     *            the namespace - must not be 'empty'
-     * @param classLoader
-     *            the class loader - must not be 'null'
+     * @param namespace the namespace - must not be 'empty'
+     * @param classLoader the class loader - must not be 'null'
      */
     public JaxbAdapter(final String namespace, final ClassLoader classLoader)
     {
@@ -70,6 +71,9 @@ public final class JaxbAdapter<T>
         try
         {
             final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader);
+            logJaxbImplementation(jaxbContext);
+            verifyJaxbImplementation(jaxbContext);
+
             createdWriter = jaxbContext.createMarshaller();
             createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
@@ -90,14 +94,12 @@ public final class JaxbAdapter<T>
     /**
      * Creates a JaxbAdapter - a writer and a reader (reader with XSD validation)
      *
-     * @param persistentContext
-     *            the persistent context - must not be 'null'
-     * @param classLoader
-     *            the class loader - must not be 'null'
+     * @param persistenceContext the persistent context - must not be 'null'
+     * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final XmlPersistenceContext persistentContext, final ClassLoader classLoader)
+    public JaxbAdapter(final XmlPersistenceContext persistenceContext, final ClassLoader classLoader)
     {
-        assert persistentContext != null : "Parameter 'persistentContext' of method 'JaxbAdapter' must not be null";
+        assert persistenceContext != null : "Parameter 'persistenceContext' of method 'JaxbAdapter' must not be null";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
 
         Marshaller createdWriter;
@@ -105,13 +107,17 @@ public final class JaxbAdapter<T>
 
         try
         {
-            final JAXBContext jaxbContext = JAXBContext.newInstance(persistentContext.getNamespaceList(), classLoader);
+            final String namespaces = persistenceContext.getNamespaceList();
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespaces, classLoader);
+            logJaxbImplementation(jaxbContext);
+            verifyJaxbImplementation(jaxbContext);
+
             createdWriter = jaxbContext.createMarshaller();
             createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
 
             createdReader = jaxbContext.createUnmarshaller();
-            final Set<URL> schemaUrls = persistentContext.getSchemaUrls();
+            final Set<URL> schemaUrls = persistenceContext.getSchemaUrls();
             final Source[] sources = new Source[schemaUrls.size()];
             int i = 0;
             for (final URL nextSchemaUrl : schemaUrls)
@@ -121,6 +127,8 @@ public final class JaxbAdapter<T>
                 i++;
             }
             createdReader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
+
+            //createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
         }
         catch (final Exception e)
         {
@@ -132,6 +140,28 @@ public final class JaxbAdapter<T>
 
         this.reader = createdReader;
         this.writer = createdWriter;
+    }
+
+    private void logJaxbImplementation(final JAXBContext jaxbContext)
+    {
+        if (!s_hasJaxbImplementationBeenLogged.getAndSet(true))
+        {
+            LOGGER.info("Using JAXBContext implementation: {}", jaxbContext.getClass().getName());
+        }
+    }
+
+    /** Since JAXB is no longer contained from Java11 onwards, we supply a different implementation and check here that it is used. */
+    private void verifyJaxbImplementation(final JAXBContext jaxbContext) throws AssertionError
+    {
+        if (!(jaxbContext instanceof com.sun.xml.bind.v2.runtime.JAXBContextImpl))
+        {
+            throw new AssertionError("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
+                    + " does not match the expected implementation " + "com.sun.xml.bind.v2.runtime.JAXBContextImpl\n"
+                    + "\tCheck if the file META-INF/services/javax.xml.bind.JAXBContext exists and contains the correct entry.\n"
+                    + "\tIf used in an OSGi environment, check that the correct classloader is used.\n"
+                    + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
+                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.runtime.JAXBContextImpl'");
+        }
     }
 
     public void setMarshalListener(final Marshaller.Listener listener)

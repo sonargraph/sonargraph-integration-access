@@ -31,8 +31,8 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
+import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
@@ -116,9 +116,10 @@ public final class XmlExportMetaDataReader extends XmlAccess
         assert identifier != null && identifier.length() > 0 : "Parameter 'identifier' of method 'convertXmlMetricsToPojo' must not be empty";
         assert result != null : "Parameter 'result' of method 'convertXmlMetaDataToPojo' must not be null";
 
-        final SingleExportMetaDataImpl metaData = new SingleExportMetaDataImpl(new BasicSoftwareSystemInfoImpl(
-                xsdMetaData.getSystemPathUsedForExport(), xsdMetaData.getSystemId(), xsdMetaData.getVersion(), xsdMetaData.getTimestamp()
-                        .toGregorianCalendar().getTimeInMillis()), identifier);
+        final SingleExportMetaDataImpl metaData = new SingleExportMetaDataImpl(
+                new BasicSoftwareSystemInfoImpl(xsdMetaData.getSystemPathUsedForExport(), xsdMetaData.getSystemId(), xsdMetaData.getVersion(),
+                        xsdMetaData.getTimestamp().toGregorianCalendar().getTimeInMillis()),
+                identifier);
 
         final Map<Object, IssueCategoryImpl> issueCategoryXsdToPojoMap = XmlExportMetaDataReader.processIssueCategories(xsdMetaData);
         for (final IssueCategoryImpl category : issueCategoryXsdToPojoMap.values())
@@ -157,8 +158,8 @@ public final class XmlExportMetaDataReader extends XmlAccess
             metaData.addMetricLevel(level);
         }
 
-        for (final MetricIdImpl id : XmlExportMetaDataReader.processMetricIds(xsdMetaData, categoryXsdToPojoMap, providerXsdToPojoMap,
-                metricLevelXsdToPojoMap).values())
+        for (final MetricIdImpl id : XmlExportMetaDataReader
+                .processMetricIds(xsdMetaData, categoryXsdToPojoMap, providerXsdToPojoMap, metricLevelXsdToPojoMap).values())
         {
             metaData.addMetricId(id);
         }
@@ -207,9 +208,8 @@ public final class XmlExportMetaDataReader extends XmlAccess
         return Collections.unmodifiableMap(metricLevelXsdToPojoMap);
     }
 
-    static Map<Object, MetricIdImpl> processMetricIds(final XsdExportMetaData xsdMetaData,
-            final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap, final Map<Object, MetricProviderImpl> providerXsdToPojoMap,
-            final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap)
+    static Map<Object, MetricIdImpl> processMetricIds(final XsdExportMetaData xsdMetaData, final Map<Object, MetricCategoryImpl> categoryXsdToPojoMap,
+            final Map<Object, MetricProviderImpl> providerXsdToPojoMap, final Map<Object, MetricLevelImpl> metricLevelXsdToPojoMap)
     {
         assert xsdMetaData != null : "Parameter 'xsdMetaData' of method 'processMetricIds' must not be null";
         assert categoryXsdToPojoMap != null : "Parameter 'categoryXsdToPojoMap' of method 'processMetricIds' must not be null";
@@ -239,8 +239,8 @@ public final class XmlExportMetaDataReader extends XmlAccess
             assert provider != null : "'provider' for metric '" + xsdMetricId.getName() + "' must not be null";
 
             metricIdXsdToPojoMap.put(xsdMetricId,
-                    new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories,
-                            metricLevels, provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
+                    new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories, metricLevels,
+                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
         }
         return Collections.unmodifiableMap(metricIdXsdToPojoMap);
     }
@@ -293,13 +293,13 @@ public final class XmlExportMetaDataReader extends XmlAccess
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT, "Severity type '" + next.getSeverity()
-                        + "' is not supported, setting to '" + Severity.ERROR + "'");
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
                 severity = Severity.ERROR;
             }
 
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category, providers.get(next
-                    .getProvider()), next.getDescription());
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category,
+                    providers.get(next.getProvider()), next.getDescription());
             issueTypeXsdToPojoMap.put(next, issueType);
         }
         return Collections.unmodifiableMap(issueTypeXsdToPojoMap);

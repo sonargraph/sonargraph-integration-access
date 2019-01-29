@@ -17,8 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.Arrays;
+
 import javax.xml.bind.JAXBElement;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.AggregatingClassLoader;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.ObjectFactory;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExportMetaDataRoot;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
@@ -35,13 +38,18 @@ public abstract class XmlAccess
 
     public static final JaxbAdapter<JAXBElement<XsdExportMetaDataRoot>> createExportMetaDataJaxbAdapter()
     {
-        final ClassLoader classLoader = ObjectFactory.class.getClassLoader();
+        final ClassLoader classLoader = getClassLoader();
         return new JaxbAdapter<>(new XmlPersistenceContext(NAMESPACE, classLoader.getResource(EXPORT_METADATA_XSD)), classLoader);
     }
 
     public static final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createReportJaxbAdapter()
     {
         //No XML validation for reports - no URL parameter used 
-        return new JaxbAdapter<>(NAMESPACE, ObjectFactory.class.getClassLoader());
+        return new JaxbAdapter<>(NAMESPACE, getClassLoader());
+    }
+
+    private static ClassLoader getClassLoader()
+    {
+        return new AggregatingClassLoader(Arrays.asList(ObjectFactory.class.getClassLoader()));
     }
 }
