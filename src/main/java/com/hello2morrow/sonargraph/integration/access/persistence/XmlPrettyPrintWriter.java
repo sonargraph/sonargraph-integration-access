@@ -17,9 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Deque;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
@@ -27,48 +27,49 @@ import javax.xml.stream.XMLStreamWriter;
 
 final class XmlPrettyPrintWriter implements XMLStreamWriter
 {
-    private static final String DEFAULT_LINE_SEPARATOR = "\n";
-    private static final int INDENTATION_LENGTH = 4;
-    private static final char INDENT_CHAR = ' ';
-    private static final String LINEFEED_CHAR = "\n";
-    private final Map<Integer, Boolean> hasChildElement = new HashMap<>();
+    private static class IndentationInfo
+    {
+        private final int indentationLevel;
+        private boolean hasChild = false;
+
+        public IndentationInfo(final int indentationLevel)
+        {
+            this.indentationLevel = indentationLevel;
+        }
+    }
+
+    private static final int INDENTATION_LENGTH = 1;
+    private static final char INDENT_CHAR = '\t';
+    private static final String LINEFEED_CHAR = System.getProperty("line.separator");
+
+    private final Deque<IndentationInfo> indentationStack = new ArrayDeque<>();
     private final XMLStreamWriter writer;
-    private int currentDepth = 0;
 
     XmlPrettyPrintWriter(final XMLStreamWriter writer)
     {
         assert writer != null : "Parameter 'writer' of method 'XmlPrettyPrintWriter' must not be null";
         this.writer = writer;
-    }
-
-    private static String harmonizeNewLineBreaks(final String text)
-    {
-        assert text != null : "Parameter 'text' of method 'harmonizeNewLineBreaks' must not be null";
-        //First replace Windows "\r\n" with default "\n"
-        String harmonizedText = text.replace("\r\n", DEFAULT_LINE_SEPARATOR);
-        //Replace MAC "\r" with default "\n"
-        harmonizedText = harmonizedText.replace("\r", DEFAULT_LINE_SEPARATOR);
-        return harmonizedText;
+        indentationStack.push(new IndentationInfo(0));
     }
 
     @Override
     public void writeStartElement(final String localName) throws XMLStreamException
     {
-        writeStartElementPretty();
+        writeIndentationForStartElement();
         writer.writeStartElement(localName);
     }
 
     @Override
     public void writeStartElement(final String namespaceURI, final String localName) throws XMLStreamException
     {
-        writeStartElementPretty();
+        writeIndentationForStartElement();
         writer.writeStartElement(namespaceURI, localName);
     }
 
     @Override
     public void writeStartElement(final String prefix, final String localName, final String namespaceURI) throws XMLStreamException
     {
-        writeStartElementPretty();
+        writeIndentationForStartElement();
         writer.writeStartElement(prefix, localName, namespaceURI);
     }
 
@@ -96,7 +97,7 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeEndElement() throws XMLStreamException
     {
-        writeEndElementPretty();
+        writeIndentationForEndElement();
         writer.writeEndElement();
     }
 
@@ -121,19 +122,19 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeAttribute(final String localName, final String value) throws XMLStreamException
     {
-        writer.writeAttribute(localName, harmonizeNewLineBreaks(value));
+        writer.writeAttribute(localName, value);
     }
 
     @Override
     public void writeAttribute(final String prefix, final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        writer.writeAttribute(prefix, namespaceURI, localName, harmonizeNewLineBreaks(value));
+        writer.writeAttribute(prefix, namespaceURI, localName, value);
     }
 
     @Override
     public void writeAttribute(final String namespaceURI, final String localName, final String value) throws XMLStreamException
     {
-        writer.writeAttribute(namespaceURI, localName, harmonizeNewLineBreaks(value));
+        writer.writeAttribute(namespaceURI, localName, value);
     }
 
     @Override
@@ -151,7 +152,7 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeComment(final String data) throws XMLStreamException
     {
-        writer.writeComment(harmonizeNewLineBreaks(data));
+        writer.writeComment(data);
     }
 
     @Override
@@ -205,16 +206,13 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final String text) throws XMLStreamException
     {
-        writer.writeCharacters(harmonizeNewLineBreaks(text));
+        writer.writeCharacters(text);
     }
 
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        char[] slice = Arrays.copyOfRange(text, start, start+len);
-
-        slice = harmonizeNewLineBreaks(new String(slice)).toCharArray();
-        writer.writeCharacters(slice, 0, slice.length);
+        writer.writeCharacters(text, start, len);
     }
 
     @Override
@@ -253,59 +251,60 @@ final class XmlPrettyPrintWriter implements XMLStreamWriter
         return writer.getProperty(name);
     }
 
-    private String repeat(final int d, final char s)
+    private char[] repeat(final int d, final char s)
     {
-        final StringBuilder builder = new StringBuilder();
-        int count = d;
-        while (count-- > 0)
-        {
-            builder.append(s);
-        }
-        return builder.toString();
+        final char[] padding = new char[d];
+        Arrays.fill(padding, 0, d, s);
+        return padding;
     }
 
-    private void writeStartElementPretty() throws XMLStreamException
+    private void writeIndentationForStartElement() throws XMLStreamException
     {
         // update state of parent node
-        if (currentDepth > 0)
+        final IndentationInfo current = indentationStack.peek();
+        if (indentationStack.size() > 0)
         {
-            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
+            current.hasChild = true;
         }
 
-        // reset state of current node
-        hasChildElement.put(currentDepth, Boolean.FALSE);
-
-        // indent for current m_depth
         writer.writeCharacters(LINEFEED_CHAR);
-        writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
+        writePadding(current);
 
-        currentDepth += INDENTATION_LENGTH;
+        final int nextIndentationLevel = current.indentationLevel + INDENTATION_LENGTH;
+        indentationStack.push(new IndentationInfo(nextIndentationLevel));
     }
 
-    private void writeEndElementPretty() throws XMLStreamException
+    private void writeIndentationForEndElement() throws XMLStreamException
     {
-        currentDepth -= INDENTATION_LENGTH;
+        final IndentationInfo current = indentationStack.pop();
 
-        assert currentDepth >= 0 : "m_depth must not be negative!";
-        assert hasChildElement.get(currentDepth) != null : "value for m_hasChildElement must exist";
-
-        if (hasChildElement.get(currentDepth).equals(Boolean.TRUE))
+        //check if we need to put the end element on a new line
+        if (current.hasChild)
         {
+            final IndentationInfo parent = indentationStack.peek();
             writer.writeCharacters(LINEFEED_CHAR);
-            writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
+            writePadding(parent);
         }
     }
 
     private void writeEmptyElementPretty() throws XMLStreamException
     {
         // update state of parent node
-        if (currentDepth > 0)
+        if (indentationStack.size() > 1)
         {
-            hasChildElement.put(currentDepth - INDENTATION_LENGTH, Boolean.TRUE);
+            final IndentationInfo current = indentationStack.pop();
+            final IndentationInfo parent = indentationStack.peek();
+            parent.hasChild = true;
+            indentationStack.push(current);
         }
 
-        // indent for current m_depth
+        final IndentationInfo current = indentationStack.peek();
         writer.writeCharacters(LINEFEED_CHAR);
-        writer.writeCharacters(repeat(currentDepth, INDENT_CHAR));
+        writePadding(current);
+    }
+
+    private void writePadding(final IndentationInfo indentationInfo) throws XMLStreamException
+    {
+        writer.writeCharacters(repeat(indentationInfo.indentationLevel, INDENT_CHAR), 0, indentationInfo.indentationLevel);
     }
 }

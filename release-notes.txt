@@ -1,6 +1,18 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.2.0
+=====
+
+- Support for JDK 11.
+
+3.1.11
+======
+
+- Info of analyzer execution level is now accessible and included in diff.
+- Info of workspace filters is now accessible and included in diff.
+
+
 3.1.10
 ======
 

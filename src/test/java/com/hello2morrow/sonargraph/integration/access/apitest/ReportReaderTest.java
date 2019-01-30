@@ -18,14 +18,17 @@
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.Test;
@@ -37,13 +40,21 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
+import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
+import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class ReportReaderTest
@@ -147,7 +158,6 @@ public final class ReportReaderTest
     }
 
     @Test
-    //HUHU
     public void processCppReportWithLogicalNamespaces() throws Exception
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
@@ -249,7 +259,111 @@ public final class ReportReaderTest
                     assertNotNull("Resolution expected", nextResolution);
                 }
             }
+        }
+    }
 
+    @Test
+    public void processReportWithPluginInfoAndAnalyzerExecutionLevel()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_PLUGINS));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        final ISoftwareSystem softwareSystem = systemInfoProcessor.getSoftwareSystem();
+        final Map<String, IPlugin> plugins = softwareSystem.getPlugins();
+        assertEquals("Wrong number of plugins", 2, plugins.size());
+
+        final IPlugin swagger = plugins.get("SwaggerPlugin");
+        assertNotNull("Swagger plugin not found", swagger);
+        assertEquals("Wrong name", "SwaggerPlugin", swagger.getName());
+        assertEquals("Wrong presentation name", "Swagger Plugin", swagger.getPresentationName());
+        assertEquals("Wrong description", "Plugin that exposes webresources and dependencies between them.", swagger.getDescription());
+        assertEquals("Wrong version", "9.9.2.533_2018-12-12", swagger.getVersion());
+        assertEquals("Wrong vendor", "hello2morrow GmbH", swagger.getVendor());
+        assertFalse("Must not be enabled", swagger.isEnabled());
+        assertTrue("Must not be executed", swagger.getActiveExecutionPhases().isEmpty());
+        assertEquals("Wrong type of available execution phase", EnumSet.of(PluginExecutionPhase.MODEL), swagger.getSupportedExecutionPhases());
+        assertTrue("Must be licensed", swagger.isLicensed());
+
+        final IPlugin spotbugsPlugin = plugins.get("SpotbugsPlugin");
+        assertNotNull("Spotbugs plugin not found", spotbugsPlugin);
+        assertEquals("Wrong type of available execution phases", EnumSet.of(PluginExecutionPhase.ANALYZER),
+                spotbugsPlugin.getSupportedExecutionPhases());
+
+        assertEquals("Wrong analyzer execution level", AnalyzerExecutionLevel.ADVANCED,
+                systemInfoProcessor.getSoftwareSystem().getAnalyzerExecutionLevel());
+        final Map<String, IAnalyzer> analyzers = softwareSystem.getAnalyzers();
+        final IAnalyzer spotbugs = analyzers.get("SpotbugsPlugin");
+        assertNotNull("Spotbugs analyzer must exist", spotbugs);
+        assertTrue("Must be licensed", spotbugs.isLicensed());
+        assertFalse("Must not be executed", spotbugs.isExecuted());
+    }
+
+    @Test
+    public void processWorkspaceFilters()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.ALARM_CLOCK_WITH_WORKSPACE_FILTERS));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final ISystemInfoProcessor systemInfoProcessor = controller.createSystemInfoProcessor();
+        final ISoftwareSystem softwareSystem = systemInfoProcessor.getSoftwareSystem();
+        {
+            final Optional<IFilter> workspaceFilterOpt = softwareSystem.getWorkspaceFilter();
+            assertTrue("Workspace filter must exist", workspaceFilterOpt.isPresent());
+            final IFilter workspaceFilter = workspaceFilterOpt.get();
+            assertEquals("Wrong description", "Exclude files from the workspace", workspaceFilter.getDescription());
+            assertEquals("Wrong information", "Excluded 0 files(s)", workspaceFilter.getInformation());
+            assertEquals("Wrong number of excluded elements", 0, workspaceFilter.getNumberOfExcludedElements());
+            final List<IWildcardPattern> includePatterns = workspaceFilter.getIncludePatterns();
+            assertEquals("Wrong number of include patterns", 1, includePatterns.size());
+            final IWildcardPattern include = includePatterns.get(0);
+            assertEquals("Wrong pattern", "**", include.getPattern());
+            assertEquals("Wrong number of matched elements", 21, include.getNumberOfMatches());
+            final List<IWildcardPattern> excludePatterns = workspaceFilter.getExcludePatterns();
+            assertEquals("Wrong number of exclude patterns", 1, excludePatterns.size());
+            final IWildcardPattern exclude = excludePatterns.get(0);
+            assertEquals("Wrong pattern", "**/bla/**", exclude.getPattern());
+            assertEquals("Wrong number of matched elements", 0, exclude.getNumberOfMatches());
+        }
+        {
+            final Optional<IComponentFilter> productionCodeFilterOpt = softwareSystem.getProductionCodeFilter();
+            assertTrue("Production code filter must exist", productionCodeFilterOpt.isPresent());
+            final IComponentFilter productionCodeFilter = productionCodeFilterOpt.get();
+            assertEquals("Wrong description", "Exclude internal components containing test code", productionCodeFilter.getDescription());
+            assertEquals("Wrong information", "Excluded 1 internal component(s) (processed 10)", productionCodeFilter.getInformation());
+            assertEquals("Wrong number of included elements", 9, productionCodeFilter.getNumberOfIncludedElements());
+            assertEquals("Wrong number of excluded elements", 1, productionCodeFilter.getNumberOfExcludedElements());
+            final List<IWildcardPattern> includePatterns = productionCodeFilter.getIncludePatterns();
+            assertEquals("Wrong number of include patterns", 1, includePatterns.size());
+            final IWildcardPattern include = includePatterns.get(0);
+            assertEquals("Wrong pattern", "**", include.getPattern());
+            assertEquals("Wrong number of matched elements", 10, include.getNumberOfMatches());
+            final List<IWildcardPattern> excludePatterns = productionCodeFilter.getExcludePatterns();
+            assertEquals("Wrong number of exclude patterns", 1, excludePatterns.size());
+            final IWildcardPattern exclude = excludePatterns.get(0);
+            assertEquals("Wrong number of matched elements", 1, exclude.getNumberOfMatches());
+            assertEquals("Wrong pattern", "**/test/java/**1", exclude.getPattern());
+        }
+        {
+            final Optional<IComponentFilter> issueFilterOpt = softwareSystem.getIssueFilter();
+            assertTrue("Issue filter must exist", issueFilterOpt.isPresent());
+            final IComponentFilter issueFilter = issueFilterOpt.get();
+            assertEquals("Wrong description", "Ignore issues of internal components containing legacy/generated code", issueFilter.getDescription());
+            assertEquals("Wrong information", "Ignoring issues of 2 internal component(s) (processed 9)", issueFilter.getInformation());
+            assertEquals("Wrong number of included elements", 7, issueFilter.getNumberOfIncludedElements());
+            assertEquals("Wrong number of excluded elements", 2, issueFilter.getNumberOfExcludedElements());
+            final List<IWildcardPattern> includePatterns = issueFilter.getIncludePatterns();
+            assertEquals("Wrong number of include patterns", 1, includePatterns.size());
+            final IWildcardPattern include = includePatterns.get(0);
+            assertEquals("Wrong pattern", "**/*", include.getPattern());
+            assertEquals("Wrong number of matched elements", 9, include.getNumberOfMatches());
+            final List<IWildcardPattern> excludePatterns = issueFilter.getExcludePatterns();
+            assertEquals("Wrong number of exclude patterns", 1, excludePatterns.size());
+            final IWildcardPattern exclude = excludePatterns.get(0);
+            assertEquals("Wrong number of matched elements", 2, exclude.getNumberOfMatches());
+            assertEquals("Wrong pattern", "**/test/java/**", exclude.getPattern());
         }
     }
 }

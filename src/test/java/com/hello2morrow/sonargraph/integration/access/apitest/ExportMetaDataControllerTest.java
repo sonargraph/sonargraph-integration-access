@@ -108,7 +108,7 @@ public final class ExportMetaDataControllerTest
     }
 
     @Test
-    public void testReadExportMetaDataOfFourLanguageSysten()
+    public void testReadExportMetaDataOfFourLanguagesSystem()
     {
         final File exportMetaDataFile = new File(TestFixture.META_DATA_PATH_OF_FOUR_LANGUAGES_SYSTEM);
         final ResultWithOutcome<IExportMetaData> result = m_controller.loadExportMetaData(exportMetaDataFile);

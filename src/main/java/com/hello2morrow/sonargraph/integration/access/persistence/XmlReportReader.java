@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBElement;
 
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
@@ -47,19 +50,25 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
+import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IncludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.IssueFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
@@ -79,14 +88,17 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceFileFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdArchitectureCheckConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
@@ -98,9 +110,11 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDupl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFilter;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
@@ -122,6 +136,8 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdModu
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdNamedElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugin;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
@@ -131,6 +147,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoft
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
 
 public final class XmlReportReader extends XmlAccess
@@ -279,24 +296,26 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport report, final Result result)
+    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport xsdReport, final Result result)
     {
-        assert report != null : "Parameter 'report' of method 'convertXmlReportToPojo' must not be null";
+        assert xsdReport != null : "Parameter 'xsdReport' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
 
-        final String systemDescription = report.getSystemDescription() != null ? report.getSystemDescription().trim() : "";
-        final SoftwareSystemImpl softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", report.getSystemId(), report.getName(),
-                systemDescription, report.getSystemPath(), report.getVersion(), report.getTimestamp().toGregorianCalendar().getTimeInMillis(),
-                report.getCurrentVirtualModel());
+        final String systemDescription = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
+        final SoftwareSystemImpl softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(),
+                systemDescription, xsdReport.getSystemPath(), xsdReport.getVersion(),
+                xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(), xsdReport.getCurrentVirtualModel(),
+                convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         softwareSystemImpl.addElement(softwareSystemImpl);
 
-        processAnalyzers(softwareSystemImpl, report);
-        processFeatures(softwareSystemImpl, report);
-        processDuplicateCodeConfiguration(softwareSystemImpl, report);
-        processScriptRunnerConfiguration(softwareSystemImpl, report);
-        processArchitectureCheckConfiguration(softwareSystemImpl, report);
+        processAnalyzers(softwareSystemImpl, xsdReport);
+        processPlugins(softwareSystemImpl, xsdReport);
+        processFeatures(softwareSystemImpl, xsdReport);
+        processDuplicateCodeConfiguration(softwareSystemImpl, xsdReport);
+        processScriptRunnerConfiguration(softwareSystemImpl, xsdReport);
+        processArchitectureCheckConfiguration(softwareSystemImpl, xsdReport);
 
-        final XsdWorkspace xsdWorkspace = report.getWorkspace();
+        final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
         if (result.isFailure())
         {
@@ -305,17 +324,17 @@ public final class XmlReportReader extends XmlAccess
 
         finishWorkspaceElementCreation(xsdWorkspace);
 
-        createSystemElements(softwareSystemImpl, report);
-        createModuleElements(report);
-        createExternalScopeElements(report);
+        createSystemElements(softwareSystemImpl, xsdReport);
+        createModuleElements(xsdReport);
+        createExternalScopeElements(xsdReport);
 
         connectSourceFiles(softwareSystemImpl);
 
-        processMetrics(softwareSystemImpl, report);
-        processMetricThresholds(softwareSystemImpl, report);
+        processMetrics(softwareSystemImpl, xsdReport);
+        processMetricThresholds(softwareSystemImpl, xsdReport);
 
-        processIssues(softwareSystemImpl, report, result);
-        processResolutions(softwareSystemImpl, report, result);
+        processIssues(softwareSystemImpl, xsdReport, result);
+        processResolutions(softwareSystemImpl, xsdReport, result);
 
         globalXmlToElementMap.clear();
         globalXmlIdToIssueMap.clear();
@@ -467,6 +486,34 @@ public final class XmlReportReader extends XmlAccess
         assert xsdWorkspace != null : "Parameter 'report' of method 'createWorkspaceElements' must not be null";
         assert result != null : "Parameter 'result' of method 'createWorkspaceElements' must not be null";
 
+        final XsdFilter xsdWorkspaceFilter = xsdWorkspace.getWorkspaceFilter();
+        if (xsdWorkspaceFilter != null)
+        {
+            final WorkspaceFileFilterImpl fileFilter = new WorkspaceFileFilterImpl(xsdWorkspaceFilter.getDescription(),
+                    xsdWorkspaceFilter.getInformation(), xsdWorkspaceFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdWorkspaceFilter, fileFilter);
+            softwareSystemImpl.setWorkspaceFileFilter(fileFilter);
+        }
+
+        final XsdFilter xsdProductionCodeFilter = xsdWorkspace.getProductionCodeFilter();
+        if (xsdProductionCodeFilter != null)
+        {
+            final ProductionCodeFilterImpl productionCodeFilter = new ProductionCodeFilterImpl(xsdProductionCodeFilter.getDescription(),
+                    xsdProductionCodeFilter.getInformation(), xsdProductionCodeFilter.getNumberOfIncludedElements(),
+                    xsdProductionCodeFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdProductionCodeFilter, productionCodeFilter);
+            softwareSystemImpl.setProductionCodeFilter(productionCodeFilter);
+        }
+
+        final XsdFilter xsdIssueFilter = xsdWorkspace.getIssueFilter();
+        if (xsdIssueFilter != null)
+        {
+            final IssueFilterImpl issueFilter = new IssueFilterImpl(xsdIssueFilter.getDescription(), xsdIssueFilter.getInformation(),
+                    xsdIssueFilter.getNumberOfIncludedElements(), xsdIssueFilter.getNumberOfExcludedElements());
+            addPatternsToFilter(xsdIssueFilter, issueFilter);
+            softwareSystemImpl.setIssueFilter(issueFilter);
+        }
+
         for (final XsdModule nextXsdModule : xsdWorkspace.getModule())
         {
             final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
@@ -494,6 +541,23 @@ public final class XmlReportReader extends XmlAccess
             nextXsdExternal.getPhysicalRecursiveElement()
                     .forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, e, null));
             nextXsdExternal.getProgrammingElement().forEach(e -> createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, e));
+        }
+    }
+
+    private void addPatternsToFilter(final XsdFilter xsdFilter, final AbstractFilterImpl filter)
+    {
+        assert xsdFilter != null : "Parameter 'xsdFilter' of method 'addPatternsToFilter' must not be null";
+        assert filter != null : "Parameter 'filter' of method 'addPatternsToFilter' must not be null";
+
+        for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getExclude())
+        {
+            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            filter.addExcludePattern(pattern);
+        }
+        for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getInclude())
+        {
+            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            filter.addIncludePattern(pattern);
         }
     }
 
@@ -563,16 +627,73 @@ public final class XmlReportReader extends XmlAccess
 
     private static void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
-        assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
-        report.getAnalyzers().getAnalyzer()
-                .forEach(a -> softwareSystem.addAnalyzer(new AnalyzerImpl(a.getName(), a.getPresentationName(), a.getDescription(), a.isLicensed())));
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processAnalyzers' must not be null";
+        assert report != null : "Parameter 'report' of method 'processAnalyzers' must not be null";
+        report.getAnalyzers().getAnalyzer().forEach(a -> softwareSystem.addAnalyzer(new AnalyzerImpl(a.getName(), a.getPresentationName(),
+                a.getDescription(), a.isLicensed(), convertXmlExecutionLevel(a.getExecutionLevel()), a.isExecuted())));
+    }
+
+    private static AnalyzerExecutionLevel convertXmlExecutionLevel(final XsdAnalyzerExecutionLevel xsdExecutionLevel)
+    {
+        assert xsdExecutionLevel != null : "Parameter 'executionLevel' of method 'convertXmlExecutionLevel' must not be null";
+
+        switch (xsdExecutionLevel)
+        {
+        case FULL:
+            return AnalyzerExecutionLevel.FULL;
+        case ADVANCED:
+            return AnalyzerExecutionLevel.ADVANCED;
+        case BASIC:
+            return AnalyzerExecutionLevel.BASIC;
+        case MINIMAL:
+            return AnalyzerExecutionLevel.MINIMAL;
+        default:
+            assert false : "Unsupported analyzer execution level: " + xsdExecutionLevel.name();
+        }
+        return null;
+    }
+
+    private static void processPlugins(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPlugins' must not be null";
+        assert report != null : "Parameter 'report' of method 'processPlugins' must not be null";
+        final XsdPlugins xsdPlugins = report.getPlugins();
+        if (xsdPlugins != null)
+        {
+            for (final XsdPlugin next : xsdPlugins.getPlugin())
+            {
+                final Set<PluginExecutionPhase> supportedExecutionPhases = convertXmlPluginExecutionPhases(next.getSupportedExecutionPhase());
+                final Set<PluginExecutionPhase> activeExecutionPhases = convertXmlPluginExecutionPhases(next.getActiveExecutionPhase());
+                final IPlugin plugin = new PluginImpl(next.getName(), next.getPresentationName(), next.getDescription(), next.getVendor(),
+                        next.getVersion(), next.isLicensed(), next.isEnabled(), supportedExecutionPhases, activeExecutionPhases);
+                softwareSystem.addPlugin(plugin);
+            }
+        }
+    }
+
+    private static Set<PluginExecutionPhase> convertXmlPluginExecutionPhases(final List<XsdExecutionPhase> xsdExecutionPhases)
+    {
+        return xsdExecutionPhases.stream().map(xsd -> convertXmlPluginExecutionPhase(xsd)).collect(Collectors.toSet());
+    }
+
+    private static PluginExecutionPhase convertXmlPluginExecutionPhase(final XsdExecutionPhase xsdExecutionPhase)
+    {
+        switch (xsdExecutionPhase)
+        {
+        case ANALYZER:
+            return PluginExecutionPhase.ANALYZER;
+        case MODEL:
+            return PluginExecutionPhase.MODEL;
+        default:
+            assert false : "Unsupported execution phase: " + xsdExecutionPhase.name();
+            return null;
+        }
     }
 
     private static void processFeatures(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'addAnalyzers' must not be null";
-        assert report != null : "Parameter 'report' of method 'addAnalyzers' must not be null";
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processFeatures' must not be null";
+        assert report != null : "Parameter 'report' of method 'processFeatures' must not be null";
         report.getFeatures().getFeature()
                 .forEach(f -> softwareSystem.addFeature(new FeatureImpl(f.getName(), f.getPresentationName(), f.isLicensed())));
     }
@@ -1034,7 +1155,7 @@ public final class XmlReportReader extends XmlAccess
                 }
 
                 final String name = nextCycle.getName();
-                //This name might not not be set -> use the old name 'issueProvider.getPresentationName()' 
+                //This name might not not be set -> use the old name 'issueProvider.getPresentationName()'
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
                         name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
                         issueProvider, analyzer, cyclicElements);

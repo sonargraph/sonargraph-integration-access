@@ -28,8 +28,8 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
     private static final String CDATA_END = "]]>";
     private static final String CDATA_START = "<![CDATA[";
     /**
-     * The CDATA section end string "]]>" must not be part of text in a CDATA section.
-     * Split it into "]]" and ">", and put CDATA_END and CDATA_START in between.
+     * The CDATA section end string "]]>" must not be part of text in a CDATA section. Split it into "]]" and ">", and put CDATA_END and CDATA_START
+     * in between.
      */
     private static final String CDATA_END_ENCODED = "]]" + CDATA_END + CDATA_START + ">";
     private static final Pattern XML_CHARS = Pattern.compile("[&<>]");
@@ -43,9 +43,11 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final String text) throws XMLStreamException
     {
+        //If there are unescaped characters, the use of a CDATA section is needed.
         final boolean useCData = XML_CHARS.matcher(text).find();
         if (useCData)
         {
+            //We need to replace the CDATA end ']]>' if it exists in the text.
             xmlStreamWriter.writeCData(text.replaceAll(CDATA_END, CDATA_END_ENCODED));
         }
         else

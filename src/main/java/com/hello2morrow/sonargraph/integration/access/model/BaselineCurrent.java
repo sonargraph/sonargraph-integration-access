@@ -81,6 +81,11 @@ public final class BaselineCurrent<T1> implements Serializable
         return baseline.equals(other.baseline) && current.equals(other.current);
     }
 
+    public boolean hasChanged()
+    {
+        return !baseline.equals(current);
+    }
+
     @Override
     public String toString()
     {

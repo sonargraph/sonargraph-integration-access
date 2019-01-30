@@ -25,24 +25,31 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.BaselineCurrent;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IFilter;
+import com.hello2morrow.sonargraph.integration.access.model.IFilterDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IModuleDelta;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.FilterDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueContainer;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueDeltaImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleDeltaImpl;
@@ -346,8 +353,8 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                         }
                         break;
                     case DUPLICATE_CODE:
-                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(), new BaselineCurrent<Integer>(
-                                nextBaseLineIssuesSize, nextCurrentIssuesSize));
+                        issueDeltaImpl.changedDuplicateCodeParticipation(nextFqNameEntry.getKey(),
+                                new BaselineCurrent<>(nextBaseLineIssuesSize, nextCurrentIssuesSize));
                         break;
                     default:
                         assert false : "Unhandled: " + type;
@@ -538,7 +545,88 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             workspaceDelta.addAddedModule(next.getValue());
         }
 
+        final ISoftwareSystem baseSystem = baselineSystemInfoProcessor.getSoftwareSystem();
+        final ISoftwareSystem currentSystem = systemProcessor.getSoftwareSystem();
+
+        final IFilterDelta fileFilterDelta = createFilterDelta("WorkspaceFileFilter", "Workspace File Filter", baseSystem.getWorkspaceFilter(),
+                currentSystem.getWorkspaceFilter());
+        workspaceDelta.setWorkspaceFileFilterDelta(fileFilterDelta);
+
+        final IFilterDelta productionCodeFilterDelta = createFilterDelta("ProductionCodeFilter", "Production Code Filter",
+                baseSystem.getProductionCodeFilter(), currentSystem.getProductionCodeFilter());
+        workspaceDelta.setProductionCodeFilterDelta(productionCodeFilterDelta);
+
+        final IFilterDelta issueFilterDelta = createFilterDelta("IssueFilter", "Issue Filter", baseSystem.getIssueFilter(),
+                currentSystem.getIssueFilter());
+        workspaceDelta.setIssueFilterDelta(issueFilterDelta);
         return workspaceDelta;
+    }
+
+    private IFilterDelta createFilterDelta(final String name, final String presentationName, final Optional<? extends IFilter> baselineFilterOpt,
+            final Optional<? extends IFilter> currentFilterOpt)
+    {
+        assert name != null && name.length() > 0 : "Parameter 'name' of method 'createFilterDelta' must not be empty";
+        assert presentationName != null
+                && presentationName.length() > 0 : "Parameter 'presentationName' of method 'createFilterDelta' must not be empty";
+        assert baselineFilterOpt != null : "Parameter 'baselineFilterOpt' of method 'createFilterDelta' must not be null";
+        assert currentFilterOpt != null : "Parameter 'currentFilterOpt' of method 'createFilterDelta' must not be null";
+
+        final FilterDeltaImpl filterDelta;
+        if (!baselineFilterOpt.isPresent() && !currentFilterOpt.isPresent())
+        {
+            filterDelta = new FilterDeltaImpl(name, presentationName);
+            return filterDelta;
+        }
+        else if (baselineFilterOpt.isPresent() && !currentFilterOpt.isPresent())
+        {
+            final IFilter baselineFilter = baselineFilterOpt.get();
+            filterDelta = new FilterDeltaImpl(baselineFilter.getName(), baselineFilter.getPresentationName());
+            baselineFilter.getIncludePatterns().forEach(include -> filterDelta.removedIncludePattern(include));
+            baselineFilter.getExcludePatterns().forEach(exclude -> filterDelta.removedExcludePattern(exclude));
+            return filterDelta;
+        }
+        else if (!baselineFilterOpt.isPresent() && currentFilterOpt.isPresent())
+        {
+            final IFilter currentFilter = currentFilterOpt.get();
+            filterDelta = new FilterDeltaImpl(currentFilter.getName(), currentFilter.getPresentationName());
+            currentFilter.getIncludePatterns().forEach(include -> filterDelta.addedIncludePattern(include));
+            currentFilter.getExcludePatterns().forEach(exclude -> filterDelta.addedExcludePattern(exclude));
+            return filterDelta;
+        }
+
+        final IFilter baselineFilter = baselineFilterOpt.get();
+        final IFilter currentFilter = currentFilterOpt.get();
+        filterDelta = new FilterDeltaImpl(currentFilter.getName(), currentFilter.getPresentationName());
+        final List<IWildcardPattern> baselineIncludes = new ArrayList<>(baselineFilter.getIncludePatterns());
+        final List<IWildcardPattern> currentIncludes = new ArrayList<>(currentFilter.getIncludePatterns());
+        processPatterns(baselineIncludes, currentIncludes, pattern -> filterDelta.removedIncludePattern(pattern),
+                pattern -> filterDelta.addedIncludePattern(pattern));
+
+        final List<IWildcardPattern> baselineExcludes = new ArrayList<>(baselineFilter.getExcludePatterns());
+        final List<IWildcardPattern> currentExcludes = new ArrayList<>(currentFilter.getExcludePatterns());
+        processPatterns(baselineExcludes, currentExcludes, pattern -> filterDelta.removedExcludePattern(pattern),
+                pattern -> filterDelta.addedExcludePattern(pattern));
+
+        return filterDelta;
+    }
+
+    private void processPatterns(final List<IWildcardPattern> baselinePatterns, final List<IWildcardPattern> currentPatterns,
+            final Consumer<IWildcardPattern> removedConsumer, final Consumer<IWildcardPattern> addedConsumer)
+    {
+        for (final IWildcardPattern nextCurrent : baselinePatterns)
+        {
+            final Optional<IWildcardPattern> match = currentPatterns.stream().filter(current -> current.getPattern().equals(nextCurrent.getPattern()))
+                    .findFirst();
+            if (match.isPresent())
+            {
+                currentPatterns.remove(match.get());
+            }
+            else
+            {
+                removedConsumer.accept(nextCurrent);
+            }
+        }
+        currentPatterns.forEach(pattern -> addedConsumer.accept(pattern));
     }
 
     private IModuleDelta computeModuleDelta(final IModule baselineModule, final IModule currentModule)
@@ -571,6 +659,20 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
         baselineAsSet.removeAll(current);
         baselineAsSet.forEach(n -> reportDeltaImpl.removedAnalyzer(n));
         currentAsSet.forEach(n -> reportDeltaImpl.addedAnalyzer(n));
+    }
+
+    private void processPlugins(final List<IPlugin> baseline, final List<IPlugin> current, final ReportDeltaImpl reportDeltaImpl)
+    {
+        assert baseline != null : "Parameter 'baseline' of method 'processPlugins' must not be null";
+        assert current != null : "Parameter 'current' of method 'processPlugins' must not be null";
+        assert reportDeltaImpl != null : "Parameter 'reportDeltaImpl' of method 'processPlugins' must not be null";
+
+        final Set<IPlugin> baselineAsSet = new HashSet<>(baseline);
+        final Set<IPlugin> currentAsSet = new HashSet<>(current);
+        currentAsSet.removeAll(baseline);
+        baselineAsSet.removeAll(current);
+        baselineAsSet.forEach(n -> reportDeltaImpl.removedPlugin(n));
+        currentAsSet.forEach(n -> reportDeltaImpl.addedPlugin(n));
     }
 
     private void processFeatures(final List<IFeature> baseline, final List<IFeature> current, final ReportDeltaImpl reportDeltaImpl)
@@ -650,13 +752,12 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
                 if (!nextBaselineThreshold.getLowerThreshold().equals(nextCurrentThreshold.getLowerThreshold())
                         || !nextBaselineThreshold.getUpperThreshold().equals(nextCurrentThreshold.getUpperThreshold()))
                 {
-                    reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<IMetricThreshold>(nextBaselineThreshold,
-                            nextCurrentThreshold));
+                    reportDeltaImpl.changedMetricThresholdBoundaries(new BaselineCurrent<>(nextBaselineThreshold, nextCurrentThreshold));
                 }
             }
             else
             {
-                //Not found in current 
+                //Not found in current
                 reportDeltaImpl.removedMetricThreshold(nextBaselineThreshold);
             }
         }
@@ -676,6 +777,7 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
 
         processFeatures(baselineSystemInfoProcessor.getFeatures(), systemInfoProcessor.getFeatures(), reportDeltaImpl);
         processAnalyzers(baselineSystemInfoProcessor.getAnalyzers(), systemInfoProcessor.getAnalyzers(), reportDeltaImpl);
+        processPlugins(baselineSystemInfoProcessor.getPlugins(), systemInfoProcessor.getPlugins(), reportDeltaImpl);
         processDuplicateCodeConfiguration(baselineSystemInfoProcessor.getDuplicateCodeConfigurationEntries(),
                 systemInfoProcessor.getDuplicateCodeConfigurationEntries(), reportDeltaImpl);
         processScriptRunnerConfiguration(baselineSystemInfoProcessor.getScriptRunnerConfigurationEntries(),

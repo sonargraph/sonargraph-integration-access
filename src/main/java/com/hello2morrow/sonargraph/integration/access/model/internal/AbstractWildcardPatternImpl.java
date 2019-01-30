@@ -15,13 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public interface IAnalyzer extends IElementWithDescription
+import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
+
+abstract class AbstractWildcardPatternImpl extends ElementImpl implements IWildcardPattern
 {
-    public boolean isLicensed();
+    private static final long serialVersionUID = 1L;
+    private final int numberOfMatches;
 
-    public AnalyzerExecutionLevel getExecutionLevel();
+    public AbstractWildcardPatternImpl(final String name, final int numberOfMatches)
+    {
+        super(name, name);
+        this.numberOfMatches = numberOfMatches;
+    }
 
-    public boolean isExecuted();
+    @Override
+    public String getPattern()
+    {
+        return getName();
+    }
+
+    @Override
+    public int getNumberOfMatches()
+    {
+        return numberOfMatches;
+    }
 }

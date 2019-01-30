@@ -17,11 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IAnalyzer extends IElementWithDescription
+public interface IWildcardPattern
 {
-    public boolean isLicensed();
+    public String getPattern();
 
-    public AnalyzerExecutionLevel getExecutionLevel();
-
-    public boolean isExecuted();
+    public int getNumberOfMatches();
 }

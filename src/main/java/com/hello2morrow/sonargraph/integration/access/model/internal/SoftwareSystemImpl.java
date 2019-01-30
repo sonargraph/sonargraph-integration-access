@@ -27,9 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
+import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
@@ -42,13 +45,14 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
 {
-    private static final long serialVersionUID = -4666348701032432246L;
+    private static final long serialVersionUID = -4666348701032432245L;
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
@@ -56,6 +60,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
+    private final Map<String, IPlugin> pluginMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
     private final List<String> duplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> scriptRunnerConfigurationEntries = new ArrayList<>();
@@ -71,11 +76,17 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final String virtualModel;
     private final long timestamp;
     private final String baseDir;
+    private final AnalyzerExecutionLevel analyzerExecutionLevel;
+
+    private IFilter workspaceFilter;
+    private IComponentFilter productionCodeFilter;
+    private IComponentFilter issueFilter;
 
     private int numberOfIssues = 0;
 
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
-            final String path, final String version, final long timestamp, final String virtualModel)
+            final String path, final String version, final long timestamp, final String virtualModel,
+            final AnalyzerExecutionLevel analyzerExecutionLevel)
     {
         super(kind, presentationKind, name, name, name, description, new MetaDataAccessImpl(path, systemId, version, timestamp),
                 new NamedElementRegistry());
@@ -85,6 +96,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         assert version != null && version.length() > 0 : "Parameter 'version' of method 'SoftwareSystem' must not be empty";
         assert timestamp > 0 : "Parameter 'timestamp' of method 'SoftwareSystem' must be > 0";
         assert virtualModel != null && virtualModel.length() > 0 : "Parameter 'virtualModel' of method 'SoftwareSystemImpl' must not be empty";
+        assert analyzerExecutionLevel != null : "Parameter 'analyzerExecutionLevel' of method 'SoftwareSystemImpl' must not be null";
 
         this.systemId = systemId;
         this.path = path;
@@ -99,6 +111,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         this.version = version;
         this.timestamp = timestamp;
         this.virtualModel = virtualModel;
+        this.analyzerExecutionLevel = analyzerExecutionLevel;
     }
 
     @Override
@@ -156,6 +169,48 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert moduleImpl != null : "Parameter 'moduleImpl' of method 'addModule' must not be null";
         modules.put(moduleImpl.getFqName(), moduleImpl);
+    }
+
+    public void setWorkspaceFilter(final IFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'addWorkspaceFilter' must not be null";
+        workspaceFilter = filter;
+    }
+
+    @Override
+    public Optional<IFilter> getWorkspaceFilter()
+    {
+        return Optional.ofNullable(workspaceFilter);
+    }
+
+    public void setWorkspaceFileFilter(final IFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'addWorkspaceFileFilter' must not be null";
+        workspaceFilter = filter;
+    }
+
+    public void setProductionCodeFilter(final IComponentFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'setProductionCodeFilter' must not be null";
+        productionCodeFilter = filter;
+    }
+
+    @Override
+    public Optional<IComponentFilter> getProductionCodeFilter()
+    {
+        return Optional.ofNullable(productionCodeFilter);
+    }
+
+    public void setIssueFilter(final IComponentFilter filter)
+    {
+        assert filter != null : "Parameter 'filter' of method 'setIssueFilter' must not be null";
+        issueFilter = filter;
+    }
+
+    @Override
+    public Optional<IComponentFilter> getIssueFilter()
+    {
+        return Optional.ofNullable(issueFilter);
     }
 
     public void addExternal(final ExternalImpl externalImpl)
@@ -247,9 +302,29 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         analyzerMap.put(analyzer.getName(), analyzer);
     }
 
+    public void addPlugin(final IPlugin plugin)
+    {
+        assert plugin != null : "Parameter 'plugin' of method 'addPlugin' must not be null";
+        assert !pluginMap.containsKey(plugin.getName()) : "Plugin '" + plugin.getName() + "' has already been added";
+        pluginMap.put(plugin.getName(), plugin);
+    }
+
+    @Override
+    public AnalyzerExecutionLevel getAnalyzerExecutionLevel()
+    {
+        return analyzerExecutionLevel;
+    }
+
+    @Override
     public Map<String, IAnalyzer> getAnalyzers()
     {
         return Collections.unmodifiableMap(analyzerMap);
+    }
+
+    @Override
+    public Map<String, IPlugin> getPlugins()
+    {
+        return Collections.unmodifiableMap(pluginMap);
     }
 
     public void addFeature(final IFeature feature)

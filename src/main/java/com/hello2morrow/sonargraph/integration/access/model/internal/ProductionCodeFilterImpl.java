@@ -15,13 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public interface IAnalyzer extends IElementWithDescription
+public final class ProductionCodeFilterImpl extends AbstractComponentFilterImpl
 {
-    public boolean isLicensed();
+    private static final long serialVersionUID = 1L;
 
-    public AnalyzerExecutionLevel getExecutionLevel();
+    public ProductionCodeFilterImpl()
+    {
+        this("Exclude internal components containing test code", "", -1, -1);
+    }
 
-    public boolean isExecuted();
+    public ProductionCodeFilterImpl(final String description, final String information, final int numberOfIncludedElements,
+            final int numberOfExcludedElements)
+    {
+        super("ProductionCodeFilter", "Production Code Filter", description, information, numberOfIncludedElements, numberOfExcludedElements);
+    }
+
 }

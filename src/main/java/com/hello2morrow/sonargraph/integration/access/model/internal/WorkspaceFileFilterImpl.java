@@ -15,13 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public interface IAnalyzer extends IElementWithDescription
+public final class WorkspaceFileFilterImpl extends AbstractFilterImpl
 {
-    public boolean isLicensed();
+    private static final long serialVersionUID = 1L;
 
-    public AnalyzerExecutionLevel getExecutionLevel();
+    public WorkspaceFileFilterImpl(final String description, final String information, final int numberOfExcludedElements)
+    {
+        super("WorkspaceFilter", "Workspace Filter", description, information, numberOfExcludedElements);
+    }
 
-    public boolean isExecuted();
 }
