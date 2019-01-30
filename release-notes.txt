@@ -1,6 +1,11 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.2.0
+=====
+
+- Support for JDK 11.
+
 3.1.11
 ======
 
