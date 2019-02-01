@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.NamespaceContext;
@@ -49,14 +50,19 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
         final boolean useCData = XML_CHARS_PATTERN.matcher(text).find();
         if (useCData)
         {
-            final String escapedText = CDATA_END_PATTERN.matcher(text).replaceAll(CDATA_END_ENCODED);
-            //We need to replace the CDATA end ']]>' if it exists in the text.
-            xmlStreamWriter.writeCData(escapedText);
+            internWriteCData(text);
         }
         else
         {
             xmlStreamWriter.writeCharacters(text);
         }
+    }
+
+    private void internWriteCData(final String text) throws XMLStreamException
+    {
+        final String escapedText = CDATA_END_PATTERN.matcher(text).replaceAll(CDATA_END_ENCODED);
+        //We need to replace the CDATA end ']]>' if it exists in the text.
+        xmlStreamWriter.writeCData(escapedText);
     }
 
     @Override
@@ -206,7 +212,17 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
-        writeCharacters(new String(text));
+        final char[] slice = Arrays.copyOfRange(text, start, len);
+        for (final char c : slice)
+        {
+            if (c == '&' || c == '>' || c == '<')
+            {
+                internWriteCData(new String(slice));
+                return;
+            }
+        }
+
+        xmlStreamWriter.writeCharacters(text, start, len);
     }
 
     @Override
