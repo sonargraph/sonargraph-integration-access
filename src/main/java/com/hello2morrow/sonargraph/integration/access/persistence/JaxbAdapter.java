@@ -193,9 +193,14 @@ public final class JaxbAdapter<T>
         assert out != null : "Parameter 'out' of method 'save' must not be null";
         try (OutputStream bufferedOut = new BufferedOutputStream(out))
         {
+            final XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+            //Disable escaping, since we want to generate <CDATA[[...]]> sections based on the detection of special characters
+            xmlOutputFactory.setProperty("escapeCharacters", false);
+
             //Using two decorators to correctly handle CDATA sections and output formatting.
             //The output formatting property set on the JAXB marshaller is not respected when using XMLStreamWriters.
-            final XMLStreamWriter streamWriter = XMLOutputFactory.newInstance().createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
+            final XMLStreamWriter streamWriter = xmlOutputFactory.createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
+
             final XmlCDataStreamWriter cdataStreamWriter = new XmlCDataStreamWriter(streamWriter);
             final XmlPrettyPrintWriter xmlPrettyWriter = new XmlPrettyPrintWriter(cdataStreamWriter);
             writer.marshal(jaxbRoot, xmlPrettyWriter);
