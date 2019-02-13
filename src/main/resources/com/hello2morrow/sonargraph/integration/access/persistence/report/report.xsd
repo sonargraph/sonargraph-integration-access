@@ -466,6 +466,10 @@
                 <xs:attribute name="numberOfCyclicElements" type="xs:int" use="required" />
                 <xs:attribute name="name" type="xs:string" use="required" />
                 <xs:attribute name="fqName" type="xs:string" use="required" />
+                <!--  additional attributes. Optional, so that older reports can also be read.  -->
+                <xs:attribute name="structuralDebtIndex" type="xs:int" use="optional" default="-1"/>
+                <xs:attribute name="componentDependenciesToRemove" type="xs:int" use="optional" default="-1" />
+                <xs:attribute name="parserDependenciesToRemove" type="xs:int" use="optional" default="-1"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

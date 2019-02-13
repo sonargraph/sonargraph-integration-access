@@ -19,7 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 public class TestFixture
 {
-    /**Report containing all available metric levels */
+    /** Report containing all available metric levels */
     public static final String TEST_REPORT = "./src/test/resources/AlarmClock.xml";
     public static final String INVALID_TEST_REPORT = "./src/test/resources/AlarmClock_invalid.xml";
 
@@ -38,6 +38,7 @@ public class TestFixture
 
     public static final String TEST_REPORT_WITHOUT_ISSUES = "./src/test/resources/ReportWithoutIssues.xml";
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
+    public static final String TEST_REPORT_WITH_CYCLE_METRICS = "./src/test/resources/AlarmClock_with_cycle_metrics.xml";
     public static final String CSHARP_REPORT = "./src/test/resources/NHibernate_2017-04-03_11-59-50.xml";
     public static final String CPP_REPORT = "./src/test/resources/project_2_2017-04-03_14-54-53.xml";
     public static final String CPP_REPORT_HILO = "./src/test/resources/Hilo_2017-04-03_19-08-39.xml";
