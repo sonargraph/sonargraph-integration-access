@@ -32,15 +32,22 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
     private static final long serialVersionUID = 3306324924477805018L;
     private final IAnalyzer analyzer;
     private final List<INamedElement> cyclicElements;
+    private final int componentDependenciesToRemove;
+    private final int structuralDebtIndex;
+    private final int parserDependenciesToRemove;
 
     public CycleGroupIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements)
+            final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements, final int structuralDebtIndex,
+            final int componentDependenciesToRemove, final int parserDependenciesToRemove)
     {
         super(name, presentationName, description, issueType, provider);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
         assert cyclicElements != null && !cyclicElements.isEmpty() : "Parameter 'cyclicElements' of method 'CycleGroupIssueImpl' must not be empty";
         this.analyzer = analyzer;
         this.cyclicElements = cyclicElements;
+        this.structuralDebtIndex = structuralDebtIndex;
+        this.componentDependenciesToRemove = componentDependenciesToRemove;
+        this.parserDependenciesToRemove = parserDependenciesToRemove;
     }
 
     @Override
@@ -59,6 +66,24 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
     public IAnalyzer getAnalyzer()
     {
         return analyzer;
+    }
+
+    @Override
+    public int getStructuralDebtIndex()
+    {
+        return structuralDebtIndex;
+    }
+
+    @Override
+    public int getComponentDependenciesToRemove()
+    {
+        return componentDependenciesToRemove;
+    }
+
+    @Override
+    public int getParserDependenciesToRemove()
+    {
+        return parserDependenciesToRemove;
     }
 
     @Override

@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.NamespaceContext;
@@ -32,7 +33,9 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
      * in between.
      */
     private static final String CDATA_END_ENCODED = "]]" + CDATA_END + CDATA_START + ">";
-    private static final Pattern XML_CHARS = Pattern.compile("[&<>]");
+    private static final Pattern CDATA_END_PATTERN = Pattern.compile(CDATA_END);
+    private static final Pattern XML_CHARS_PATTERN = Pattern.compile("[&<>]");
+
     private final XMLStreamWriter xmlStreamWriter;
 
     XmlCDataStreamWriter(final XMLStreamWriter writer)
@@ -44,16 +47,22 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
     public void writeCharacters(final String text) throws XMLStreamException
     {
         //If there are unescaped characters, the use of a CDATA section is needed.
-        final boolean useCData = XML_CHARS.matcher(text).find();
+        final boolean useCData = XML_CHARS_PATTERN.matcher(text).find();
         if (useCData)
         {
-            //We need to replace the CDATA end ']]>' if it exists in the text.
-            xmlStreamWriter.writeCData(text.replaceAll(CDATA_END, CDATA_END_ENCODED));
+            internWriteCData(text);
         }
         else
         {
             xmlStreamWriter.writeCharacters(text);
         }
+    }
+
+    private void internWriteCData(final String text) throws XMLStreamException
+    {
+        final String escapedText = CDATA_END_PATTERN.matcher(text).replaceAll(CDATA_END_ENCODED);
+        //We need to replace the CDATA end ']]>' if it exists in the text.
+        xmlStreamWriter.writeCData(escapedText);
     }
 
     @Override
@@ -203,6 +212,16 @@ final class XmlCDataStreamWriter implements XMLStreamWriter
     @Override
     public void writeCharacters(final char[] text, final int start, final int len) throws XMLStreamException
     {
+        final char[] slice = Arrays.copyOfRange(text, start, len);
+        for (final char c : slice)
+        {
+            if (c == '&' || c == '>' || c == '<')
+            {
+                internWriteCData(new String(slice));
+                return;
+            }
+        }
+
         xmlStreamWriter.writeCharacters(text, start, len);
     }
 

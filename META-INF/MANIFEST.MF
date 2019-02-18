@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sonargraph Integration
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-SymbolicName: com.hello2morrow.sonargraph.integration.access;singleton:=true
-Bundle-Version: 3.2.0
+Bundle-SymbolicName: com.hello2morrow.sonargraph.integration.access
+Bundle-Version: 3.2.1
 Bundle-Vendor: hello2morrow GmbH
 Export-Package: com.hello2morrow.sonargraph.integration.access.controller,
  com.hello2morrow.sonargraph.integration.access.foundation,

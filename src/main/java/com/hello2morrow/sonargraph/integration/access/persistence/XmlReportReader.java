@@ -162,6 +162,7 @@ public final class XmlReportReader extends XmlAccess
 
     /**
      * Reads an XML report.
+     * 
      * @param reportFile XML file that is expected to exist and be readable.
      * @param result Contains info about errors.
      */
@@ -1158,7 +1159,8 @@ public final class XmlReportReader extends XmlAccess
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()'
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
                         name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
-                        issueProvider, analyzer, cyclicElements);
+                        issueProvider, analyzer, cyclicElements, nextCycle.getStructuralDebtIndex(), nextCycle.getComponentDependenciesToRemove(),
+                        nextCycle.getParserDependenciesToRemove());
 
                 softwareSystem.addIssue(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);

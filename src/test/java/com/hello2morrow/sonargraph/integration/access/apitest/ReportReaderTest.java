@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -43,6 +44,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
+import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
@@ -260,6 +262,40 @@ public final class ReportReaderTest
                 }
             }
         }
+    }
+
+    @Test
+    public void checkForCycleMetrics()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.TEST_REPORT_WITH_CYCLE_METRICS));
+        assertTrue(result.toString(), result.isSuccess());
+
+        final ISystemInfoProcessor infoProcessor = controller.createSystemInfoProcessor();
+        {
+            final List<ICycleGroupIssue> packageCycles = getCycleGroup(infoProcessor, "NamespaceCycleGroup");
+            assertEquals("Wrong number of package cycles ", 1, packageCycles.size());
+            final ICycleGroupIssue packageCycle = packageCycles.get(0);
+            assertEquals("Wrong number of cyclic elements", 2, packageCycle.getAffectedNamedElements().size());
+            assertEquals("Wrong structural debt index", 13, packageCycle.getStructuralDebtIndex());
+            assertEquals("Wrong component dependencies to remove", 1, packageCycle.getComponentDependenciesToRemove());
+            assertEquals("Wrong parser dependencies to remove", 3, packageCycle.getParserDependenciesToRemove());
+        }
+        {
+            final List<ICycleGroupIssue> componentCycles = getCycleGroup(infoProcessor, "ComponentCycleGroup");
+            assertEquals("Wrong number of component cycles ", 1, componentCycles.size());
+            final ICycleGroupIssue componentCycle = componentCycles.get(0);
+            assertEquals("Wrong number of cyclic elements", 2, componentCycle.getAffectedNamedElements().size());
+            assertEquals("Wrong structural debt index", 13, componentCycle.getStructuralDebtIndex());
+            assertEquals("Wrong component dependencies to remove", 1, componentCycle.getComponentDependenciesToRemove());
+            assertEquals("Wrong parser dependencies to remove", 3, componentCycle.getParserDependenciesToRemove());
+        }
+    }
+
+    private List<ICycleGroupIssue> getCycleGroup(final ISystemInfoProcessor infoProcessor, final String issueTypeName)
+    {
+        return infoProcessor.getIssues(i -> i.getIssueType().getName().equals(issueTypeName)).stream().map(i -> (ICycleGroupIssue) i)
+                .collect(Collectors.toList());
     }
 
     @Test

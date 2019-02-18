@@ -20,4 +20,10 @@ package com.hello2morrow.sonargraph.integration.access.model;
 public interface ICycleGroupIssue extends INamedElementIssue
 {
     public IAnalyzer getAnalyzer();
+
+    public int getStructuralDebtIndex();
+
+    public int getParserDependenciesToRemove();
+
+    public int getComponentDependenciesToRemove();
 }
