@@ -27,10 +27,21 @@ public interface ISonargraphSystemController
 {
     /**
      * Loads an XML report file.
-     * @param systemReportFile
-     * @return {@link Result} containing info about any errors.
+     *
+     * @param  systemReportFile
+     * @return                  {@link Result} containing info about any errors.
      */
     public Result loadSystemReport(File systemReportFile);
+
+    /**
+     * Same as {@link #loadSystemReport(File)}, but adjusts the base directory. This enables loading a report for a system that has been generated on
+     * a different machine.
+     *
+     * @param  systemReportFile
+     * @param  baseDir
+     * @return                  {@link Result} containing info about any errors.
+     */
+    public Result loadSystemReport(File systemReportFile, File baseDir);
 
     public boolean hasSoftwareSystem();
 

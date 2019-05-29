@@ -61,8 +61,9 @@ public class TestFixture
     public static final String TEST_REPORT_REFACTORINGS_DUPLICATE_FQNAMES = "./src/test/resources/AlarmClockMain_Refactorings_DuplicateFqName.xml";
 
     public static final String META_DATA_PATH_WRONG_ENCODING = "./src/test/resources/ExportMetaData_Prolog_Error.xml";
-
     public static final String META_DATA_PATH_OF_FOUR_LANGUAGES_SYSTEM = "./src/test/data/multilanguage/ExportMetaDataFourLanguages.xml";
+
+    public static final String REPORT_FROM_DIFFERENT_ORIGIN = "./src/test/resources/IntegrationAccess_From_Different_Origin.xml";
 
     /** Reports for testing diff functionality */
     public static final String ALARM_CLOCK_BASELINE_PLUGIN_NOT_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_not_executed.xml";

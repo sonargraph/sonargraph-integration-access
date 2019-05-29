@@ -162,11 +162,13 @@ public final class XmlReportReader extends XmlAccess
 
     /**
      * Reads an XML report.
-     * 
+     *
      * @param reportFile XML file that is expected to exist and be readable.
-     * @param result Contains info about errors.
+     * @param baseDir
+     * @param baseDir
+     * @param result     Contains info about errors.
      */
-    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final Result result)
+    public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final File baseDir, final Result result)
     {
         assert reportFile != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
         assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
@@ -193,7 +195,8 @@ public final class XmlReportReader extends XmlAccess
             xmlRoot = jaxbAdapter.load(in, eventHandler);
             if (xmlRoot != null)
             {
-                return convertXmlReportToPojo(xmlRoot.getValue(), result);
+                final String baseDirectoryPath = baseDir != null ? Utility.convertPathToUniversalForm(baseDir.getCanonicalPath()) : null;
+                return convertXmlReportToPojo(xmlRoot.getValue(), baseDirectoryPath, result);
             }
         }
         catch (final Exception ex)
@@ -297,16 +300,26 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport xsdReport, final Result result)
+    private Optional<SoftwareSystemImpl> convertXmlReportToPojo(final XsdSoftwareSystemReport xsdReport, final String basePath, final Result result)
     {
         assert xsdReport != null : "Parameter 'xsdReport' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
 
         final String systemDescription = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
-        final SoftwareSystemImpl softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(),
-                systemDescription, xsdReport.getSystemPath(), xsdReport.getVersion(),
-                xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(), xsdReport.getCurrentVirtualModel(),
-                convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
+
+        final SoftwareSystemImpl softwareSystemImpl;
+        if (basePath == null)
+        {
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+                    xsdReport.getSystemPath(), xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
+                    xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
+        }
+        else
+        {
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+                    xsdReport.getSystemPath(), basePath, xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
+                    xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
+        }
         softwareSystemImpl.addElement(softwareSystemImpl);
 
         processAnalyzers(softwareSystemImpl, xsdReport);

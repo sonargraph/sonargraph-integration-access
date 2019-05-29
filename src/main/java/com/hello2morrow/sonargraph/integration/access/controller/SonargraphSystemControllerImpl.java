@@ -41,7 +41,21 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public Result loadSystemReport(final File systemReportFile)
     {
         assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
+        return innerLoadSystemReport(systemReportFile, null);
+    }
 
+    @Override
+    public Result loadSystemReport(final File systemReportFile, final File baseDirectory)
+    {
+        assert systemReportFile != null : "Parameter 'systemReportFile' of method 'loadSystemReport' must not be null";
+        assert baseDirectory != null : "Parameter 'baseDirectory' of method 'loadSystemReport' must not be null";
+        assert baseDirectory.exists() && baseDirectory.isDirectory() : "Must be an existing directory: " + baseDirectory;
+
+        return innerLoadSystemReport(systemReportFile, baseDirectory);
+    }
+
+    private Result innerLoadSystemReport(final File systemReportFile, final File baseDir)
+    {
         final Result result = new Result("Load data from '" + systemReportFile.getAbsolutePath() + "'");
         if (!systemReportFile.exists())
         {
@@ -58,7 +72,7 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         }
 
         final XmlReportReader persistence = new XmlReportReader();
-        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, result);
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReportFile, baseDir, result);
         if (!readResult.isPresent() || result.isFailure())
         {
             return result;
