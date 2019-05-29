@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -75,7 +76,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final String version;
     private final String virtualModel;
     private final long timestamp;
-    private final String baseDir;
+    private String baseDir;
     private final AnalyzerExecutionLevel analyzerExecutionLevel;
 
     private IFilter workspaceFilter;
@@ -88,11 +89,19 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
             final String path, final String version, final long timestamp, final String virtualModel,
             final AnalyzerExecutionLevel analyzerExecutionLevel)
     {
+        this(kind, presentationKind, systemId, name, description, path, null, version, timestamp, virtualModel, analyzerExecutionLevel);
+    }
+
+    public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
+            final String path, final String baseDir, final String version, final long timestamp, final String virtualModel,
+            final AnalyzerExecutionLevel analyzerExecutionLevel)
+    {
         super(kind, presentationKind, name, name, name, description, new MetaDataAccessImpl(path, systemId, version, timestamp),
                 new NamedElementRegistry());
 
         assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'SoftwareSystem' must not be empty";
         assert path != null && path.length() > 0 : "Parameter 'path' of method 'SoftwareSystem' must not be empty";
+        //baseDir might be null
         assert version != null && version.length() > 0 : "Parameter 'version' of method 'SoftwareSystem' must not be empty";
         assert timestamp > 0 : "Parameter 'timestamp' of method 'SoftwareSystem' must be > 0";
         assert virtualModel != null && virtualModel.length() > 0 : "Parameter 'virtualModel' of method 'SoftwareSystemImpl' must not be empty";
@@ -101,13 +110,21 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         this.systemId = systemId;
         this.path = path;
 
-        int lastIndexOf = path.lastIndexOf('/');
-        if (lastIndexOf == -1)
+        if (baseDir == null)
         {
-            lastIndexOf = path.lastIndexOf('\\');
+            int lastIndexOf = path.lastIndexOf('/');
+            if (lastIndexOf == -1)
+            {
+                lastIndexOf = path.lastIndexOf('\\');
+            }
+            assert lastIndexOf != -1 : "Invalid path for system file: " + path;
+            this.baseDir = Utility.convertPathToUniversalForm(path.substring(0, lastIndexOf));
         }
-        assert lastIndexOf != -1 : "Invalid path for system file: " + path;
-        this.baseDir = Utility.convertPathToUniversalForm(path.substring(0, lastIndexOf));
+        else
+        {
+            this.baseDir = baseDir;
+        }
+
         this.version = version;
         this.timestamp = timestamp;
         this.virtualModel = virtualModel;
@@ -396,8 +413,8 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     }
 
     /**
-     * @param issue the issue - must not be 'null'
-     * @return the resolution or 'null' if the issue has no resolution
+     * @param  issue the issue - must not be 'null'
+     * @return       the resolution or 'null' if the issue has no resolution
      */
     public IResolution getResolution(final IIssue issue)
     {
@@ -486,5 +503,11 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'getSourceFile' must not be null";
         return Optional.ofNullable(namedElementToSourceFile.get(namedElement));
+    }
+
+    public void setBaseDir(final String baseDirectory) throws IOException
+    {
+        assert baseDirectory != null && baseDirectory.length() > 0 : "Parameter 'baseDirectory' of method 'setBaseDir' must not be empty";
+        baseDir = baseDirectory;
     }
 }
