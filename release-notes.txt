@@ -1,6 +1,12 @@
 Sonargraph 8 Integration Access
 ===============================
 
+3.2.2
+=====
+
+- Allow configuration of different system base directory.
+
+
 3.2.0
 =====
 
