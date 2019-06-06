@@ -25,6 +25,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProc
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestUtility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -167,6 +169,18 @@ public final class SonargraphSystemControllerTest
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
         assertNotNull("No software system available", softwareSystem);
+    }
+
+    @Test
+    public void testReadReportWithDifferentOrigin() throws IOException
+    {
+        final File baseDir = new File("./src/test/projects/smallTestProject");
+        final Result result = m_controller.loadSystemReport(new File("./src/test/projects/smallTestProject/AlarmClock_from_different_origin.xml"),
+                baseDir);
+        assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = m_controller.getSoftwareSystem();
+        assertNotNull("No software system available", softwareSystem);
+        assertEquals("Wrong base directory", Utility.convertPathToUniversalForm(baseDir.getCanonicalPath()), softwareSystem.getBaseDir());
     }
 
     private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)

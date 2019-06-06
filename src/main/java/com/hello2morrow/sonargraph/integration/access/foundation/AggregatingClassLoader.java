@@ -21,12 +21,19 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class AggregatingClassLoader extends ClassLoader
 {
     private final List<ClassLoader> classLoaders;
+
+    public AggregatingClassLoader(final ClassLoader... classLoaders)
+    {
+        assert classLoaders != null : "Parameter 'classLoaders' of method 'AggregatingClassLoader' must not be null";
+        this.classLoaders = Arrays.asList(classLoaders);
+    }
 
     public AggregatingClassLoader(final List<ClassLoader> classLoaders)
     {

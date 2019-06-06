@@ -42,6 +42,7 @@ import javax.xml.validation.SchemaFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.AggregatingClassLoader;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public final class JaxbAdapter<T>
@@ -60,10 +61,16 @@ public final class JaxbAdapter<T>
      * @param namespace the namespace - must not be 'empty'
      * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final String namespace, final ClassLoader classLoader)
+    public JaxbAdapter(final String namespace, ClassLoader classLoader)
     {
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
+
+        if (!(classLoader instanceof AggregatingClassLoader))
+        {
+            // We must use this class loader here to enforce the use of a specific JaxB implementation
+            classLoader = new AggregatingClassLoader(classLoader);
+        }
 
         Marshaller createdWriter;
         Unmarshaller createdReader;
@@ -97,10 +104,16 @@ public final class JaxbAdapter<T>
      * @param persistenceContext the persistent context - must not be 'null'
      * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final XmlPersistenceContext persistenceContext, final ClassLoader classLoader)
+    public JaxbAdapter(final XmlPersistenceContext persistenceContext, ClassLoader classLoader)
     {
         assert persistenceContext != null : "Parameter 'persistenceContext' of method 'JaxbAdapter' must not be null";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
+
+        if (!(classLoader instanceof AggregatingClassLoader))
+        {
+            // We must use this class loader here to enforce the use of a specific JaxB implementation
+            classLoader = new AggregatingClassLoader(classLoader);
+        }
 
         Marshaller createdWriter;
         Unmarshaller createdReader;
@@ -153,7 +166,7 @@ public final class JaxbAdapter<T>
     /** Since JAXB is no longer contained from Java11 onwards, we supply a different implementation and check here that it is used. */
     private void verifyJaxbImplementation(final JAXBContext jaxbContext) throws AssertionError
     {
-        if (!(jaxbContext instanceof com.sun.xml.bind.v2.runtime.JAXBContextImpl))
+        if (!jaxbContext.getClass().getName().equals("com.sun.xml.bind.v2.runtime.JAXBContextImpl"))
         {
             throw new AssertionError("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
                     + " does not match the expected implementation " + "com.sun.xml.bind.v2.runtime.JAXBContextImpl\n"

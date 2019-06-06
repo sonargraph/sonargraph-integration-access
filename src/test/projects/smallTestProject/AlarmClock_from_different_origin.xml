@@ -1,0 +1,2192 @@
+<?xml version="1.0" ?>
+<ns3:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/report" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/export" id="_0" systemId="ee6df0ca7ae86f49238d18fce3851b9X-" name="AlarmClock" version="9.11.0.100" systemPath="D:\sgng\com.hello2morrow.sonargraph.language.provider.java\src\test\smallTestProject_hierarchicalissues\AlarmClock.sonargraph" timestamp="2019-05-29T13:22:39.500+02:00" currentVirtualModel="Modifiable.vm" analyzerExecutionLevel="full">
+	<metaData>
+		<issueProviders>
+			<issueProvider id="_25" name="./Layers.arc" presentationName="./Layers.arc"></issueProvider>
+			<issueProvider id="_26" name="Core" presentationName="Core"></issueProvider>
+		</issueProviders>
+		<issueCategories>
+			<category id="_16" name="ArchitecturalView" presentationName="Architectural View"></category>
+			<category id="_17" name="ArchitectureConsistency" presentationName="Architecture Consistency"></category>
+			<category id="_18" name="ArchitectureDefinition" presentationName="Architecture Definition"></category>
+			<category id="_19" name="ArchitectureViolation" presentationName="Architecture Violation"></category>
+			<category id="_1a" name="CycleGroup" presentationName="Cycle Group"></category>
+			<category id="_1b" name="DuplicateCode" presentationName="Duplicate Code"></category>
+			<category id="_1c" name="InstallationConfiguration" presentationName="Installation Configuration"></category>
+			<category id="_1d" name="PluginBased" presentationName="Plugin Based"></category>
+			<category id="_1e" name="Refactoring" presentationName="Refactoring"></category>
+			<category id="_1f" name="ScriptBased" presentationName="Script Based"></category>
+			<category id="_20" name="ScriptDefinition" presentationName="Script Definition"></category>
+			<category id="_21" name="SystemConfiguration" presentationName="System Configuration"></category>
+			<category id="_22" name="ThresholdViolation" presentationName="Threshold Violation"></category>
+			<category id="_23" name="Todo" presentationName="Todo"></category>
+			<category id="_24" name="Workspace" presentationName="Workspace"></category>
+		</issueCategories>
+		<issueTypes>
+			<issueType severity="Error" category="_19" id="_27" name="ArchitectureViolation" presentationName="Architecture Violation"></issueType>
+			<issueType severity="Error" category="_1a" id="_28" name="CriticalNamespaceCycleGroup" presentationName="Critical Namespace Cycle Group"></issueType>
+			<issueType severity="Warning" category="_1a" id="_29" name="ComponentCycleGroup" presentationName="Component Cycle Group"></issueType>
+			<issueType severity="Warning" category="_1a" id="_2a" name="NamespaceCycleGroup" presentationName="Namespace Cycle Group"></issueType>
+			<issueType severity="Warning" category="_1b" id="_2b" name="DuplicateCodeBlock" presentationName="Duplicate Code Block"></issueType>
+			<issueType severity="Error" category="_20" id="_2c" name="ScriptCompilationError" presentationName="Script Compilation Error"></issueType>
+			<issueType severity="Warning" category="_21" id="_2d" name="PluginNotInstalled" presentationName="Plugin not installed"></issueType>
+			<issueType severity="Info" category="_24" id="_2e" name="WorkspaceDependencyNotDefined" presentationName="Undefined Workspace Dependency"></issueType>
+			<issueType severity="Info" category="_24" id="_2f" name="WorkspaceDependencyNotImplemented" presentationName="Unimplemented Workspace Dependency"></issueType>
+		</issueTypes>
+		<metricProviders>
+			<provider id="_35" name="Core" presentationName="Core"></provider>
+			<provider id="_3c" name="JavaLanguageProvider" presentationName="Java"></provider>
+		</metricProviders>
+		<metricCategories>
+			<category id="_6f" name="Architecture" presentationName="Architecture" orderNumber="0"></category>
+			<category id="_3b" name="CodeAnalysis" presentationName="Code Analysis" orderNumber="1"></category>
+			<category id="_3f" name="Cycle" presentationName="Cycle" orderNumber="2"></category>
+			<category id="_31" name="CohesionAndCoupling" presentationName="Cohesion/Coupling" orderNumber="3"></category>
+			<category id="_49" name="Dependency" presentationName="Dependency" orderNumber="4"></category>
+			<category id="_42" name="Size" presentationName="Size" orderNumber="5"></category>
+			<category id="_32" name="JohnLakos" presentationName="John Lakos" orderNumber="7"></category>
+			<category id="_9a" name="CraigLarman" presentationName="Craig Larman" orderNumber="8"></category>
+			<category id="_37" name="RobertMartin" presentationName="Robert C. Martin" orderNumber="9"></category>
+			<category id="_50" name="ThomasMccabe" presentationName="Thomas J. McCabe" orderNumber="10"></category>
+			<category id="_59" name="MacCormack" presentationName="MacCormack, Rusnak, Baldwin" orderNumber="11"></category>
+		</metricCategories>
+		<metricLevels>
+			<level id="_33" name="System" presentationName="System" orderNumber="0"></level>
+			<level id="_34" name="Module" presentationName="Module" orderNumber="10"></level>
+			<level id="_38" name="JavaPackage" presentationName="Java Package" orderNumber="40"></level>
+			<level id="_4b" name="Component" presentationName="Component" orderNumber="50"></level>
+			<level id="_45" name="SourceFile" presentationName="Source File" orderNumber="60"></level>
+			<level id="_66" name="LogicalProgrammingElement" presentationName="Logical Programming Element" orderNumber="65"></level>
+			<level id="_61" name="Type" presentationName="Type" orderNumber="70"></level>
+			<level id="_51" name="Routine" presentationName="Routine" orderNumber="80"></level>
+		</metricLevels>
+		<metricIds>
+			<metricId id="_30" name="CoreAcd" presentationName="ACD" description="Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components." categories="_31 _32" provider="_35" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_36" name="CoreAbstractnessModule" presentationName="Abstractness (Module)" description="Abstractness according to Robert C. Martin based on module level dependencies. Total number of abstract types divided by the total number of concrete types. The metric has a range of [0,1]. 0 means that the container contains no abstract types. 1 means that the container contains nothing but abstract types." categories="_37" provider="_35" isFloat="true" levels="_38"></metricId>
+			<metricId id="_39" name="CoreAbstractnessSystem" presentationName="Abstractness (System)" description="Abstractness according to Robert C. Martin based on system level dependencies. Total number of abstract types divided by the total number of concrete types. The metric has a range of [0,1]. 0 means that the container contains no abstract types. 1 means that the container contains nothing but abstract types." categories="_37" provider="_35" isFloat="true" levels="_38"></metricId>
+			<metricId id="_3a" name="JavaAverageClassMemberVisibility" presentationName="Average Java Class Member Visibility (%)" description="Average of Java class member visibility in a Java package" categories="_3b" provider="_3c" isFloat="true" levels="_38" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_3d" name="JavaAveragePackagePublicVisibility" presentationName="Average Java Public Visibility (%)" description="Average of Java public visibility for all Java packages in a Java module" categories="_3b" provider="_3c" isFloat="true" levels="_34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_3e" name="CoreBiggestComponentCycleGroup" presentationName="Biggest Component Cycle Group" description="Number of components in biggest cycle." categories="_3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_40" name="JavaBiggestPackageCycleGroup" presentationName="Biggest Java Package Cycle Group" description="Biggest Java package cycle group." categories="_3f" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_41" name="JavaByteCodeInstructions" presentationName="Byte Code Instructions" description="Number of Java byte code instructions." categories="_42" provider="_3c" isFloat="false" levels="_33"></metricId>
+			<metricId id="_43" name="CoreCcd" presentationName="CCD" description="Cumulative component dependency according to John Lakos. Cumulated depends upon values." categories="_31 _32" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_44" name="CoreCodeCommentLines" presentationName="Code Comment Lines" description="Counts all comment lines excluding header comments." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45"></metricId>
+			<metricId id="_46" name="CoreCommentLines" presentationName="Comment Lines" description="Counts all comment lines." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45"></metricId>
+			<metricId id="_47" name="CoreComponentDependenciesToRemoveComponents" presentationName="Component Dependencies to Remove (Components)" description="Number of component dependencies to remove to break up all  component cycles (including ignored)." categories="_3b _3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_48" name="JavaComponentDependenciesToRemovePackages" presentationName="Component Dependencies to Remove (Java Packages)" description="Number of component dependencies to remove to break up all Java package cycle groups (including ignored)." categories="_3b _49" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_4a" name="CoreComponentRankModule" presentationName="Component Rank (Module)" description="Component Rank is based on Google's page rank algorithm. The total componet rank over all components in the selected group adds up to 100. The higher the rank, the more 'important' a component is in a system. Having many incoming dependencies or being referenced by other important components increases rank." categories="_3b" provider="_35" isFloat="true" levels="_4b"></metricId>
+			<metricId id="_4c" name="CoreComponentRankSystem" presentationName="Component Rank (System)" description="Component Rank is based on Google's page rank algorithm. The total componet rank over all components in the selected group adds up to 100. The higher the rank, the more 'important' a component is in a system. Having many incoming dependencies or being referenced by other important components increases rank." categories="_3b" provider="_35" isFloat="true" levels="_4b"></metricId>
+			<metricId id="_4d" name="CoreCyclicityComponents" presentationName="Cyclicity (Components)" description="Cumulated cyclicity of component cycles." categories="_3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_4e" name="JavaCyclicityPackages" presentationName="Cyclicity (Java Packages)" description="Cumulated cyclicity of Java package cycle groups." categories="_3f" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_4f" name="CoreCcn" presentationName="Cyclomatic Complexity" description="Cyclomatic complexity according to Thomas J. McCabe. Number of decision points in a method plus one for the method entry." categories="_50" provider="_35" isFloat="false" levels="_51" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_52" name="CoreDependsUponModule" presentationName="Depends Upon (Module)" description="Depends upon module level according to DependsOn by John Lakos. Total number of components that a component directly and indirectly depends upon in containing module." categories="_31 _32" provider="_35" isFloat="false" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_53" name="CoreDependsUponSystem" presentationName="Depends Upon (System)" description="Depends upon system level according to DependsOn by John Lakos. Total number of components that a component directly and indirectly depends upon in system." categories="_31 _32" provider="_35" isFloat="false" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_54" name="CoreDistanceModule" presentationName="Distance (Module)" description="Distance according to Robert C. Martin based on module level dependencies. Abstractness + Instability - 1. The metric has a range of [-1,1]. This is a variation of the original metric definition. A negative sign means 'in the zone of pain' and a positive sign means 'in the zone of uselessness'. A 'good' value should be around 0." categories="_37" provider="_35" isFloat="true" levels="_38" bestValue="0.0"></metricId>
+			<metricId id="_55" name="CoreDistanceSystem" presentationName="Distance (System)" description="Distance according to Robert C. Martin based on system level dependencies. Abstractness + Instability - 1. The metric has a range of [-1,1]. This is a variation of the original metric definition. A negative sign means 'in the zone of pain' and a positive sign means 'in the zone of uselessness'. A 'good' value should be around 0." categories="_37" provider="_35" isFloat="true" levels="_38" bestValue="0.0"></metricId>
+			<metricId id="_56" name="CoreExtendedCcn" presentationName="Extended Cyclomatic Complexity" description="As cyclomatic complexity adding the number of logical '&amp;&amp;' and '||' operations." categories="_50" provider="_35" isFloat="false" levels="_51" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_57" name="CoreMlFanInModule" presentationName="Fan In Maintainability Level (Module)" description="Percentage of higher level components in the same module that depend directly or indirectly on this component." categories="_31" provider="_35" isFloat="true" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_58" name="CoreFanInModule" presentationName="Fan In Visibility (Module)" description="Percentage of components in the same module that depend directly or indirectly on this component." categories="_31 _59" provider="_35" isFloat="true" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_5a" name="CoreFanInSystem" presentationName="Fan In Visibility (System)" description="Percentage of internal components in the system that depend directly or indirectly on this component." categories="_31 _59" provider="_35" isFloat="true" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_5b" name="CoreFanOutModule" presentationName="Fan Out Visibility (Module)" description="Percentage of components in the same module that this component depends upon." categories="_31 _59" provider="_35" isFloat="true" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_5c" name="CoreFanOutSystem" presentationName="Fan Out Visibility (System)" description="Percentage of internal components in the system that this component depends upon." categories="_31 _59" provider="_35" isFloat="true" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_5d" name="CoreMaxAcd" presentationName="Highest ACD" description="Highest ACD." categories="_31 _32" provider="_35" isFloat="true" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_5e" name="CoreInstabilityModule" presentationName="Instability (Module)" description="Instability according to Robert C. Martin based on module level dependencies. The metric has a range of [0,1]. If there are no outgoing dependencies, then the Instability will be 0 and the measured element is stable. If there are no incoming dependencies, then the Instability will be 1 and the measured element is instable. Stable means that the element is not so easy to be changed. Instable means that it is easier to be changed." categories="_37" provider="_35" isFloat="true" levels="_38 _4b" bestValue="0.0" worstValue="1.0"></metricId>
+			<metricId id="_5f" name="CoreInstabilitySysytem" presentationName="Instability (System)" description="Instability according to Robert C. Martin based on system level dependencies. The metric has a range of [0,1]. If there are no outgoing dependencies, then I will be 0 and the measured element is stable. If there are no incoming dependencies, then I will be 1 and the measured element is instable. Stable means that the element is not so easy to be changed. Instable means that it is easier to be changed. " categories="_37" provider="_35" isFloat="true" levels="_38 _4b" bestValue="0.0" worstValue="1.0"></metricId>
+			<metricId id="_60" name="JavaClassMemberVisibility" presentationName="Java Member Visibility (%)" description="Percentage of non-private Java members in a class" categories="_3b" provider="_3c" isFloat="true" levels="_61" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_62" name="JavaPackagePublicVisibility" presentationName="Java Public Visibility (%)" description="Percentage of public Java types in a Java package" categories="_3b" provider="_3c" isFloat="true" levels="_38" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_63" name="CoreLcom4" presentationName="LCOM4" description="Determines the number of components in a class. A component is composed of fields, methods and types defined top level including all their nested programming elements. Constructors, destructors, empty, abstract and overridden methods of classes are not included in the calculation. The metric represents the unrelated portions of code in a class. A value of 1 indicates the highest cohesion possible - which is normally desirable. High values might indicate that a class is a candidate for a refactoring. Consider that utility classes by nature have high LCOM4 values." categories="_31" provider="_35" isFloat="false" levels="_61" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_64" name="CoreLinesOfCode" presentationName="Lines of Code" description="Lines of code excluding blank and comment lines." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45"></metricId>
+			<metricId id="_65" name="CoreLogicalCohesionModule" presentationName="Logical cohesion (Module)" description="Number of dependencies 'to' and 'from' other top-level logical programming elements in the same namespace on module level." categories="_31" provider="_35" isFloat="false" levels="_66" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_67" name="CoreLogicalCohesionSystem" presentationName="Logical cohesion (System)" description="Number of dependencies 'to' and 'from' other top-level logical programming elements in the same namespace on system level." categories="_31" provider="_35" isFloat="false" levels="_66" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_68" name="CoreLogicalCouplingModule" presentationName="Logical coupling (Module)" description="Number of dependencies 'to' and 'from' other top-level logical programming elements in other namespaces on module level." categories="_31" provider="_35" isFloat="false" levels="_66" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_69" name="CoreLogicalCouplingSystem" presentationName="Logical coupling (System)" description="Number of dependencies 'to' and 'from' other top-level logical programming elements in other namespaces on system level." categories="_31" provider="_35" isFloat="false" levels="_66" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_6a" name="CoreMaintainabilityLevel" presentationName="Maintainability Level" description="This metric estimates maintainability as a percentage. 100% is tbe best possible value. To do that it looks at the deppendency structure between components (source files in most languages). Cyclic dependencies and low level classes with a lot of incoming dependencies have a negative influence on the metric. Keeping good vertical boundaries and not having too many layers will have a positive influence. It is also recommended to have as many components as possible that are independent, i.e. have no incoming dependencies and therefore can be changed without influencing the rest of the system. In Java and C# the metric also considers the value of the relative cyclicity metric for packages/namespaces. If you have large cycle groups they will have a negative influence on the metric value." categories="_31" provider="_35" isFloat="true" levels="_33 _34" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_6b" name="CoreModifiedCcn" presentationName="Modified Cyclomatic Complexity" description="As cyclomatic complexity but switch statements only add 1 independent from the number of cases." categories="_50" provider="_35" isFloat="false" levels="_51" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_6c" name="CoreModifiedExtendedCcn" presentationName="Modified Extended Cyclomatic Complexity" description="As cyclomatic complexity but switch statements only add 1 independent from the number of cases and adding the number of logical '&amp;&amp;' and '||' operations." categories="_50" provider="_35" isFloat="false" levels="_51" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_6d" name="CoreNccd" presentationName="NCCD" description="Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more vertical design. A value less than 1 indicates a more horizontal design." categories="_31 _32" provider="_35" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_6e" name="CoreArtifactCount" presentationName="Number of Artifacts" description="Number of active architecture artifacts" categories="_6f" provider="_35" isFloat="false" levels="_33"></metricId>
+			<metricId id="_70" name="CoreDuplicates" presentationName="Number of Code Duplicates" description="Number of duplicated code blocks." categories="_3b" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_71" name="CoreComponentCycleGroups" presentationName="Number of Component Cycle Groups" description="Number of component cycles." categories="_3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_72" name="CoreComponents" presentationName="Number of Components" description="Number of components." categories="_42" provider="_35" isFloat="false" levels="_33 _34"></metricId>
+			<metricId id="_73" name="CoreComponentsIgnoringIssues" presentationName="Number of Components (Ignoring Issues)" description="Number of components ignoring issues." categories="_42" provider="_35" isFloat="false" levels="_33 _34"></metricId>
+			<metricId id="_74" name="CoreComponentsInDeprecatedArtifacts" presentationName="Number of Components in Deprecated Artifacts" description="Number of components that are assigned to deprecated artifact" categories="_6f" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_75" name="CoreViolatingComponents" presentationName="Number of Components with Violations" description="Number of components that contain architecture violations" categories="_6f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_76" name="CoreCyclicComponents" presentationName="Number of Cyclic Components" description="Number of cyclic components." categories="_3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_77" name="JavaCyclicPackages" presentationName="Number of Cyclic Java Packages" description="Number of cyclic Java packages." categories="_3f" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_78" name="CoreCyclicModules" presentationName="Number of Cyclic Modules" description="Number of cyclic modules." categories="_3f" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_79" name="CoreDuplicatedLines" presentationName="Number of Duplicated Code Lines" description="Number of duplicated lines in duplicated code blocks." categories="_3b" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7a" name="CoreEmptyArtifactCount" presentationName="Number of Empty Artifacts" description="Number of active architecture artifacts that are empty" categories="_6f" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7b" name="CoreIgnoredDuplicates" presentationName="Number of Ignored Code Duplicates" description="Number of ignored duplicated code blocks." categories="_3b" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7c" name="CoreIgnoredCyclicComponents" presentationName="Number of Ignored Cyclic Components" description="Number of ignored cyclic components." categories="_3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7d" name="JavaIgnoredCyclicPackages" presentationName="Number of Ignored Cyclic Java Packages" description="Number of ignored cyclic Java packages." categories="_3f" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7e" name="CoreIgnoredThresholdViolations" presentationName="Number of Ignored Threshold Violations" description="Number of ignored threshold violations." categories="_3b" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_7f" name="CoreIgnoredViolationsParserDependencies" presentationName="Number of Ignored Violations (Parser Dependencies)" description="Number of parser dependencies in ignored architecture violations" categories="_6f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_80" name="CoreIncomingDependenciesModule" presentationName="Number of Incoming Dependencies (Module)" description="Number of incoming dependencies on module level." categories="_37" provider="_35" isFloat="false" levels="_38 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_81" name="CoreIncomingDependenciesSystem" presentationName="Number of Incoming Dependencies (System)" description="Number of incoming dependencies on system level." categories="_37" provider="_35" isFloat="false" levels="_38 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_82" name="JavaPackageCycleGroups" presentationName="Number of Java Package Cycle Groups" description="Number of Java package cycle groups." categories="_3f" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_83" name="JavaPackages" presentationName="Number of Java Packages" description="Number of Java packages containing types." categories="_42" provider="_3c" isFloat="false" levels="_33 _34"></metricId>
+			<metricId id="_84" name="CoreElementsInDeprecatedArtifacts" presentationName="Number of Logical Elements in Deprecated Artifacts" description="Number of logical programming elements that are assigned to deprecated artifact" categories="_6f" provider="_35" isFloat="false" levels="_33" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_85" name="CoreMethods" presentationName="Number of Methods" description="Number of member functions." categories="_42" provider="_35" isFloat="false" levels="_61"></metricId>
+			<metricId id="_86" name="CoreModules" presentationName="Number of Modules" description="Number of modules." categories="_42" provider="_35" isFloat="false" levels="_33"></metricId>
+			<metricId id="_87" name="CoreOutgoingDependenciesModule" presentationName="Number of Outgoing Dependencies (Module)" description="Number of outgoing dependencies on module level." categories="_37" provider="_35" isFloat="false" levels="_38 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_88" name="CoreOutgoingDependenciesSystem" presentationName="Number of Outgoing Dependencies (System)" description="Number of outgoing dependencies on system level." categories="_37" provider="_35" isFloat="false" levels="_38 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_89" name="CoreParameters" presentationName="Number of Parameters" description="Number of parameters." categories="_42" provider="_35" isFloat="false" levels="_51"></metricId>
+			<metricId id="_8a" name="CoreStatements" presentationName="Number of Statements" description="Counts all statements." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45 _61 _51"></metricId>
+			<metricId id="_8b" name="CoreThresholdViolations" presentationName="Number of Threshold Violations" description="Number of threshold violations." categories="_3b" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_8c" name="CoreTypesModule" presentationName="Number of Types (Module)" description="Number of types (classes, enums or similar) in container on module level." categories="_42" provider="_35" isFloat="false" levels="_38 _4b"></metricId>
+			<metricId id="_8d" name="CoreTypesSystem" presentationName="Number of Types (System)" description="Number of types (classes, enums or similar) in container on system level." categories="_42" provider="_35" isFloat="false" levels="_38"></metricId>
+			<metricId id="_8e" name="CoreUnassignedLogicalElements" presentationName="Number of Unassigned Logical Elements" description="Number of internal logical elements that are not assigned to any artifact" categories="_6f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_8f" name="CoreUnassignedComponents" presentationName="Number of Unassigned Physical Components" description="Number of internal physical components that are not assigned to any artifact" categories="_6f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_90" name="CoreViolationsComponentDependencies" presentationName="Number of Violations (Component Dependencies)" description="Number of architecture violating component dependencies" categories="_6f" provider="_35" isFloat="false" levels="_33 _34 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_91" name="CoreViolationsParserDependencies" presentationName="Number of Violations (Parser Dependencies)" description="Number of architecture violating parser dependencies" categories="_6f" provider="_35" isFloat="false" levels="_33 _34 _4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_92" name="CoreAllViolatingComponents" presentationName="Number of all Components with Violations" description="Number of components that contain architecture violations (including ignored)" categories="_6f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_93" name="CoreParserDependenciesToRemoveComponents" presentationName="Parser Dependencies to Remove (Components)" description="Number of code lines to change to break up all  component cycles (including ignored)." categories="_3b _3f" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_94" name="JavaParserDependenciesToRemovePackages" presentationName="Parser Dependencies to Remove (Java Packages)" description="Number of code lines to change to break up all Java package cycle groups (including ignored)." categories="_3b _49" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_95" name="CorePhysicalCohesion" presentationName="Physical cohesion" description="Number of dependencies 'to' and 'from' other components in the same module." categories="_31" provider="_35" isFloat="false" levels="_4b" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_96" name="CorePhysicalCoupling" presentationName="Physical coupling" description="Number of dependencies 'to' and 'from' other components in other modules." categories="_31" provider="_35" isFloat="false" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_97" name="CorePropagationCost" presentationName="Propagation Cost" description="Propagation cost metric according to MacCormack, Rusnak and Baldwin." categories="_31 _59" provider="_35" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_98" name="CoreRacd" presentationName="RACD" description="Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent)." categories="_31 _32" provider="_35" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_99" name="CoreRelationalCohesionModule" presentationName="Relational cohesion (Module)" description="Relation cohesion according to Craig Larman (adapted). Number of internal namespace dependencies divided by the number of top-level logical programming elements in the same namespace on module level. Higher numbers suggest more cohesion. " categories="_9a _31" provider="_35" isFloat="true" levels="_38" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_9b" name="CoreRelationalCohesionSystem" presentationName="Relational cohesion (System)" description="Relation cohesion according to Craig Larman (adapted). Number of internal namespace dependencies divided by the number of top-level logical programming elements in the same namespace on system level. Higher numbers suggest more cohesion. " categories="_9a _31" provider="_35" isFloat="true" levels="_38" bestValue="INF" worstValue="0.0"></metricId>
+			<metricId id="_9c" name="CoreRelativeCyclicityComponents" presentationName="Relative Cyclicity (Components)" description="Relative component cyclicity in percent." categories="_3f" provider="_35" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_9d" name="JavaRelativeCyclicityPackages" presentationName="Relative Cyclicity (Java Packages)" description="Relative Java package cyclicity in percent." categories="_3f" provider="_3c" isFloat="true" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_9e" name="CoreSourceElementCount" presentationName="Source Element Count" description="Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45 _61"></metricId>
+			<metricId id="_9f" name="CoreStructuralDebtIndexComponents" presentationName="Structural Debt Index (Components)" description="Cumulative structural debt index of component cycles (including ignored)." categories="_3b" provider="_35" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_a0" name="JavaStructuralDebtIndexPackages" presentationName="Structural Debt Index (Java Packages)" description="Cumulative structural debt index of all Java package cycle groups (including ignored)." categories="_3b" provider="_3c" isFloat="false" levels="_33 _34" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_a1" name="CoreTotalLines" presentationName="Total Lines" description="Counts all lines including empty and comment lines." categories="_42" provider="_35" isFloat="false" levels="_33 _34 _45"></metricId>
+			<metricId id="_a2" name="CoreUsedFromModule" presentationName="Used From (Module)" description="Number of all depending elements (direct and indirect) + 1 (including self) in containing module." categories="_31 _32" provider="_35" isFloat="false" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+			<metricId id="_a3" name="CoreUsedFromSystem" presentationName="Used From (System)" description="Number of all depending elements (direct and indirect) + 1 (including self) in system." categories="_31 _32" provider="_35" isFloat="false" levels="_4b" bestValue="0.0" worstValue="INF"></metricId>
+		</metricIds>
+	</metaData>
+	<features>
+		<feature name="Architecture" presentationName="Architecture" licensed="true"></feature>
+		<feature name="CohesionAndCouplingMetrics" presentationName="Cohesion And Coupling Metrics" licensed="true"></feature>
+		<feature name="CycleBreakUp" presentationName="Cycle Break Up" licensed="true"></feature>
+		<feature name="DuplicateCode" presentationName="Duplicate Code" licensed="true"></feature>
+		<feature name="Platform" presentationName="Platform" licensed="true"></feature>
+		<feature name="Plugins" presentationName="Plugins" licensed="true"></feature>
+		<feature name="Reporting" presentationName="Reporting" licensed="true"></feature>
+		<feature name="Scripts" presentationName="Scripts" licensed="true"></feature>
+		<feature name="ScriptsAutomated" presentationName="Scripts Automated" licensed="true"></feature>
+		<feature name="Snapshots" presentationName="Snapshots" licensed="true"></feature>
+		<feature name="Systems" presentationName="Systems" licensed="true"></feature>
+		<feature name="VirtualModels" presentationName="Virtual Models" licensed="true"></feature>
+	</features>
+	<analyzers>
+		<analyzer description="Checks for architecture violations" licensed="true" executionLevel="minimal" executed="true" id="_1" name="ArchitectureCheck" presentationName="Architecture Check"></analyzer>
+		<analyzer description="Calculates number of violatong/ignored parser dependencies" licensed="true" executionLevel="minimal" executed="true" id="_2" name="ArchitectureCheckMetrics" presentationName="Architecture Metrics"></analyzer>
+		<analyzer description="Calculates cohesion and coupling metrics" licensed="true" executionLevel="full" executed="true" id="_10" name="CohesionAndCouplingMetrics" presentationName="Cohesion and Coupling Metrics"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on module level" licensed="true" executionLevel="advanced" executed="true" id="_e" name="ComponentCyclesModule" presentationName="Component Cycles (Module)"></analyzer>
+		<analyzer description="Computes component cycle metrics on module level" licensed="true" executionLevel="advanced" executed="true" id="_c" name="ComponentCyclesModuleMetrics" presentationName="Component Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on system level" licensed="true" executionLevel="advanced" executed="true" id="_f" name="ComponentCyclesSystem" presentationName="Component Cycles (System)"></analyzer>
+		<analyzer description="Computes component cycle metrics on system level" licensed="true" executionLevel="advanced" executed="true" id="_d" name="ComponentCyclesSystemMetrics" presentationName="Component Cycle Metrics (System)"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on module level" licensed="true" executionLevel="full" executed="true" id="_13" name="CumulateDependenciesModule" presentationName="Module Dependencies"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on system level" licensed="true" executionLevel="full" executed="true" id="_15" name="CumulateDependenciesSystem" presentationName="System Dependencies"></analyzer>
+		<analyzer description="Cumulates sizes" licensed="true" executionLevel="minimal" executed="true" id="_3" name="CumulateSize" presentationName="Cumulate size"></analyzer>
+		<analyzer description="Search duplicate code on system level" licensed="true" executionLevel="full" executed="true" id="_11" name="DuplicateCode" presentationName="Duplicate Code"></analyzer>
+		<analyzer description="Calculates duplicate code metrics" licensed="true" executionLevel="full" executed="true" id="_12" name="DuplicateCodeMetrics" presentationName="Duplicate Code Metrics"></analyzer>
+		<analyzer description="Computes Java visibility metrics" licensed="true" executionLevel="basic" executed="true" id="_5" name="JavaVisibilityMetrics" presentationName="Java Visibility Metrics"></analyzer>
+		<analyzer description="Calculates maintainability level metrics" licensed="true" executionLevel="advanced" executed="true" id="_b" name="MaintainabilityLevel" presentationName="Calculate Maintainability Level"></analyzer>
+		<analyzer description="Checks for metric threshold violations" licensed="true" executionLevel="minimal" executed="true" id="_4" name="MetricThresholds" presentationName="Metric Thresholds"></analyzer>
+		<analyzer description="Analyzes module cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_6" name="ModuleCyclesSystem" presentationName="Module Cycles"></analyzer>
+		<analyzer description="Analyzes package cycles on module level" licensed="true" executionLevel="basic" executed="true" id="_9" name="PackageCyclesModule" presentationName="Package Cycles (Module)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on module level" licensed="true" executionLevel="basic" executed="true" id="_7" name="PackageCyclesModuleMetrics" presentationName="Package Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes package cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_a" name="PackageCyclesSystem" presentationName="Package Cycles (System)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on system level" licensed="true" executionLevel="basic" executed="true" id="_8" name="PackageCyclesSystemMetrics" presentationName="Package Cycle Metrics (System)"></analyzer>
+		<analyzer description="Runs scripts configured for automated execution" licensed="true" executionLevel="full" executed="true" id="_14" name="ScriptRunner" presentationName="Script Runner"></analyzer>
+	</analyzers>
+	<plugins></plugins>
+	<duplicateCodeConfiguration>
+		<entry>MinimalLineLength:4</entry>
+		<entry>MinimalBlockLength:25</entry>
+		<entry>MaximalNumberOfCopies:100</entry>
+		<entry>MaximalTolerancePerEdit:3</entry>
+		<entry>MaximalRelativeTolerancePercentage:35</entry>
+	</duplicateCodeConfiguration>
+	<scriptRunnerConfiguration>
+		<entry>./CountLinesOfCode.xml:Alarm</entry>
+	</scriptRunnerConfiguration>
+	<architectureCheckConfiguration>
+		<entry>./Layers.arc</entry>
+		<entry>./test.arc</entry>
+	</architectureCheckConfiguration>
+	<metricThresholds>
+		<threshold id="_a4" metricId="_30" metricLevel="_34" upperThreshold="48"></threshold>
+		<threshold id="_a5" metricId="_30" metricLevel="_33" upperThreshold="75"></threshold>
+		<threshold id="_a6" metricId="_6b" metricLevel="_51" upperThreshold="25"></threshold>
+		<threshold id="_a7" metricId="_64" metricLevel="_45" upperThreshold="900"></threshold>
+	</metricThresholds>
+	<elementKinds>
+		<elementKind id="_c7" standardKind="JavaNonInitializer" presentationKind="Java Non Initializer"></elementKind>
+		<elementKind id="_ba" standardKind="JavaLogicalModuleNamespace" presentationKind="Package"></elementKind>
+		<elementKind id="_ab" standardKind="JavaClassRootDirectoryPath" presentationKind="Java Class Root Directory/Archive"></elementKind>
+		<elementKind id="_10f" standardKind="JavaLogicalSystemNamespace" presentationKind="Package"></elementKind>
+		<elementKind id="_111" standardKind="LogicalSystemProgrammingElement" presentationKind="Logical System Programming Element"></elementKind>
+		<elementKind id="_c2" standardKind="JavaInternalCompilationUnit" presentationKind="Java Internal Compilation Unit"></elementKind>
+		<elementKind id="_be" standardKind="LogicalModuleProgrammingElement" presentationKind="Logical Module Programming Element"></elementKind>
+		<elementKind id="_a9" standardKind="JavaModule" presentationKind="Java Module"></elementKind>
+		<elementKind id="_b8" standardKind="JavaExternal" presentationKind="Java External"></elementKind>
+		<elementKind id="_10d" standardKind="GroovyScript" presentationKind="Script File"></elementKind>
+		<elementKind id="_c0" standardKind="JavaType" presentationKind="Java Type"></elementKind>
+		<elementKind id="_109" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+		<elementKind id="_10b" standardKind="PluginConfiguration" presentationKind="Plugin Configuration"></elementKind>
+		<elementKind id="_bc" standardKind="JavaPackageFragment" presentationKind="Package"></elementKind>
+		<elementKind id="_ad" standardKind="JavaSourceRootDirectoryPath" presentationKind="Java Source Root Directory/Archive"></elementKind>
+		<elementKind id="_cc" standardKind="JavaStaticBlock" presentationKind="Java Static Block"></elementKind>
+		<elementKind id="_c9" standardKind="JavaConstructor" presentationKind="Java Constructor"></elementKind>
+	</elementKinds>
+	<workspace>
+		<workspaceFilter description="Exclude files from the workspace" information="Excluded 0 files(s)" numberOfExcludedElements="0"></workspaceFilter>
+		<productionCodeFilter description="Exclude internal components containing test code" information="Excluded 0 internal component(s) (processed 10)" numberOfExcludedElements="0" numberOfIncludedElements="10"></productionCodeFilter>
+		<issueFilter description="Ignore issues of internal components containing legacy/generated code" information="Ignoring issues of 0 internal component(s) (processed 10)" numberOfExcludedElements="0" numberOfIncludedElements="10"></issueFilter>
+		<module language="Java" description="Main Project" kind="_a9" fqName="Workspace:Application" id="_a8" name="Application" presentationName="Application">
+			<rootDirectory kind="_ab" fqName="Workspace:Application:Class|./Application/target/classes" id="_aa" name="Class|./Application/target/classes" presentationName="./Application/target/classes"></rootDirectory>
+			<rootDirectory kind="_ad" fqName="Workspace:Application:./Application/src/main/java" id="_ac" name="./Application/src/main/java" presentationName="./Application/src/main/java">
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/application" kind="_bc" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application" id="_bb" name="application" presentationName="com.h2m.alarm.application"></physicalRecursiveElement>
+				<sourceElement kind="_c2" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java" id="_c1" name="Main.java" presentationName="./com/h2m/alarm/application/Main.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Singleton.java" id="_c5" name="Singleton.java" presentationName="./com/h2m/alarm/application/Singleton.java"></sourceElement>
+				<programmingElement line="8" kind="_c0" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main" source="_c1" id="_bf" name="Main" presentationName="com.h2m.alarm.application.Main"></programmingElement>
+				<programmingElement line="3" kind="_c0" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Singleton.java:Singleton" source="_c5" id="_c4" name="Singleton" presentationName="com.h2m.alarm.application.Singleton"></programmingElement>
+				<programmingElement line="10" kind="_c7" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])" source="_c1" id="_c6" name="main(java.lang.String[])" presentationName="com.h2m.alarm.application.Main.main(String[]) : void"></programmingElement>
+				<programmingElement line="11" kind="_c9" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Singleton.java:Singleton:Singleton()" source="_c5" id="_c8" name="Singleton()" presentationName="com.h2m.alarm.application.Singleton.Singleton()"></programmingElement>
+				<programmingElement line="16" kind="_c7" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Singleton.java:Singleton:getInstance()" source="_c5" id="_ca" name="getInstance()" presentationName="com.h2m.alarm.application.Singleton.getInstance() : Singleton"></programmingElement>
+				<programmingElement line="7" kind="_cc" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Singleton.java:Singleton:static" source="_c5" id="_cb" name="static" presentationName="com.h2m.alarm.application.Singleton.static"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module language="Java" description="" kind="_a9" fqName="Workspace:Foundation" id="_ae" name="Foundation" presentationName="Foundation">
+			<rootDirectory kind="_ab" fqName="Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes" id="_af" name="Class|./AlarmClock/Foundation/target/classes" presentationName="./AlarmClock/Foundation/target/classes"></rootDirectory>
+			<rootDirectory kind="_ad" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java" id="_b0" name="./AlarmClock/Foundation/src/main/java" presentationName="./AlarmClock/Foundation/src/main/java">
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/application" kind="_bc" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:alarm:application" id="_ce" name="application" presentationName="com.h2m.alarm.application"></physicalRecursiveElement>
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/common/observer" kind="_bc" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer" id="_d3" name="observer" presentationName="com.h2m.common.observer"></physicalRecursiveElement>
+				<sourceElement kind="_c2" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:alarm:application:TestForNamespaceCycle.java" id="_d1" name="TestForNamespaceCycle.java" presentationName="./com/h2m/alarm/application/TestForNamespaceCycle.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java" id="_d6" name="DuplicateInFoundation.java" presentationName="./com/h2m/common/observer/DuplicateInFoundation.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java" id="_d9" name="Observable.java" presentationName="./com/h2m/common/observer/Observable.java"></sourceElement>
+				<programmingElement line="3" kind="_c0" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:alarm:application:TestForNamespaceCycle.java:TestForNamespaceCycle" source="_d1" id="_d0" name="TestForNamespaceCycle" presentationName="com.h2m.alarm.application.TestForNamespaceCycle"></programmingElement>
+				<programmingElement line="5" kind="_c0" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java:DuplicateInFoundation" source="_d6" id="_d5" name="DuplicateInFoundation" presentationName="com.h2m.common.observer.DuplicateInFoundation"></programmingElement>
+				<programmingElement line="8" kind="_c0" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable" source="_d9" id="_d8" name="Observable" presentationName="com.h2m.common.observer.Observable"></programmingElement>
+				<programmingElement line="5" kind="_c7" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:alarm:application:TestForNamespaceCycle.java:TestForNamespaceCycle:test()" source="_d1" id="_da" name="test()" presentationName="com.h2m.alarm.application.TestForNamespaceCycle.test() : int"></programmingElement>
+				<programmingElement line="9" kind="_c9" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java:DuplicateInFoundation:DuplicateInFoundation()" source="_d6" id="_db" name="DuplicateInFoundation()" presentationName="com.h2m.common.observer.DuplicateInFoundation.DuplicateInFoundation()"></programmingElement>
+				<programmingElement line="55" kind="_c7" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:DuplicateInFoundation.java:DuplicateInFoundation:getCount()" source="_d6" id="_dc" name="getCount()" presentationName="com.h2m.common.observer.DuplicateInFoundation.getCount() : int"></programmingElement>
+				<programmingElement line="10" kind="_c0" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver" source="_d9" id="_dd" name="IObserver" presentationName="com.h2m.common.observer.Observable$IObserver"></programmingElement>
+				<programmingElement line="12" kind="_c7" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver:handleEvent(com.h2m.common.observer.Observable,java.lang.String)" source="_d9" id="_de" name="handleEvent(com.h2m.common.observer.Observable,java.lang.String)" presentationName="com.h2m.common.observer.Observable$IObserver.handleEvent(Observable,String) : void"></programmingElement>
+				<programmingElement line="21" kind="_c9" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:Observable(java.lang.String[])" source="_d9" id="_df" name="Observable(java.lang.String[])" presentationName="com.h2m.common.observer.Observable.Observable(String[])"></programmingElement>
+				<programmingElement line="32" kind="_c7" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)" source="_d9" id="_e0" name="addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)" presentationName="com.h2m.common.observer.Observable.addObserver(Observable$IObserver,String) : void"></programmingElement>
+				<programmingElement line="41" kind="_c7" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:notifyAboutEvent(java.lang.String)" source="_d9" id="_e1" name="notifyAboutEvent(java.lang.String)" presentationName="com.h2m.common.observer.Observable.notifyAboutEvent(String) : void"></programmingElement>
+				<programmingElement line="17" kind="_cc" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:static" source="_d9" id="_e2" name="static" presentationName="com.h2m.common.observer.Observable.static"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module language="Java" description="" kind="_a9" fqName="Workspace:Model" id="_b1" name="Model" presentationName="Model">
+			<rootDirectory kind="_ab" fqName="Workspace:Model:Class|./AlarmClock/Model/target/classes" id="_b2" name="Class|./AlarmClock/Model/target/classes" presentationName="./AlarmClock/Model/target/classes"></rootDirectory>
+			<rootDirectory kind="_ad" fqName="Workspace:Model:./AlarmClock/Model/src/main/java" id="_b3" name="./AlarmClock/Model/src/main/java" presentationName="./AlarmClock/Model/src/main/java">
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/model" kind="_bc" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model" id="_e4" name="model" presentationName="com.h2m.alarm.model"></physicalRecursiveElement>
+				<sourceElement kind="_c2" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java" id="_e7" name="AlarmClock.java" presentationName="./com/h2m/alarm/model/AlarmClock.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:DuplicateInModel.java" id="_ea" name="DuplicateInModel.java" presentationName="./com/h2m/alarm/model/DuplicateInModel.java"></sourceElement>
+				<programmingElement line="5" kind="_c0" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock" source="_e7" id="_e6" name="AlarmClock" presentationName="com.h2m.alarm.model.AlarmClock"></programmingElement>
+				<programmingElement line="3" kind="_c0" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:DuplicateInModel.java:DuplicateInModel" source="_ea" id="_e9" name="DuplicateInModel" presentationName="com.h2m.alarm.model.DuplicateInModel"></programmingElement>
+				<programmingElement line="13" kind="_c9" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()" source="_e7" id="_eb" name="AlarmClock()" presentationName="com.h2m.alarm.model.AlarmClock.AlarmClock()"></programmingElement>
+				<programmingElement kind="_c7" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:notifyAboutEvent(java.lang.String)" source="_e7" id="_ec" name="notifyAboutEvent(java.lang.String)" presentationName="com.h2m.alarm.model.AlarmClock.notifyAboutEvent(String) : void"></programmingElement>
+				<programmingElement line="18" kind="_c7" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()" source="_e7" id="_ed" name="run()" presentationName="com.h2m.alarm.model.AlarmClock.run() : void"></programmingElement>
+				<programmingElement line="7" kind="_c9" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:DuplicateInModel.java:DuplicateInModel:DuplicateInModel()" source="_ea" id="_ee" name="DuplicateInModel()" presentationName="com.h2m.alarm.model.DuplicateInModel.DuplicateInModel()"></programmingElement>
+				<programmingElement line="53" kind="_c7" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:DuplicateInModel.java:DuplicateInModel:getCount()" source="_ea" id="_ef" name="getCount()" presentationName="com.h2m.alarm.model.DuplicateInModel.getCount() : int"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module language="Java" description="Second-level module containing other modules." kind="_a9" fqName="Workspace:View" id="_b4" name="View" presentationName="View">
+			<rootDirectory kind="_ab" fqName="Workspace:View:Class|./AlarmClock/View/target/classes" id="_b5" name="Class|./AlarmClock/View/target/classes" presentationName="./AlarmClock/View/target/classes"></rootDirectory>
+			<rootDirectory kind="_ad" fqName="Workspace:View:./AlarmClock/View/src/main/java" id="_b6" name="./AlarmClock/View/src/main/java" presentationName="./AlarmClock/View/src/main/java">
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/presentation" kind="_bc" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation" id="_f1" name="presentation" presentationName="com.h2m.alarm.presentation"></physicalRecursiveElement>
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/presentation/console" kind="_bc" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console" id="_f6" name="console" presentationName="com.h2m.alarm.presentation.console"></physicalRecursiveElement>
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/presentation/file" kind="_bc" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file" id="_fb" name="file" presentationName="com.h2m.alarm.presentation.file"></physicalRecursiveElement>
+				<sourceElement kind="_c2" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java" id="_f4" name="AlarmHandler.java" presentationName="./com/h2m/alarm/presentation/AlarmHandler.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java" id="_f9" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/console/AlarmToConsole.java"></sourceElement>
+				<sourceElement kind="_c2" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java" id="_fe" name="AlarmToFile.java" presentationName="./com/h2m/alarm/presentation/file/AlarmToFile.java"></sourceElement>
+				<programmingElement line="9" kind="_c0" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler" source="_f4" id="_f3" name="AlarmHandler" presentationName="com.h2m.alarm.presentation.AlarmHandler"></programmingElement>
+				<programmingElement line="6" kind="_c0" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole" source="_f9" id="_f8" name="AlarmToConsole" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole"></programmingElement>
+				<programmingElement line="10" kind="_c0" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile" source="_fe" id="_fd" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.file.AlarmToFile"></programmingElement>
+				<programmingElement line="17" kind="_c9" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:AlarmHandler()" source="_f4" id="_ff" name="AlarmHandler()" presentationName="com.h2m.alarm.presentation.AlarmHandler.AlarmHandler()"></programmingElement>
+				<programmingElement line="22" kind="_c7" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:getAlarmHandler()" source="_f4" id="_100" name="getAlarmHandler()" presentationName="com.h2m.alarm.presentation.AlarmHandler.getAlarmHandler() : List&lt;AlarmHandler&gt;"></programmingElement>
+				<programmingElement line="35" kind="_c7" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleAlarm()" source="_f4" id="_101" name="handleAlarm()" presentationName="com.h2m.alarm.presentation.AlarmHandler.handleAlarm() : void"></programmingElement>
+				<programmingElement line="27" kind="_c7" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)" source="_f4" id="_102" name="handleEvent(com.h2m.common.observer.Observable,java.lang.String)" presentationName="com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String) : void"></programmingElement>
+				<programmingElement line="13" kind="_cc" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:static" source="_f4" id="_103" name="static" presentationName="com.h2m.alarm.presentation.AlarmHandler.static"></programmingElement>
+				<programmingElement line="14" kind="_c9" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:AlarmToConsole()" source="_f9" id="_104" name="AlarmToConsole()" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole.AlarmToConsole()"></programmingElement>
+				<programmingElement line="20" kind="_c7" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()" source="_f9" id="_105" name="handleAlarm()" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm() : void"></programmingElement>
+				<programmingElement line="18" kind="_c9" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:AlarmToFile()" source="_fe" id="_106" name="AlarmToFile()" presentationName="com.h2m.alarm.presentation.file.AlarmToFile.AlarmToFile()"></programmingElement>
+				<programmingElement line="24" kind="_c7" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile:handleAlarm()" source="_fe" id="_107" name="handleAlarm()" presentationName="com.h2m.alarm.presentation.file.AlarmToFile.handleAlarm() : void"></programmingElement>
+			</rootDirectory>
+		</module>
+		<external language="Java" description="Contains external Java elements" kind="_b8" fqName="Workspace:External [Java]" id="_b7" name="External [Java]" presentationName="External [Java]"></external>
+	</workspace>
+	<systemElements ref="_0">
+		<element kind="_109" fqName="AlarmClock" id="_108" name="AlarmClock" presentationName="AlarmClock"></element>
+		<element kind="_10b" fqName="Files:BaseDirectory:SystemDirectory:Plugins:SpotbugsPlugin.xml" id="_10a" name="SpotbugsPlugin.xml" presentationName="./SpotbugsPlugin.xml"></element>
+		<element kind="_10d" fqName="Files:BaseDirectory:SystemDirectory:Scripts:CompilationError.scr" id="_10c" name="CompilationError.scr" presentationName="./CompilationError.scr"></element>
+		<logicalNamespace derivedFrom="_ce _bb" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:application" id="_10e" name="application" presentationName="com.h2m.alarm.application"></logicalNamespace>
+		<logicalNamespace derivedFrom="_e4" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:model" id="_114" name="model" presentationName="com.h2m.alarm.model"></logicalNamespace>
+		<logicalNamespace derivedFrom="_f1" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation" id="_117" name="presentation" presentationName="com.h2m.alarm.presentation"></logicalNamespace>
+		<logicalNamespace derivedFrom="_f6" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation:console" id="_119" name="console" presentationName="com.h2m.alarm.presentation.console"></logicalNamespace>
+		<logicalNamespace derivedFrom="_fb" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation:file" id="_11b" name="file" presentationName="com.h2m.alarm.presentation.file"></logicalNamespace>
+		<logicalNamespace derivedFrom="_d3" kind="_10f" fqName="Logical system namespaces:Internal [Java]:com:h2m:common:observer" id="_11d" name="observer" presentationName="com.h2m.common.observer"></logicalNamespace>
+		<logicalProgrammingElement derivedFrom="_bf" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:application:Main" id="_110" name="Main" presentationName="com.h2m.alarm.application.Main"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_c4" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:application:Singleton" id="_112" name="Singleton" presentationName="com.h2m.alarm.application.Singleton"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_d0" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:application:TestForNamespaceCycle" id="_113" name="TestForNamespaceCycle" presentationName="com.h2m.alarm.application.TestForNamespaceCycle"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_e6" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:model:AlarmClock" id="_115" name="AlarmClock" presentationName="com.h2m.alarm.model.AlarmClock"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_e9" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:model:DuplicateInModel" id="_116" name="DuplicateInModel" presentationName="com.h2m.alarm.model.DuplicateInModel"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_f3" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation:AlarmHandler" id="_118" name="AlarmHandler" presentationName="com.h2m.alarm.presentation.AlarmHandler"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_f8" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation:console:AlarmToConsole" id="_11a" name="AlarmToConsole" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_fd" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:alarm:presentation:file:AlarmToFile" id="_11c" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.file.AlarmToFile"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_d5" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:common:observer:DuplicateInFoundation" id="_11e" name="DuplicateInFoundation" presentationName="com.h2m.common.observer.DuplicateInFoundation"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_d8" kind="_111" fqName="Logical system namespaces:Internal [Java]:com:h2m:common:observer:Observable" id="_11f" name="Observable" presentationName="com.h2m.common.observer.Observable"></logicalProgrammingElement>
+	</systemElements>
+	<moduleElements ref="_a8">
+		<logicalNamespace derivedFrom="_bb" kind="_ba" fqName="Logical module namespaces:Application:com:h2m:alarm:application" id="_b9" name="application" presentationName="com.h2m.alarm.application"></logicalNamespace>
+		<logicalProgrammingElement derivedFrom="_bf" kind="_be" fqName="Logical module namespaces:Application:com:h2m:alarm:application:Main" id="_bd" name="Main" presentationName="com.h2m.alarm.application.Main"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_c4" kind="_be" fqName="Logical module namespaces:Application:com:h2m:alarm:application:Singleton" id="_c3" name="Singleton" presentationName="com.h2m.alarm.application.Singleton"></logicalProgrammingElement>
+	</moduleElements>
+	<moduleElements ref="_ae">
+		<logicalNamespace derivedFrom="_ce" kind="_ba" fqName="Logical module namespaces:Foundation:com:h2m:alarm:application" id="_cd" name="application" presentationName="com.h2m.alarm.application"></logicalNamespace>
+		<logicalNamespace derivedFrom="_d3" kind="_ba" fqName="Logical module namespaces:Foundation:com:h2m:common:observer" id="_d2" name="observer" presentationName="com.h2m.common.observer"></logicalNamespace>
+		<logicalProgrammingElement derivedFrom="_d0" kind="_be" fqName="Logical module namespaces:Foundation:com:h2m:alarm:application:TestForNamespaceCycle" id="_cf" name="TestForNamespaceCycle" presentationName="com.h2m.alarm.application.TestForNamespaceCycle"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_d5" kind="_be" fqName="Logical module namespaces:Foundation:com:h2m:common:observer:DuplicateInFoundation" id="_d4" name="DuplicateInFoundation" presentationName="com.h2m.common.observer.DuplicateInFoundation"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_d8" kind="_be" fqName="Logical module namespaces:Foundation:com:h2m:common:observer:Observable" id="_d7" name="Observable" presentationName="com.h2m.common.observer.Observable"></logicalProgrammingElement>
+	</moduleElements>
+	<moduleElements ref="_b1">
+		<logicalNamespace derivedFrom="_e4" kind="_ba" fqName="Logical module namespaces:Model:com:h2m:alarm:model" id="_e3" name="model" presentationName="com.h2m.alarm.model"></logicalNamespace>
+		<logicalProgrammingElement derivedFrom="_e6" kind="_be" fqName="Logical module namespaces:Model:com:h2m:alarm:model:AlarmClock" id="_e5" name="AlarmClock" presentationName="com.h2m.alarm.model.AlarmClock"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_e9" kind="_be" fqName="Logical module namespaces:Model:com:h2m:alarm:model:DuplicateInModel" id="_e8" name="DuplicateInModel" presentationName="com.h2m.alarm.model.DuplicateInModel"></logicalProgrammingElement>
+	</moduleElements>
+	<moduleElements ref="_b4">
+		<logicalNamespace derivedFrom="_f1" kind="_ba" fqName="Logical module namespaces:View:com:h2m:alarm:presentation" id="_f0" name="presentation" presentationName="com.h2m.alarm.presentation"></logicalNamespace>
+		<logicalNamespace derivedFrom="_f6" kind="_ba" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:console" id="_f5" name="console" presentationName="com.h2m.alarm.presentation.console"></logicalNamespace>
+		<logicalNamespace derivedFrom="_fb" kind="_ba" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:file" id="_fa" name="file" presentationName="com.h2m.alarm.presentation.file"></logicalNamespace>
+		<logicalProgrammingElement derivedFrom="_f3" kind="_be" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:AlarmHandler" id="_f2" name="AlarmHandler" presentationName="com.h2m.alarm.presentation.AlarmHandler"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_f8" kind="_be" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:console:AlarmToConsole" id="_f7" name="AlarmToConsole" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole"></logicalProgrammingElement>
+		<logicalProgrammingElement derivedFrom="_fd" kind="_be" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:file:AlarmToFile" id="_fc" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.file.AlarmToFile"></logicalProgrammingElement>
+	</moduleElements>
+	<systemMetricValues elementRef="_0">
+		<levelValues levelRef="_33">
+			<metric ref="_8f">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_108">1</int>
+			</metric>
+			<metric ref="_8e">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_108">308</int>
+			</metric>
+			<metric ref="_93">
+				<int ref="_108">3</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_108">10</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_108">184</int>
+			</metric>
+			<metric ref="_9d">
+				<float ref="_108">100.0</float>
+			</metric>
+			<metric ref="_43">
+				<int ref="_108">26</int>
+			</metric>
+			<metric ref="_74">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_77">
+				<int ref="_108">6</int>
+			</metric>
+			<metric ref="_44">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_108">36</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_108">356</int>
+			</metric>
+			<metric ref="_a0">
+				<int ref="_108">24</int>
+			</metric>
+			<metric ref="_7a">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_30">
+				<float ref="_108">2.6</float>
+			</metric>
+			<metric ref="_3e">
+				<int ref="_108">2</int>
+			</metric>
+			<metric ref="_7b">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_47">
+				<int ref="_108">1</int>
+			</metric>
+			<metric ref="_82">
+				<int ref="_108">1</int>
+			</metric>
+			<metric ref="_40">
+				<int ref="_108">6</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_108">8</int>
+			</metric>
+			<metric ref="_70">
+				<int ref="_108">1</int>
+			</metric>
+			<metric ref="_6d">
+				<float ref="_108">0.93</float>
+			</metric>
+			<metric ref="_79">
+				<int ref="_108">45</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_108">2</int>
+			</metric>
+			<metric ref="_92">
+				<int ref="_108">3</int>
+			</metric>
+			<metric ref="_94">
+				<int ref="_108">4</int>
+			</metric>
+			<metric ref="_83">
+				<int ref="_108">6</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_78">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_86">
+				<int ref="_108">4</int>
+			</metric>
+			<metric ref="_8b">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_9c">
+				<float ref="_108">20.0</float>
+			</metric>
+			<metric ref="_46">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_84">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_9f">
+				<int ref="_108">13</int>
+			</metric>
+			<metric ref="_97">
+				<float ref="_108">26.0</float>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_108">4</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_108">3</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_108">140</int>
+			</metric>
+			<metric ref="_90">
+				<int ref="_108">3</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_108">0</int>
+			</metric>
+			<metric ref="_6e">
+				<int ref="_108">5</int>
+			</metric>
+			<metric ref="_98">
+				<float ref="_108">26.0</float>
+			</metric>
+			<metric ref="_41">
+				<int ref="_108">996</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_108">2</int>
+			</metric>
+			<metric ref="_5d">
+				<float ref="_108">2.33</float>
+			</metric>
+			<metric ref="_6a">
+				<float ref="_108">95.88</float>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_108">0</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_38">
+			<metric ref="_9b">
+				<float ref="_119">0.0</float>
+				<float ref="_11b">0.0</float>
+				<float ref="_117">0.0</float>
+				<float ref="_114">0.0</float>
+				<float ref="_10e">0.0</float>
+				<float ref="_11d">0.0</float>
+			</metric>
+			<metric ref="_39">
+				<float ref="_117">1.0</float>
+				<float ref="_11d">0.67</float>
+				<float ref="_119">0.0</float>
+				<float ref="_11b">0.0</float>
+				<float ref="_114">0.0</float>
+				<float ref="_10e">0.0</float>
+			</metric>
+			<metric ref="_55">
+				<float ref="_119">-0.5</float>
+				<float ref="_11b">-0.5</float>
+				<float ref="_114">-0.5</float>
+				<float ref="_117">0.33</float>
+				<float ref="_10e">-0.2</float>
+				<float ref="_11d">-0.08</float>
+			</metric>
+			<metric ref="_5f">
+				<float ref="_10e">0.8</float>
+				<float ref="_119">0.5</float>
+				<float ref="_11b">0.5</float>
+				<float ref="_114">0.5</float>
+				<float ref="_117">0.33</float>
+				<float ref="_11d">0.25</float>
+			</metric>
+			<metric ref="_81">
+				<int ref="_11d">3</int>
+				<int ref="_119">2</int>
+				<int ref="_11b">2</int>
+				<int ref="_117">2</int>
+				<int ref="_114">1</int>
+				<int ref="_10e">1</int>
+			</metric>
+			<metric ref="_88">
+				<int ref="_10e">4</int>
+				<int ref="_119">2</int>
+				<int ref="_11b">2</int>
+				<int ref="_117">1</int>
+				<int ref="_114">1</int>
+				<int ref="_11d">1</int>
+			</metric>
+			<metric ref="_8d">
+				<int ref="_10e">3</int>
+				<int ref="_11d">3</int>
+				<int ref="_114">2</int>
+				<int ref="_119">1</int>
+				<int ref="_11b">1</int>
+				<int ref="_117">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_66">
+			<metric ref="_67">
+				<int ref="_11a">0</int>
+				<int ref="_11c">0</int>
+				<int ref="_118">0</int>
+				<int ref="_115">0</int>
+				<int ref="_116">0</int>
+				<int ref="_113">0</int>
+				<int ref="_112">0</int>
+				<int ref="_110">0</int>
+				<int ref="_11f">0</int>
+				<int ref="_11e">0</int>
+			</metric>
+			<metric ref="_69">
+				<int ref="_11c">4</int>
+				<int ref="_110">4</int>
+				<int ref="_11a">4</int>
+				<int ref="_118">3</int>
+				<int ref="_115">2</int>
+				<int ref="_11f">2</int>
+				<int ref="_11e">2</int>
+				<int ref="_113">1</int>
+				<int ref="_116">0</int>
+				<int ref="_112">0</int>
+			</metric>
+		</levelValues>
+	</systemMetricValues>
+	<moduleMetricValues elementRef="_b4">
+		<levelValues levelRef="_34">
+			<metric ref="_92">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_8e">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_8f">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_90">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_b4">2</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_b4">100.0</float>
+			</metric>
+			<metric ref="_47">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_8b">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_93">
+				<int ref="_b4">3</int>
+			</metric>
+			<metric ref="_94">
+				<int ref="_b4">3</int>
+			</metric>
+			<metric ref="_9f">
+				<int ref="_b4">13</int>
+			</metric>
+			<metric ref="_a0">
+				<int ref="_b4">13</int>
+			</metric>
+			<metric ref="_30">
+				<float ref="_b4">2.33</float>
+			</metric>
+			<metric ref="_43">
+				<int ref="_b4">7</int>
+			</metric>
+			<metric ref="_6a">
+				<float ref="_b4">90.0</float>
+			</metric>
+			<metric ref="_6d">
+				<float ref="_b4">1.4</float>
+			</metric>
+			<metric ref="_97">
+				<float ref="_b4">77.78</float>
+			</metric>
+			<metric ref="_98">
+				<float ref="_b4">77.78</float>
+			</metric>
+			<metric ref="_3e">
+				<int ref="_b4">2</int>
+			</metric>
+			<metric ref="_40">
+				<int ref="_b4">2</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_b4">4</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_b4">4</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_b4">2</int>
+			</metric>
+			<metric ref="_77">
+				<int ref="_b4">2</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_82">
+				<int ref="_b4">1</int>
+			</metric>
+			<metric ref="_9c">
+				<float ref="_b4">66.67</float>
+			</metric>
+			<metric ref="_9d">
+				<float ref="_b4">66.67</float>
+			</metric>
+			<metric ref="_44">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_b4">81</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_b4">3</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_b4">0</int>
+			</metric>
+			<metric ref="_83">
+				<int ref="_b4">3</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_b4">17</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_b4">32</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_b4">102</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_38">
+			<metric ref="_3a">
+				<float ref="_f0">83.33</float>
+				<float ref="_f5">66.67</float>
+				<float ref="_fa">66.67</float>
+			</metric>
+			<metric ref="_62">
+				<float ref="_f5">100.0</float>
+				<float ref="_fa">100.0</float>
+				<float ref="_f0">100.0</float>
+			</metric>
+			<metric ref="_99">
+				<float ref="_f5">0.0</float>
+				<float ref="_fa">0.0</float>
+				<float ref="_f0">0.0</float>
+			</metric>
+			<metric ref="_36">
+				<float ref="_f0">1.0</float>
+				<float ref="_f5">0.0</float>
+				<float ref="_fa">0.0</float>
+			</metric>
+			<metric ref="_54">
+				<float ref="_f5">-0.33</float>
+				<float ref="_fa">-0.33</float>
+				<float ref="_f0">0.0</float>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_f5">0.67</float>
+				<float ref="_fa">0.67</float>
+				<float ref="_f0">0.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_f0">2</int>
+				<int ref="_f5">1</int>
+				<int ref="_fa">1</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_f5">2</int>
+				<int ref="_fa">2</int>
+				<int ref="_f0">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_f5">1</int>
+				<int ref="_fa">1</int>
+				<int ref="_f0">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_4b">
+			<metric ref="_90">
+				<int ref="_f4">1</int>
+				<int ref="_fe">0</int>
+				<int ref="_f9">0</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_f4">2</int>
+				<int ref="_fe">0</int>
+				<int ref="_f9">0</int>
+			</metric>
+			<metric ref="_4a">
+				<float ref="_f4">41.61</float>
+				<float ref="_f9">29.2</float>
+				<float ref="_fe">29.2</float>
+			</metric>
+			<metric ref="_4c">
+				<float ref="_f4">14.8</float>
+				<float ref="_f9">11.18</float>
+				<float ref="_fe">11.18</float>
+			</metric>
+			<metric ref="_52">
+				<int ref="_f9">3</int>
+				<int ref="_fe">3</int>
+				<int ref="_f4">1</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_f9">4</int>
+				<int ref="_fe">4</int>
+				<int ref="_f4">2</int>
+			</metric>
+			<metric ref="_57">
+				<float ref="_f4">100.0</float>
+				<float ref="_fe">0.0</float>
+				<float ref="_f9">0.0</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_f4">100.0</float>
+				<float ref="_f9">66.67</float>
+				<float ref="_fe">66.67</float>
+			</metric>
+			<metric ref="_5a">
+				<float ref="_f4">40.0</float>
+				<float ref="_f9">30.0</float>
+				<float ref="_fe">30.0</float>
+			</metric>
+			<metric ref="_5b">
+				<float ref="_f9">100.0</float>
+				<float ref="_fe">100.0</float>
+				<float ref="_f4">33.33</float>
+			</metric>
+			<metric ref="_5c">
+				<float ref="_f9">40.0</float>
+				<float ref="_fe">40.0</float>
+				<float ref="_f4">20.0</float>
+			</metric>
+			<metric ref="_95">
+				<int ref="_f4">0</int>
+				<int ref="_f9">0</int>
+				<int ref="_fe">0</int>
+			</metric>
+			<metric ref="_96">
+				<int ref="_f9">4</int>
+				<int ref="_fe">4</int>
+				<int ref="_f4">3</int>
+			</metric>
+			<metric ref="_a2">
+				<int ref="_f4">3</int>
+				<int ref="_f9">2</int>
+				<int ref="_fe">2</int>
+			</metric>
+			<metric ref="_a3">
+				<int ref="_f4">4</int>
+				<int ref="_f9">3</int>
+				<int ref="_fe">3</int>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_f9">0.67</float>
+				<float ref="_fe">0.67</float>
+				<float ref="_f4">0.0</float>
+			</metric>
+			<metric ref="_5f">
+				<float ref="_f9">0.5</float>
+				<float ref="_fe">0.5</float>
+				<float ref="_f4">0.33</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_f4">2</int>
+				<int ref="_f9">1</int>
+				<int ref="_fe">1</int>
+			</metric>
+			<metric ref="_81">
+				<int ref="_f4">2</int>
+				<int ref="_f9">2</int>
+				<int ref="_fe">2</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_f9">2</int>
+				<int ref="_fe">2</int>
+				<int ref="_f4">0</int>
+			</metric>
+			<metric ref="_88">
+				<int ref="_f9">2</int>
+				<int ref="_fe">2</int>
+				<int ref="_f4">1</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_f4">1</int>
+				<int ref="_f9">1</int>
+				<int ref="_fe">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_45">
+			<metric ref="_44">
+				<int ref="_f4">0</int>
+				<int ref="_f9">0</int>
+				<int ref="_fe">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_f4">0</int>
+				<int ref="_f9">0</int>
+				<int ref="_fe">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_fe">34</int>
+				<int ref="_f4">28</int>
+				<int ref="_f9">19</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_fe">9</int>
+				<int ref="_f4">6</int>
+				<int ref="_f9">2</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_f4">13</int>
+				<int ref="_fe">13</int>
+				<int ref="_f9">6</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_fe">40</int>
+				<int ref="_f4">36</int>
+				<int ref="_f9">26</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_66">
+			<metric ref="_65">
+				<int ref="_f7">0</int>
+				<int ref="_fc">0</int>
+				<int ref="_f2">0</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_fc">4</int>
+				<int ref="_f7">4</int>
+				<int ref="_f2">3</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_61">
+			<metric ref="_60">
+				<float ref="_f3">83.33</float>
+				<float ref="_f8">66.67</float>
+				<float ref="_fd">66.67</float>
+			</metric>
+			<metric ref="_63">
+				<int ref="_f3">2</int>
+				<int ref="_f8">1</int>
+				<int ref="_fd">1</int>
+			</metric>
+			<metric ref="_85">
+				<int ref="_f3">5</int>
+				<int ref="_f8">2</int>
+				<int ref="_fd">2</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_fd">9</int>
+				<int ref="_f3">6</int>
+				<int ref="_f8">2</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_f3">13</int>
+				<int ref="_fd">13</int>
+				<int ref="_f8">6</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_51">
+			<metric ref="_89">
+				<int ref="_102">2</int>
+				<int ref="_103">0</int>
+				<int ref="_ff">0</int>
+				<int ref="_100">0</int>
+				<int ref="_101">0</int>
+				<int ref="_104">0</int>
+				<int ref="_105">0</int>
+				<int ref="_106">0</int>
+				<int ref="_107">0</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_107">8</int>
+				<int ref="_102">4</int>
+				<int ref="_ff">1</int>
+				<int ref="_100">1</int>
+				<int ref="_104">1</int>
+				<int ref="_105">1</int>
+				<int ref="_106">1</int>
+				<int ref="_103">0</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_107">2</int>
+				<int ref="_103">1</int>
+				<int ref="_ff">1</int>
+				<int ref="_100">1</int>
+				<int ref="_102">1</int>
+				<int ref="_104">1</int>
+				<int ref="_105">1</int>
+				<int ref="_106">1</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_107">2</int>
+				<int ref="_103">1</int>
+				<int ref="_ff">1</int>
+				<int ref="_100">1</int>
+				<int ref="_102">1</int>
+				<int ref="_104">1</int>
+				<int ref="_105">1</int>
+				<int ref="_106">1</int>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_103">1</int>
+				<int ref="_ff">1</int>
+				<int ref="_100">1</int>
+				<int ref="_102">1</int>
+				<int ref="_104">1</int>
+				<int ref="_105">1</int>
+				<int ref="_106">1</int>
+				<int ref="_107">1</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_103">1</int>
+				<int ref="_ff">1</int>
+				<int ref="_100">1</int>
+				<int ref="_102">1</int>
+				<int ref="_104">1</int>
+				<int ref="_105">1</int>
+				<int ref="_106">1</int>
+				<int ref="_107">1</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<moduleMetricValues elementRef="_b1">
+		<levelValues levelRef="_34">
+			<metric ref="_92">
+				<int ref="_b1">1</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_b1">1</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_8e">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_8f">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_90">
+				<int ref="_b1">1</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_b1">3</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_b1">100.0</float>
+			</metric>
+			<metric ref="_47">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_8b">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_93">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_94">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_9f">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_a0">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_30">
+				<float ref="_b1">1.0</float>
+			</metric>
+			<metric ref="_43">
+				<int ref="_b1">2</int>
+			</metric>
+			<metric ref="_6a">
+				<float ref="_b1">100.0</float>
+			</metric>
+			<metric ref="_6d">
+				<float ref="_b1">0.73</float>
+			</metric>
+			<metric ref="_97">
+				<float ref="_b1">50.0</float>
+			</metric>
+			<metric ref="_98">
+				<float ref="_b1">50.0</float>
+			</metric>
+			<metric ref="_3e">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_40">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_77">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_82">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_9c">
+				<float ref="_b1">0.0</float>
+			</metric>
+			<metric ref="_9d">
+				<float ref="_b1">0.0</float>
+			</metric>
+			<metric ref="_44">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_b1">83</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_b1">2</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_b1">0</int>
+			</metric>
+			<metric ref="_83">
+				<int ref="_b1">1</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_b1">51</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_b1">59</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_b1">92</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_38">
+			<metric ref="_3a">
+				<float ref="_e3">83.33</float>
+			</metric>
+			<metric ref="_62">
+				<float ref="_e3">100.0</float>
+			</metric>
+			<metric ref="_99">
+				<float ref="_e3">0.0</float>
+			</metric>
+			<metric ref="_36">
+				<float ref="_e3">0.0</float>
+			</metric>
+			<metric ref="_54">
+				<float ref="_e3">0.0</float>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_e3">1.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_e3">0</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_e3">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_e3">2</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_4b">
+			<metric ref="_90">
+				<int ref="_e7">1</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_e7">3</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_4a">
+				<float ref="_e7">50.0</float>
+				<float ref="_ea">50.0</float>
+			</metric>
+			<metric ref="_4c">
+				<float ref="_e7">6.43</float>
+				<float ref="_ea">5.3</float>
+			</metric>
+			<metric ref="_52">
+				<int ref="_e7">1</int>
+				<int ref="_ea">1</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_e7">2</int>
+				<int ref="_ea">1</int>
+			</metric>
+			<metric ref="_57">
+				<float ref="_e7">0.0</float>
+				<float ref="_ea">0.0</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_e7">50.0</float>
+				<float ref="_ea">50.0</float>
+			</metric>
+			<metric ref="_5a">
+				<float ref="_e7">20.0</float>
+				<float ref="_ea">10.0</float>
+			</metric>
+			<metric ref="_5b">
+				<float ref="_e7">50.0</float>
+				<float ref="_ea">50.0</float>
+			</metric>
+			<metric ref="_5c">
+				<float ref="_e7">20.0</float>
+				<float ref="_ea">10.0</float>
+			</metric>
+			<metric ref="_95">
+				<int ref="_e7">0</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_96">
+				<int ref="_e7">2</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_a2">
+				<int ref="_e7">1</int>
+				<int ref="_ea">1</int>
+			</metric>
+			<metric ref="_a3">
+				<int ref="_e7">2</int>
+				<int ref="_ea">1</int>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_e7">1.0</float>
+				<float ref="_ea">1.0</float>
+			</metric>
+			<metric ref="_5f">
+				<float ref="_ea">1.0</float>
+				<float ref="_e7">0.5</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_e7">0</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_81">
+				<int ref="_e7">1</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_e7">0</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_88">
+				<int ref="_e7">1</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_e7">1</int>
+				<int ref="_ea">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_45">
+			<metric ref="_44">
+				<int ref="_e7">0</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_e7">0</int>
+				<int ref="_ea">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_ea">54</int>
+				<int ref="_e7">29</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_ea">43</int>
+				<int ref="_e7">8</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_ea">47</int>
+				<int ref="_e7">12</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_ea">57</int>
+				<int ref="_e7">35</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_66">
+			<metric ref="_65">
+				<int ref="_e5">0</int>
+				<int ref="_e8">0</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_e5">2</int>
+				<int ref="_e8">0</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_61">
+			<metric ref="_60">
+				<float ref="_e6">100.0</float>
+				<float ref="_e9">66.67</float>
+			</metric>
+			<metric ref="_63">
+				<int ref="_e6">1</int>
+				<int ref="_e9">1</int>
+			</metric>
+			<metric ref="_85">
+				<int ref="_e6">2</int>
+				<int ref="_e9">2</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_e9">43</int>
+				<int ref="_e6">8</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_e9">47</int>
+				<int ref="_e6">12</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_51">
+			<metric ref="_89">
+				<int ref="_eb">0</int>
+				<int ref="_ed">0</int>
+				<int ref="_ee">0</int>
+				<int ref="_ef">0</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_ee">42</int>
+				<int ref="_ed">7</int>
+				<int ref="_eb">1</int>
+				<int ref="_ef">1</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_ed">3</int>
+				<int ref="_eb">1</int>
+				<int ref="_ee">1</int>
+				<int ref="_ef">1</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_ed">3</int>
+				<int ref="_eb">1</int>
+				<int ref="_ee">1</int>
+				<int ref="_ef">1</int>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_ed">2</int>
+				<int ref="_eb">1</int>
+				<int ref="_ee">1</int>
+				<int ref="_ef">1</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_ed">2</int>
+				<int ref="_eb">1</int>
+				<int ref="_ee">1</int>
+				<int ref="_ef">1</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<moduleMetricValues elementRef="_ae">
+		<levelValues levelRef="_34">
+			<metric ref="_92">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_8e">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_8f">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_90">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_ae">100.0</float>
+			</metric>
+			<metric ref="_47">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_8b">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_93">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_94">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_9f">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_a0">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_30">
+				<float ref="_ae">1.33</float>
+			</metric>
+			<metric ref="_43">
+				<int ref="_ae">4</int>
+			</metric>
+			<metric ref="_6a">
+				<float ref="_ae">99.0</float>
+			</metric>
+			<metric ref="_6d">
+				<float ref="_ae">0.8</float>
+			</metric>
+			<metric ref="_97">
+				<float ref="_ae">44.44</float>
+			</metric>
+			<metric ref="_98">
+				<float ref="_ae">44.44</float>
+			</metric>
+			<metric ref="_3e">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_40">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_77">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_82">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_9c">
+				<float ref="_ae">0.0</float>
+			</metric>
+			<metric ref="_9d">
+				<float ref="_ae">0.0</float>
+			</metric>
+			<metric ref="_44">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_ae">106</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_ae">3</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_ae">0</int>
+			</metric>
+			<metric ref="_83">
+				<int ref="_ae">2</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_ae">60</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_ae">74</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_ae">118</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_38">
+			<metric ref="_3a">
+				<float ref="_cd">100.0</float>
+				<float ref="_d2">75.0</float>
+			</metric>
+			<metric ref="_62">
+				<float ref="_cd">100.0</float>
+				<float ref="_d2">100.0</float>
+			</metric>
+			<metric ref="_99">
+				<float ref="_cd">0.0</float>
+				<float ref="_d2">0.0</float>
+			</metric>
+			<metric ref="_36">
+				<float ref="_d2">0.67</float>
+				<float ref="_cd">0.0</float>
+			</metric>
+			<metric ref="_54">
+				<float ref="_cd">-1.0</float>
+				<float ref="_d2">0.67</float>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_d2">1.0</float>
+				<float ref="_cd">0.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_cd">1</int>
+				<int ref="_d2">0</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_d2">1</int>
+				<int ref="_cd">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_d2">3</int>
+				<int ref="_cd">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_4b">
+			<metric ref="_90">
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+				<int ref="_d1">0</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+				<int ref="_d1">0</int>
+			</metric>
+			<metric ref="_4a">
+				<float ref="_d1">48.05</float>
+				<float ref="_d6">25.97</float>
+				<float ref="_d9">25.97</float>
+			</metric>
+			<metric ref="_4c">
+				<float ref="_d9">23.34</float>
+				<float ref="_d1">10.76</float>
+				<float ref="_d6">6.43</float>
+			</metric>
+			<metric ref="_52">
+				<int ref="_d6">2</int>
+				<int ref="_d1">1</int>
+				<int ref="_d9">1</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_d6">2</int>
+				<int ref="_d1">1</int>
+				<int ref="_d9">1</int>
+			</metric>
+			<metric ref="_57">
+				<float ref="_d1">100.0</float>
+				<float ref="_d6">0.0</float>
+				<float ref="_d9">0.0</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_d1">66.67</float>
+				<float ref="_d6">33.33</float>
+				<float ref="_d9">33.33</float>
+			</metric>
+			<metric ref="_5a">
+				<float ref="_d9">60.0</float>
+				<float ref="_d1">30.0</float>
+				<float ref="_d6">20.0</float>
+			</metric>
+			<metric ref="_5b">
+				<float ref="_d6">66.67</float>
+				<float ref="_d1">33.33</float>
+				<float ref="_d9">33.33</float>
+			</metric>
+			<metric ref="_5c">
+				<float ref="_d6">20.0</float>
+				<float ref="_d1">10.0</float>
+				<float ref="_d9">10.0</float>
+			</metric>
+			<metric ref="_95">
+				<int ref="_d1">0</int>
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_96">
+				<int ref="_d6">2</int>
+				<int ref="_d9">2</int>
+				<int ref="_d1">1</int>
+			</metric>
+			<metric ref="_a2">
+				<int ref="_d1">2</int>
+				<int ref="_d6">1</int>
+				<int ref="_d9">1</int>
+			</metric>
+			<metric ref="_a3">
+				<int ref="_d9">6</int>
+				<int ref="_d1">3</int>
+				<int ref="_d6">2</int>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_d6">1.0</float>
+				<float ref="_d9">1.0</float>
+				<float ref="_d1">0.0</float>
+			</metric>
+			<metric ref="_5f">
+				<float ref="_d6">0.5</float>
+				<float ref="_d1">0.0</float>
+				<float ref="_d9">0.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_d1">1</int>
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_81">
+				<int ref="_d9">2</int>
+				<int ref="_d1">1</int>
+				<int ref="_d6">1</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_d6">1</int>
+				<int ref="_d1">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_88">
+				<int ref="_d6">1</int>
+				<int ref="_d1">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_d9">2</int>
+				<int ref="_d1">1</int>
+				<int ref="_d6">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_45">
+			<metric ref="_44">
+				<int ref="_d1">0</int>
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_d1">0</int>
+				<int ref="_d6">0</int>
+				<int ref="_d9">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_d6">55</int>
+				<int ref="_d9">43</int>
+				<int ref="_d1">8</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_d6">43</int>
+				<int ref="_d9">16</int>
+				<int ref="_d1">1</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_d6">47</int>
+				<int ref="_d9">24</int>
+				<int ref="_d1">3</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_d6">59</int>
+				<int ref="_d9">50</int>
+				<int ref="_d1">9</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_66">
+			<metric ref="_65">
+				<int ref="_cf">0</int>
+				<int ref="_d7">0</int>
+				<int ref="_d4">0</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_d7">2</int>
+				<int ref="_d4">2</int>
+				<int ref="_cf">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_61">
+			<metric ref="_60">
+				<float ref="_d0">100.0</float>
+				<float ref="_d8">83.33</float>
+				<float ref="_d5">66.67</float>
+			</metric>
+			<metric ref="_63">
+				<int ref="_d0">1</int>
+				<int ref="_d5">1</int>
+				<int ref="_d8">1</int>
+			</metric>
+			<metric ref="_85">
+				<int ref="_d8">4</int>
+				<int ref="_d5">2</int>
+				<int ref="_d0">1</int>
+				<int ref="_dd">1</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_d5">43</int>
+				<int ref="_d8">16</int>
+				<int ref="_d0">1</int>
+				<int ref="_dd">0</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_d5">47</int>
+				<int ref="_d8">24</int>
+				<int ref="_d0">3</int>
+				<int ref="_dd">2</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_51">
+			<metric ref="_89">
+				<int ref="_e0">2</int>
+				<int ref="_de">2</int>
+				<int ref="_df">1</int>
+				<int ref="_e1">1</int>
+				<int ref="_da">0</int>
+				<int ref="_db">0</int>
+				<int ref="_dc">0</int>
+				<int ref="_e2">0</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_db">42</int>
+				<int ref="_df">6</int>
+				<int ref="_e0">5</int>
+				<int ref="_e1">5</int>
+				<int ref="_da">1</int>
+				<int ref="_dc">1</int>
+				<int ref="_e2">0</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_df">2</int>
+				<int ref="_e1">2</int>
+				<int ref="_da">1</int>
+				<int ref="_db">1</int>
+				<int ref="_dc">1</int>
+				<int ref="_e2">1</int>
+				<int ref="_e0">1</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_df">2</int>
+				<int ref="_e1">2</int>
+				<int ref="_da">1</int>
+				<int ref="_db">1</int>
+				<int ref="_dc">1</int>
+				<int ref="_e2">1</int>
+				<int ref="_e0">1</int>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_df">2</int>
+				<int ref="_e1">2</int>
+				<int ref="_da">1</int>
+				<int ref="_db">1</int>
+				<int ref="_dc">1</int>
+				<int ref="_e2">1</int>
+				<int ref="_e0">1</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_df">2</int>
+				<int ref="_e1">2</int>
+				<int ref="_da">1</int>
+				<int ref="_db">1</int>
+				<int ref="_dc">1</int>
+				<int ref="_e2">1</int>
+				<int ref="_e0">1</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<moduleMetricValues elementRef="_a8">
+		<levelValues levelRef="_34">
+			<metric ref="_92">
+				<int ref="_a8">1</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_a8">1</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_8e">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_8f">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_90">
+				<int ref="_a8">1</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_a8">3</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_a8">100.0</float>
+			</metric>
+			<metric ref="_47">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_8b">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_93">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_94">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_9f">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_a0">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_30">
+				<float ref="_a8">1.0</float>
+			</metric>
+			<metric ref="_43">
+				<int ref="_a8">2</int>
+			</metric>
+			<metric ref="_6a">
+				<float ref="_a8">100.0</float>
+			</metric>
+			<metric ref="_6d">
+				<float ref="_a8">0.73</float>
+			</metric>
+			<metric ref="_97">
+				<float ref="_a8">50.0</float>
+			</metric>
+			<metric ref="_98">
+				<float ref="_a8">50.0</float>
+			</metric>
+			<metric ref="_3e">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_40">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_77">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_82">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_9c">
+				<float ref="_a8">0.0</float>
+			</metric>
+			<metric ref="_9d">
+				<float ref="_a8">0.0</float>
+			</metric>
+			<metric ref="_44">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_a8">38</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_a8">2</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_a8">0</int>
+			</metric>
+			<metric ref="_83">
+				<int ref="_a8">1</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_a8">12</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_a8">19</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_a8">44</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_38">
+			<metric ref="_3a">
+				<float ref="_b9">75.0</float>
+			</metric>
+			<metric ref="_62">
+				<float ref="_b9">100.0</float>
+			</metric>
+			<metric ref="_99">
+				<float ref="_b9">0.0</float>
+			</metric>
+			<metric ref="_36">
+				<float ref="_b9">0.0</float>
+			</metric>
+			<metric ref="_54">
+				<float ref="_b9">0.0</float>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_b9">1.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_b9">0</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_b9">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_b9">2</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_4b">
+			<metric ref="_90">
+				<int ref="_c1">1</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_91">
+				<int ref="_c1">3</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_4a">
+				<float ref="_c1">50.0</float>
+				<float ref="_c5">50.0</float>
+			</metric>
+			<metric ref="_4c">
+				<float ref="_c1">5.3</float>
+				<float ref="_c5">5.3</float>
+			</metric>
+			<metric ref="_52">
+				<int ref="_c1">1</int>
+				<int ref="_c5">1</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_c1">8</int>
+				<int ref="_c5">1</int>
+			</metric>
+			<metric ref="_57">
+				<float ref="_c5">0.0</float>
+				<float ref="_c1">0.0</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_c1">50.0</float>
+				<float ref="_c5">50.0</float>
+			</metric>
+			<metric ref="_5a">
+				<float ref="_c1">10.0</float>
+				<float ref="_c5">10.0</float>
+			</metric>
+			<metric ref="_5b">
+				<float ref="_c1">50.0</float>
+				<float ref="_c5">50.0</float>
+			</metric>
+			<metric ref="_5c">
+				<float ref="_c1">80.0</float>
+				<float ref="_c5">10.0</float>
+			</metric>
+			<metric ref="_95">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_96">
+				<int ref="_c1">4</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_a2">
+				<int ref="_c1">1</int>
+				<int ref="_c5">1</int>
+			</metric>
+			<metric ref="_a3">
+				<int ref="_c1">1</int>
+				<int ref="_c5">1</int>
+			</metric>
+			<metric ref="_5e">
+				<float ref="_c1">1.0</float>
+				<float ref="_c5">1.0</float>
+			</metric>
+			<metric ref="_5f">
+				<float ref="_c1">1.0</float>
+				<float ref="_c5">1.0</float>
+			</metric>
+			<metric ref="_80">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_81">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_87">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_88">
+				<int ref="_c1">4</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_8c">
+				<int ref="_c1">1</int>
+				<int ref="_c5">1</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_45">
+			<metric ref="_44">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_c1">0</int>
+				<int ref="_c5">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_c5">20</int>
+				<int ref="_c1">18</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_c1">7</int>
+				<int ref="_c5">5</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_c5">10</int>
+				<int ref="_c1">9</int>
+			</metric>
+			<metric ref="_a1">
+				<int ref="_c5">24</int>
+				<int ref="_c1">20</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_66">
+			<metric ref="_65">
+				<int ref="_c3">0</int>
+				<int ref="_bd">0</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_bd">4</int>
+				<int ref="_c3">0</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_61">
+			<metric ref="_60">
+				<float ref="_bf">100.0</float>
+				<float ref="_c4">50.0</float>
+			</metric>
+			<metric ref="_63">
+				<int ref="_bf">1</int>
+				<int ref="_c4">1</int>
+			</metric>
+			<metric ref="_85">
+				<int ref="_c4">3</int>
+				<int ref="_bf">1</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_bf">7</int>
+				<int ref="_c4">5</int>
+			</metric>
+			<metric ref="_9e">
+				<int ref="_c4">10</int>
+				<int ref="_bf">9</int>
+			</metric>
+		</levelValues>
+		<levelValues levelRef="_51">
+			<metric ref="_89">
+				<int ref="_c6">1</int>
+				<int ref="_cb">0</int>
+				<int ref="_c8">0</int>
+				<int ref="_ca">0</int>
+			</metric>
+			<metric ref="_8a">
+				<int ref="_c6">7</int>
+				<int ref="_ca">4</int>
+				<int ref="_c8">1</int>
+				<int ref="_cb">0</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_ca">2</int>
+				<int ref="_c6">1</int>
+				<int ref="_cb">1</int>
+				<int ref="_c8">1</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_ca">2</int>
+				<int ref="_c6">1</int>
+				<int ref="_cb">1</int>
+				<int ref="_c8">1</int>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_ca">2</int>
+				<int ref="_c6">1</int>
+				<int ref="_cb">1</int>
+				<int ref="_c8">1</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_ca">2</int>
+				<int ref="_c6">1</int>
+				<int ref="_cb">1</int>
+				<int ref="_c8">1</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<issues modelName="./Modifiable.vm" numberOfIssues="16" numberOfUnresolvedIssues="16">
+		<elementIssues>
+			<issue affectedElement="_10a" id="_120" type="_2d" provider="_26" description="Plugin with plugin id 'SpotbugsPlugin' is not installed"></issue>
+			<issue affectedElement="_10c" id="_121" type="_2c" provider="_26" description="Ambiguous expression could be either a parameterless closure expression or an isolated open code block;
+   solution: Add an explicit closure parameter list, e.g. {it -&gt; ...}, or force it to be treated as an open block by giving it a label, e.g. L:{...} @ line 2, column 1." line="2" column="0"></issue>
+			<issue affectedElement="_a8" id="_122" type="_2e" provider="_26" description="Uses 'Model'"></issue>
+			<duplicate name="Duplicate code block 1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:Result:4dfde499dae243f815010ab5677d2fe2|e9972b655186eeb567a042e4c49a0ec0" blockSize="45" numberOfOccurrences="2" id="_123" type="_2b" provider="_26" description="2 occurrences with 45 line(s) found in 2 file(s)">
+				<occurrence source="_d6" startLine="11" blockSize="45" tolerance="0"></occurrence>
+				<occurrence source="_ea" startLine="9" blockSize="45" tolerance="0"></occurrence>
+			</duplicate>
+			<cycleGroups analyzerRef="_e">
+				<cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:7a8ddffb0de6e040b0d7d7ea8207392e|3c2f1e036dc7c36cff32f9bad250b653" structuralDebtIndex="13" componentDependenciesToRemove="1" parserDependenciesToRemove="3" id="_124" type="_29" provider="_26" description="2 cyclic components">
+					<element ref="_f9"></element>
+					<element ref="_fe"></element>
+				</cycleGroup>
+			</cycleGroups>
+			<cycleGroups analyzerRef="_9">
+				<cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:Result:ec2c67ff3133cfb08f72426d2dcc3611|3185f62aac2e0d644108f276de970dfe" structuralDebtIndex="13" componentDependenciesToRemove="1" parserDependenciesToRemove="3" id="_125" type="_2a" provider="_26" description="2 cyclic packages">
+					<element ref="_f5"></element>
+					<element ref="_fa"></element>
+				</cycleGroup>
+			</cycleGroups>
+			<cycleGroups analyzerRef="_a">
+				<cycleGroup numberOfCyclicElements="6" name="[Critical] Java Package cycle group 1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesSystem:Result:015933f1f05b2950c223f552709dd4fc|91e1845a37333a8526be4c6c072efaef" structuralDebtIndex="24" componentDependenciesToRemove="2" parserDependenciesToRemove="4" id="_126" type="_28" provider="_26" description="6 cyclic packages">
+					<element ref="_10e"></element>
+					<element ref="_114"></element>
+					<element ref="_117"></element>
+					<element ref="_119"></element>
+					<element ref="_11b"></element>
+					<element ref="_11d"></element>
+				</cycleGroup>
+			</cycleGroups>
+		</elementIssues>
+		<depencencyIssues>
+			<issue from="_ec" to="_e1" id="_127" type="_27" provider="_25" description="[Virtual Method Call [Via Subtype Self]] 'Model' cannot access 'Observable.java' from 'Foundation'" line="33"></issue>
+			<issue from="_eb" to="_df" id="_128" type="_27" provider="_25" description="[Constructor Call] 'Model' cannot access 'Observable.java' from 'Foundation'" line="15"></issue>
+			<issue from="_b4" to="_b1" id="_129" type="_2f" provider="_26"></issue>
+			<issue from="_102" to="_d8" id="_12a" type="_27" provider="_25" description="[Parameter] 'View' cannot access 'Observable.java' from 'Foundation'" line="27"></issue>
+			<issue from="_c6" to="_dc" id="_12b" type="_27" provider="_25" description="[Virtual Method Call] 'Application' cannot access 'DuplicateInFoundation.java' from 'Foundation'" line="18"></issue>
+			<issue from="_c6" to="_db" id="_12c" type="_27" provider="_25" description="[Constructor Call] 'Application' cannot access 'DuplicateInFoundation.java' from 'Foundation'" line="18"></issue>
+			<issue from="_e6" to="_d8" id="_12d" type="_27" provider="_25" description="[Extends] 'Model' cannot access 'Observable.java' from 'Foundation'" line="5"></issue>
+			<issue from="_c6" to="_d5" id="_12e" type="_27" provider="_25" description="[New] 'Application' cannot access 'DuplicateInFoundation.java' from 'Foundation'" line="18"></issue>
+			<issue from="_f3" to="_dd" id="_12f" type="_27" provider="_25" description="[Implements] 'View' cannot access 'Observable.java' from 'Foundation'" line="9"></issue>
+		</depencencyIssues>
+	</issues>
+</ns3:report>
