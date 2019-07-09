@@ -46,5 +46,12 @@ public class ArchitectureReaderTest
         assertNotNull("Missing artifact", architecturalModel.findArtifact("Alarm.App"));
         assertNotNull("Missing interface", architecturalModel.findInterface("Alarm.App.default"));
         assertNotNull("Missing connector", architecturalModel.findConnector("Alarm.App.default"));
+
+        assertEquals("Wrong version", "9.11.2.100", architecturalModel.getVersion());
+        assertEquals("Wrong system path",
+                "D:\\00_repo\\sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph",
+                architecturalModel.getSystemPath());
+        assertEquals("Wrong system id", "4df288656010188b4d84a2a03bb0ecb9", architecturalModel.getSystemId());
+        assertEquals("Wrong timestamp", 1562668320367L, architecturalModel.getTimestamp());
     }
 }
