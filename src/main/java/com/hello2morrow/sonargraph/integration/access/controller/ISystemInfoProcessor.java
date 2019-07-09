@@ -76,6 +76,4 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<IMetricThreshold> getMetricThresholds();
 
     public List<String> getElementKinds();
-
-    public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 }
