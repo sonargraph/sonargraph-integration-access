@@ -420,16 +420,16 @@ public final class ReportReaderTest
     public void processMetricMinMaxInformation()
     {
         final ISonargraphSystemController controller = ControllerAccess.createController();
-        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_SYSTEM_METADATA));
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_METRIC_METADATA));
         assertTrue(result.toString(), result.isSuccess());
         final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
         assertNotNull("Missing softwareSystem", softwareSystem);
         final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
         final List<IMetricId> metricIds = systemProcessor.getMetricIds();
-        assertEquals("Wrong number of metrics", 76, metricIds.size());
+        assertEquals("Wrong number of metrics", 95, metricIds.size());
         validateMetricInfo(systemProcessor, "CoreAcd", 0.0, Double.POSITIVE_INFINITY, SortDirection.HIGHER_WORSE);
         validateMetricInfo(systemProcessor, "JavaCyclicityPackages", 0.0, Double.POSITIVE_INFINITY, SortDirection.HIGHER_WORSE);
-        final IMetricId distance = validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0, SortDirection.BEST_AT);
+        final IMetricId distance = validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0, SortDirection.OPTIMUM_AT_ZERO);
         assertEquals("Wrong best value", 0.0, distance.getBest(), 0.001);
         validateMetricInfo(systemProcessor, "CoreLinesOfCode", 0.0, Double.POSITIVE_INFINITY, SortDirection.INDIFFERENT);
     }

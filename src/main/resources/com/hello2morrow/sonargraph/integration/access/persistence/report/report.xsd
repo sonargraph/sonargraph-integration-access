@@ -515,7 +515,7 @@
 
     <xs:complexType name="xsdSoftwareSystemReport">
         <xs:sequence>
-            <xs:element name="systemMetaData" type="xsdMap" minOccurs="0" maxOccurs="1" />
+            <xs:element name="systemMetaData" type="xsdMap" minOccurs="0" maxOccurs="1" /><!-- allows to add arbitrary info -->
             <xs:element name="metaData" type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
             <xs:element name="features" type="xsdFeatures" minOccurs="1" maxOccurs="1" />
             <xs:element name="analyzers" type="xsdAnalyzers" minOccurs="1" maxOccurs="1" />

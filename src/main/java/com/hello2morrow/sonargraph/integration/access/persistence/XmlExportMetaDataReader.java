@@ -258,7 +258,7 @@ public final class XmlExportMetaDataReader extends XmlAccess
         }
         try
         {
-            return SortDirection.valueOf(xsdMetricId.getDirection());
+            return SortDirection.fromStandardName(xsdMetricId.getDirection());
         }
         catch (final IllegalArgumentException ex)
         {

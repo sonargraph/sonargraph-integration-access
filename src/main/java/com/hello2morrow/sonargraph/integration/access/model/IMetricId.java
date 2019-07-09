@@ -29,7 +29,8 @@ public interface IMetricId extends IElementWithDescription
         INDIFFERENT,
         HIGHER_WORSE,
         LOWER_WORSE,
-        BEST_AT;
+        OPTIMUM_AT_ZERO,
+        OPTIMUM_AT;
 
         @Override
         public String getStandardName()
@@ -41,6 +42,11 @@ public interface IMetricId extends IElementWithDescription
         public String getPresentationName()
         {
             return Utility.convertConstantNameToPresentationName(name());
+        }
+
+        public static SortDirection fromStandardName(final String direction)
+        {
+            return SortDirection.valueOf(Utility.convertStandardNameToConstantName(direction));
         }
     }
 
