@@ -240,7 +240,8 @@ public final class XmlExportMetaDataReader extends XmlAccess
 
             metricIdXsdToPojoMap.put(xsdMetricId,
                     new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories, metricLevels,
-                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
+                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue(), xsdMetricId.getMinValue(),
+                            xsdMetricId.getMaxValue()));
         }
         return Collections.unmodifiableMap(metricIdXsdToPojoMap);
     }

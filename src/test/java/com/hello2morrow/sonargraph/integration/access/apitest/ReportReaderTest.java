@@ -414,4 +414,29 @@ public final class ReportReaderTest
         final Map<String, String> metaData = softwareSystem.getMetaData();
         assertEquals("Wrong value", "hello2morrow", metaData.get("organisation"));
     }
+
+    @Test
+    public void processMetricMinMaxInformation()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_SYSTEM_METADATA));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<IMetricId> metricIds = systemProcessor.getMetricIds();
+        assertEquals("Wrong number of metrics", 76, metricIds.size());
+        validateMetricInfo(systemProcessor, "CoreAcd", 0.0, Double.POSITIVE_INFINITY);
+        validateMetricInfo(systemProcessor, "JavaCyclicityPackages", 0.0, Double.POSITIVE_INFINITY);
+        validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0);
+    }
+
+    private void validateMetricInfo(final ISystemInfoProcessor systemProcessor, final String metricId, final double min, final double max)
+    {
+        final Optional<IMetricId> metricOptional = systemProcessor.getMetricId(metricId);
+        assertTrue("Missing metric '" + metricId + "'", metricOptional.isPresent());
+        final IMetricId metric = metricOptional.get();
+        assertEquals("Wrong minValue", min, metric.getMin(), 0.001);
+        assertEquals("Wrong maxValue", max, metric.getMax(), 0.001);
+    }
 }

@@ -36,7 +36,8 @@ public interface IMetricId extends IElementWithDescription
 
         private StandardName(final String presentationName)
         {
-            assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
+            assert presentationName != null
+                    && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
             this.presentationName = presentationName;
         }
 
@@ -61,7 +62,15 @@ public interface IMetricId extends IElementWithDescription
 
     public List<IMetricLevel> getLevels();
 
+    @Deprecated
     public Double getBestValue();
 
+    @Deprecated
     public Double getWorstValue();
+
+    public double getBest();
+
+    public double getMin();
+
+    public double getMax();
 }

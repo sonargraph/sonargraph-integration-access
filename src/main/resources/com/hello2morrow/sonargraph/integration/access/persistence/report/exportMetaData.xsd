@@ -95,15 +95,7 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="xsdMetricValueRange">
-    	<xs:attribute name="minValue" type="xs:double" use="optional" default="0.0" />
-    	<xs:attribute name="maxValue" type="xs:double" use="optional" default="INF"/>    	
-    </xs:complexType>
-    
     <xs:complexType name="xsdMetricId">
-        <xs:sequence>
-        	<xs:element name="valueRange" type="xsdMetricValueRange" minOccurs="0" maxOccurs="1"/> <!-- optional for compatibility reasons with older reports -->
-        </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required" />
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="presentationName" type="xs:string" use="required" />
@@ -114,6 +106,8 @@
         <xs:attribute name="levels" type="xs:IDREFS" use="required" />
         <xs:attribute name="bestValue" type="xs:double" use="optional" default="NaN"/>
         <xs:attribute name="worstValue" type="xs:double" use="optional" default="NaN"/>
+    	<xs:attribute name="minValue" type="xs:double" use="optional" default="0.0" />
+    	<xs:attribute name="maxValue" type="xs:double" use="optional" default="INF"/>    	
     </xs:complexType>
     
     <xs:complexType name="xsdMetricIds">
