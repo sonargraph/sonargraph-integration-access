@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hello2morrow</groupId>
 	<artifactId>sonargraph-integration-access</artifactId>
-	<version>3.3</version>
+	<version>3.3.0</version>
 	<name>Sonargraph Integration</name>
 	<description>Sonargraph Integration</description>
 	<url>http://www.hello2morrow.com</url>
