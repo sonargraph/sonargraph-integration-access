@@ -15,14 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.persistence;
+package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import java.util.Collections;
 import java.util.Set;
 
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ElementWithDescriptionImpl;
 
 public class PluginImpl extends ElementWithDescriptionImpl implements IPlugin
 {

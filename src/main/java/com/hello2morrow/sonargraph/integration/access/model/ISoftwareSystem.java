@@ -45,4 +45,6 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Optional<IComponentFilter> getProductionCodeFilter();
 
     public Optional<IComponentFilter> getIssueFilter();
+
+    public Map<String, String> getMetaData();
 }

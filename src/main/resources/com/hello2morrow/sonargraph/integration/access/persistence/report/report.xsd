@@ -501,9 +501,21 @@
         <xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" />
         <xs:attribute name="debugInfo" type="xs:string" />
     </xs:complexType>
+    
+    <xs:complexType name="xsdMapEntry">
+    	<xs:attribute name="key" type="xs:string" use="required" />
+    	<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMap">
+    	<xs:sequence>
+            <xs:element name="entry" type="xsdMapEntry" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:complexType name="xsdSoftwareSystemReport">
         <xs:sequence>
+            <xs:element name="systemMetaData" type="xsdMap" minOccurs="0" maxOccurs="1" />
             <xs:element name="metaData" type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
             <xs:element name="features" type="xsdFeatures" minOccurs="1" maxOccurs="1" />
             <xs:element name="analyzers" type="xsdAnalyzers" minOccurs="1" maxOccurs="1" />

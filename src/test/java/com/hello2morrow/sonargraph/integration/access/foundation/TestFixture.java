@@ -65,6 +65,8 @@ public class TestFixture
 
     public static final String REPORT_FROM_DIFFERENT_ORIGIN = "./src/test/resources/IntegrationAccess_From_Different_Origin.xml";
 
+    public static final String REPORT_WITH_SYSTEM_METADATA = "./src/test/resources/AlarmClock_with_metadata.xml";
+
     /** Reports for testing diff functionality */
     public static final String ALARM_CLOCK_BASELINE_PLUGIN_NOT_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_not_executed.xml";
     public static final String ALARM_CLOCK_PLUGIN_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_executed.xml";

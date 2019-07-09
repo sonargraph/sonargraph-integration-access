@@ -402,4 +402,16 @@ public final class ReportReaderTest
             assertEquals("Wrong pattern", "**/test/java/**", exclude.getPattern());
         }
     }
+
+    @Test
+    public void processSystemMetaData()
+    {
+        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_SYSTEM_METADATA));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final Map<String, String> metaData = softwareSystem.getMetaData();
+        assertEquals("Wrong value", "hello2morrow", metaData.get("organisation"));
+    }
 }
