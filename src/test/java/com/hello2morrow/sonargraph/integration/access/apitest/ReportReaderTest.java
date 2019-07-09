@@ -48,6 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricId.SortDirection;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
@@ -426,17 +427,22 @@ public final class ReportReaderTest
         final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
         final List<IMetricId> metricIds = systemProcessor.getMetricIds();
         assertEquals("Wrong number of metrics", 76, metricIds.size());
-        validateMetricInfo(systemProcessor, "CoreAcd", 0.0, Double.POSITIVE_INFINITY);
-        validateMetricInfo(systemProcessor, "JavaCyclicityPackages", 0.0, Double.POSITIVE_INFINITY);
-        validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0);
+        validateMetricInfo(systemProcessor, "CoreAcd", 0.0, Double.POSITIVE_INFINITY, SortDirection.HIGHER_WORSE);
+        validateMetricInfo(systemProcessor, "JavaCyclicityPackages", 0.0, Double.POSITIVE_INFINITY, SortDirection.HIGHER_WORSE);
+        final IMetricId distance = validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0, SortDirection.BEST_AT);
+        assertEquals("Wrong best value", 0.0, distance.getBest(), 0.001);
+        validateMetricInfo(systemProcessor, "CoreLinesOfCode", 0.0, Double.POSITIVE_INFINITY, SortDirection.INDIFFERENT);
     }
 
-    private void validateMetricInfo(final ISystemInfoProcessor systemProcessor, final String metricId, final double min, final double max)
+    private IMetricId validateMetricInfo(final ISystemInfoProcessor systemProcessor, final String metricId, final double min, final double max,
+            final SortDirection direction)
     {
         final Optional<IMetricId> metricOptional = systemProcessor.getMetricId(metricId);
         assertTrue("Missing metric '" + metricId + "'", metricOptional.isPresent());
         final IMetricId metric = metricOptional.get();
         assertEquals("Wrong minValue", min, metric.getMin(), 0.001);
         assertEquals("Wrong maxValue", max, metric.getMax(), 0.001);
+        assertEquals("Wrong direction", direction, metric.getSortDirection());
+        return metric;
     }
 }

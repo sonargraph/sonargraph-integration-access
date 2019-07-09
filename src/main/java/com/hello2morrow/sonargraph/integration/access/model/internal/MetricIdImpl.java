@@ -36,15 +36,17 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
     private final double bestValue;
     private final double maxValue;
     private final double minValue;
+    private final SortDirection sortDirection;
 
     public MetricIdImpl(final String name, final String presentationName, final String description, final List<IMetricCategory> categories,
             final List<IMetricLevel> levels, final IMetricProvider provider, final boolean isFloat, final double bestValue, final double worstValue,
-            final double minValue, final double maxValue)
+            final double minValue, final double maxValue, final SortDirection direction)
     {
         super(name, presentationName, description);
         assert categories != null && !categories.isEmpty() : "Parameter 'categories' of method 'setCategories' must not be empty";
         assert levels != null && !levels.isEmpty() : "Parameter 'levels' of method 'MetricIdImpl' must not be empty";
         assert provider != null : "Parameter 'provider' of method 'MetricId' must not be null";
+        assert direction != null : "Parameter 'direction' of method 'MetricIdImpl' must not be null";
 
         this.categories = categories;
         this.levels = levels;
@@ -54,6 +56,7 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
         this.worstValue = worstValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.sortDirection = direction;
     }
 
     @Override
@@ -88,6 +91,12 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
 
     @Override
     public Double getWorstValue()
+    {
+        return worstValue;
+    }
+
+    @Override
+    public double getWorst()
     {
         return worstValue;
     }
@@ -211,5 +220,11 @@ public final class MetricIdImpl extends ElementWithDescriptionImpl implements IM
             return false;
         }
         return true;
+    }
+
+    @Override
+    public SortDirection getSortDirection()
+    {
+        return sortDirection;
     }
 }

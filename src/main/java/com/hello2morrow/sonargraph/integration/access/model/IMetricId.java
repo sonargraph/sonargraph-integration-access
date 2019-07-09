@@ -24,6 +24,26 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public interface IMetricId extends IElementWithDescription
 {
+    public enum SortDirection implements IEnumeration
+    {
+        INDIFFERENT,
+        HIGHER_WORSE,
+        LOWER_WORSE,
+        BEST_AT;
+
+        @Override
+        public String getStandardName()
+        {
+            return Utility.convertConstantNameToStandardName(name());
+        }
+
+        @Override
+        public String getPresentationName()
+        {
+            return Utility.convertConstantNameToPresentationName(name());
+        }
+    }
+
     public enum StandardName implements IEnumeration
     {
         CORE_VIOLATIONS_PARSER_DEPENDENCIES("Number of Violations (Parser Dependencies)"),
@@ -73,4 +93,8 @@ public interface IMetricId extends IElementWithDescription
     public double getMin();
 
     public double getMax();
+
+    public SortDirection getSortDirection();
+
+    double getWorst();
 }
