@@ -114,7 +114,7 @@
         <xs:attribute name="worstValue" type="xs:double" use="optional" default="NaN"/>
     	<xs:attribute name="minValue" type="xs:double" use="optional" default="0.0" />
     	<xs:attribute name="maxValue" type="xs:double" use="optional" default="INF"/>
-    	<xs:attribute name="direction" type="xsdMetricValueDirection" use="optional" default="INDIFFERENT" />    	
+    	<xs:attribute name="direction" type="xsdMetricValueDirection" use="optional" default="Indifferent" />    	
     </xs:complexType>
     
     <xs:complexType name="xsdMetricIds">

@@ -27,32 +27,31 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyIssue;
-import com.hello2morrow.sonargraph.integration.access.model.INamedElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.ILogicalElement;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElementIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 
 final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
 {
     private final ModuleImpl module;
     private final ISystemInfoProcessor systemInfoProcessor;
 
-    public ModuleInfoProcessorImpl(final SoftwareSystemImpl softwareSystem, final ModuleImpl module)
+    public ModuleInfoProcessorImpl(final ISystemInfoProcessor systemInfoProcessor, final ModuleImpl module)
     {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'ModuleInfoProcessorImpl' must not be null";
+        assert systemInfoProcessor != null : "Parameter 'systemInfoProcessor' of method 'ModuleInfoProcessorImpl' must not be null";
         assert module != null : "Parameter 'module' of method 'ModuleInfoProcessorImpl' must not be null";
 
-        this.systemInfoProcessor = new SystemInfoProcessorImpl(softwareSystem);
+        this.systemInfoProcessor = systemInfoProcessor;
         this.module = module;
     }
 
@@ -258,8 +257,10 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
 
     private String concatenate(final String relativeRootDirectory, final String relativeDirectory)
     {
-        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'concatenate' must not be empty";
-        assert relativeDirectory != null && relativeDirectory.length() > 0 : "Parameter 'relativeDirectory' of method 'concatenate' must not be empty";
+        assert relativeRootDirectory != null
+                && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'concatenate' must not be empty";
+        assert relativeDirectory != null
+                && relativeDirectory.length() > 0 : "Parameter 'relativeDirectory' of method 'concatenate' must not be empty";
 
         String directory = relativeRootDirectory;
         if (relativeDirectory.startsWith("./"))
