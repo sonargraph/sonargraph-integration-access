@@ -151,7 +151,9 @@
 
     <xs:complexType name="xsdModule">
         <xs:complexContent>
-            <xs:extension base="xsdLanguageBasedContainer" />
+            <xs:extension base="xsdLanguageBasedContainer" >
+                <xs:attribute name="moduleId" type="xs:string" use="required" />
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 

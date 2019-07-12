@@ -555,7 +555,7 @@ public final class XmlReportReader extends XmlAccess
         {
             final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
             final ModuleImpl nextModuleImpl = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), nextXsdModule.getName(),
-                    nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(),
+                    nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(), nextXsdModule.getModuleId(),
                     softwareSystemImpl.getMetaDataAccess(), softwareSystemImpl.getElementRegistry(), nextXsdModule.getLanguage(), softwareSystemImpl);
             softwareSystemImpl.addModule(nextModuleImpl);
             nextModuleImpl.addElement(nextModuleImpl);
