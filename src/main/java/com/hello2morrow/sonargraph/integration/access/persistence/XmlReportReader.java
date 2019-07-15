@@ -168,7 +168,6 @@ public final class XmlReportReader extends XmlAccess
      *
      * @param reportFile XML file that is expected to exist and be readable.
      * @param baseDir
-     * @param baseDir
      * @param result Contains info about errors.
      */
     public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final File baseDir, final Result result)

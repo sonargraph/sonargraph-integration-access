@@ -152,7 +152,7 @@
     <xs:complexType name="xsdModule">
         <xs:complexContent>
             <xs:extension base="xsdLanguageBasedContainer" >
-                <xs:attribute name="moduleId" type="xs:string" use="required" />
+                <xs:attribute name="moduleId" type="xs:string" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -534,9 +534,9 @@
             <xs:element name="systemElements" type="xsdSystemElements" minOccurs="0" maxOccurs="1" />
             <xs:element name="moduleElements" type="xsdModuleElements" minOccurs="1" maxOccurs="unbounded" />
             <xs:element name="externalSystemScopeElements" type="xsdExternalSystemScopeElements"
-                minOccurs="1" maxOccurs="unbounded" />
+                minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="externalModuleScopeElements" type="xsdExternalModuleScopeElements"
-                minOccurs="1" maxOccurs="unbounded" />
+                minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="systemMetricValues" type="xsdSystemMetricValues" minOccurs="0" maxOccurs="1" />
             <xs:element name="moduleMetricValues" type="xsdModuleMetricValues" minOccurs="0"
                 maxOccurs="unbounded" />
