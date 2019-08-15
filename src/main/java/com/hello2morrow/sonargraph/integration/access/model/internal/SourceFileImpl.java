@@ -69,6 +69,12 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
     }
 
     @Override
+    public String getIdentifyingPath()
+    {
+        return relativeRootDirectory + getRelativePath().substring(1);
+    }
+
+    @Override
     public String toString()
     {
         return super.toString() + "\nrelativeRootDirectory:" + relativeRootDirectory;

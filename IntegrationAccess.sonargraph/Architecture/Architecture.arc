@@ -7,7 +7,7 @@ artifact Architecture
         include "**/controller/**"
     }
     
-    artifact Peristence
+    artifact Persistence
     {
         include "**/persistence/**"
     }

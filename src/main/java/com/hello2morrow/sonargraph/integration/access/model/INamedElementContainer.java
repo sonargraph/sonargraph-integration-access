@@ -18,14 +18,17 @@
 package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 public interface INamedElementContainer extends INamedElement, IElementWithDescription
 {
-    public Set<String> getElementKinds();
+    Set<INamedElement> getElements(Predicate<INamedElement> predicate);
 
-    public Set<INamedElement> getElements(String elementKind);
+    Set<String> getElementKinds();
 
-    public Set<ILogicalNamespace> getLogicalNamespaces();
+    Set<INamedElement> getElements(String elementKind);
 
-    public Set<ILogicalProgrammingElement> getLogicalProgrammingElements();
+    Set<ILogicalNamespace> getLogicalNamespaces();
+
+    Set<ILogicalProgrammingElement> getLogicalProgrammingElements();
 }
