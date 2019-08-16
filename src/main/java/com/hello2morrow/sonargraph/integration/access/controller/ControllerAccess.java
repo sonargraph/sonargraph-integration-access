@@ -17,6 +17,11 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
+/**
+ * @deprecated use {@link ControllerFactory} instead.
+ */
+//This is a factory, no "access" - whatever that means...
+@Deprecated
 public final class ControllerAccess
 {
     private ControllerAccess()

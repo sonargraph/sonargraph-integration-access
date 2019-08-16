@@ -15,28 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.controller;
 
-import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
-import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
-
-public enum Severity implements IEnumeration
+public final class ControllerFactory
 {
-    //DO NOT CHANGE THE ORDER OF THESE CONSTANTS!
-    ERROR,
-    WARNING,
-    INFO,
-    NONE;
-
-    @Override
-    public String getStandardName()
+    private ControllerFactory()
     {
-        return Utility.convertConstantNameToStandardName(name());
+        super();
     }
 
-    @Override
-    public String getPresentationName()
+    public static ISonargraphSystemController createController()
     {
-        return Utility.convertConstantNameToPresentationName(name());
+        return new SonargraphSystemControllerImpl();
+    }
+
+    public static IMetaDataController createMetaDataController()
+    {
+        return new MetaDataControllerImpl();
     }
 }

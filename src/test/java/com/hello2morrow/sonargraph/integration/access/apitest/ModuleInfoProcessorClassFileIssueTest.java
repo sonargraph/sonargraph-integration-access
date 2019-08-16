@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
 import com.hello2morrow.sonargraph.integration.access.controller.IModuleInfoProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
@@ -43,7 +43,7 @@ public final class ModuleInfoProcessorClassFileIssueTest
     @Test
     public void validateIssues()
     {
-        m_controller = ControllerAccess.createController();
+        m_controller = ControllerFactory.createController();
         final Result result = m_controller.loadSystemReport(new File(TestFixture.TEST_REPORT_CLASSFILE_ISSUES));
         assertTrue("Failed to read report: " + result.toString(), result.isSuccess());
         final Map<String, IModule> moduleMap = m_controller.getSoftwareSystem().getModules();

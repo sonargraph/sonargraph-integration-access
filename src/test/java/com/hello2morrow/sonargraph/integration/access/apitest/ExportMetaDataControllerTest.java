@@ -32,7 +32,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
 import com.hello2morrow.sonargraph.integration.access.controller.IMetaDataController;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultWithOutcome;
 import com.hello2morrow.sonargraph.integration.access.foundation.TestFixture;
@@ -50,7 +50,7 @@ public final class ExportMetaDataControllerTest
     @Before
     public void before()
     {
-        m_controller = ControllerAccess.createMetaDataController();
+        m_controller = ControllerFactory.createMetaDataController();
     }
 
     @Test
