@@ -32,14 +32,22 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
 {
     private static final long serialVersionUID = -4617725409511641491L;
     private final ISourceFileLookup sourceFileLookup;
+    private final String moduleId;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
+            final String description, final String moduleId, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
             final String language, final ISourceFileLookup sourceFileLookup)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
         assert sourceFileLookup != null : "Parameter 'sourceFileLookup' of method 'ModuleImpl' must not be null";
         this.sourceFileLookup = sourceFileLookup;
+        this.moduleId = moduleId;
+    }
+
+    @Override
+    public String getModuleId()
+    {
+        return moduleId;
     }
 
     @Override

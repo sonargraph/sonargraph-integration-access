@@ -22,6 +22,8 @@ import java.util.Optional;
 
 public interface IModule extends ILanguageBasedContainer
 {
+    String getModuleId();
+
     public Map<String, IMetricLevel> getMetricLevels();
 
     public Optional<ISourceFile> getSourceForElement(INamedElement namedElement);

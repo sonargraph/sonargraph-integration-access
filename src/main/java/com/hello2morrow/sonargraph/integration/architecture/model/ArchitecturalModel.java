@@ -30,11 +30,54 @@ public final class ArchitecturalModel
     private final String fileName;
     private final String model;
     private final List<Artifact> m_artifacts = new ArrayList<>();
+    private long timestamp;
+    private String systemId;
+    private String systemPath;
+    private String version;
 
+    @Deprecated
     public ArchitecturalModel(final String fileName, final String model)
     {
         this.fileName = fileName;
         this.model = model;
+    }
+
+    public ArchitecturalModel(final String fileName, final String model, final String systemPath, final String systemId, final long timestamp,
+            final String version)
+    {
+        assert fileName != null && fileName.length() > 0 : "Parameter 'fileName' of method 'ArchitectureModel' must not be empty";
+        assert model != null && model.length() > 0 : "Parameter 'model' of method 'ArchitectureModel' must not be empty";
+        assert systemPath != null && systemPath.length() > 0 : "Parameter 'systemPath' of method 'ArchitectureModel' must not be empty";
+        assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'ArchitectureModel' must not be empty";
+        assert timestamp > 0 : "Parameter 'timestamp' must be positive but is " + timestamp;
+        assert version != null && version.length() > 0 : "Parameter 'version' of method 'ArchitecturalModel' must not be empty";
+
+        this.fileName = fileName;
+        this.model = model;
+        this.systemPath = systemPath;
+        this.systemId = systemId;
+        this.timestamp = timestamp;
+        this.version = version;
+    }
+
+    public String getSystemPath()
+    {
+        return systemPath;
+    }
+
+    public String getSystemId()
+    {
+        return systemId;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public String getVersion()
+    {
+        return version;
     }
 
     /**
@@ -49,6 +92,7 @@ public final class ArchitecturalModel
 
     /**
      * The model this architecture is based on
+     *
      * @return "physical" or "logical"
      */
     public String getModel()

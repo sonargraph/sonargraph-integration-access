@@ -46,6 +46,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 
 final class SystemInfoProcessorImpl implements ISystemInfoProcessor
@@ -293,5 +294,13 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         assert issue != null : "Parameter 'issue' of method 'getResolution' must not be null";
         return softwareSystem.getResolution(issue);
+    }
+
+    @Override
+    public IModuleInfoProcessor createModuleInfoProcessor(final IModule module)
+    {
+        assert module != null : "Parameter 'module' of method 'createModuleInfoProcessor' must not be null";
+        assert module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module.getClass();
+        return new ModuleInfoProcessorImpl(this, (ModuleImpl) module);
     }
 }

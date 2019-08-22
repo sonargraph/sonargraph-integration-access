@@ -95,6 +95,12 @@
         </xs:sequence>
     </xs:complexType>
     
+    <xs:simpleType name="xsdMetricValueDirection">
+      <xs:restriction base="xs:string">
+      	<xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+    
     <xs:complexType name="xsdMetricId">
         <xs:attribute name="id" type="xs:ID" use="required" />
         <xs:attribute name="name" type="xs:string" use="required" />
@@ -106,6 +112,9 @@
         <xs:attribute name="levels" type="xs:IDREFS" use="required" />
         <xs:attribute name="bestValue" type="xs:double" use="optional" default="NaN"/>
         <xs:attribute name="worstValue" type="xs:double" use="optional" default="NaN"/>
+    	<xs:attribute name="minValue" type="xs:double" use="optional" default="0.0" />
+    	<xs:attribute name="maxValue" type="xs:double" use="optional" default="INF"/>
+    	<xs:attribute name="direction" type="xsdMetricValueDirection" use="optional" default="Indifferent" />    	
     </xs:complexType>
     
     <xs:complexType name="xsdMetricIds">

@@ -18,7 +18,9 @@
 
 package com.hello2morrow.sonargraph.integration.architecture;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Optional;
@@ -26,24 +28,30 @@ import java.util.Optional;
 import org.junit.Test;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
-import com.hello2morrow.sonargraph.integration.architecture.model.ArchitecturalModel;
 import com.hello2morrow.sonargraph.integration.architecture.controller.ArchitectureReader;
+import com.hello2morrow.sonargraph.integration.architecture.model.ArchitecturalModel;
 
 public class ArchitectureReaderTest
 {
     @Test
     public void readArchitectureTest()
     {
-        Result result = new Result("Reading Architecture");
-        ArchitectureReader reader = new ArchitectureReader();
-        Optional<ArchitecturalModel> modelOptional;
-
-        modelOptional = reader.readArchitectureFile(new File("src/test/data/architecture/sonargraph.xml"), result);
-        assertTrue(result.isSuccess());
+        final Result result = new Result("Reading Architecture");
+        final ArchitectureReader reader = new ArchitectureReader();
+        final Optional<ArchitecturalModel> modelOptional = reader.readArchitectureFile(new File("src/test/data/architecture/anytest.xml"), result);
+        assertTrue("Failed to read architecture", result.isSuccess());
         assertTrue(modelOptional.isPresent());
-        assertEquals(11, modelOptional.get().getArtifacts().size());
-        assertNotNull(modelOptional.get().findArtifact("LanguageProvider-Java.Command"));
-        assertNotNull(modelOptional.get().findInterface("LanguageProvider-Java.Command.default"));
-        assertNotNull(modelOptional.get().findConnector("LanguageProvider-Java.Command.default"));
+        final ArchitecturalModel architecturalModel = modelOptional.get();
+        assertEquals("Wrong number of artifacts", 2, architecturalModel.getArtifacts().size());
+        assertNotNull("Missing artifact", architecturalModel.findArtifact("Alarm.App"));
+        assertNotNull("Missing interface", architecturalModel.findInterface("Alarm.App.default"));
+        assertNotNull("Missing connector", architecturalModel.findConnector("Alarm.App.default"));
+
+        assertEquals("Wrong version", "9.11.2.100", architecturalModel.getVersion());
+        assertEquals("Wrong system path",
+                "D:\\00_repo\\sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph",
+                architecturalModel.getSystemPath());
+        assertEquals("Wrong system id", "4df288656010188b4d84a2a03bb0ecb9", architecturalModel.getSystemId());
+        assertEquals("Wrong timestamp", 1562668320367L, architecturalModel.getTimestamp());
     }
 }

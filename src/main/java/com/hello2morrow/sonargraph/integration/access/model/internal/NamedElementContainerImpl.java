@@ -20,12 +20,14 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.ILogicalNamespace;
@@ -97,6 +99,20 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'getElements' must not be empty";
         final Set<INamedElement> namedElements = kindToNamedElements.get(elementKind);
         return namedElements != null ? Collections.unmodifiableSet(namedElements) : Collections.emptySet();
+    }
+
+    @Override
+    public final Set<INamedElement> getElements(Predicate<INamedElement> predicate)
+    {
+        assert predicate != null;
+
+        Set<INamedElement> result = new HashSet<>();
+
+        for (Set<INamedElement> elements : kindToNamedElements.values())
+        {
+            elements.stream().filter(n -> predicate.test(n)).forEach(n -> result.add(n));
+        }
+        return result;
     }
 
     @Override

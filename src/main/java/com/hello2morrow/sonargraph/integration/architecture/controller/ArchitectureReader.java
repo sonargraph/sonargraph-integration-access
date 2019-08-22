@@ -58,6 +58,7 @@ public final class ArchitectureReader
 
     /**
      * Reads an XML report.
+     *
      * @param modelFile XML file containing the architectural model.
      * @param result Contains info about errors.
      */
@@ -88,17 +89,29 @@ public final class ArchitectureReader
         return Optional.ofNullable(model);
     }
 
-    private ArchitecturalModel convertXmlArchitectureToPojo(final Architecture value)
+    private ArchitecturalModel convertXmlArchitectureToPojo(final Architecture architecture)
     {
-        final ArchitecturalModel model = new ArchitecturalModel(value.getName(), value.getModel());
+        assert architecture != null : "Parameter 'architecture' of method 'convertXmlArchitectureToPojo' must not be null";
 
-        for (final XsdArtifact xmlArtifact : value.getArtifact())
+        final ArchitecturalModel model;
+        if (architecture.getTimestamp() == null)
+        {
+            //support for old schema version
+            model = new ArchitecturalModel(architecture.getName(), architecture.getModel());
+        }
+        else
+        {
+            model = new ArchitecturalModel(architecture.getName(), architecture.getModel(), architecture.getSystemPath(), architecture.getSystemId(),
+                    architecture.getTimestamp().toGregorianCalendar().getTimeInMillis(), architecture.getVersion());
+        }
+
+        for (final XsdArtifact xmlArtifact : architecture.getArtifact())
         {
             model.addArtifact(convertXmlArtifact(null, xmlArtifact));
         }
 
         // Linking is done after all interfaces and connectors are known
-        for (final XsdArtifact xmlArtifact : value.getArtifact())
+        for (final XsdArtifact xmlArtifact : architecture.getArtifact())
         {
             linkArtifact(xmlArtifact);
         }

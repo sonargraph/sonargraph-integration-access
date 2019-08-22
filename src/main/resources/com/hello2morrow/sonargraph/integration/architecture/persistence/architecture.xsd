@@ -103,6 +103,10 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="model" type="xs:string" use="required"/>
+        <xs:attribute name="systemPath" type="xs:string" use="optional" /> <!-- "optional" to ensure compatibility with older versions -->
+        <xs:attribute name="systemId" type="xs:string" use="optional" /> <!-- "optional" to ensure compatibility with older versions -->
+        <xs:attribute name="timestamp" type="xs:dateTime" use="optional" /> <!-- "optional" to ensure compatibility with older versions -->
+        <xs:attribute name="version" type="xs:string" use="optional" /> <!-- "optional" to ensure compatibility with older versions -->
       </xs:complexType>
     </xs:element>
 

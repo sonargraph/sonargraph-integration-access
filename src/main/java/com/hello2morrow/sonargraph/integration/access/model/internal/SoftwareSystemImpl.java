@@ -85,6 +85,8 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     private int numberOfIssues = 0;
 
+    private final Map<String, String> metaData = new HashMap<>();
+
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel,
             final AnalyzerExecutionLevel analyzerExecutionLevel)
@@ -413,8 +415,8 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     }
 
     /**
-     * @param  issue the issue - must not be 'null'
-     * @return       the resolution or 'null' if the issue has no resolution
+     * @param issue the issue - must not be 'null'
+     * @return the resolution or 'null' if the issue has no resolution
      */
     public IResolution getResolution(final IIssue issue)
     {
@@ -509,5 +511,19 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         assert baseDirectory != null && baseDirectory.length() > 0 : "Parameter 'baseDirectory' of method 'setBaseDir' must not be empty";
         baseDir = baseDirectory;
+    }
+
+    @Override
+    public Map<String, String> getMetaData()
+    {
+        return Collections.unmodifiableMap(metaData);
+    }
+
+    public String addMetaData(final String key, final String value)
+    {
+        assert key != null && key.length() > 0 : "Parameter 'key' of method 'addMetaData' must not be empty";
+        assert value != null : "Parameter 'value' of method 'addMetaData' must not be null";
+
+        return metaData.put(key, value);
     }
 }

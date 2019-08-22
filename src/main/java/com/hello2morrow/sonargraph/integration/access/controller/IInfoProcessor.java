@@ -60,7 +60,6 @@ public interface IInfoProcessor
     /**
      * @param level
      * @param metricId the metric's 'standard' name, e.g. 'CoreParameter'
-     * @return
      */
     public Optional<IMetricId> getMetricId(IMetricLevel level, String metricId);
 
@@ -72,7 +71,6 @@ public interface IInfoProcessor
 
     /**
      * @param levelName The level's 'standard' name, e.g. 'SourceFile'
-     * @return
      */
     public Optional<IMetricLevel> getMetricLevel(String levelName);
 

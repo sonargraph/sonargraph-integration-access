@@ -42,10 +42,23 @@ public abstract class XmlAccess
         return new JaxbAdapter<>(new XmlPersistenceContext(NAMESPACE, classLoader.getResource(EXPORT_METADATA_XSD)), classLoader);
     }
 
+    /**
+     * No XML validation is used for reports, because it slows down the processing dramatically (factor 1000 for large reports).
+     */
     public static final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createReportJaxbAdapter()
     {
-        //No XML validation for reports - no URL parameter used 
         return new JaxbAdapter<>(NAMESPACE, getClassLoader());
+    }
+
+    /**
+     * For testing.
+     */
+    public static final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createValidatingReportJaxbAdapter()
+    {
+        final ClassLoader classLoader = getClassLoader();
+        final XmlPersistenceContext context = new XmlPersistenceContext(NAMESPACE, classLoader.getResource(EXPORT_METADATA_XSD));
+        context.add(NAMESPACE, classLoader.getResource("com/hello2morrow/sonargraph/integration/access/persistence/report/report.xsd"));
+        return new JaxbAdapter<>(context, classLoader);
     }
 
     private static ClassLoader getClassLoader()

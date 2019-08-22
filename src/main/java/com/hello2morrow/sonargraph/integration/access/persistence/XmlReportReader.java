@@ -88,6 +88,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PluginImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
@@ -121,6 +122,8 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssu
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalNamespace;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalProgrammingElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMap;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMapEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricFloatValue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricIntValue;
@@ -165,8 +168,7 @@ public final class XmlReportReader extends XmlAccess
      *
      * @param reportFile XML file that is expected to exist and be readable.
      * @param baseDir
-     * @param baseDir
-     * @param result     Contains info about errors.
+     * @param result Contains info about errors.
      */
     public Optional<SoftwareSystemImpl> readReportFile(final File reportFile, final File baseDir, final Result result)
     {
@@ -322,6 +324,7 @@ public final class XmlReportReader extends XmlAccess
         }
         softwareSystemImpl.addElement(softwareSystemImpl);
 
+        processSystemMetaData(softwareSystemImpl, xsdReport);
         processAnalyzers(softwareSystemImpl, xsdReport);
         processPlugins(softwareSystemImpl, xsdReport);
         processFeatures(softwareSystemImpl, xsdReport);
@@ -354,6 +357,25 @@ public final class XmlReportReader extends XmlAccess
         globalXmlIdToIssueMap.clear();
 
         return Optional.of(softwareSystemImpl);
+    }
+
+    private void processSystemMetaData(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport xsdReport)
+    {
+        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'processSystemMetaData' must not be null";
+        assert xsdReport != null : "Parameter 'xsdReport' of method 'processSystemMetaData' must not be null";
+
+        final XsdMap xsdMetaData = xsdReport.getSystemMetaData();
+        if (xsdMetaData == null)
+        {
+            return;
+        }
+
+        for (final XsdMapEntry next : xsdMetaData.getEntry())
+        {
+            final String previous = softwareSystemImpl.addMetaData(next.getKey(), next.getValue());
+            assert previous == null : "Unexpected duplicate entry for metadata key '" + next.getKey() + "'. previous value: " + previous
+                    + ", current value: " + next.getValue();
+        }
     }
 
     private void connectSourceFiles(final SoftwareSystemImpl softwareSystemImpl)
@@ -532,7 +554,7 @@ public final class XmlReportReader extends XmlAccess
         {
             final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
             final ModuleImpl nextModuleImpl = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), nextXsdModule.getName(),
-                    nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(),
+                    nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(), nextXsdModule.getModuleId(),
                     softwareSystemImpl.getMetaDataAccess(), softwareSystemImpl.getElementRegistry(), nextXsdModule.getLanguage(), softwareSystemImpl);
             softwareSystemImpl.addModule(nextModuleImpl);
             nextModuleImpl.addElement(nextModuleImpl);

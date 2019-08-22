@@ -151,7 +151,9 @@
 
     <xs:complexType name="xsdModule">
         <xs:complexContent>
-            <xs:extension base="xsdLanguageBasedContainer" />
+            <xs:extension base="xsdLanguageBasedContainer" >
+                <xs:attribute name="moduleId" type="xs:string" use="optional" />
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
@@ -501,9 +503,21 @@
         <xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" />
         <xs:attribute name="debugInfo" type="xs:string" />
     </xs:complexType>
+    
+    <xs:complexType name="xsdMapEntry">
+    	<xs:attribute name="key" type="xs:string" use="required" />
+    	<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="xsdMap">
+    	<xs:sequence>
+            <xs:element name="entry" type="xsdMapEntry" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:complexType name="xsdSoftwareSystemReport">
         <xs:sequence>
+            <xs:element name="systemMetaData" type="xsdMap" minOccurs="0" maxOccurs="1" /><!-- allows to add arbitrary info -->
             <xs:element name="metaData" type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
             <xs:element name="features" type="xsdFeatures" minOccurs="1" maxOccurs="1" />
             <xs:element name="analyzers" type="xsdAnalyzers" minOccurs="1" maxOccurs="1" />
@@ -520,9 +534,9 @@
             <xs:element name="systemElements" type="xsdSystemElements" minOccurs="0" maxOccurs="1" />
             <xs:element name="moduleElements" type="xsdModuleElements" minOccurs="1" maxOccurs="unbounded" />
             <xs:element name="externalSystemScopeElements" type="xsdExternalSystemScopeElements"
-                minOccurs="1" maxOccurs="unbounded" />
+                minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="externalModuleScopeElements" type="xsdExternalModuleScopeElements"
-                minOccurs="1" maxOccurs="unbounded" />
+                minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="systemMetricValues" type="xsdSystemMetricValues" minOccurs="0" maxOccurs="1" />
             <xs:element name="moduleMetricValues" type="xsdModuleMetricValues" minOccurs="0"
                 maxOccurs="unbounded" />

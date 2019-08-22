@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<architecture name="anytest.arc" model="physical" systemPath="D:\00_repo\sgng\com.hello2morrow.sonargraph.language.provider.java\src\test\architecture\AlarmClockWithArchitecture\AlarmClock.sonargraph" systemId="4df288656010188b4d84a2a03bb0ecb9" timestamp="2019-07-09T12:32:00.367+02:00" version="9.11.2.100">
+	<artifact name="Alarm">
+		<include>*/com/h2m/alarm/**</include>
+		<artifact name="Alarm.App">
+			<stereotype>LOCAL</stereotype>
+			<include>**/application/**</include>
+			<interface name="Alarm.App.default" isOptional="false">
+				<include>**</include>
+			</interface>
+			<connector name="Alarm.App.default" isOptional="false">
+				<include>**</include>
+				<connectTo>Alarm.Presentation.default</connectTo>
+				<connectTo>Alarm.Model.default</connectTo>
+			</connector>
+		</artifact>
+		<artifact name="Alarm.Model">
+			<include>**/model/**</include>
+			<interface name="Alarm.Model.default" isOptional="false">
+				<include>**</include>
+			</interface>
+			<connector name="Alarm.Model.default" isOptional="false">
+				<include>**</include>
+				<connectTo>Alarm.Presentation.default</connectTo>
+				<connectTo viaParentConnector="Alarm.ToObserver">Observer.default</connectTo>
+			</connector>
+		</artifact>
+		<artifact name="Alarm.Presentation">
+			<stereotype>PUBLIC</stereotype>
+			<include>**/presentation/**</include>
+			<interface name="Alarm.Presentation.default" isOptional="false">
+				<include>**</include>
+			</interface>
+			<connector name="Alarm.Presentation.default" isOptional="false">
+				<include>**</include>
+				<connectTo viaParentConnector="Alarm.ToObserver">Observer.default</connectTo>
+			</connector>
+		</artifact>
+		<interface name="Alarm.default" isOptional="false">
+			<include>**</include>
+			<export>Alarm.App.default</export>
+			<export>Alarm.Model.default</export>
+			<export>Alarm.Presentation.default</export>
+		</interface>
+		<connector name="Alarm.ToObserver" isOptional="false">
+			<includedConnector>Alarm.Model.default</includedConnector>
+			<includedConnector>Alarm.Presentation.default</includedConnector>
+			<connectTo>Observer.default</connectTo>
+		</connector>
+		<connector name="Alarm.default" isOptional="false">
+			<include>**</include>
+			<includedConnector>Alarm.Model.default</includedConnector>
+			<includedConnector>Alarm.Presentation.default</includedConnector>
+		</connector>
+	</artifact>
+	<artifact name="Observer">
+		<include>*/com/h2m/common/observer/**</include>
+		<interface name="Observer.default" isOptional="false">
+			<include>**</include>
+		</interface>
+		<connector name="Observer.default" isOptional="false">
+			<include>**</include>
+		</connector>
+	</artifact>
+</architecture>

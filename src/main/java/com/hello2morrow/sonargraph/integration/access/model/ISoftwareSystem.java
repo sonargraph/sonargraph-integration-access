@@ -22,6 +22,24 @@ import java.util.Optional;
 
 public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElementContainer, ISourceFileLookup
 {
+    public enum KnownMetaDataKeys
+    {
+        ORGANISATION("Organisation"),
+        OWNER("Owner");
+
+        private final String label;
+
+        private KnownMetaDataKeys(String label)
+        {
+            this.label = label;
+        }
+
+        public String getLabel()
+        {
+            return label;
+        }
+    }
+
     public String getVirtualModel();
 
     public String getBaseDir();
@@ -45,4 +63,6 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Optional<IComponentFilter> getProductionCodeFilter();
 
     public Optional<IComponentFilter> getIssueFilter();
+
+    public Map<String, String> getMetaData();
 }

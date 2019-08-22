@@ -24,6 +24,32 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public interface IMetricId extends IElementWithDescription
 {
+    public enum SortDirection implements IEnumeration
+    {
+        INDIFFERENT,
+        HIGHER_WORSE,
+        LOWER_WORSE,
+        OPTIMUM_AT_ZERO,
+        OPTIMUM_AT;
+
+        @Override
+        public String getStandardName()
+        {
+            return Utility.convertConstantNameToStandardName(name());
+        }
+
+        @Override
+        public String getPresentationName()
+        {
+            return Utility.convertConstantNameToPresentationName(name());
+        }
+
+        public static SortDirection fromStandardName(final String direction)
+        {
+            return SortDirection.valueOf(Utility.convertStandardNameToConstantName(direction));
+        }
+    }
+
     public enum StandardName implements IEnumeration
     {
         CORE_VIOLATIONS_PARSER_DEPENDENCIES("Number of Violations (Parser Dependencies)"),
@@ -36,7 +62,8 @@ public interface IMetricId extends IElementWithDescription
 
         private StandardName(final String presentationName)
         {
-            assert presentationName != null && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
+            assert presentationName != null
+                    && presentationName.length() > 0 : "Parameter 'presentationName' of method 'StandardMetricNames' must not be empty";
             this.presentationName = presentationName;
         }
 
@@ -61,7 +88,19 @@ public interface IMetricId extends IElementWithDescription
 
     public List<IMetricLevel> getLevels();
 
+    @Deprecated
     public Double getBestValue();
 
+    @Deprecated
     public Double getWorstValue();
+
+    public double getBest();
+
+    public double getMin();
+
+    public double getMax();
+
+    public SortDirection getSortDirection();
+
+    double getWorst();
 }

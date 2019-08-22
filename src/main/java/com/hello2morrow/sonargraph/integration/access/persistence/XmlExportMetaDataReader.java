@@ -36,6 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
+import com.hello2morrow.sonargraph.integration.access.model.IMetricId.SortDirection;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
@@ -240,9 +241,31 @@ public final class XmlExportMetaDataReader extends XmlAccess
 
             metricIdXsdToPojoMap.put(xsdMetricId,
                     new MetricIdImpl(xsdMetricId.getName(), xsdMetricId.getPresentationName(), xsdMetricId.getDescription(), categories, metricLevels,
-                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue()));
+                            provider, xsdMetricId.isIsFloat(), xsdMetricId.getBestValue(), xsdMetricId.getWorstValue(), xsdMetricId.getMinValue(),
+                            xsdMetricId.getMaxValue(), determineSortDirection(xsdMetricId)));
         }
         return Collections.unmodifiableMap(metricIdXsdToPojoMap);
+    }
+
+    private static SortDirection determineSortDirection(final XsdMetricId xsdMetricId)
+    {
+        if (xsdMetricId.getDirection() == null)
+        {
+
+            LOGGER.info("Sort direction of metric '{}' is undefined, setting it to '{}'", xsdMetricId.getName(),
+                    SortDirection.INDIFFERENT.getStandardName());
+            return SortDirection.INDIFFERENT;
+        }
+        try
+        {
+            return SortDirection.fromStandardName(xsdMetricId.getDirection());
+        }
+        catch (final IllegalArgumentException ex)
+        {
+            LOGGER.error("Invalid sort direction '{}' detected for metric '{}', setting it to '{}'", xsdMetricId.getDirection(),
+                    xsdMetricId.getName(), SortDirection.INDIFFERENT.getStandardName());
+            return SortDirection.INDIFFERENT;
+        }
     }
 
     static Map<Object, IssueCategoryImpl> processIssueCategories(final XsdExportMetaData xsdMetaData)

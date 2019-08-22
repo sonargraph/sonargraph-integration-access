@@ -24,7 +24,7 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 
@@ -49,8 +49,8 @@ public final class GiganticReportReaderTest
     8. time needed to read report: 32
     9. time needed to read report: 31
     10. time needed to read report: 28
-
-
+    
+    
     Check performance of loading D:\07_test\Sonargraph_Snapshots\Sonargraph-all-metrics.xml, size in bytes: 58120952
     1. time needed to read report: 1654
     2. time needed to read report: 1698
@@ -62,8 +62,8 @@ public final class GiganticReportReaderTest
     8. time needed to read report: 1613
     9. time needed to read report: 1547
     10. time needed to read report: 1377
-
-
+    
+    
     Check performance of loading D:\07_test\Sonargraph_Snapshots\Sonargraph_lots-of-issues.xml, size in bytes: 77935494
     1. time needed to read report: 2064
     2. time needed to read report: 2077
@@ -93,7 +93,7 @@ public final class GiganticReportReaderTest
         for (int i = 0; i < times; i++)
         {
             final long start = System.currentTimeMillis();
-            final ISonargraphSystemController controller = ControllerAccess.createController();
+            final ISonargraphSystemController controller = ControllerFactory.createController();
             final Result result = controller.loadSystemReport(reportFile);
             assertTrue(result.toString(), result.isSuccess());
             System.out.println((i + 1) + ". time needed to read report: " + (System.currentTimeMillis() - start));

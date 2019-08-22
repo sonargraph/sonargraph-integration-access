@@ -24,6 +24,10 @@
 			<name>com.hello2morrow.sonargraph.ide.eclipse.builder</name>
 			<arguments>
 				<dictionary>
+					<key>../sgng-master/master/Sonargraph.sonargraph</key>
+					<value>2019-07-16 10:53:00 +0200</value>
+				</dictionary>
+				<dictionary>
 					<key>../sgng/master/Sonargraph.sonargraph</key>
 					<value>2019-01-15 12:29:53 +0100</value>
 				</dictionary>

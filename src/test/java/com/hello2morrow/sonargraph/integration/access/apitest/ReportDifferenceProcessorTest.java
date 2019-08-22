@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.hello2morrow.sonargraph.integration.access.controller.ControllerAccess;
+import com.hello2morrow.sonargraph.integration.access.controller.ControllerFactory;
 import com.hello2morrow.sonargraph.integration.access.controller.IReportDifferenceProcessor;
 import com.hello2morrow.sonargraph.integration.access.controller.ISonargraphSystemController;
 import com.hello2morrow.sonargraph.integration.access.controller.ISystemInfoProcessor;
@@ -113,12 +113,12 @@ public class ReportDifferenceProcessorTest
 
     private IReportDelta createDelta(final String baselineReport, final String currentReport)
     {
-        final ISonargraphSystemController controller = ControllerAccess.createController();
+        final ISonargraphSystemController controller = ControllerFactory.createController();
         final Result result = controller.loadSystemReport(new File(baselineReport));
         assertTrue(result.toString(), result.isSuccess());
         final IReportDifferenceProcessor diffProcessor = controller.createReportDifferenceProcessor();
 
-        final ISonargraphSystemController controller2 = ControllerAccess.createController();
+        final ISonargraphSystemController controller2 = ControllerFactory.createController();
         final Result result2 = controller2.loadSystemReport(new File(currentReport));
         assertTrue(result2.toString(), result2.isSuccess());
         final ISystemInfoProcessor systemInfoProcessor = controller2.createSystemInfoProcessor();
