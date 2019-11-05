@@ -790,7 +790,19 @@ public final class XmlReportReader extends XmlAccess
             assert level != null : "metric level '" + next.getMetricLevel() + "' of threshold '" + next.getDebugInfo() + "' must exist";
             final IMetricLevel metricLevel = (IMetricLevel) level;
 
-            final MetricThreshold threshold = new MetricThreshold(metricId, metricLevel, next.getLowerThreshold(), next.getUpperThreshold());
+            final String xsdSeverity = next.getSeverity();
+            Severity severity;
+            if (xsdSeverity != null)
+            {
+                severity = Severity.fromString(xsdSeverity);
+            }
+            else
+            {
+                severity = Severity.WARNING;
+            }
+
+            final MetricThreshold threshold = new MetricThreshold(metricId, metricLevel, next.getLowerThreshold(), next.getUpperThreshold(),
+                    severity);
             softwareSystem.addMetricThreshold(threshold);
             globalXmlToElementMap.put(next, threshold);
         }
@@ -1074,7 +1086,7 @@ public final class XmlReportReader extends XmlAccess
             Severity severity;
             try
             {
-                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
+                severity = Severity.fromString(next.getSeverity());
             }
             catch (final Exception e)
             {

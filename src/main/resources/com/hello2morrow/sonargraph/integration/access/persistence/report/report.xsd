@@ -64,7 +64,7 @@
             <xs:enumeration value="model" />
         </xs:restriction>
     </xs:simpleType>
-
+    
     <xs:complexType name="xsdPlugins">
         <xs:sequence>
             <xs:element name="plugin" type="xsdPlugin" minOccurs="0" maxOccurs="unbounded" />
@@ -357,6 +357,7 @@
         <xs:attribute name="metricLevel" type="xs:IDREF" use="required" />
         <xs:attribute name="lowerThreshold" type="xs:decimal" default="0" />
         <xs:attribute name="upperThreshold" type="xs:decimal" default="0" />
+        <xs:attribute name="severity" type="xs:string" />
         <xs:attribute name="debugInfo" type="xs:string" />
     </xs:complexType>
 

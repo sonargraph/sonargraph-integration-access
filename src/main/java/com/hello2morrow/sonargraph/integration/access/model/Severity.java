@@ -39,4 +39,26 @@ public enum Severity implements IEnumeration
     {
         return Utility.convertConstantNameToPresentationName(name());
     }
+
+    public static Severity fromString(final String name)
+    {
+        assert name != null && name.trim().length() > 0 : "Parameter 'name' of method 'fromName' must not be empty";
+
+        final String nameLowerCase = name.toLowerCase().trim();
+        switch (nameLowerCase)
+        {
+        case "error":
+            return Severity.ERROR;
+        case "warning":
+            return Severity.WARNING;
+        case "info":
+            return Severity.INFO;
+        case "none":
+            return Severity.NONE;
+        default:
+            assert false : "Unspported severity '" + name + "'";
+        }
+
+        return null;
+    }
 }
