@@ -17,7 +17,6 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -30,6 +29,7 @@ import java.util.Optional;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
@@ -63,10 +63,16 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IAnalyzer> analyzerMap = new HashMap<>();
     private final Map<String, IPlugin> pluginMap = new HashMap<>();
     private final Map<String, IFeature> featuresMap = new HashMap<>();
+
+    //Special analyzer configuration entries
     private final List<String> duplicateCodeConfigurationEntries = new ArrayList<>();
     private final List<String> scriptRunnerConfigurationEntries = new ArrayList<>();
     private final List<String> architectureCheckConfigurationEntries = new ArrayList<>();
     private final List<IMetricThreshold> thresholds = new ArrayList<>();
+
+    //Generic analyzer configuration entries
+    private final Map<String, IAnalyzerConfiguration> analyzerIdToConfigurationMap = new HashMap<>();
+
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
     private final Map<NamedElementImpl, SourceFileImpl> namedElementToSourceFile = new HashMap<>();
@@ -507,7 +513,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Optional.ofNullable(namedElementToSourceFile.get(namedElement));
     }
 
-    public void setBaseDir(final String baseDirectory) throws IOException
+    public void setBaseDir(final String baseDirectory)
     {
         assert baseDirectory != null && baseDirectory.length() > 0 : "Parameter 'baseDirectory' of method 'setBaseDir' must not be empty";
         baseDir = baseDirectory;
@@ -525,5 +531,15 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         assert value != null : "Parameter 'value' of method 'addMetaData' must not be null";
 
         return metaData.put(key, value);
+    }
+
+    public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations()
+    {
+        return Collections.unmodifiableMap(analyzerIdToConfigurationMap);
+    }
+
+    public void addAnalyzerConfiguration(final IAnalyzerConfiguration configuration)
+    {
+        analyzerIdToConfigurationMap.put(configuration.getName(), configuration);
     }
 }

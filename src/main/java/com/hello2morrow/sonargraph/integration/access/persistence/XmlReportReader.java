@@ -57,6 +57,7 @@ import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
@@ -102,6 +103,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnal
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdArchitectureCheckConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyIssue;
@@ -116,6 +118,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExte
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFilter;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIntEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
@@ -148,6 +151,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdScri
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdStringEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
@@ -331,6 +335,7 @@ public final class XmlReportReader extends XmlAccess
         processDuplicateCodeConfiguration(softwareSystemImpl, xsdReport);
         processScriptRunnerConfiguration(softwareSystemImpl, xsdReport);
         processArchitectureCheckConfiguration(softwareSystemImpl, xsdReport);
+        processCycleGroupAnalyzerConfigurations(softwareSystemImpl, xsdReport);
 
         final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -661,12 +666,19 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    private static void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'processAnalyzers' must not be null";
-        report.getAnalyzers().getAnalyzer().forEach(a -> softwareSystem.addAnalyzer(new AnalyzerImpl(a.getName(), a.getPresentationName(),
-                a.getDescription(), a.isLicensed(), convertXmlExecutionLevel(a.getExecutionLevel()), a.isExecuted())));
+
+        for (final XsdAnalyzer nextXsdAnalyzer : report.getAnalyzers().getAnalyzer())
+        {
+            final IAnalyzer analyzer = new AnalyzerImpl(nextXsdAnalyzer.getName(), nextXsdAnalyzer.getPresentationName(),
+                    nextXsdAnalyzer.getDescription(), nextXsdAnalyzer.isLicensed(), convertXmlExecutionLevel(nextXsdAnalyzer.getExecutionLevel()),
+                    nextXsdAnalyzer.isExecuted());
+            softwareSystem.addAnalyzer(analyzer);
+            globalXmlToElementMap.put(nextXsdAnalyzer, analyzer);
+        }
     }
 
     private static AnalyzerExecutionLevel convertXmlExecutionLevel(final XsdAnalyzerExecutionLevel xsdExecutionLevel)
@@ -767,6 +779,33 @@ public final class XmlReportReader extends XmlAccess
         if (architectureCheckConfiguration != null)
         {
             architectureCheckConfiguration.getEntry().forEach(e -> softwareSystem.addArchitectureCheckConfigurationEntry(e));
+        }
+    }
+
+    private void processCycleGroupAnalyzerConfigurations(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processCycleAnalyzerConfigurations' must not be null";
+        assert report != null : "Parameter 'report' of method 'processCycleAnalyzerConfigurations' must not be null";
+
+        for (final XsdCycleGroupAnalyzerConfiguration nextXsdCycleGroupConfiguration : report.getCycleGroupAnalyzerConfiguration())
+        {
+            final Object xsdAnalyzer = nextXsdCycleGroupConfiguration.getAnalyzer();
+            final IElement analyzer = globalXmlToElementMap.get(xsdAnalyzer);
+            assert analyzer != null : "Missing analyzer for configuration '" + nextXsdCycleGroupConfiguration.getName() + "'";
+            assert analyzer instanceof IAnalyzer : "Wrong class " + analyzer.getClass().getCanonicalName();
+
+            final AnalyzerConfigurationImpl configuration = new AnalyzerConfigurationImpl((IAnalyzer) analyzer);
+            globalXmlToElementMap.put(nextXsdCycleGroupConfiguration, configuration);
+            softwareSystem.addAnalyzerConfiguration(configuration);
+
+            for (final XsdIntEntry nextXsdIntEntry : nextXsdCycleGroupConfiguration.getIntEntry())
+            {
+                configuration.addIntConfigurationValue(nextXsdIntEntry.getName(), nextXsdIntEntry.getValue().intValue());
+            }
+            for (final XsdStringEntry nextXsdStringEntry : nextXsdCycleGroupConfiguration.getStringEntry())
+            {
+                configuration.addStringConfigurationValue(nextXsdStringEntry.getName(), nextXsdStringEntry.getValue());
+            }
         }
     }
 

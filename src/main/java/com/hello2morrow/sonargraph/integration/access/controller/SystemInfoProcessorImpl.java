@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -302,5 +303,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         assert module != null : "Parameter 'module' of method 'createModuleInfoProcessor' must not be null";
         assert module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module.getClass();
         return new ModuleInfoProcessorImpl(this, (ModuleImpl) module);
+    }
+
+    @Override
+    public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations()
+    {
+        return softwareSystem.getAnalyzerConfigurations();
     }
 }
