@@ -47,6 +47,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -72,6 +73,9 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     //Generic analyzer configuration entries
     private final Map<String, IAnalyzerConfiguration> analyzerIdToConfigurationMap = new HashMap<>();
+
+    //Plugin configuration entries
+    private final Map<String, IPluginConfiguration> pluginIdToConfigurationMap = new HashMap<>();
 
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
@@ -540,6 +544,18 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     public void addAnalyzerConfiguration(final IAnalyzerConfiguration configuration)
     {
+        assert configuration != null : "Parameter 'configuration' of method 'addAnalyzerConfiguration' must not be null";
         analyzerIdToConfigurationMap.put(configuration.getName(), configuration);
+    }
+
+    public void addPluginConfiguration(final PluginConfigurationImpl pluginConfiguration)
+    {
+        assert pluginConfiguration != null : "Parameter 'pluginConfiguration' of method 'addPluginConfiguration' must not be null";
+        pluginIdToConfigurationMap.put(pluginConfiguration.getName(), pluginConfiguration);
+    }
+
+    public Map<String, IPluginConfiguration> getPluginConfigurations()
+    {
+        return Collections.unmodifiableMap(pluginIdToConfigurationMap);
     }
 }

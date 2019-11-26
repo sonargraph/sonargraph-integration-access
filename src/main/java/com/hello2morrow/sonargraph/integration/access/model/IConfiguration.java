@@ -17,7 +17,20 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IAnalyzerConfiguration extends IConfiguration
+import java.util.Map;
+
+public interface IConfiguration extends IElementWithDescription
 {
-    //Marker
+    public Integer getIntConfigurationValue(String property);
+
+    public String getStringConfigurationValue(String property);
+
+    public Boolean getBooleanConfigurationValue(String property);
+
+    public Float getFloatConfigurationValue(String property);
+
+    /**
+     * @return map of configuration names to values.
+     */
+    public Map<String, Object> getConfigurationValues();
 }

@@ -15,25 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.IAnalyzerConfiguration;
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 
-public final class AnalyzerConfigurationImpl extends AbstractConfigurationImpl implements IAnalyzerConfiguration
+public final class PluginConfigurationImpl extends AbstractConfigurationImpl implements IPluginConfiguration
 {
-    private static final long serialVersionUID = -5782893226459810814L;
+    private static final long serialVersionUID = 1340926548847217077L;
+    private final IPlugin plugin;
 
-    private final IAnalyzer analyzer;
-
-    public AnalyzerConfigurationImpl(final IAnalyzer analyzer)
+    public PluginConfigurationImpl(final String name, final String presentationName, final IPlugin plugin)
     {
-        super(analyzer.getName(), analyzer.getPresentationName(), analyzer.getDescription());
-        this.analyzer = analyzer;
+        super(name, presentationName, "");
+        this.plugin = plugin;
     }
 
-    public IAnalyzer getAnalyzer()
+    @Override
+    public IPlugin getPlugin()
     {
-        return analyzer;
+        return plugin;
     }
 }

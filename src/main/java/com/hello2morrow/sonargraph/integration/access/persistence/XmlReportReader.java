@@ -89,6 +89,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PluginConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
@@ -102,6 +103,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEven
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdArchitectureCheckConfiguration;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdBooleanEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
@@ -118,6 +120,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExte
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFilter;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFloatEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIntEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
@@ -143,6 +146,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdName
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugin;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
@@ -336,6 +340,7 @@ public final class XmlReportReader extends XmlAccess
         processScriptRunnerConfiguration(softwareSystemImpl, xsdReport);
         processArchitectureCheckConfiguration(softwareSystemImpl, xsdReport);
         processCycleGroupAnalyzerConfigurations(softwareSystemImpl, xsdReport);
+        processPluginConfigurations(softwareSystemImpl, xsdReport);
 
         final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -701,7 +706,7 @@ public final class XmlReportReader extends XmlAccess
         return null;
     }
 
-    private static void processPlugins(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processPlugins(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPlugins' must not be null";
         assert report != null : "Parameter 'report' of method 'processPlugins' must not be null";
@@ -715,6 +720,7 @@ public final class XmlReportReader extends XmlAccess
                 final IPlugin plugin = new PluginImpl(next.getName(), next.getPresentationName(), next.getDescription(), next.getVendor(),
                         next.getVersion(), next.isLicensed(), next.isEnabled(), supportedExecutionPhases, activeExecutionPhases);
                 softwareSystem.addPlugin(plugin);
+                globalXmlToElementMap.put(next, plugin);
             }
         }
     }
@@ -805,6 +811,43 @@ public final class XmlReportReader extends XmlAccess
             for (final XsdStringEntry nextXsdStringEntry : nextXsdCycleGroupConfiguration.getStringEntry())
             {
                 configuration.addStringConfigurationValue(nextXsdStringEntry.getName(), nextXsdStringEntry.getValue());
+            }
+        }
+    }
+
+    private void processPluginConfigurations(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPluginConfigurations' must not be null";
+        assert report != null : "Parameter 'report' of method 'processPluginConfigurations' must not be null";
+
+        for (final XsdPluginConfiguration nextXsdPluginConfiguration : report.getPluginConfiguration())
+        {
+            final Object xsdPluginObject = nextXsdPluginConfiguration.getPlugin();
+            final Object pluginObject = globalXmlToElementMap.get(xsdPluginObject);
+            assert pluginObject != null : "Missing plugin for configuration: " + nextXsdPluginConfiguration.getId();
+            final IPlugin plugin = (IPlugin) pluginObject;
+            final PluginConfigurationImpl pluginConfiguration = new PluginConfigurationImpl(nextXsdPluginConfiguration.getName(),
+                    nextXsdPluginConfiguration.getPresentationName(), plugin);
+            softwareSystem.addPluginConfiguration(pluginConfiguration);
+
+            for (final XsdStringEntry nextXsdStringEntry : nextXsdPluginConfiguration.getStringEntry())
+            {
+                pluginConfiguration.addStringConfigurationValue(nextXsdStringEntry.getName(), nextXsdStringEntry.getValue());
+            }
+
+            for (final XsdIntEntry nextXsdIntEntry : nextXsdPluginConfiguration.getIntEntry())
+            {
+                pluginConfiguration.addIntConfigurationValue(nextXsdIntEntry.getName(), nextXsdIntEntry.getValue().intValue());
+            }
+
+            for (final XsdFloatEntry nextXsdFloatEntry : nextXsdPluginConfiguration.getFloatEntry())
+            {
+                pluginConfiguration.addFloatConfigurationValue(nextXsdFloatEntry.getName(), nextXsdFloatEntry.getValue().floatValue());
+            }
+
+            for (final XsdBooleanEntry nextXsdBooleanEntry : nextXsdPluginConfiguration.getBooleanEntry())
+            {
+                pluginConfiguration.addBooleanConfigurationValue(nextXsdBooleanEntry.getName(), nextXsdBooleanEntry.isValue().booleanValue());
             }
         }
     }

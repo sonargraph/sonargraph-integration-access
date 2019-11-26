@@ -135,6 +135,24 @@
 			<xs:extension base="xsdAnalyzerConfiguration" />
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:complexType name="xsdPluginConfiguration">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:sequence>
+					<xs:element name="stringEntry" type="xsdStringEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="intEntry" type="xsdIntEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="floatEntry" type="xsdFloatEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="booleanEntry" type="xsdBooleanEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="plugin" type="xs:IDREF" use="required" />				
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 	<xs:complexType name="xsdStringEntry">
 		<xs:attribute name="name" type="xs:string" />
@@ -144,6 +162,16 @@
 	<xs:complexType name="xsdIntEntry">
 		<xs:attribute name="name" type="xs:string" />
 		<xs:attribute name="value" type="xs:int" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdFloatEntry">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="value" type="xs:float" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdBooleanEntry">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:boolean" />
 	</xs:complexType>
 
 	<xs:complexType name="xsdNamedElement">
@@ -665,6 +693,7 @@
 				type="xsdMetricThresholds" minOccurs="0" maxOccurs="1" />
 			<xs:element name="cycleGroupAnalyzerConfiguration"
 				type="xsdCycleGroupAnalyzerConfiguration" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="elementKinds" type="xsdElementKinds"
 				minOccurs="1" maxOccurs="1" />
 			<xs:element name="workspace" type="xsdWorkspace"
