@@ -17,15 +17,18 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.util.List;
-
 import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+
+import java.util.List;
 
 public interface IMetricId extends IElementWithDescription
 {
     public enum SortDirection implements IEnumeration
     {
+        // DO NOT CHANGE NAMES BELOW
+        //
+        // They are stored in a database
         INDIFFERENT,
         HIGHER_WORSE,
         LOWER_WORSE,
