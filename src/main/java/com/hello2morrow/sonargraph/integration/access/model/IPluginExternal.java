@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IExternal extends ILanguageBasedContainer, IExternalContainer
+public interface IPluginExternal extends IExternalContainer, INamedElementContainer
 {
     //Marker
 }

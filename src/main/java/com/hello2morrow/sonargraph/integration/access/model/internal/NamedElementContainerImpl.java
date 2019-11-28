@@ -49,7 +49,8 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     private final NamedElementRegistry elementRegistryImpl;
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl)
+            final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl,
+            final NamedElementRegistry elementRegistryImpl)
     {
         super(kind, presentationKind, name, presentationName, fqName, description);
         assert metaDataAccessImpl != null : "Parameter 'metaDataAccessImpl' of method 'NamedElementContainerImpl' must not be null";
@@ -81,7 +82,7 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
         namedElements.add(element);
         if (!element.isLocationOnly())
         {
-            //'location-only' elements are never added to the registry - they are reachable through their refactored  counterparts and never have issues nor metrics 
+            //'location-only' elements are never added to the registry - they are reachable through their refactored  counterparts and never have issues nor metrics
             getElementRegistry().addElement(element);
         }
     }
@@ -102,13 +103,13 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
     }
 
     @Override
-    public final Set<INamedElement> getElements(Predicate<INamedElement> predicate)
+    public final Set<INamedElement> getElements(final Predicate<INamedElement> predicate)
     {
         assert predicate != null;
 
-        Set<INamedElement> result = new HashSet<>();
+        final Set<INamedElement> result = new HashSet<>();
 
-        for (Set<INamedElement> elements : kindToNamedElements.values())
+        for (final Set<INamedElement> elements : kindToNamedElements.values())
         {
             elements.stream().filter(n -> predicate.test(n)).forEach(n -> result.add(n));
         }

@@ -88,6 +88,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PluginExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
@@ -140,6 +141,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdName
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugin;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
@@ -578,6 +580,23 @@ public final class XmlReportReader extends XmlAccess
                     .forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, nextExternalImpl, nextExternalImpl, e, null));
             nextXsdExternal.getProgrammingElement().forEach(e -> createProgrammingElementImpl(nextExternalImpl, nextExternalImpl, e));
         }
+
+        for (final XsdPluginExternal nextXsdPluginExternal : xsdWorkspace.getPluginExternal())
+        {
+            final XsdElementKind xsdPluginKind = (XsdElementKind) nextXsdPluginExternal.getKind();
+            final PluginExternalImpl nextPluginExternalImpl = new PluginExternalImpl(xsdPluginKind.getStandardKind(),
+                    xsdPluginKind.getPresentationKind(), nextXsdPluginExternal.getName(), nextXsdPluginExternal.getPresentationName(),
+                    nextXsdPluginExternal.getFqName(), nextXsdPluginExternal.getDescription(), softwareSystemImpl.getMetaDataAccess(),
+                    softwareSystemImpl.getElementRegistry());
+            softwareSystemImpl.addPluginExternal(nextPluginExternalImpl);
+            nextPluginExternalImpl.addElement(nextPluginExternalImpl);
+            globalXmlToElementMap.put(nextXsdPluginExternal, nextPluginExternalImpl);
+
+            nextXsdPluginExternal.getPhysicalRecursiveElement()
+                    .forEach(e -> createPhysicalRecursiveElementImpl(softwareSystemImpl, nextPluginExternalImpl, nextPluginExternalImpl, e, null));
+            nextXsdPluginExternal.getProgrammingElement()
+                    .forEach(e -> createProgrammingElementImpl(nextPluginExternalImpl, nextPluginExternalImpl, e));
+        }
     }
 
     private void addPatternsToFilter(final XsdFilter xsdFilter, final AbstractFilterImpl filter)
@@ -905,36 +924,35 @@ public final class XmlReportReader extends XmlAccess
         for (final XsdExternalSystemScopeElements nextXsdExternalSystemScopeElements : report.getExternalSystemScopeElements())
         {
             final IElement nextElement = globalXmlToElementMap.get(nextXsdExternalSystemScopeElements.getRef());
-            assert nextElement != null && nextElement instanceof ExternalImpl : "Unexpected class in method 'createExternalScopeElements': "
-                    + nextElement;
-            final ExternalImpl nextExternalImpl = (ExternalImpl) nextElement;
-
+            assert nextElement != null
+                    && nextElement instanceof NamedElementContainerImpl : "Unexpected class in method 'createExternalScopeElements': " + nextElement;
+            final NamedElementContainerImpl nextExternalContainerImpl = (NamedElementContainerImpl) nextElement;
             for (final XsdNamedElement nextNamedElement : nextXsdExternalSystemScopeElements.getElement())
             {
                 final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
                 if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
                 {
-                    createNamedElementImpl(nextExternalImpl, nextNamedElement, elementKind);
+                    createNamedElementImpl(nextExternalContainerImpl, nextNamedElement, elementKind);
                 }
             }
-            createLogicalElements(nextExternalImpl, nextXsdExternalSystemScopeElements);
+            createLogicalElements(nextExternalContainerImpl, nextXsdExternalSystemScopeElements);
         }
         for (final XsdExternalModuleScopeElements nextXsdExternalModuleScopeElements : report.getExternalModuleScopeElements())
         {
             final IElement nextElement = globalXmlToElementMap.get(nextXsdExternalModuleScopeElements.getRef());
-            assert nextElement != null && nextElement instanceof ExternalImpl : "Unexpected class in method 'createExternalScopeElements': "
-                    + nextElement;
-            final ExternalImpl nextExternalImpl = (ExternalImpl) nextElement;
+            assert nextElement != null
+                    && nextElement instanceof NamedElementContainerImpl : "Unexpected class in method 'createExternalScopeElements': " + nextElement;
+            final NamedElementContainerImpl nextExternalContainerImpl = (NamedElementContainerImpl) nextElement;
 
             for (final XsdNamedElement nextNamedElement : nextXsdExternalModuleScopeElements.getElement())
             {
                 final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
                 if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
                 {
-                    createNamedElementImpl(nextExternalImpl, nextNamedElement, elementKind);
+                    createNamedElementImpl(nextExternalContainerImpl, nextNamedElement, elementKind);
                 }
             }
-            createLogicalElements(nextExternalImpl, nextXsdExternalModuleScopeElements);
+            createLogicalElements(nextExternalContainerImpl, nextXsdExternalModuleScopeElements);
         }
     }
 
