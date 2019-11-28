@@ -28,8 +28,8 @@ import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElement;
 public final class ExternalImpl extends LanguageBasedContainerImpl implements IExternal
 {
     private static final long serialVersionUID = -3981958901055955573L;
-    private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
-    private final Set<ProgrammingElementImpl> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
+    private final Set<IPhysicalRecursiveElement> physicalRecursiveElements = new TreeSet<>(new NamedElementComparator());
+    private final Set<IProgrammingElement> programmingElements = new TreeSet<>(new NamedElementComparator());
 
     public ExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
@@ -39,31 +39,31 @@ public final class ExternalImpl extends LanguageBasedContainerImpl implements IE
     }
 
     @Override
-    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl)
+    public void addPhysicalRecursiveElement(final IPhysicalRecursiveElement physicalRecursiveElement)
     {
-        assert physicalRecursiveElementImpl != null : "Parameter 'physicalRecursiveElementImpl' of method 'addPhysicalRecursiveElement' must not be null";
-        assert !physicalRecursiveElementImpls.contains(physicalRecursiveElementImpl) : "Already added physical recursive element: "
-                + physicalRecursiveElementImpl.getFqName();
-        physicalRecursiveElementImpls.add(physicalRecursiveElementImpl);
+        assert physicalRecursiveElement != null : "Parameter 'physicalRecursiveElementImpl' of method 'addPhysicalRecursiveElement' must not be null";
+        assert !physicalRecursiveElements.contains(physicalRecursiveElement) : "Already added physical recursive element: "
+                + physicalRecursiveElement.getFqName();
+        physicalRecursiveElements.add(physicalRecursiveElement);
     }
 
     @Override
     public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements()
     {
-        return Collections.unmodifiableSet(physicalRecursiveElementImpls);
+        return Collections.unmodifiableSet(physicalRecursiveElements);
     }
 
     @Override
-    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl)
+    public void addProgrammingElement(final IProgrammingElement programmingElement)
     {
-        assert programmingElementImpl != null : "Parameter 'programmingElementImpl' of method 'addProgrammingElement' must not be null";
-        assert !programmingElementImpls.contains(programmingElementImpl) : "Already added programming element: " + programmingElementImpl.getFqName();
-        programmingElementImpls.add(programmingElementImpl);
+        assert programmingElement != null : "Parameter 'programmingElement' of method 'addProgrammingElement' must not be null";
+        assert !programmingElements.contains(programmingElement) : "Already added programming element: " + programmingElement.getFqName();
+        programmingElements.add(programmingElement);
     }
 
     @Override
     public Set<IProgrammingElement> getProgrammingElements()
     {
-        return Collections.unmodifiableSet(programmingElementImpls);
+        return Collections.unmodifiableSet(programmingElements);
     }
 }

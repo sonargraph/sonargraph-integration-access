@@ -51,6 +51,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
@@ -66,7 +67,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCo
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IncludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueFilterImpl;

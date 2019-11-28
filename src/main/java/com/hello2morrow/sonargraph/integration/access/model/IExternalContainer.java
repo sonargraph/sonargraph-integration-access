@@ -19,8 +19,6 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 import java.util.Set;
 
-import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
-
 public interface IExternalContainer extends IProgrammingElementContainer
 {
     public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements();

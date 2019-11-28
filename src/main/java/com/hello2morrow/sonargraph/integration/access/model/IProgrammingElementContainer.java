@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model.internal;
+package com.hello2morrow.sonargraph.integration.access.model;
 
 public interface IProgrammingElementContainer
 {
-    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl);
+    public void addPhysicalRecursiveElement(final IPhysicalRecursiveElement physicalRecursiveElement);
 
-    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl);
+    public void addProgrammingElement(final IProgrammingElement programmingElement);
 }
