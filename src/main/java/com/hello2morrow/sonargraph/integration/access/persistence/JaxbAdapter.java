@@ -92,6 +92,7 @@ public final class JaxbAdapter<T>
             createdWriter = null;
             createdReader = null;
             assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(ex);
+            throw new RuntimeException(INITIALIZATION_FAILED, ex);
         }
 
         this.writer = createdWriter;
@@ -149,6 +150,7 @@ public final class JaxbAdapter<T>
             createdReader = null;
             createdWriter = null;
             assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(e);
+            throw new RuntimeException(INITIALIZATION_FAILED, e);
         }
 
         this.reader = createdReader;

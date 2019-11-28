@@ -17,7 +17,13 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IExternal extends ILanguageBasedContainer, IExternalContainer
+import java.util.Set;
+
+import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
+
+public interface IExternalContainer extends IProgrammingElementContainer
 {
-    //Marker
+    public Set<IPhysicalRecursiveElement> getPhysicalRecursiveElements();
+
+    public Set<IProgrammingElement> getProgrammingElements();
 }

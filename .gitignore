@@ -3,6 +3,7 @@
 /sonargraph-build/
 /sonargraph/
 /build.eclipse/
+/build.eclipse.test/
 /src/generated/
 /classes/
 /target/

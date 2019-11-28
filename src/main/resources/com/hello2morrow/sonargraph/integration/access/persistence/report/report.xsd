@@ -232,6 +232,20 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:complexType name="xsdPluginExternal">
+        <xs:complexContent>
+            <xs:extension base="xsdNamedElement">
+                <xs:sequence>
+                    <xs:element name="physicalRecursiveElement" type="xsdPhysicalRecursiveElement"
+                        minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="programmingElement" type="xsdProgrammingElement" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+                <xs:attribute name="description" type="xs:string" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
 	<xs:complexType name="xsdModule">
 		<xs:complexContent>
@@ -257,6 +271,7 @@
 				maxOccurs="unbounded" />
 			<xs:element name="external" type="xsdExternal"
 				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="pluginExternal" type="xsdPluginExternal" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 
