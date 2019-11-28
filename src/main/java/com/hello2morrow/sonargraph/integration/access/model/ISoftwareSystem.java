@@ -29,7 +29,7 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
 
         private final String label;
 
-        private KnownMetaDataKeys(String label)
+        private KnownMetaDataKeys(final String label)
         {
             this.label = label;
         }
@@ -65,4 +65,6 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Optional<IComponentFilter> getIssueFilter();
 
     public Map<String, String> getMetaData();
+
+    public Map<String, IPluginExternal> getPluginExternals();
 }

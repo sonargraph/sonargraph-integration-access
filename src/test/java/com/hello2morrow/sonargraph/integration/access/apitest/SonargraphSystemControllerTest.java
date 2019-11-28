@@ -157,8 +157,8 @@ public final class SonargraphSystemControllerTest
         verifySystem(softwareSystem,
                 "D:\\00_repos\\00_e4-sgng\\com.hello2morrow.sonargraph.language.provider.java\\src\\test\\architecture\\AlarmClockWithArchitecture\\AlarmClock.sonargraph");
         verifyModule(softwareSystem);
-        verifyIssues(softwareSystem);
-        verifyResolutions(softwareSystem);
+        verifyIssues();
+        verifyResolutions();
         verifyMetrics(softwareSystem);
     }
 
@@ -220,10 +220,10 @@ public final class SonargraphSystemControllerTest
         assertEquals("No uunlicensed features expected", 0, infoProcessor.getFeatures().stream().filter(features -> !features.isLicensed()).count());
 
         final IModule moduleView = softwareSystem.getModules().get("View");
-        processModuleElements(softwareSystem, moduleView);
+        processModuleElements(moduleView);
     }
 
-    private void processModuleElements(final ISoftwareSystem softwareSystem, final IModule module)
+    private void processModuleElements(final IModule module)
     {
         final Map<IMetricLevel, Map<IMetricId, Map<String, IMetricValue>>> elementMetricValueMap = new HashMap<>();
         final IModuleInfoProcessor moduleInfoProcessor = m_controller.createModuleInfoProcessor(module);
@@ -326,7 +326,7 @@ public final class SonargraphSystemControllerTest
                 .getValue().intValue());
     }
 
-    private void verifyIssues(final ISoftwareSystem softwareSystem)
+    private void verifyIssues()
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();
         assertEquals("Wrong number of issue providers", 3, infoProcessor.getIssueProviders().size());
@@ -363,7 +363,7 @@ public final class SonargraphSystemControllerTest
                         .size());
     }
 
-    private void verifyResolutions(final ISoftwareSystem softwareSystem)
+    private void verifyResolutions()
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();
         assertEquals("Wrong number of resolutions", 1, infoProcessor.getResolutions(null).size());

@@ -47,6 +47,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -57,6 +58,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     private final Map<String, ModuleImpl> modules = new LinkedHashMap<>();
     private final Map<String, ExternalImpl> externals = new LinkedHashMap<>();
+    private final Map<String, PluginExternalImpl> pluginExternals = new LinkedHashMap<>();
     private final Map<String, IIssueProvider> issueProviders = new HashMap<>();
     private final Map<String, IIssueType> issueTypes = new HashMap<>();
     private final Map<IIssueType, List<IIssue>> issueMap = new HashMap<>();
@@ -243,6 +245,20 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     {
         final Map<String, IExternal> map = new LinkedHashMap<>();
         externals.values().stream().forEach((final IExternal external) -> map.put(external.getName(), external));
+        return Collections.unmodifiableMap(map);
+    }
+
+    public void addPluginExternal(final PluginExternalImpl pluginExternalImpl)
+    {
+        assert pluginExternalImpl != null : "Parameter 'pluginExternalImpl' of method 'addPluginExternal' must not be null";
+        pluginExternals.put(pluginExternalImpl.getFqName(), pluginExternalImpl);
+    }
+
+    @Override
+    public Map<String, IPluginExternal> getPluginExternals()
+    {
+        final Map<String, IPluginExternal> map = new LinkedHashMap<>();
+        pluginExternals.values().stream().forEach((final IPluginExternal external) -> map.put(external.getName(), external));
         return Collections.unmodifiableMap(map);
     }
 

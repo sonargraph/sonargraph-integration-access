@@ -59,6 +59,9 @@ import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
+import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PluginExternalImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 
 public final class ReportReaderTest
 {
@@ -432,6 +435,34 @@ public final class ReportReaderTest
         final IMetricId distance = validateMetricInfo(systemProcessor, "CoreDistanceSystem", -1.0, 1.0, SortDirection.OPTIMUM_AT_ZERO);
         assertEquals("Wrong best value", 0.0, distance.getBest(), 0.001);
         validateMetricInfo(systemProcessor, "CoreLinesOfCode", 0.0, Double.POSITIVE_INFINITY, SortDirection.INDIFFERENT);
+    }
+
+    @Test
+    public void processReportWithPluginExternalIssues()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_PLUGIN_EXTERNAL));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<IResolution> todos = systemProcessor.getResolutions(r -> r.getType() == ResolutionType.TODO);
+        assertEquals("Wrong number of todos", 3, todos.size());
+        int index = 0;
+        assertExternalTodo(todos.get(index++), "Swagger Todo", ProgrammingElementImpl.class,
+                "Workspace:External [com.hello2morrow.sonargraph.plugin.swagger]:/pet/{petId}[DELETE]");
+        assertExternalTodo(todos.get(index++), "Plugin External Todo", PluginExternalImpl.class,
+                "Workspace:External [com.hello2morrow.sonargraph.plugin.swagger]");
+        assertExternalTodo(todos.get(index), "TODO on Java External", NamedElementImpl.class, "Workspace:External [Java]:[Unknown]:java:io:File");
+    }
+
+    private void assertExternalTodo(final IResolution todo, final String description, final Class<?> clazzOfAffectedElement,
+            final String fqNameOfAffectedElement)
+    {
+        assertEquals("Wrong description", description, todo.getDescription());
+        final INamedElement affectedElement = todo.getIssues().get(0).getAffectedNamedElements().get(0);
+        assertEquals("Wrong fqName", fqNameOfAffectedElement, affectedElement.getFqName());
+        assertEquals("Wrong class", clazzOfAffectedElement, affectedElement.getClass());
     }
 
     private IMetricId validateMetricInfo(final ISystemInfoProcessor systemProcessor, final String metricId, final double min, final double max,

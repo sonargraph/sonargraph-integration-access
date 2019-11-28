@@ -21,21 +21,21 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.hello2morrow.sonargraph.integration.access.model.IExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IPhysicalRecursiveElement;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElement;
 
-public final class ExternalImpl extends LanguageBasedContainerImpl implements IExternal
+public final class PluginExternalImpl extends NamedElementContainerImpl implements IPluginExternal
 {
-    private static final long serialVersionUID = -3981958901055955573L;
+    private static final long serialVersionUID = -5155691967957343798L;
+
     private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
     private final Set<ProgrammingElementImpl> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
 
-    public ExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
-            final String language)
+    public PluginExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
+            final String description, final MetaDataAccessImpl metaDataAccess, final NamedElementRegistry elementRegistry)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccess, elementRegistry);
     }
 
     @Override
