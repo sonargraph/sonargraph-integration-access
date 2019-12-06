@@ -181,6 +181,7 @@
 					use="required" />
 				<xs:attribute name="fqName" type="xs:string"
 					use="required" />
+				<xs:attribute name="originalFqName" type="xs:string" use="optional" />
 				<xs:attribute name="source" type="xs:IDREF" />
 				<xs:attribute name="debugInfo" type="xs:string" />
 			</xs:extension>

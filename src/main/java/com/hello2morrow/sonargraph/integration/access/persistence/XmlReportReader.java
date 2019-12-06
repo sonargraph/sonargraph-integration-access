@@ -444,6 +444,10 @@ public final class XmlReportReader extends XmlAccess
         final NamedElementImpl namedElementImpl = new NamedElementImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
                 xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName());
         namedElementContainerImpl.addElement(namedElementImpl);
+        if (xsdNamedElement.getOriginalFqName() != null)
+        {
+            namedElementImpl.setOriginalFqName(xsdNamedElement.getFqName());
+        }
         globalXmlToElementMap.put(xsdNamedElement, namedElementImpl);
     }
 
@@ -458,6 +462,10 @@ public final class XmlReportReader extends XmlAccess
         final SourceFileImpl sourceFileImpl = new SourceFileImpl(sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
                 xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), xsdSourceFile.isLocationOnly(),
                 rootDirectoryImpl.getRelativePath());
+        if (xsdSourceFile.getOriginalFqName() != null)
+        {
+            sourceFileImpl.setOriginalFqName(xsdSourceFile.getOriginalFqName());
+        }
         rootDirectoryImpl.addSourceFile(sourceFileImpl);
         softwareSystemImpl.addSourceFile(sourceFileImpl, sourceFileImpl);
         namedElementContainerImpl.addElement(sourceFileImpl);
@@ -476,6 +484,11 @@ public final class XmlReportReader extends XmlAccess
                 xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine());
         programmingElementContainer.addProgrammingElement(programmingElementImpl);
         namedElementContainerImpl.addElement(programmingElementImpl);
+
+        if (xsdProgrammingElement.getOriginalFqName() != null)
+        {
+            programmingElementImpl.setOriginalFqName(xsdProgrammingElement.getOriginalFqName());
+        }
         globalXmlToElementMap.put(xsdProgrammingElement, programmingElementImpl);
     }
 

@@ -17,6 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
+import java.util.Comparator;
+
+import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IReportDelta;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
@@ -25,4 +28,34 @@ public interface IReportDifferenceProcessor
     public ISoftwareSystem getSoftwareSystem();
 
     public IReportDelta createReportDelta(final ISystemInfoProcessor systemInfoProcessor);
+
+    public static final class IssueComparator implements Comparator<IIssue>
+    {
+        public IssueComparator()
+        {
+            super();
+        }
+
+        @Override
+        public int compare(final IIssue i1, final IIssue i2)
+        {
+            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
+            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
+
+            int compared = i1.getLine() - i2.getLine();
+            if (compared == 0)
+            {
+                compared = i1.getColumn() - i2.getColumn();
+                if (compared == 0)
+                {
+                    compared = i1.getName().compareToIgnoreCase(i2.getName());
+                    if (compared == 0)
+                    {
+                        compared = 1;
+                    }
+                }
+            }
+            return compared;
+        }
+    }
 }

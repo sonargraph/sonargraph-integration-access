@@ -30,4 +30,6 @@ public interface INamedElement extends IElement
     public boolean isLocationOnly();
 
     public Optional<? extends INamedElement> getOriginalLocation();
+
+    public Optional<String> getOriginalFqName();
 }

@@ -29,6 +29,8 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     private final String presentationKind;
     private final String fqName;
 
+    private String m_originalFqName;
+
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description)
     {
@@ -62,6 +64,18 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     public final String getPresentationKind()
     {
         return presentationKind;
+    }
+
+    public final void setOriginalFqName(final String originalFqName)
+    {
+        assert originalFqName != null && originalFqName.length() > 0 : "Parameter 'originalFqName' of method 'setOriginalFqName' must not be empty";
+        m_originalFqName = originalFqName;
+    }
+
+    @Override
+    public Optional<String> getOriginalFqName()
+    {
+        return Optional.ofNullable(m_originalFqName);
     }
 
     @Override
