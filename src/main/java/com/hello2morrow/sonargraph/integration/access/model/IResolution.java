@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IResolution extends IElement
@@ -42,18 +43,59 @@ public interface IResolution extends IElement
     public String getDescription();
 
     /**
-     * @return the date - never <code>null</code>
+     * @return the information - never <code>null</code>
+     */
+    public String getInformation();
+
+    /**
+     * @return the formatted date of creation for this resolution.
      */
     public String getDate();
+
+    /**
+     * @return the date of creation.
+     */
+    public Date getCreationDate();
 
     /**
      * @return the issue - never <code>null</code>
      */
     public List<IIssue> getIssues();
 
+    /**
+     * @deprecated use {@link #getMatchingElementsCount()} instead
+     * @return true if matching element count is > 0, false otherwise
+     */
+    @Deprecated
     public boolean isApplicable();
 
+    /**
+     * @return the number of elements that this resolution matches.
+     */
+    public int getMatchingElementsCount();
+
+    /**
+     * @return true if the resolution is a task, i.e. todo, fix, or refactoring.
+     */
     public boolean isTask();
 
+    /**
+     * @return the number of parser dependencies affected by this resolution.
+     */
     public int getNumberOfAffectedParserDependencies();
+
+    /**
+     * @return the element patterns used to connect this resolution to the code.
+     */
+    public List<IElementPattern> getElementPatterns();
+
+    /**
+     * @return the dependency patterns used to connect this resolution to the code.
+     */
+    public List<IDependencyPattern> getDependencyPatterns();
+
+    /**
+     * @return the {@link IMatching} object used to connect this resolution to the code.
+     */
+    public IMatching getMatching();
 }

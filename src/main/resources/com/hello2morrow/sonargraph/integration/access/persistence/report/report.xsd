@@ -634,6 +634,7 @@
 					type="xs:int" use="optional" default="-1" />
 				<xs:attribute name="parserDependenciesToRemove"
 					type="xs:int" use="optional" default="-1" />
+				<xs:attribute name="scope" type="xs:IDREF" use="optional" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -653,6 +654,11 @@
 	</xs:complexType>
 
 	<xs:complexType name="xsdResolution">
+		<xs:sequence>
+			<xs:element name="elementPattern" type="xsdElementPattern" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="dependencyPattern" type="xsdDependencyPattern" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="matching" type="xsdMatching" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required" />
 		<xs:attribute name="prio" type="xs:string" use="required" />
 		<xs:attribute name="fqName" type="xs:string"
@@ -664,7 +670,8 @@
 		<xs:attribute name="date" type="xs:dateTime"
 			use="required" />
 		<xs:attribute name="applicable" type="xs:boolean"
-			default="false" />
+			default="false" /> <!--  deprecated since 3.4 -->
+		<xs:attribute name="matchingElementsCount" type="xs:int" use="optional" default="-1"/>
 		<xs:attribute name="task" type="xs:boolean"
 			default="false" />
 		<xs:attribute name="refactoring" type="xs:boolean"
@@ -673,6 +680,41 @@
 			type="xs:int" default="-1" />
 		<xs:attribute name="debugInfo" type="xs:string" />
 	</xs:complexType>
+
+	<xs:simpleType name="xsdDependencyPatternType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Wildcard"/>
+            <xs:enumeration value="ParserDependencyEndpoint"/>
+         </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xsdDependencyPattern">
+        <xs:attribute name="type" type="xsdDependencyPatternType"/>
+        <xs:attribute name="from" type="xs:string" use="required"/>
+        <xs:attribute name="to" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="xsdElementPatternType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Wildcard"/>
+            <xs:enumeration value="FullyQualifiedName"/>
+         </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xsdElementPattern">
+    	<xs:simpleContent>
+        	<xs:extension base="xs:string">
+            	<xs:attribute name="type" type="xsdElementPatternType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="xsdMatching">
+        <xs:sequence>
+            <xs:element name="elementPattern" type="xsdElementPattern" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="info" type="xs:string" use="required" />
+    </xs:complexType>
 
 	<xs:complexType name="xsdMapEntry">
 		<xs:attribute name="key" type="xs:string" use="required" />

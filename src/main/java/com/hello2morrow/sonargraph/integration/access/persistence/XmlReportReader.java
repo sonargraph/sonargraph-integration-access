@@ -38,13 +38,18 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
+import com.hello2morrow.sonargraph.integration.access.model.DependencyPatternType;
+import com.hello2morrow.sonargraph.integration.access.model.ElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
+import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
+import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
@@ -62,8 +67,10 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerCon
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ElementPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
@@ -77,6 +84,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.LanguageBas
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalNamespaceImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalProgrammingElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.MatchingImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricIdImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevelImpl;
@@ -110,11 +118,15 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyIssue;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyPattern;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyPatternType;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementPattern;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
@@ -131,6 +143,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogi
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMap;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMapEntry;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMatching;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricFloatValue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricIntValue;
@@ -696,9 +709,101 @@ public final class XmlReportReader extends XmlAccess
                 issues.add(nextIssueImpl);
             }
 
-            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isApplicable(),
-                    nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(), nextResolution.getAssignee(),
-                    nextResolution.getDate().toString());
+            final List<IElementPattern> elementPatterns = new ArrayList<>();
+            for (final XsdElementPattern nextXsdElementPattern : nextResolution.getElementPattern())
+            {
+                final XsdElementPatternType xsdPatternType = nextXsdElementPattern.getType();
+                final ElementPatternType patternType = ElementPatternType.valueOf(xsdPatternType.name());
+                final String pattern = nextXsdElementPattern.getValue();
+
+                if (pattern == null || pattern.isEmpty())
+                {
+                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "Pattern of resolution is empty.");
+                    continue;
+                }
+
+                final IElementPattern elementPattern = new ElementPatternImpl(patternType, pattern);
+                elementPatterns.add(elementPattern);
+            }
+
+            final List<IDependencyPattern> dependencyPatterns = new ArrayList<>();
+            for (final XsdDependencyPattern xsdDependency : nextResolution.getDependencyPattern())
+            {
+                final XsdDependencyPatternType xsdPatternType = xsdDependency.getType();
+                final String fromPattern = xsdDependency.getFrom();
+                final String toPattern = xsdDependency.getTo();
+                if (fromPattern == null || fromPattern.isEmpty())
+                {
+                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "From pattern is empty.");
+                    continue;
+                }
+                if (toPattern == null || toPattern.isEmpty())
+                {
+                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "To pattern is empty.");
+                    continue;
+                }
+
+                final IDependencyPattern dependencyPattern;
+                if (xsdPatternType == null || xsdPatternType == XsdDependencyPatternType.WILDCARD)
+                {
+                    dependencyPattern = new DependencyPatternImpl(DependencyPatternType.WILDCARD, fromPattern, toPattern);
+                }
+                else
+                {
+                    assert xsdPatternType == XsdDependencyPatternType.PARSER_DEPENDENCY_ENDPOINT : "Unexpected type: " + type;
+                    dependencyPattern = new DependencyPatternImpl(DependencyPatternType.PARSER_DEPENDENCY_ENDPOINT, fromPattern, toPattern);
+                }
+                dependencyPatterns.add(dependencyPattern);
+            }
+
+            final IMatching matching;
+            final XsdMatching xsdMatching = nextResolution.getMatching();
+            if (xsdMatching != null)
+            {
+                final String matchingInfo = xsdMatching.getInfo();
+                if (matchingInfo != null && !matchingInfo.isEmpty())
+                {
+                    final List<IElementPattern> matchingPatterns = new ArrayList<>();
+                    for (final XsdElementPattern nextXsdElementPattern : xsdMatching.getElementPattern())
+                    {
+                        final XsdElementPatternType nextXsdElementPatternType = nextXsdElementPattern.getType();
+                        if (nextXsdElementPatternType != null && nextXsdElementPatternType == XsdElementPatternType.FULLY_QUALIFIED_NAME)
+                        {
+                            final String nextXsdValue = nextXsdElementPattern.getValue();
+                            if (nextXsdValue != null && !nextXsdValue.isEmpty())
+                            {
+                                matchingPatterns.add(new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, nextXsdValue));
+                            }
+                            else
+                            {
+                                result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Empty matching pattern");
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING,
+                                    "Unspported pattern type: " + nextXsdElementPatternType);
+                        }
+                    }
+                    matching = new MatchingImpl(matchingInfo, matchingPatterns);
+                }
+                else
+                {
+                    result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Empty matching info");
+                    matching = null;
+                }
+            }
+            else
+            {
+                matching = null;
+            }
+
+            final Integer matchingElementsCount = nextResolution.getMatchingElementsCount();
+            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, matchingElementsCount,
+                    nextResolution.isApplicable(), nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(),
+                    nextResolution.getInformation(), nextResolution.getAssignee(), nextResolution.getDate().toGregorianCalendar().getTime(),
+                    elementPatterns, dependencyPatterns, matching);
             softwareSystem.addResolution(resolution);
         }
     }
@@ -1315,12 +1420,26 @@ public final class XmlReportReader extends XmlAccess
                     cyclicElements.add((INamedElement) element);
                 }
 
+                final Object scopeObject = nextCycle.getScope();
+                final INamedElement scope;
+                if (scopeObject != null)
+                {
+                    final IElement scopeElement = globalXmlToElementMap.get(scopeObject);
+                    assert scopeElement != null && scopeElement instanceof INamedElement : "Unexpected class in method 'processCycleGroupIssues': "
+                            + scopeElement;
+                    scope = (INamedElement) scopeElement;
+                }
+                else
+                {
+                    scope = null;
+                }
+
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()'
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
                         name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
                         issueProvider, analyzer, cyclicElements, nextCycle.getStructuralDebtIndex(), nextCycle.getComponentDependenciesToRemove(),
-                        nextCycle.getParserDependenciesToRemove());
+                        nextCycle.getParserDependenciesToRemove(), scope);
 
                 softwareSystem.addIssue(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);

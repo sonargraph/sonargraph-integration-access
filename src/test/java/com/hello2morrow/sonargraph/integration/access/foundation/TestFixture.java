@@ -36,6 +36,7 @@ public class TestFixture
     public static final String TEST_REPORT_9_3 = "./src/test/resources/AlarmClock_9.3.0.xml";
     public static final String TEST_REPORT_CLASSFILE_ISSUES = "./src/test/resources/ClassFileIssues.xml";
 
+    public static final String REPORT_WITH_RESOLUTION_PATTERNS = "./src/test/resources/ResolutionsWithPatterns.xml";
     public static final String TEST_REPORT_WITHOUT_ISSUES = "./src/test/resources/ReportWithoutIssues.xml";
     public static final String TEST_REPORT_WITHOUT_ELEMENTS = "./src/test/resources/ReportWithoutElements.xml";
     public static final String TEST_REPORT_WITH_CYCLE_METRICS = "./src/test/resources/AlarmClock_with_cycle_metrics.xml";

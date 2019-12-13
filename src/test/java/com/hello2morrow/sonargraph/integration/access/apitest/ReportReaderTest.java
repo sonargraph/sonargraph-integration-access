@@ -45,8 +45,11 @@ import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLev
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
+import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IFilter;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId.SortDirection;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
@@ -454,6 +457,40 @@ public final class ReportReaderTest
         assertExternalTodo(todos.get(index++), "Plugin External Todo", PluginExternalImpl.class,
                 "Workspace:External [com.hello2morrow.sonargraph.plugin.swagger]");
         assertExternalTodo(todos.get(index), "TODO on Java External", NamedElementImpl.class, "Workspace:External [Java]:[Unknown]:java:io:File");
+    }
+
+    @Test
+    public void processReportWithResolutionPatterns()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_RESOLUTION_PATTERNS));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<IResolution> ignores = systemProcessor.getResolutions(r -> r.getType() == ResolutionType.IGNORE);
+        assertEquals("Wrong number of ignores", 9, ignores.size());
+
+        {
+            final IResolution ignoreArchViolations = ignores.get(0);
+            assertEquals("Wrong description", "C11 -> C22", ignoreArchViolations.getDescription());
+            final List<IDependencyPattern> dependencyPatterns = ignoreArchViolations.getDependencyPatterns();
+            assertEquals("Wrong number of dependency patterns", 4, dependencyPatterns.size());
+        }
+        {
+            final IResolution ignoreFixme = ignores.get(1);
+            assertEquals("Wrong description", "Only present in baseline", ignoreFixme.getDescription());
+            final List<IElementPattern> elementPatterns = ignoreFixme.getElementPatterns();
+            assertEquals("Wrong number of element patterns", 1, elementPatterns.size());
+        }
+        {
+            final IResolution ignoreCycle = ignores.get(5);
+            assertEquals("Wrong description", "Unmodified", ignoreCycle.getDescription());
+            final IMatching matching = ignoreCycle.getMatching();
+            assertNotNull("Matching missing", matching);
+            final List<IElementPattern> elementPatterns = matching.getPatterns();
+            assertEquals("Wrong number of matching patterns", 2, elementPatterns.size());
+        }
     }
 
     private void assertExternalTodo(final IResolution todo, final String description, final Class<?> clazzOfAffectedElement,
