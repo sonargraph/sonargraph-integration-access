@@ -803,7 +803,7 @@ public final class XmlReportReader extends XmlAccess
             final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, matchingElementsCount,
                     nextResolution.isApplicable(), nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(),
                     nextResolution.getInformation(), nextResolution.getAssignee(), nextResolution.getDate().toGregorianCalendar().getTime(),
-                    elementPatterns, dependencyPatterns, matching);
+                    elementPatterns, dependencyPatterns, matching, nextResolution.getDescriptor());
             softwareSystem.addResolution(resolution);
         }
     }

@@ -678,6 +678,7 @@
 			default="false" />
 		<xs:attribute name="numberOfAffectedParserDependencies"
 			type="xs:int" default="-1" />
+		<xs:attribute name="descriptor" type="xs:string" />
 		<xs:attribute name="debugInfo" type="xs:string" />
 	</xs:complexType>
 

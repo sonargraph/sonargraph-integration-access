@@ -46,11 +46,12 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     private final List<IElementPattern> elementPatterns;
     private final List<IDependencyPattern> dependencyPatterns;
     private final IMatching matching;
+    private final String descriptor;
 
     public ResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
             final int matchingElementsCount, final boolean isApplicable, final int numberOfAffectedParserDependencies, final String description,
             final String information, final String assignee, final Date dateTime, final List<IElementPattern> elementPatterns,
-            final List<IDependencyPattern> dependencyPatterns, final IMatching matching)
+            final List<IDependencyPattern> dependencyPatterns, final IMatching matching, final String descriptor)
     {
         super(fqName, type != null ? type.name() : "");
 
@@ -74,6 +75,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.elementPatterns = elementPatterns != null ? elementPatterns : Collections.emptyList();
         this.dependencyPatterns = dependencyPatterns != null ? dependencyPatterns : Collections.emptyList();
         this.matching = matching;
+        this.descriptor = descriptor != null ? descriptor : "";
     }
 
     @Override
@@ -274,5 +276,11 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     public IMatching getMatching()
     {
         return matching;
+    }
+
+    @Override
+    public String getDescriptor()
+    {
+        return descriptor;
     }
 }

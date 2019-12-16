@@ -98,4 +98,9 @@ public interface IResolution extends IElement
      * @return the {@link IMatching} object used to connect this resolution to the code.
      */
     public IMatching getMatching();
+
+    /**
+     * @return the descriptor that uniquely identifies a resolution.
+     */
+    public String getDescriptor();
 }
