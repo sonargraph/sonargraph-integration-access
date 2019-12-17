@@ -358,8 +358,7 @@ public final class XmlReportReader extends XmlAccess
         processMetricThresholds(softwareSystemImpl, xsdReport);
 
         processIssues(softwareSystemImpl, xsdReport, result);
-        final ResolutionConverter resolutionConverter = new ResolutionConverter(softwareSystemImpl, xsdReport, globalXmlIdToIssueMap,
-                globalXmlToElementMap);
+        final ResolutionConverter resolutionConverter = new ResolutionConverter(softwareSystemImpl, xsdReport, globalXmlIdToIssueMap);
         resolutionConverter.convert(result);
 
         globalXmlToElementMap.clear();

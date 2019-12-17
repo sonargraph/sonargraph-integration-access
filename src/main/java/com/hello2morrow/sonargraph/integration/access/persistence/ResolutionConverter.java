@@ -13,7 +13,6 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.DependencyPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.ElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
-import com.hello2morrow.sonargraph.integration.access.model.IElement;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
@@ -52,6 +51,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdReso
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdToDo;
 
+@SuppressWarnings("deprecation") //We need to handle deprecated ResolutionImpl
 public class ResolutionConverter
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionConverter.class);
@@ -60,15 +60,13 @@ public class ResolutionConverter
     private final XsdSoftwareSystemReport report;
 
     private final Map<Object, IssueImpl> globalXmlIdToIssueMap;
-    private final Map<Object, IElement> globalXmlToElementMap;
 
     public ResolutionConverter(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report,
-            final Map<Object, IssueImpl> globalXmlIdToIssueMap, final Map<Object, IElement> globalXmlToElementMap)
+            final Map<Object, IssueImpl> globalXmlIdToIssueMap)
     {
         this.softwareSystem = softwareSystem;
         this.report = report;
         this.globalXmlIdToIssueMap = globalXmlIdToIssueMap;
-        this.globalXmlToElementMap = globalXmlToElementMap;
     }
 
     public void convert(final Result result)
