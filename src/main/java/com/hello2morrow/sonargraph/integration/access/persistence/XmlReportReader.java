@@ -38,18 +38,12 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
-import com.hello2morrow.sonargraph.integration.access.model.DependencyPatternType;
-import com.hello2morrow.sonargraph.integration.access.model.ElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
-import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
-import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
-import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
-import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
@@ -59,18 +53,14 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
-import com.hello2morrow.sonargraph.integration.access.model.Priority;
-import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ElementPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
@@ -84,7 +74,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.LanguageBas
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalNamespaceImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalProgrammingElementImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.MatchingImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricIdImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MetricLevelImpl;
@@ -102,7 +91,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.PluginExter
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
@@ -118,15 +106,11 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyIssue;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyPattern;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyPatternType;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateBlockIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementPattern;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
@@ -143,7 +127,6 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogi
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalProgrammingElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMap;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMapEntry;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMatching;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricFloatValue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricId;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdMetricIntValue;
@@ -164,7 +147,6 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlug
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdScriptRunnerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
@@ -376,7 +358,9 @@ public final class XmlReportReader extends XmlAccess
         processMetricThresholds(softwareSystemImpl, xsdReport);
 
         processIssues(softwareSystemImpl, xsdReport, result);
-        processResolutions(softwareSystemImpl, xsdReport, result);
+        final ResolutionConverter resolutionConverter = new ResolutionConverter(softwareSystemImpl, xsdReport, globalXmlIdToIssueMap,
+                globalXmlToElementMap);
+        resolutionConverter.convert(result);
 
         globalXmlToElementMap.clear();
         globalXmlIdToIssueMap.clear();
@@ -649,162 +633,6 @@ public final class XmlReportReader extends XmlAccess
         {
             final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
             filter.addIncludePattern(pattern);
-        }
-    }
-
-    private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final Result result)
-    {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processResolutions' must not be null";
-        assert report != null : "Parameter 'report' of method 'processResolutions' must not be null";
-        assert result != null : "Parameter 'result' of method 'processResolutions' must not be null";
-
-        if (report.getResolutions() == null)
-        {
-            //no resolutions to be processed
-            return;
-        }
-
-        for (final XsdResolution nextResolution : report.getResolutions().getResolution())
-        {
-            ResolutionType type;
-            if (nextResolution.isRefactoring())
-            {
-                type = ResolutionType.REFACTORING;
-            }
-            else
-            {
-                try
-                {
-                    type = ResolutionType.valueOf(nextResolution.getType().toUpperCase());
-                }
-                catch (final Exception e)
-                {
-                    LOGGER.error("Failed to process resolution type '" + nextResolution.getType() + "'", e);
-                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                            "Resolution type '" + nextResolution.getType() + "' is not supported and will be ignored.");
-                    continue;
-                }
-            }
-
-            Priority priority;
-            try
-            {
-                priority = Priority.valueOf(Utility.convertStandardNameToConstantName(nextResolution.getPrio()));
-            }
-            catch (final Exception e)
-            {
-                LOGGER.error("Failed to process priority type '" + nextResolution.getPrio() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                        "Priority type '" + nextResolution.getPrio() + "' is not supported, setting to '" + Priority.NONE + "'");
-                priority = Priority.NONE;
-            }
-
-            final List<IIssue> issues = new ArrayList<>();
-            for (final Object nextXsdIssue : nextResolution.getIssueIds())
-            {
-                final XsdIssue xsdIssue = (XsdIssue) nextXsdIssue;
-                final IssueImpl nextIssueImpl = globalXmlIdToIssueMap.get(xsdIssue);
-                assert nextIssueImpl != null : "No issue with id '" + xsdIssue.getId() + "' exists";
-                nextIssueImpl.setResolutionType(type);
-                issues.add(nextIssueImpl);
-            }
-
-            final List<IElementPattern> elementPatterns = new ArrayList<>();
-            for (final XsdElementPattern nextXsdElementPattern : nextResolution.getElementPattern())
-            {
-                final XsdElementPatternType xsdPatternType = nextXsdElementPattern.getType();
-                final ElementPatternType patternType = ElementPatternType.valueOf(xsdPatternType.name());
-                final String pattern = nextXsdElementPattern.getValue();
-
-                if (pattern == null || pattern.isEmpty())
-                {
-                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "Pattern of resolution is empty.");
-                    continue;
-                }
-
-                final IElementPattern elementPattern = new ElementPatternImpl(patternType, pattern);
-                elementPatterns.add(elementPattern);
-            }
-
-            final List<IDependencyPattern> dependencyPatterns = new ArrayList<>();
-            for (final XsdDependencyPattern xsdDependency : nextResolution.getDependencyPattern())
-            {
-                final XsdDependencyPatternType xsdPatternType = xsdDependency.getType();
-                final String fromPattern = xsdDependency.getFrom();
-                final String toPattern = xsdDependency.getTo();
-                if (fromPattern == null || fromPattern.isEmpty())
-                {
-                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "From pattern is empty.");
-                    continue;
-                }
-                if (toPattern == null || toPattern.isEmpty())
-                {
-                    result.addError(ValidationMessageCauses.XML_VALIDATION_WARNING, "To pattern is empty.");
-                    continue;
-                }
-
-                final IDependencyPattern dependencyPattern;
-                if (xsdPatternType == null || xsdPatternType == XsdDependencyPatternType.WILDCARD)
-                {
-                    dependencyPattern = new DependencyPatternImpl(DependencyPatternType.WILDCARD, fromPattern, toPattern);
-                }
-                else
-                {
-                    assert xsdPatternType == XsdDependencyPatternType.PARSER_DEPENDENCY_ENDPOINT : "Unexpected type: " + type;
-                    dependencyPattern = new DependencyPatternImpl(DependencyPatternType.PARSER_DEPENDENCY_ENDPOINT, fromPattern, toPattern);
-                }
-                dependencyPatterns.add(dependencyPattern);
-            }
-
-            final IMatching matching;
-            final XsdMatching xsdMatching = nextResolution.getMatching();
-            if (xsdMatching != null)
-            {
-                final String matchingInfo = xsdMatching.getInfo();
-                if (matchingInfo != null && !matchingInfo.isEmpty())
-                {
-                    final List<IElementPattern> matchingPatterns = new ArrayList<>();
-                    for (final XsdElementPattern nextXsdElementPattern : xsdMatching.getElementPattern())
-                    {
-                        final XsdElementPatternType nextXsdElementPatternType = nextXsdElementPattern.getType();
-                        if (nextXsdElementPatternType != null && nextXsdElementPatternType == XsdElementPatternType.FULLY_QUALIFIED_NAME)
-                        {
-                            final String nextXsdValue = nextXsdElementPattern.getValue();
-                            if (nextXsdValue != null && !nextXsdValue.isEmpty())
-                            {
-                                matchingPatterns.add(new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, nextXsdValue));
-                            }
-                            else
-                            {
-                                result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Empty matching pattern");
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING,
-                                    "Unspported pattern type: " + nextXsdElementPatternType);
-                        }
-                    }
-                    matching = new MatchingImpl(matchingInfo, matchingPatterns);
-                }
-                else
-                {
-                    result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Empty matching info");
-                    matching = null;
-                }
-            }
-            else
-            {
-                matching = null;
-            }
-
-            final Integer matchingElementsCount = nextResolution.getMatchingElementsCount();
-            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, matchingElementsCount,
-                    nextResolution.isApplicable(), nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(),
-                    nextResolution.getInformation(), nextResolution.getAssignee(), nextResolution.getDate().toGregorianCalendar().getTime(),
-                    elementPatterns, dependencyPatterns, matching, nextResolution.getDescriptor());
-            softwareSystem.addResolution(resolution);
         }
     }
 

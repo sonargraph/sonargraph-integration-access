@@ -659,27 +659,89 @@
             <xs:element name="dependencyPattern" type="xsdDependencyPattern" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="matching" type="xsdMatching" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="prio" type="xs:string" use="required" />
-		<xs:attribute name="fqName" type="xs:string"
-			use="required" />
+		<xs:attribute name="type" type="xs:string" use="required" /> 
+		<xs:attribute name="prio" type="xs:string" use="optional" />           
+		<xs:attribute name="fqName" type="xs:string" use="required" />
 		<xs:attribute name="issueIds" type="xs:IDREFS" />
 		<xs:attribute name="description" type="xs:string" />
 		<xs:attribute name="information" type="xs:string" />
-		<xs:attribute name="assignee" type="xs:string" />
-		<xs:attribute name="date" type="xs:dateTime"
-			use="required" />
-		<xs:attribute name="applicable" type="xs:boolean"
-			default="false" /> <!--  deprecated since 3.4 -->
+		<xs:attribute name="assignee" type="xs:string" />	                 
+		<xs:attribute name="date" type="xs:dateTime" use="required" />
+		<xs:attribute name="applicable" type="xs:boolean" default="false" />  <!--  deprecated since 3.4 -->
 		<xs:attribute name="matchingElementsCount" type="xs:int" use="optional" default="-1"/>
-		<xs:attribute name="task" type="xs:boolean"
-			default="false" />
-		<xs:attribute name="refactoring" type="xs:boolean"
-			default="false" />
-		<xs:attribute name="numberOfAffectedParserDependencies"
-			type="xs:int" default="-1" />
+		<xs:attribute name="task" type="xs:boolean" default="false" />		  <!-- deprecated since 3.4 -->
+		<xs:attribute name="refactoring" type="xs:boolean" default="false" /> <!-- deprecated since 3.4 -->
+		<xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" /> <!-- deprecated since 3.4 -->
 		<xs:attribute name="descriptor" type="xs:string" />
 		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdIgnore">
+		<xs:complexContent>
+			<xs:extension base="xsdResolution"/>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdTask" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdResolution" />
+		</xs:complexContent>
+	</xs:complexType>
+		
+	<xs:complexType name="xsdToDo">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdFixMe">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" >
+				<xs:attribute name="status" type="xs:string" use="required" />
+				<xs:attribute name="numberOfPotentiallyDoneElements" type="xs:int" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdDeleteRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+			<xs:attribute name="affectedParserDependencyCount" type="xs:int" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdMoveRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+				<xs:attribute name="targetRootDirectoryFqName" type="xs:string" use="required" />
+				<xs:attribute name="moveToParentName" type="xs:string" use="required" />
+				<xs:attribute name="elementKind" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdRenameRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+				<xs:attribute name="newName" type="xs:string" use="required" />
+				<xs:attribute name="elementKind" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdMoveRenameRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdMoveRefactoring">
+				<xs:attribute name="newName" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:simpleType name="xsdDependencyPatternType">

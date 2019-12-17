@@ -67,7 +67,10 @@ public interface IResolution extends IElement
      * @return true if matching element count is > 0, false otherwise
      */
     @Deprecated
-    public boolean isApplicable();
+    default public boolean isApplicable()
+    {
+        return true;
+    }
 
     /**
      * @return the number of elements that this resolution matches.
@@ -78,11 +81,6 @@ public interface IResolution extends IElement
      * @return true if the resolution is a task, i.e. todo, fix, or refactoring.
      */
     public boolean isTask();
-
-    /**
-     * @return the number of parser dependencies affected by this resolution.
-     */
-    public int getNumberOfAffectedParserDependencies();
 
     /**
      * @return the element patterns used to connect this resolution to the code.
@@ -103,4 +101,14 @@ public interface IResolution extends IElement
      * @return the descriptor that uniquely identifies a resolution.
      */
     public String getDescriptor();
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    default public int getNumberOfAffectedParserDependencies()
+    {
+        return -1;
+    }
 }

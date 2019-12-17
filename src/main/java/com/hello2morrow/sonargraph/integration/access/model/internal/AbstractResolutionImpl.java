@@ -30,15 +30,12 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-@Deprecated
-public final class ResolutionImpl extends ElementImpl implements IResolution
+class AbstractResolutionImpl extends ElementImpl implements IResolution
 {
     private static final long serialVersionUID = 6480407569513366548L;
     private final List<IIssue> issues;
     private final Priority priority;
     private final ResolutionType type;
-    private final boolean isApplicable;
-    private final int numberOfAffectedParserDependencies;
     private final Date dateTime;
     private final String assignee;
     private final String description;
@@ -49,10 +46,10 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     private final IMatching matching;
     private final String descriptor;
 
-    public ResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
-            final int matchingElementsCount, final boolean isApplicable, final int numberOfAffectedParserDependencies, final String description,
-            final String information, final String assignee, final Date dateTime, final List<IElementPattern> elementPatterns,
-            final List<IDependencyPattern> dependencyPatterns, final IMatching matching, final String descriptor)
+    public AbstractResolutionImpl(final String fqName, final ResolutionType type, final Priority priority, final List<IIssue> issues,
+            final int matchingElementsCount, final String description, final String information, final String assignee, final Date dateTime,
+            final List<IElementPattern> elementPatterns, final List<IDependencyPattern> dependencyPatterns, final IMatching matching,
+            final String descriptor)
     {
         super(fqName, type != null ? type.name() : "");
 
@@ -64,8 +61,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         this.type = type;
         this.priority = priority;
         this.issues = issues;
-        this.isApplicable = isApplicable;
-        this.numberOfAffectedParserDependencies = numberOfAffectedParserDependencies;
+
         this.matchingElementsCount = matchingElementsCount;
 
         this.description = description != null ? description : "";
@@ -105,9 +101,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         builder.append(", description=").append(description);
         builder.append(", assignee=").append(assignee);
         builder.append(", date=").append(dateTime);
-        builder.append(", applicable=").append(isApplicable ? "yes" : "no");
         builder.append(", number of issues=").append(issues.size());
-        builder.append(", number of affected parser dependencies=").append(numberOfAffectedParserDependencies);
         builder.append(", name=").append(getName());
         return builder.toString();
     }
@@ -120,9 +114,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         result = prime * result + ((assignee == null) ? 0 : assignee.hashCode());
         result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
         result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + (isApplicable ? 1231 : 1237);
         result = prime * result + ((issues == null) ? 0 : issues.hashCode());
-        result = prime * result + numberOfAffectedParserDependencies;
         result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
@@ -143,7 +135,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         {
             return false;
         }
-        final ResolutionImpl other = (ResolutionImpl) obj;
+        final AbstractResolutionImpl other = (AbstractResolutionImpl) obj;
         if (assignee == null)
         {
             if (other.assignee != null)
@@ -177,10 +169,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         {
             return false;
         }
-        if (isApplicable != other.isApplicable)
-        {
-            return false;
-        }
+
         if (issues == null)
         {
             if (other.issues != null)
@@ -192,10 +181,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
         {
             return false;
         }
-        if (numberOfAffectedParserDependencies != other.numberOfAffectedParserDependencies)
-        {
-            return false;
-        }
+
         if (priority != other.priority)
         {
             return false;
@@ -208,21 +194,9 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
-    public boolean isApplicable()
-    {
-        return isApplicable;
-    }
-
-    @Override
     public boolean isTask()
     {
         return type != ResolutionType.IGNORE;
-    }
-
-    @Override
-    public int getNumberOfAffectedParserDependencies()
-    {
-        return numberOfAffectedParserDependencies;
     }
 
     @Override
@@ -284,4 +258,5 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     {
         return descriptor;
     }
+
 }
