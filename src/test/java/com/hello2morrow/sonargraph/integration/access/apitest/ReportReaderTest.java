@@ -525,7 +525,7 @@ public final class ReportReaderTest
         assertEquals("Wrong number of rename refactorings", 1, renames.size());
 
         final List<IMoveRefactoring> moves = systemProcessor.getResolutions(null, IMoveRefactoring.class);
-        assertEquals("Wrong number of move refactorings (move + move/rename)", 2, moves.size());
+        assertEquals("Wrong number of move refactorings (move + move/rename)", 1, moves.size());
 
         final List<IMoveRenameRefactoring> moveRename = systemProcessor.getResolutions(null, IMoveRenameRefactoring.class);
         assertEquals("Wrong number of move/rename refactorings", 1, moveRename.size());

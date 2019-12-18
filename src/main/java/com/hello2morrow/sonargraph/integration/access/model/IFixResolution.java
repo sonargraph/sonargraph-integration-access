@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IFixMeResolution extends ITaskResolution
+public interface IFixResolution extends ITaskResolution
 {
     //Marker
 }

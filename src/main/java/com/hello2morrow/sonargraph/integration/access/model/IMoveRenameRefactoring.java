@@ -17,7 +17,15 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IMoveRenameRefactoring extends IMoveRefactoring
+//Implementation detail: This interface is neither extending IRenameRefactoring nor IMoveRefactoring,
+//because we want to allow easy retrieval in SystemInfoProcessor.getResolutions(final Predicate<T> filter, final Class<T> resolutionClass)
+public interface IMoveRenameRefactoring extends IRefactoring
 {
     public String getNewName();
+
+    public String getTargetRootDirectoryFqName();
+
+    public String getMoveToParentName();
+
+    public String getElementKind();
 }

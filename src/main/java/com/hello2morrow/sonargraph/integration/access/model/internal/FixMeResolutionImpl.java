@@ -22,13 +22,13 @@ import java.util.List;
 
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
-import com.hello2morrow.sonargraph.integration.access.model.IFixMeResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IFixResolution;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-public class FixMeResolutionImpl extends TaskResolutionImpl implements IFixMeResolution
+public class FixMeResolutionImpl extends TaskResolutionImpl implements IFixResolution
 {
     private static final long serialVersionUID = -7590979592940151582L;
 

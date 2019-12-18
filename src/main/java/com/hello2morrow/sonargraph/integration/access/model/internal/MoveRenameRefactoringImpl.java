@@ -28,9 +28,15 @@ import com.hello2morrow.sonargraph.integration.access.model.IMoveRenameRefactori
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.RefactoringStatus;
 
-public class MoveRenameRefactoringImpl extends MoveRefactoringImpl implements IMoveRenameRefactoring
+//Implementation detail: This class is neither extending RenameRefactoringImpl nor MoveRefactoringImpl,
+//because we want to allow easy retrieval in SystemInfoProcessor.getResolutions(final Predicate<T> filter, final Class<T> resolutionClass)
+public class MoveRenameRefactoringImpl extends AbstractRefactoringImpl implements IMoveRenameRefactoring
 {
     private static final long serialVersionUID = -3826123794372026966L;
+
+    private final String targetRootDirectoryFqName;
+    private final String moveToParentName;
+    private final String elementKind;
     private final String newName;
 
     public MoveRenameRefactoringImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
@@ -40,8 +46,35 @@ public class MoveRenameRefactoringImpl extends MoveRefactoringImpl implements IM
             final String targetRootDirectoryFqName, final String moveToParentName, final String elementKind, final String newName)
     {
         super(fqName, priority, issues, matchingElementsCount, description, information, assignee, dateTime, elementPatterns, dependencyPatterns,
-                matching, descriptor, status, numberOfPotentiallyDoneElements, targetRootDirectoryFqName, moveToParentName, elementKind);
+                matching, descriptor, status, numberOfPotentiallyDoneElements);
+        assert targetRootDirectoryFqName != null
+                && targetRootDirectoryFqName.length() > 0 : "Parameter 'targetRootDirectoryFqName' of method 'MoveRefactoringImpl' must not be empty";
+        assert moveToParentName != null
+                && moveToParentName.length() > 0 : "Parameter 'moveToParentName' of method 'MoveRefactoringImpl' must not be empty";
+        assert elementKind != null && elementKind.length() > 0 : "Parameter 'elementKind' of method 'MoveRefactoringImpl' must not be empty";
+
+        this.targetRootDirectoryFqName = targetRootDirectoryFqName;
+        this.moveToParentName = moveToParentName;
+        this.elementKind = elementKind;
         this.newName = newName;
+    }
+
+    @Override
+    public String getTargetRootDirectoryFqName()
+    {
+        return targetRootDirectoryFqName;
+    }
+
+    @Override
+    public String getMoveToParentName()
+    {
+        return moveToParentName;
+    }
+
+    @Override
+    public String getElementKind()
+    {
+        return elementKind;
     }
 
     @Override
