@@ -49,7 +49,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IDeleteRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IFilter;
-import com.hello2morrow.sonargraph.integration.access.model.IIgnoreResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IIgnoreDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
@@ -64,7 +64,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IRenameRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
-import com.hello2morrow.sonargraph.integration.access.model.IToDoResolution;
+import com.hello2morrow.sonargraph.integration.access.model.IToDoDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -512,10 +512,10 @@ public final class ReportReaderTest
         final List<IResolution> resolutions = systemProcessor.getResolutions(null);
         assertEquals("Wrong number of resolutions", 7, resolutions.size());
 
-        final List<IIgnoreResolution> ignores = systemProcessor.getResolutions(null, IIgnoreResolution.class);
+        final List<IIgnoreDefinition> ignores = systemProcessor.getResolutions(null, IIgnoreDefinition.class);
         assertEquals("Wrong number of ignore resolutions", 1, ignores.size());
 
-        final List<IToDoResolution> todos = systemProcessor.getResolutions(null, IToDoResolution.class);
+        final List<IToDoDefinition> todos = systemProcessor.getResolutions(null, IToDoDefinition.class);
         assertEquals("Wrong number of todo resolutions", 1, todos.size());
 
         final List<IDeleteRefactoring> deletes = systemProcessor.getResolutions(null, IDeleteRefactoring.class);

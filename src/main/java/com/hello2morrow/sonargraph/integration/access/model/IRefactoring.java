@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IRefactoring extends ITaskResolution
+public interface IRefactoring extends ITaskDefinition
 {
     public RefactoringStatus getStatus();
 

@@ -31,7 +31,8 @@ public final class SourceFileImpl extends PhysicalElementImpl implements ISource
             final boolean isLocationOnly, final String relativeRootDirectory)
     {
         super(kind, presentationKind, name, presentationName, fqName, isLocationOnly);
-        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'SourceFileImpl' must not be empty";
+        assert relativeRootDirectory != null
+                && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'SourceFileImpl' must not be empty";
         this.relativeRootDirectory = relativeRootDirectory;
     }
 

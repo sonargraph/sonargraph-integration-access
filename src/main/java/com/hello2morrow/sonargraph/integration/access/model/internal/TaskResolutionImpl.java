@@ -24,11 +24,11 @@ import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
-import com.hello2morrow.sonargraph.integration.access.model.ITaskResolution;
+import com.hello2morrow.sonargraph.integration.access.model.ITaskDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-abstract class TaskResolutionImpl extends AbstractResolutionImpl implements ITaskResolution
+abstract class TaskResolutionImpl extends AbstractResolutionImpl implements ITaskDefinition
 {
     private static final long serialVersionUID = 6364176910810103016L;
 
