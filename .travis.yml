@@ -9,7 +9,7 @@ branches:
     - develop
 
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 script:
   - mvn package -B -e -V
