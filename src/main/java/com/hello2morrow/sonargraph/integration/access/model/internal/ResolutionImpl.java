@@ -20,12 +20,14 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -283,5 +285,41 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     public String getDescriptor()
     {
         return descriptor;
+    }
+
+    @Override
+    public String getKind()
+    {
+        return type.getStandardName();
+    }
+
+    @Override
+    public String getPresentationKind()
+    {
+        return type.getPresentationName();
+    }
+
+    @Override
+    public String getFqName()
+    {
+        return getName();
+    }
+
+    @Override
+    public boolean isLocationOnly()
+    {
+        return false;
+    }
+
+    @Override
+    public Optional<? extends INamedElement> getOriginalLocation()
+    {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> getOriginalFqName()
+    {
+        return Optional.empty();
     }
 }

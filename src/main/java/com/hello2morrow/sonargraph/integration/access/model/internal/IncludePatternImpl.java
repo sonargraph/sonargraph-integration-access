@@ -21,8 +21,9 @@ public final class IncludePatternImpl extends AbstractWildcardPatternImpl
 {
     private static final long serialVersionUID = 1L;
 
-    public IncludePatternImpl(final String name, final int numberOfMatches)
+    public IncludePatternImpl(final String fqName, final String kind, final String presentationKind, final String name, final String presentationName,
+            final int numberOfMatches)
     {
-        super(name, numberOfMatches);
+        super(fqName, kind, presentationKind, name, presentationName, numberOfMatches);
     }
 }

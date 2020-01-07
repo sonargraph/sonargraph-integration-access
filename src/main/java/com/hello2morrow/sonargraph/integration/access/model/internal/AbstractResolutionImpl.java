@@ -20,12 +20,14 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -73,6 +75,42 @@ class AbstractResolutionImpl extends ElementImpl implements IResolution
         this.dependencyPatterns = dependencyPatterns != null ? dependencyPatterns : Collections.emptyList();
         this.matching = matching;
         this.descriptor = descriptor != null ? descriptor : "";
+    }
+
+    @Override
+    public final String getFqName()
+    {
+        return getName();
+    }
+
+    @Override
+    public final Optional<String> getOriginalFqName()
+    {
+        return Optional.of(getFqName());
+    }
+
+    @Override
+    public final boolean isLocationOnly()
+    {
+        return false;
+    }
+
+    @Override
+    public Optional<? extends INamedElement> getOriginalLocation()
+    {
+        return Optional.empty();
+    }
+
+    @Override
+    public final String getKind()
+    {
+        return getType().getStandardName();
+    }
+
+    @Override
+    public final String getPresentationKind()
+    {
+        return getType().getPresentationName();
     }
 
     @Override

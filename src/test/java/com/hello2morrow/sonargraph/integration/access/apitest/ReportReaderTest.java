@@ -399,8 +399,9 @@ public final class ReportReaderTest
             final Optional<IComponentFilter> issueFilterOpt = softwareSystem.getIssueFilter();
             assertTrue("Issue filter must exist", issueFilterOpt.isPresent());
             final IComponentFilter issueFilter = issueFilterOpt.get();
-            assertEquals("Wrong description", "Ignore issues of internal components containing legacy/generated code", issueFilter.getDescription());
-            assertEquals("Wrong information", "Ignoring issues of 2 internal component(s) (processed 9)", issueFilter.getInformation());
+            assertEquals("Wrong description", "Ignore analysis issues of internal components containing legacy/generated code",
+                    issueFilter.getDescription());
+            assertEquals("Wrong information", "Ignoring analysis issues of 2 internal component(s) (processed 9)", issueFilter.getInformation());
             assertEquals("Wrong number of included elements", 7, issueFilter.getNumberOfIncludedElements());
             assertEquals("Wrong number of excluded elements", 2, issueFilter.getNumberOfExcludedElements());
             final List<IWildcardPattern> includePatterns = issueFilter.getIncludePatterns();

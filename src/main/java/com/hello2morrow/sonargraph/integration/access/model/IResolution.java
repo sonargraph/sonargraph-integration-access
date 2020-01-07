@@ -20,7 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model;
 import java.util.Date;
 import java.util.List;
 
-public interface IResolution extends IElement
+public interface IResolution extends INamedElement
 {
     /**
      * @return the type - never <code>null</code>

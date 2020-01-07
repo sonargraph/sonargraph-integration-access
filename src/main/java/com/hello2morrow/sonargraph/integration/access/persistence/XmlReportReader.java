@@ -625,12 +625,18 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getExclude())
         {
-            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
+                    nextXsdPattern.getNumberOfMatches());
             filter.addExcludePattern(pattern);
         }
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getInclude())
         {
-            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
+                    nextXsdPattern.getNumberOfMatches());
             filter.addIncludePattern(pattern);
         }
     }

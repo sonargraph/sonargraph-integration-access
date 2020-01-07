@@ -277,11 +277,11 @@
 	</xs:complexType>
 
 	<xs:complexType name="xsdWildcardPattern">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
 				<xs:attribute name="numberOfMatches" type="xs:int" />
 			</xs:extension>
-		</xs:simpleContent>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="xsdFilter">

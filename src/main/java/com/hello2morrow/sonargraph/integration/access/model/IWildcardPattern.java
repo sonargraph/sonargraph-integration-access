@@ -17,7 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-public interface IWildcardPattern
+public interface IWildcardPattern extends INamedElement
 {
     public String getPattern();
 
