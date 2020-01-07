@@ -144,7 +144,9 @@
 					</execution>
 				</executions>
 				<configuration>
+					<source>8</source>
 					<additionalparam>-Xdoclint:none</additionalparam>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
 					<excludePackageNames>com.hello2morrow.sonargraph.integration.access.persistence.report:com.hello2morrow.sonargraph.integration.architecture.persistence</excludePackageNames>
 				</configuration>
 			</plugin>

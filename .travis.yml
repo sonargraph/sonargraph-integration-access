@@ -9,7 +9,7 @@ branches:
     - develop
 
 jdk:
-  - openjdk11
+  - openjdk12
 
 script:
   - mvn package -B -e -V
