@@ -1,0 +1,731 @@
+<?xml version="1.0" ?>
+<ns2:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/export" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/report" id="_0" systemId="f6dac8962bc63a6549cdd3781e473df0_b" name="CyclesDiff" version="9.12.3.100" systemPath="D:\00_repo\sgng\com.hello2morrow.sonargraph.language.provider.java\src\test\diffCycles\baseline\CyclesDiff.sonargraph" timestamp="2020-01-13T17:38:00.036+01:00" currentVirtualModel="Modifiable.vm" systemDescription="This is
+a multi
+line test" analyzerExecutionLevel="full">
+	<reportContextInfo>Multi-
+line
+context
+info</reportContextInfo>
+	<metaData>
+		<issueProviders>
+			<issueProvider id="_38" name="Core" presentationName="Core"></issueProvider>
+			<issueProvider id="_39" name="JavaLanguageProvider" presentationName="Java"></issueProvider>
+		</issueProviders>
+		<issueCategories>
+			<category id="_29" name="ArchitecturalView" presentationName="Architectural View"></category>
+			<category id="_2a" name="ArchitectureConsistency" presentationName="Architecture Consistency"></category>
+			<category id="_2b" name="ArchitectureDefinition" presentationName="Architecture Definition"></category>
+			<category id="_2c" name="ArchitectureViolation" presentationName="Architecture Violation"></category>
+			<category id="_2d" name="CycleGroup" presentationName="Cycle Group"></category>
+			<category id="_2e" name="DuplicateCode" presentationName="Duplicate Code"></category>
+			<category id="_2f" name="InstallationConfiguration" presentationName="Installation Configuration"></category>
+			<category id="_30" name="PluginBased" presentationName="Plugin Based"></category>
+			<category id="_31" name="Refactoring" presentationName="Refactoring"></category>
+			<category id="_32" name="ScriptBased" presentationName="Script Based"></category>
+			<category id="_33" name="ScriptDefinition" presentationName="Script Definition"></category>
+			<category id="_34" name="SystemConfiguration" presentationName="System Configuration"></category>
+			<category id="_35" name="ThresholdViolation" presentationName="Threshold Violation"></category>
+			<category id="_36" name="Todo" presentationName="Todo"></category>
+			<category id="_37" name="Workspace" presentationName="Workspace"></category>
+		</issueCategories>
+		<issueTypes>
+			<issueType severity="Warning" category="_2d" id="_3a" name="ComponentCycleGroup" presentationName="Component Cycle Group"></issueType>
+			<issueType severity="None" category="_31" id="_3b" name="RenameRefactoring" presentationName="Rename Refactoring"></issueType>
+			<issueType severity="Warning" category="_37" id="_3c" name="ClassFileOutOfDate" presentationName="Class file is out-of-date"></issueType>
+		</issueTypes>
+		<metricProviders>
+			<provider id="_42" name="Core" presentationName="Core"></provider>
+			<provider id="_45" name="JavaLanguageProvider" presentationName="Java"></provider>
+		</metricProviders>
+		<metricCategories>
+			<category id="_58" name="Architecture" presentationName="Architecture" orderNumber="0"></category>
+			<category id="_44" name="CodeAnalysis" presentationName="Code Analysis" orderNumber="1"></category>
+			<category id="_47" name="Cycle" presentationName="Cycle" orderNumber="2"></category>
+			<category id="_3e" name="CohesionAndCoupling" presentationName="Cohesion/Coupling" orderNumber="3"></category>
+			<category id="_50" name="Dependency" presentationName="Dependency" orderNumber="4"></category>
+			<category id="_4a" name="Size" presentationName="Size" orderNumber="5"></category>
+			<category id="_3f" name="JohnLakos" presentationName="John Lakos" orderNumber="7"></category>
+			<category id="_76" name="MacCormack" presentationName="MacCormack, Rusnak, Baldwin" orderNumber="11"></category>
+		</metricCategories>
+		<metricLevels>
+			<level id="_40" name="System" presentationName="System" orderNumber="0"></level>
+			<level id="_41" name="Module" presentationName="Module" orderNumber="10"></level>
+		</metricLevels>
+		<metricIds>
+			<metricId id="_3d" name="CoreAcd" presentationName="ACD" description="Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components." categories="_3e _3f" provider="_42" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_43" name="JavaAveragePackagePublicVisibility" presentationName="Average Java Public Visibility (%)" description="Average of Java public visibility for all Java packages in a Java module" categories="_44" provider="_45" isFloat="true" levels="_41" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_46" name="CoreBiggestComponentCycleGroup" presentationName="Biggest Component Cycle Group" description="Number of components in biggest cycle." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_48" name="JavaBiggestPackageCycleGroup" presentationName="Biggest Java Package Cycle Group" description="Biggest Java package cycle group." categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_49" name="JavaByteCodeInstructions" presentationName="Byte Code Instructions" description="Number of Java byte code instructions." categories="_4a" provider="_45" isFloat="false" levels="_40" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4b" name="CoreCcd" presentationName="CCD" description="Cumulative component dependency according to John Lakos. Cumulated depends upon values." categories="_3e _3f" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4c" name="CoreCodeCommentLines" presentationName="Code Comment Lines" description="Counts all comment lines excluding header comments and blank comment lines." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4d" name="CoreCommentLines" presentationName="Comment Lines" description="Counts all comment lines excluding blank comment lines." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4e" name="CoreComponentDependenciesToRemoveComponents" presentationName="Component Dependencies to Remove (Components)" description="Number of component dependencies to remove to break up all  component cycles." categories="_44 _47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4f" name="JavaComponentDependenciesToRemovePackages" presentationName="Component Dependencies to Remove (Java Packages)" description="Number of component dependencies to remove to break up all Java package cycle groups." categories="_44 _50" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_51" name="CoreCyclicityComponents" presentationName="Cyclicity (Components)" description="Cumulated cyclicity of component cycles." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_52" name="JavaCyclicityPackages" presentationName="Cyclicity (Java Packages)" description="Cumulated cyclicity of Java package cycle groups." categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_53" name="CoreMaxAcd" presentationName="Highest ACD" description="Highest ACD." categories="_3e _3f" provider="_42" isFloat="true" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_54" name="CoreLinesOfCode" presentationName="Lines of Code" description="Lines of code excluding blank and comment lines." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_55" name="CoreMaintainabilityLevel" presentationName="Maintainability Level" description="This metric estimates maintainability as a percentage. 100% is the best possible value. To do that it looks at the dependency structure between components (source files in most languages). Cyclic dependencies and low level classes with a lot of incoming dependencies have a negative influence on the metric. Keeping good vertical boundaries and not having too many layers will have a positive influence. It is also recommended to have as many components as possible that are independent, i.e. have no incoming dependencies and therefore can be changed without influencing the rest of the system. In Java and C# the metric also considers the value of the relative cyclicity metric for packages/namespaces. If you have large cycle groups they will have a negative influence on the metric value." categories="_3e" provider="_42" isFloat="true" levels="_40 _41" bestValue="100.0" worstValue="0.0" minValue="0.0" maxValue="100.0" direction="LowerWorse"></metricId>
+			<metricId id="_56" name="CoreNccd" presentationName="NCCD" description="Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more vertical design. A value less than 1 indicates a more horizontal design." categories="_3e _3f" provider="_42" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_57" name="CoreArtifactCount" presentationName="Number of Artifacts" description="Number of active architecture artifacts" categories="_58" provider="_42" isFloat="false" levels="_40" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_59" name="CoreDuplicates" presentationName="Number of Code Duplicates" description="Number of duplicated code blocks." categories="_44" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5a" name="CoreComponentCycleGroups" presentationName="Number of Component Cycle Groups" description="Number of all component cycle groups, warnings and errors." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5b" name="CoreComponents" presentationName="Number of Components" description="Number of components." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_5c" name="CoreComponentsIgnoringIssues" presentationName="Number of Components (Ignoring Issues)" description="Number of components ignoring issues." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_5d" name="CoreComponentsInDeprecatedArtifacts" presentationName="Number of Components in Deprecated Artifacts" description="Number of components that are assigned to deprecated artifact" categories="_58" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5e" name="CoreViolatingComponents" presentationName="Number of Components with Violations" description="Number of components that contain architecture violations" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5f" name="CoreCriticalComponentCycleGroups" presentationName="Number of Critical Component Cycle Groups" description="Number of component cycle groups marked as errors." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_60" name="JavaCriticalPackageCycleGroups" presentationName="Number of Critical Java Package Cycle Groups" description="Number of Java package cycle groups marked as errors." categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_61" name="CoreCyclicComponents" presentationName="Number of Cyclic Components" description="Number of cyclic components." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_62" name="JavaCyclicPackages" presentationName="Number of Cyclic Java Packages" description="Number of cyclic Java packages." categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_63" name="CoreCyclicModules" presentationName="Number of Cyclic Modules" description="Number of cyclic modules." categories="_47" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_64" name="CoreDuplicatedLines" presentationName="Number of Duplicated Code Lines" description="Number of duplicated lines in duplicated code blocks." categories="_44" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_65" name="CoreEmptyArtifactCount" presentationName="Number of Empty Artifacts" description="Number of active architecture artifacts that are empty" categories="_58" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_66" name="CoreIgnoredDuplicates" presentationName="Number of Ignored Code Duplicates" description="Number of ignored duplicated code blocks." categories="_44" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_67" name="CoreIgnoredCyclicComponents" presentationName="Number of Ignored Cyclic Components" description="Number of ignored cyclic components." categories="_47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_68" name="JavaIgnoredCyclicPackages" presentationName="Number of Ignored Cyclic Java Packages" description="Number of ignored cyclic Java packages." categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_69" name="CoreIgnoredViolationsParserDependencies" presentationName="Number of Ignored Violations (Parser Dependencies)" description="Number of parser dependencies in ignored architecture violations" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6a" name="JavaPackages" presentationName="Number of Java Packages" description="Number of Java packages containing types." categories="_4a" provider="_45" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6b" name="CoreElementsInDeprecatedArtifacts" presentationName="Number of Logical Elements in Deprecated Artifacts" description="Number of logical programming elements that are assigned to deprecated artifact" categories="_58" provider="_42" isFloat="false" levels="_40" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6c" name="CoreModules" presentationName="Number of Modules" description="Number of modules." categories="_4a" provider="_42" isFloat="false" levels="_40" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6d" name="CoreStatements" presentationName="Number of Statements" description="Counts all statements." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6e" name="CoreUnassignedLogicalElements" presentationName="Number of Unassigned Logical Elements" description="Number of internal logical elements that are not assigned to any artifact" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6f" name="CoreUnassignedComponents" presentationName="Number of Unassigned Physical Components" description="Number of internal physical components that are not assigned to any artifact" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_70" name="CoreViolationsComponentDependencies" presentationName="Number of Violations (Component Dependencies)" description="Number of architecture-violating component dependencies" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_71" name="CoreViolationsParserDependencies" presentationName="Number of Violations (Parser Dependencies)" description="Number of architecture-violating parser dependencies" categories="_58" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_72" name="JavaPackageCycleGroups" presentationName="Number of all Java Package Cycle Groups" description="Number of all Java package cycle groups, errors and warnings" categories="_47" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_73" name="CoreParserDependenciesToRemoveComponents" presentationName="Parser Dependencies to Remove (Components)" description="Number of code lines to change to break up all  component cycles." categories="_44 _47" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_74" name="JavaParserDependenciesToRemovePackages" presentationName="Parser Dependencies to Remove (Java Packages)" description="Number of code lines to change to break up all Java package cycle groups)." categories="_44 _50" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_75" name="CorePropagationCost" presentationName="Propagation Cost" description="Propagation cost metric according to MacCormack, Rusnak and Baldwin." categories="_3e _76" provider="_42" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_77" name="CoreRacd" presentationName="RACD" description="Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent)." categories="_3e _3f" provider="_42" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_78" name="CoreRelativeCyclicityComponents" presentationName="Relative Cyclicity (Components)" description="Relative component cyclicity in percent." categories="_47" provider="_42" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_79" name="JavaRelativeCyclicityPackages" presentationName="Relative Cyclicity (Java Packages)" description="Relative Java package cyclicity in percent." categories="_47" provider="_45" isFloat="true" levels="_40 _41" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7a" name="CoreSourceElementCount" presentationName="Source Element Count" description="Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_7b" name="CoreStructuralDebtIndexComponents" presentationName="Structural Debt Index (Components)" description="Cumulative structural debt index of component cycles." categories="_44" provider="_42" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7c" name="JavaStructuralDebtIndexPackages" presentationName="Structural Debt Index (Java Packages)" description="Cumulative structural debt index of all Java package cycle groups." categories="_44" provider="_45" isFloat="false" levels="_40 _41" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7d" name="CoreTotalLines" presentationName="Total Lines" description="Counts all lines including empty and comment lines." categories="_4a" provider="_42" isFloat="false" levels="_40 _41" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+		</metricIds>
+	</metaData>
+	<features>
+		<feature name="Architecture" presentationName="Architecture" licensed="true"></feature>
+		<feature name="CohesionAndCouplingMetrics" presentationName="Cohesion And Coupling Metrics" licensed="true"></feature>
+		<feature name="CycleBreakUp" presentationName="Cycle Break Up" licensed="true"></feature>
+		<feature name="DuplicateCode" presentationName="Duplicate Code" licensed="true"></feature>
+		<feature name="Platform" presentationName="Platform" licensed="true"></feature>
+		<feature name="Plugins" presentationName="Plugins" licensed="true"></feature>
+		<feature name="Reporting" presentationName="Reporting" licensed="true"></feature>
+		<feature name="Scripts" presentationName="Scripts" licensed="true"></feature>
+		<feature name="ScriptsAutomated" presentationName="Scripts Automated" licensed="true"></feature>
+		<feature name="Snapshots" presentationName="Snapshots" licensed="true"></feature>
+		<feature name="Systems" presentationName="Systems" licensed="true"></feature>
+		<feature name="VirtualModels" presentationName="Virtual Models" licensed="true"></feature>
+	</features>
+	<analyzers>
+		<analyzer description="Checks for architecture violations" licensed="true" executionLevel="minimal" executed="true" id="_4" name="ArchitectureCheck" presentationName="Architecture Check"></analyzer>
+		<analyzer description="Calculates number of violatong/ignored parser dependencies" licensed="true" executionLevel="minimal" executed="true" id="_5" name="ArchitectureCheckMetrics" presentationName="Architecture Metrics"></analyzer>
+		<analyzer description="Calculates cohesion and coupling metrics" licensed="true" executionLevel="full" executed="true" id="_20" name="CohesionAndCouplingMetrics" presentationName="Cohesion and Coupling Metrics"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on module level" licensed="true" executionLevel="advanced" executed="true" id="_1e" name="ComponentCyclesModule" presentationName="Component Cycles (Module)"></analyzer>
+		<analyzer description="Computes component cycle metrics on module level" licensed="true" executionLevel="advanced" executed="true" id="_1c" name="ComponentCyclesModuleMetrics" presentationName="Component Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on system level" licensed="true" executionLevel="advanced" executed="true" id="_1f" name="ComponentCyclesSystem" presentationName="Component Cycles (System)"></analyzer>
+		<analyzer description="Computes component cycle metrics on system level" licensed="true" executionLevel="advanced" executed="true" id="_1d" name="ComponentCyclesSystemMetrics" presentationName="Component Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes directory cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_e" name="CppDirectoryCyclesModule" presentationName="C/C++ Directory Cycles (Module)"></analyzer>
+		<analyzer description="Computes directory cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_d" name="CppDirectoryCyclesModuleMetrics" presentationName="C/C++ Directory Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes directory cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_1a" name="CppDirectoryCyclesSystem" presentationName="C/C++ Directory Cycles (System)"></analyzer>
+		<analyzer description="Computes directory cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_19" name="CppDirectoryCyclesSystemMetrics" presentationName="C/C++ Directory Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_c" name="CppNamespaceCyclesModule" presentationName="C++ Namespace Cycles (Module)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_b" name="CppNamespaceCyclesModuleMetrics" presentationName="C++ Namespace Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_18" name="CppNamespaceCyclesSystem" presentationName="C++ Namespace Cycles (System)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_17" name="CppNamespaceCyclesSystemMetrics" presentationName="C++ Namespace Cycle Metrics (System)"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on module level" licensed="true" executionLevel="full" executed="true" id="_23" name="CumulateDependenciesModule" presentationName="Module Dependencies"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on system level" licensed="true" executionLevel="full" executed="true" id="_25" name="CumulateDependenciesSystem" presentationName="System Dependencies"></analyzer>
+		<analyzer description="Cumulates sizes" licensed="true" executionLevel="minimal" executed="true" id="_7" name="CumulateSize" presentationName="Cumulate size"></analyzer>
+		<analyzer description="Search duplicate code on system level" licensed="true" executionLevel="full" executed="true" id="_21" name="DuplicateCode" presentationName="Duplicate Code"></analyzer>
+		<analyzer description="Calculates duplicate code metrics" licensed="true" executionLevel="full" executed="true" id="_22" name="DuplicateCodeMetrics" presentationName="Duplicate Code Metrics"></analyzer>
+		<analyzer description="Calculates average complexity metrics" licensed="true" executionLevel="minimal" executed="true" id="_6" name="JavaAverageComplexityMetrics" presentationName="Average Complexity Metrics"></analyzer>
+		<analyzer description="Computes Java visibility metrics" licensed="true" executionLevel="basic" executed="true" id="_f" name="JavaVisibilityMetrics" presentationName="Java Visibility Metrics"></analyzer>
+		<analyzer description="Calculates maintainability level metrics" licensed="true" executionLevel="advanced" executed="true" id="_1b" name="MaintainabilityLevel" presentationName="Calculate Maintainability Level"></analyzer>
+		<analyzer description="Checks for metric threshold violations" licensed="true" executionLevel="minimal" executed="true" id="_8" name="MetricThresholds" presentationName="Metric Thresholds"></analyzer>
+		<analyzer description="Analyzes module cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_10" name="ModuleCyclesSystem" presentationName="Module Cycles"></analyzer>
+		<analyzer description="Analyzes namespace cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_a" name="NamespaceCyclesModule" presentationName="C# Namespace Cycles (Module)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_9" name="NamespaceCyclesModuleMetrics" presentationName="C# Namespace Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_16" name="NamespaceCyclesSystem" presentationName="C# Namespace Cycles (System)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_15" name="NamespaceCyclesSystemMetrics" presentationName="C# Namespace Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes package cycles on module level" licensed="true" executionLevel="basic" executed="true" id="_13" name="PackageCyclesModule" presentationName="Package Cycles (Module)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on module level" licensed="true" executionLevel="basic" executed="true" id="_11" name="PackageCyclesModuleMetrics" presentationName="Package Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes package cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_14" name="PackageCyclesSystem" presentationName="Package Cycles (System)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on system level" licensed="true" executionLevel="basic" executed="true" id="_12" name="PackageCyclesSystemMetrics" presentationName="Package Cycle Metrics (System)"></analyzer>
+		<analyzer description="Runs scripts configured for automated execution" licensed="true" executionLevel="full" executed="true" id="_24" name="ScriptRunner" presentationName="Script Runner"></analyzer>
+	</analyzers>
+	<plugins>
+		<plugin description="Plugin that uses PMD to find issues" version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_1" name="com.hello2morrow.sonargraph.plugin.pmd" presentationName="Sonargraph PMD Plugin">
+			<supportedExecutionPhase>analyzer</supportedExecutionPhase>
+		</plugin>
+		<plugin description="Plugin that uses Spotbugs to find issues" version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_2" name="com.hello2morrow.sonargraph.plugin.spotbugs" presentationName="Sonargraph Spotbugs Plugin">
+			<supportedExecutionPhase>analyzer</supportedExecutionPhase>
+		</plugin>
+		<plugin description="Plugin that exposes webresources and dependencies between them." version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_3" name="com.hello2morrow.sonargraph.plugin.swagger" presentationName="Sonargraph Swagger Plugin">
+			<supportedExecutionPhase>model</supportedExecutionPhase>
+		</plugin>
+	</plugins>
+	<duplicateCodeConfiguration>
+		<entry>MinimalLineLength:3</entry>
+		<entry>MinimalBlockLength:25</entry>
+		<entry>MaximalNumberOfCopies:100</entry>
+		<entry>MaximalTolerancePerEdit:3</entry>
+		<entry>MaximalRelativeTolerancePercentage:35</entry>
+	</duplicateCodeConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_1e" name="ComponentCyclesModule">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_1f" name="ComponentCyclesSystem">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_10" name="ModuleCyclesSystem">
+		<intEntry name="CriticalModuleCycleSize" value="2"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_13" name="PackageCyclesModule">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_14" name="PackageCyclesSystem">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<pluginConfiguration plugin="_1" id="_26" name="./com.hello2morrow.sonargraph.plugin.pmd.xml" presentationName="./com.hello2morrow.sonargraph.plugin.pmd.xml">
+		<stringEntry name="HIGH" value="error"></stringEntry>
+		<stringEntry name="MEDIUM_HIGH" value="error"></stringEntry>
+		<stringEntry name="MEDIUM" value="error"></stringEntry>
+		<stringEntry name="MEDIUM_LOW" value="warning"></stringEntry>
+		<stringEntry name="LOW" value="warning"></stringEntry>
+		<stringEntry name="RuleSets" value="/rulesets/java/basic.xml"></stringEntry>
+		<intEntry name="Minimum Priority" value="5"></intEntry>
+		<intEntry name="Number of Threads" value="0"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+		<booleanEntry name="Cache" value="true"></booleanEntry>
+	</pluginConfiguration>
+	<pluginConfiguration plugin="_3" id="_27" name="./com.hello2morrow.sonargraph.plugin.swagger.xml" presentationName="./com.hello2morrow.sonargraph.plugin.swagger.xml">
+		<intEntry name="Ranking" value="10"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+	</pluginConfiguration>
+	<pluginConfiguration plugin="_2" id="_28" name="./com.hello2morrow.sonargraph.plugin.spotbugs.xml" presentationName="./com.hello2morrow.sonargraph.plugin.spotbugs.xml">
+		<stringEntry name="Analysis Effort" value="default"></stringEntry>
+		<stringEntry name="Scariest" value="warning"></stringEntry>
+		<stringEntry name="Scary" value="warning"></stringEntry>
+		<stringEntry name="Troubling" value="warning"></stringEntry>
+		<stringEntry name="OfConcern" value="warning"></stringEntry>
+		<intEntry name="Ranking" value="12"></intEntry>
+		<intEntry name="Minimum Rank" value="15"></intEntry>
+		<intEntry name="Minimum Confidence" value="2"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+		<booleanEntry name="Bad practice" value="true"></booleanEntry>
+		<booleanEntry name="Malicious code vulnerability" value="true"></booleanEntry>
+		<booleanEntry name="Correctness" value="true"></booleanEntry>
+		<booleanEntry name="Performance" value="true"></booleanEntry>
+		<booleanEntry name="Security" value="true"></booleanEntry>
+		<booleanEntry name="Dodgy code" value="true"></booleanEntry>
+		<booleanEntry name="Multithreaded correctness" value="true"></booleanEntry>
+		<booleanEntry name="Internationalization" value="true"></booleanEntry>
+		<booleanEntry name="Experimental" value="false"></booleanEntry>
+	</pluginConfiguration>
+	<elementKinds>
+		<elementKind id="_85" standardKind="JavaExternal" presentationKind="Java External" imageResourceName="External"></elementKind>
+		<elementKind id="_81" standardKind="JavaClassRootDirectoryPath" presentationKind="Java Class Root Directory/Archive" imageResourceName="RootDirectoryPath"></elementKind>
+		<elementKind id="_89" standardKind="JavaClassFile" presentationKind="Java Class File"></elementKind>
+		<elementKind id="_d6" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+		<elementKind id="_87" standardKind="JavaInternalCompilationUnit" presentationKind="Java Internal Compilation Unit" imageResourceName="JavaCompilationUnit"></elementKind>
+		<elementKind id="_83" standardKind="JavaSourceRootDirectoryPath" presentationKind="Java Source Root Directory/Archive"></elementKind>
+		<elementKind id="_7f" standardKind="JavaModule" presentationKind="Java Module" imageResourceName="Module"></elementKind>
+	</elementKinds>
+	<workspace>
+		<workspaceFilter description="Exclude files from the workspace" information="Excluded 0 files(s)" numberOfExcludedElements="0"></workspaceFilter>
+		<productionCodeFilter description="Exclude internal components containing test code" information="Excluded 0 internal component(s) (processed 38)" numberOfExcludedElements="0" numberOfIncludedElements="38"></productionCodeFilter>
+		<issueFilter description="Ignore analysis issues of internal components containing legacy/generated code" information="Ignoring analysis issues of 0 internal component(s) (processed 38)" numberOfExcludedElements="0" numberOfIncludedElements="38"></issueFilter>
+		<module moduleId="ed9303db34fc7ac46944cc3103ac28c1" language="Java" description="" kind="_7f" fqName="Workspace:m1" id="_7e" name="m1" presentationName="m1">
+			<rootDirectory kind="_81" fqName="Workspace:m1:Class|./bin" id="_80" name="Class|./bin" presentationName="./bin"></rootDirectory>
+			<rootDirectory kind="_83" fqName="Workspace:m1:./src" id="_82" name="./src" presentationName="./src">
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:A.java" id="_86" name="A.java" presentationName="./com/h2m/test/improved/dependencies/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:B.java" id="_8a" name="B.java" presentationName="./com/h2m/test/improved/dependencies/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:C.java" id="_8c" name="C.java" presentationName="./com/h2m/test/improved/dependencies/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:A.java" id="_8e" name="A.java" presentationName="./com/h2m/test/improved/smaller/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:B.java" id="_90" name="B.java" presentationName="./com/h2m/test/improved/smaller/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:C.java" id="_92" name="C.java" presentationName="./com/h2m/test/improved/smaller/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:D.java" id="_94" name="D.java" presentationName="./com/h2m/test/improved/smaller/D.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modified:A.java" id="_96" name="A.java" presentationName="./com/h2m/test/modified/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modified:B.java" id="_98" name="B.java" presentationName="./com/h2m/test/modified/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modified:C.java" id="_9a" name="C.java" presentationName="./com/h2m/test/modified/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modified:D.java" id="_9c" name="D.java" presentationName="./com/h2m/test/modified/D.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modified:E.java" id="_9e" name="E.java" presentationName="./com/h2m/test/modified/E.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:A.java" id="_a0" name="A.java" presentationName="./com/h2m/test/modifiedtoomuch/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:B.java" id="_a2" name="B.java" presentationName="./com/h2m/test/modifiedtoomuch/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:C.java" id="_a4" name="C.java" presentationName="./com/h2m/test/modifiedtoomuch/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:D.java" id="_a6" name="D.java" presentationName="./com/h2m/test/modifiedtoomuch/D.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:E.java" id="_a8" name="E.java" presentationName="./com/h2m/test/modifiedtoomuch/E.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:removed:A.java" id="_aa" name="A.java" presentationName="./com/h2m/test/removed/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:removed:B.java" id="_ac" name="B.java" presentationName="./com/h2m/test/removed/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:removed:C.java" id="_ae" name="C.java" presentationName="./com/h2m/test/removed/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:split:A.java" id="_b0" name="A.java" presentationName="./com/h2m/test/split/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:split:B.java" id="_b2" name="B.java" presentationName="./com/h2m/test/split/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:split:C.java" id="_b4" name="C.java" presentationName="./com/h2m/test/split/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:split:D.java" id="_b6" name="D.java" presentationName="./com/h2m/test/split/D.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:split:E.java" id="_b8" name="E.java" presentationName="./com/h2m/test/split/E.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unified:A.java" id="_ba" name="A.java" presentationName="./com/h2m/test/unified/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unified:B.java" id="_bc" name="B.java" presentationName="./com/h2m/test/unified/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unified:C.java" id="_be" name="C.java" presentationName="./com/h2m/test/unified/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unified:D.java" id="_c0" name="D.java" presentationName="./com/h2m/test/unified/D.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unmodified:A.java" id="_c2" name="A.java" presentationName="./com/h2m/test/unmodified/A.java"></sourceElement>
+				<sourceElement locationOnly="true" kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unmodified:B.java" id="_c4" name="B.java" presentationName="./com/h2m/test/unmodified/B_renamed.java"></sourceElement>
+				<sourceElement originalLocation="_c5" kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unmodified:B_renamed.java" originalFqName="Workspace:m1:./src:com:h2m:test:unmodified:B.java" id="_c5" name="B_renamed.java" presentationName="./com/h2m/test/unmodified/B_renamed.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:unmodified:C.java" id="_c7" name="C.java" presentationName="./com/h2m/test/unmodified/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:A.java" id="_c9" name="A.java" presentationName="./com/h2m/test/worsened/bigger/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:B.java" id="_cb" name="B.java" presentationName="./com/h2m/test/worsened/bigger/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:C.java" id="_cd" name="C.java" presentationName="./com/h2m/test/worsened/bigger/C.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:A.java" id="_cf" name="A.java" presentationName="./com/h2m/test/worsened/dependencies/A.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:B.java" id="_d1" name="B.java" presentationName="./com/h2m/test/worsened/dependencies/B.java"></sourceElement>
+				<sourceElement kind="_87" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:C.java" id="_d3" name="C.java" presentationName="./com/h2m/test/worsened/dependencies/C.java"></sourceElement>
+			</rootDirectory>
+		</module>
+		<external language="Java" description="Contains external Java elements" kind="_85" fqName="Workspace:External [Java]" id="_84" name="External [Java]" presentationName="External [Java]"></external>
+	</workspace>
+	<systemElements ref="_0">
+		<element kind="_d6" fqName="CyclesDiff" id="_d5" name="CyclesDiff" presentationName="CyclesDiff"></element>
+	</systemElements>
+	<moduleElements ref="_7e">
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:A.java:A:A.class" source="_86" id="_88" name="A.class" presentationName="./com/h2m/test/improved/dependencies/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:B.java:B:B.class" source="_8a" id="_8b" name="B.class" presentationName="./com/h2m/test/improved/dependencies/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:dependencies:C.java:C:C.class" source="_8c" id="_8d" name="C.class" presentationName="./com/h2m/test/improved/dependencies/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:A.java:A:A.class" source="_8e" id="_8f" name="A.class" presentationName="./com/h2m/test/improved/smaller/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:B.java:B:B.class" source="_90" id="_91" name="B.class" presentationName="./com/h2m/test/improved/smaller/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:C.java:C:C.class" source="_92" id="_93" name="C.class" presentationName="./com/h2m/test/improved/smaller/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:improved:smaller:D.java:D:D.class" source="_94" id="_95" name="D.class" presentationName="./com/h2m/test/improved/smaller/D.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modified:A.java:A:A.class" source="_96" id="_97" name="A.class" presentationName="./com/h2m/test/modified/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modified:B.java:B:B.class" source="_98" id="_99" name="B.class" presentationName="./com/h2m/test/modified/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modified:C.java:C:C.class" source="_9a" id="_9b" name="C.class" presentationName="./com/h2m/test/modified/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modified:D.java:D:D.class" source="_9c" id="_9d" name="D.class" presentationName="./com/h2m/test/modified/D.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modified:E.java:E:E.class" source="_9e" id="_9f" name="E.class" presentationName="./com/h2m/test/modified/E.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:A.java:A:A.class" source="_a0" id="_a1" name="A.class" presentationName="./com/h2m/test/modifiedtoomuch/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:B.java:B:B.class" source="_a2" id="_a3" name="B.class" presentationName="./com/h2m/test/modifiedtoomuch/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:C.java:C:C.class" source="_a4" id="_a5" name="C.class" presentationName="./com/h2m/test/modifiedtoomuch/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:D.java:D:D.class" source="_a6" id="_a7" name="D.class" presentationName="./com/h2m/test/modifiedtoomuch/D.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:modifiedtoomuch:E.java:E:E.class" source="_a8" id="_a9" name="E.class" presentationName="./com/h2m/test/modifiedtoomuch/E.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:removed:A.java:A:A.class" source="_aa" id="_ab" name="A.class" presentationName="./com/h2m/test/removed/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:removed:B.java:B:B.class" source="_ac" id="_ad" name="B.class" presentationName="./com/h2m/test/removed/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:removed:C.java:C:C.class" source="_ae" id="_af" name="C.class" presentationName="./com/h2m/test/removed/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:split:A.java:A:A.class" source="_b0" id="_b1" name="A.class" presentationName="./com/h2m/test/split/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:split:B.java:B:B.class" source="_b2" id="_b3" name="B.class" presentationName="./com/h2m/test/split/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:split:C.java:C:C.class" source="_b4" id="_b5" name="C.class" presentationName="./com/h2m/test/split/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:split:D.java:D:D.class" source="_b6" id="_b7" name="D.class" presentationName="./com/h2m/test/split/D.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:split:E.java:E:E.class" source="_b8" id="_b9" name="E.class" presentationName="./com/h2m/test/split/E.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unified:A.java:A:A.class" source="_ba" id="_bb" name="A.class" presentationName="./com/h2m/test/unified/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unified:B.java:B:B.class" source="_bc" id="_bd" name="B.class" presentationName="./com/h2m/test/unified/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unified:C.java:C:C.class" source="_be" id="_bf" name="C.class" presentationName="./com/h2m/test/unified/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unified:D.java:D:D.class" source="_c0" id="_c1" name="D.class" presentationName="./com/h2m/test/unified/D.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unmodified:A.java:A:A.class" source="_c2" id="_c3" name="A.class" presentationName="./com/h2m/test/unmodified/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unmodified:B_renamed.java:B:B.class" originalFqName="Workspace:m1:./src:com:h2m:test:unmodified:B.java:B:B.class" source="_c5" id="_c6" name="B.class" presentationName="./com/h2m/test/unmodified/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:unmodified:C.java:C:C.class" source="_c7" id="_c8" name="C.class" presentationName="./com/h2m/test/unmodified/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:A.java:A:A.class" source="_c9" id="_ca" name="A.class" presentationName="./com/h2m/test/worsened/bigger/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:B.java:B:B.class" source="_cb" id="_cc" name="B.class" presentationName="./com/h2m/test/worsened/bigger/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:bigger:C.java:C:C.class" source="_cd" id="_ce" name="C.class" presentationName="./com/h2m/test/worsened/bigger/C.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:A.java:A:A.class" source="_cf" id="_d0" name="A.class" presentationName="./com/h2m/test/worsened/dependencies/A.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:B.java:B:B.class" source="_d1" id="_d2" name="B.class" presentationName="./com/h2m/test/worsened/dependencies/B.class"></element>
+		<element kind="_89" fqName="Workspace:m1:./src:com:h2m:test:worsened:dependencies:C.java:C:C.class" source="_d3" id="_d4" name="C.class" presentationName="./com/h2m/test/worsened/dependencies/C.class"></element>
+	</moduleElements>
+	<systemMetricValues elementRef="_0">
+		<levelValues levelRef="_40">
+			<metric ref="_61">
+				<int ref="_d5">38</int>
+			</metric>
+			<metric ref="_5d">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_59">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_5c">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_78">
+				<float ref="_d5">31.58</float>
+			</metric>
+			<metric ref="_63">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_6a">
+				<int ref="_d5">10</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_d5">28</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_d5">3.79</float>
+			</metric>
+			<metric ref="_56">
+				<float ref="_d5">0.86</float>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_53">
+				<float ref="_d5">3.79</float>
+			</metric>
+			<metric ref="_6d">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_7b">
+				<int ref="_d5">336</int>
+			</metric>
+			<metric ref="_55">
+				<float ref="_d5">100.0</float>
+			</metric>
+			<metric ref="_71">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_74">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_4b">
+				<int ref="_d5">144</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_7a">
+				<int ref="_d5">106</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_d5">1</int>
+			</metric>
+			<metric ref="_54">
+				<int ref="_d5">220</int>
+			</metric>
+			<metric ref="_5a">
+				<int ref="_d5">11</int>
+			</metric>
+			<metric ref="_5b">
+				<int ref="_d5">38</int>
+			</metric>
+			<metric ref="_75">
+				<float ref="_d5">9.97</float>
+			</metric>
+			<metric ref="_5e">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_51">
+				<int ref="_d5">144</int>
+			</metric>
+			<metric ref="_4c">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_46">
+				<int ref="_d5">5</int>
+			</metric>
+			<metric ref="_5f">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_6e">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_49">
+				<int ref="_d5">666</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_79">
+				<float ref="_d5">0.0</float>
+			</metric>
+			<metric ref="_62">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_77">
+				<float ref="_d5">9.97</float>
+			</metric>
+			<metric ref="_52">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_67">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_6f">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_d5">56</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_d5">258</int>
+			</metric>
+			<metric ref="_70">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_65">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_60">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_69">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_57">
+				<int ref="_d5">0</int>
+			</metric>
+			<metric ref="_66">
+				<int ref="_d5">0</int>
+			</metric>
+		</levelValues>
+	</systemMetricValues>
+	<moduleMetricValues elementRef="_7e">
+		<levelValues levelRef="_41">
+			<metric ref="_5e">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_69">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_6e">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_6f">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_70">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_43">
+				<float ref="_7e">100.0</float>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_7e">28</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_7e">56</int>
+			</metric>
+			<metric ref="_74">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_7b">
+				<int ref="_7e">336</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_3d">
+				<float ref="_7e">3.79</float>
+			</metric>
+			<metric ref="_4b">
+				<int ref="_7e">144</int>
+			</metric>
+			<metric ref="_55">
+				<float ref="_7e">100.0</float>
+			</metric>
+			<metric ref="_56">
+				<float ref="_7e">0.86</float>
+			</metric>
+			<metric ref="_75">
+				<float ref="_7e">9.97</float>
+			</metric>
+			<metric ref="_77">
+				<float ref="_7e">9.97</float>
+			</metric>
+			<metric ref="_46">
+				<int ref="_7e">5</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_51">
+				<int ref="_7e">144</int>
+			</metric>
+			<metric ref="_52">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_5a">
+				<int ref="_7e">11</int>
+			</metric>
+			<metric ref="_5f">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_60">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_61">
+				<int ref="_7e">38</int>
+			</metric>
+			<metric ref="_62">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_67">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_68">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_78">
+				<float ref="_7e">31.58</float>
+			</metric>
+			<metric ref="_79">
+				<float ref="_7e">0.0</float>
+			</metric>
+			<metric ref="_4c">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_54">
+				<int ref="_7e">220</int>
+			</metric>
+			<metric ref="_5b">
+				<int ref="_7e">38</int>
+			</metric>
+			<metric ref="_5c">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_6a">
+				<int ref="_7e">10</int>
+			</metric>
+			<metric ref="_6d">
+				<int ref="_7e">0</int>
+			</metric>
+			<metric ref="_7a">
+				<int ref="_7e">106</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_7e">258</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<issues modelName="./Modifiable.vm" numberOfIssues="50" numberOfUnresolvedIssues="49">
+		<elementIssues>
+			<issue affectedElement="_a5" id="_d7" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modifiedtoomuch/C.java has a more recent timestamp than './com/h2m/test/modifiedtoomuch/C.class'"></issue>
+			<issue affectedElement="_bd" id="_d8" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unified/B.java has a more recent timestamp than './com/h2m/test/unified/B.class'"></issue>
+			<issue affectedElement="_9d" id="_d9" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modified/D.java has a more recent timestamp than './com/h2m/test/modified/D.class'"></issue>
+			<issue affectedElement="_a1" id="_da" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modifiedtoomuch/A.java has a more recent timestamp than './com/h2m/test/modifiedtoomuch/A.class'"></issue>
+			<issue affectedElement="_b3" id="_db" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/split/B.java has a more recent timestamp than './com/h2m/test/split/B.class'"></issue>
+			<issue affectedElement="_95" id="_dc" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/smaller/D.java has a more recent timestamp than './com/h2m/test/improved/smaller/D.class'"></issue>
+			<issue affectedElement="_bf" id="_dd" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unified/C.java has a more recent timestamp than './com/h2m/test/unified/C.class'"></issue>
+			<issue affectedElement="_88" id="_de" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/dependencies/A.java has a more recent timestamp than './com/h2m/test/improved/dependencies/A.class'"></issue>
+			<issue affectedElement="_bb" id="_df" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unified/A.java has a more recent timestamp than './com/h2m/test/unified/A.class'"></issue>
+			<issue affectedElement="_b7" id="_e0" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/split/D.java has a more recent timestamp than './com/h2m/test/split/D.class'"></issue>
+			<issue affectedElement="_cc" id="_e1" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/bigger/B.java has a more recent timestamp than './com/h2m/test/worsened/bigger/B.class'"></issue>
+			<issue affectedElement="_d0" id="_e2" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/dependencies/A.java has a more recent timestamp than './com/h2m/test/worsened/dependencies/A.class'"></issue>
+			<issue affectedElement="_af" id="_e3" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/removed/C.java has a more recent timestamp than './com/h2m/test/removed/C.class'"></issue>
+			<issue affectedElement="_ca" id="_e4" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/bigger/A.java has a more recent timestamp than './com/h2m/test/worsened/bigger/A.class'"></issue>
+			<issue affectedElement="_91" id="_e5" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/smaller/B.java has a more recent timestamp than './com/h2m/test/improved/smaller/B.class'"></issue>
+			<issue affectedElement="_d2" id="_e6" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/dependencies/B.java has a more recent timestamp than './com/h2m/test/worsened/dependencies/B.class'"></issue>
+			<issue affectedElement="_ab" id="_e7" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/removed/A.java has a more recent timestamp than './com/h2m/test/removed/A.class'"></issue>
+			<issue affectedElement="_8f" id="_e8" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/smaller/A.java has a more recent timestamp than './com/h2m/test/improved/smaller/A.class'"></issue>
+			<issue affectedElement="_d4" id="_e9" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/dependencies/C.java has a more recent timestamp than './com/h2m/test/worsened/dependencies/C.class'"></issue>
+			<issue affectedElement="_9f" id="_ea" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modified/E.java has a more recent timestamp than './com/h2m/test/modified/E.class'"></issue>
+			<issue affectedElement="_b1" id="_eb" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/split/A.java has a more recent timestamp than './com/h2m/test/split/A.class'"></issue>
+			<issue affectedElement="_c6" id="_ec" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unmodified/B.java has a more recent timestamp than './com/h2m/test/unmodified/B.class'"></issue>
+			<issue affectedElement="_a7" id="_ed" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modifiedtoomuch/D.java has a more recent timestamp than './com/h2m/test/modifiedtoomuch/D.class'"></issue>
+			<issue affectedElement="_a9" id="_ee" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modifiedtoomuch/E.java has a more recent timestamp than './com/h2m/test/modifiedtoomuch/E.class'"></issue>
+			<issue affectedElement="_97" id="_ef" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modified/A.java has a more recent timestamp than './com/h2m/test/modified/A.class'"></issue>
+			<issue affectedElement="_ad" id="_f0" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/removed/B.java has a more recent timestamp than './com/h2m/test/removed/B.class'"></issue>
+			<issue affectedElement="_b5" id="_f1" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/split/C.java has a more recent timestamp than './com/h2m/test/split/C.class'"></issue>
+			<issue affectedElement="_b9" id="_f2" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/split/E.java has a more recent timestamp than './com/h2m/test/split/E.class'"></issue>
+			<issue affectedElement="_8d" id="_f3" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/dependencies/C.java has a more recent timestamp than './com/h2m/test/improved/dependencies/C.class'"></issue>
+			<issue affectedElement="_c1" id="_f4" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unified/D.java has a more recent timestamp than './com/h2m/test/unified/D.class'"></issue>
+			<issue affectedElement="_99" id="_f5" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modified/B.java has a more recent timestamp than './com/h2m/test/modified/B.class'"></issue>
+			<issue affectedElement="_9b" id="_f6" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modified/C.java has a more recent timestamp than './com/h2m/test/modified/C.class'"></issue>
+			<issue affectedElement="_ce" id="_f7" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/worsened/bigger/C.java has a more recent timestamp than './com/h2m/test/worsened/bigger/C.class'"></issue>
+			<issue affectedElement="_8b" id="_f8" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/dependencies/B.java has a more recent timestamp than './com/h2m/test/improved/dependencies/B.class'"></issue>
+			<issue affectedElement="_a3" id="_f9" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/modifiedtoomuch/B.java has a more recent timestamp than './com/h2m/test/modifiedtoomuch/B.class'"></issue>
+			<issue affectedElement="_c3" id="_fa" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unmodified/A.java has a more recent timestamp than './com/h2m/test/unmodified/A.class'"></issue>
+			<issue affectedElement="_93" id="_fb" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/improved/smaller/C.java has a more recent timestamp than './com/h2m/test/improved/smaller/C.class'"></issue>
+			<issue affectedElement="_c8" id="_fc" type="_3c" provider="_39" description="Corresponding source file ./com/h2m/test/unmodified/C.java has a more recent timestamp than './com/h2m/test/unmodified/C.class'"></issue>
+			<issue affectedElement="_c5" id="_fd" type="_3b" provider="_38" description="Rename to 'B_renamed'"></issue>
+			<cycleGroups analyzerRef="_1e">
+				<cycleGroup numberOfCyclicElements="5" name="Component cycle group 1.8" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:93b44c4fbcc0d85ec04803028b6fe1b0|eb2e9b24b4cf3d33b32899f10dc9ae8b" structuralDebtIndex="48" componentDependenciesToRemove="4" parserDependenciesToRemove="8" scope="_7e" id="_fe" type="_3a" provider="_38" description="5 cyclic components">
+					<element ref="_a0"></element>
+					<element ref="_a2"></element>
+					<element ref="_a4"></element>
+					<element ref="_a6"></element>
+					<element ref="_a8"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="5" name="Component cycle group 1.4" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:5426db95bfda008b4edadb3e9f9626af|071b2784a191a2e1223274e7e7581ac6" structuralDebtIndex="48" componentDependenciesToRemove="4" parserDependenciesToRemove="8" scope="_7e" id="_ff" type="_3a" provider="_38" description="5 cyclic components">
+					<element ref="_96"></element>
+					<element ref="_98"></element>
+					<element ref="_9a"></element>
+					<element ref="_9c"></element>
+					<element ref="_9e"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="5" name="Component cycle group 1.10" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:e451843863ce933c98414d821bfd3247|63ca7dfb740a93a5d23637b302f79fc3" structuralDebtIndex="48" componentDependenciesToRemove="4" parserDependenciesToRemove="8" scope="_7e" id="_100" type="_3a" provider="_38" description="5 cyclic components">
+					<element ref="_b0"></element>
+					<element ref="_b2"></element>
+					<element ref="_b4"></element>
+					<element ref="_b6"></element>
+					<element ref="_b8"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="4" name="Component cycle group 1.7" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:8ac5b72623a2ac2cc19e3eccc0f280bb|1f531ed45eeffda8b80840d37931e841" structuralDebtIndex="36" componentDependenciesToRemove="3" parserDependenciesToRemove="6" scope="_7e" id="_101" type="_3a" provider="_38" description="4 cyclic components">
+					<element ref="_8e"></element>
+					<element ref="_90"></element>
+					<element ref="_92"></element>
+					<element ref="_94"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="3" name="Component cycle group 1.2" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:0a4eff361e55af01502b110cf24c9ba7|8504bcc0b252a02469740878b8961489" structuralDebtIndex="36" componentDependenciesToRemove="3" parserDependenciesToRemove="6" scope="_7e" id="_102" type="_3a" provider="_38" description="3 cyclic components">
+					<element ref="_86"></element>
+					<element ref="_8a"></element>
+					<element ref="_8c"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="3" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:053663cd3e875d536e0a89521b5765af|2268ecb236fbbbcbf56497eaf2a9caea" structuralDebtIndex="24" componentDependenciesToRemove="2" parserDependenciesToRemove="4" scope="_7e" id="_103" type="_3a" provider="_38" description="3 cyclic components">
+					<element ref="_c2"></element>
+					<element ref="_c5"></element>
+					<element ref="_c7"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="3" name="Component cycle group 1.11" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:f848a40c9c36b53251f8380ff7eb632a|b100f926c788b6e83b6cbe4eb62baf7b" structuralDebtIndex="24" componentDependenciesToRemove="2" parserDependenciesToRemove="4" scope="_7e" id="_104" type="_3a" provider="_38" description="3 cyclic components">
+					<element ref="_cf"></element>
+					<element ref="_d1"></element>
+					<element ref="_d3"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="3" name="Component cycle group 1.3" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:27d715608296aff91bde085e066c942b|2b648f6f9c741045e65f46eb220d5bd3" structuralDebtIndex="24" componentDependenciesToRemove="2" parserDependenciesToRemove="4" scope="_7e" id="_105" type="_3a" provider="_38" description="3 cyclic components">
+					<element ref="_c9"></element>
+					<element ref="_cb"></element>
+					<element ref="_cd"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="3" name="Component cycle group 1.5" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:7a4a1c94847a6f22c3f175e176a138c6|7dd69644bc2cbe42dd0c1f04cdaf20fa" structuralDebtIndex="24" componentDependenciesToRemove="2" parserDependenciesToRemove="4" scope="_7e" id="_106" type="_3a" provider="_38" description="3 cyclic components">
+					<element ref="_aa"></element>
+					<element ref="_ac"></element>
+					<element ref="_ae"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.9" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:ad90fb64434e3adfa3cfb0b73e0b7c5c|8b42bc2c4fdc804464c4af200bc98403" structuralDebtIndex="12" componentDependenciesToRemove="1" parserDependenciesToRemove="2" scope="_7e" id="_107" type="_3a" provider="_38" description="2 cyclic components">
+					<element ref="_be"></element>
+					<element ref="_c0"></element>
+				</cycleGroup>
+				<cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.6" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:8059444fdce287de0396e60715240675|b657531aad5c643cc74fe1b8d05c287c" structuralDebtIndex="12" componentDependenciesToRemove="1" parserDependenciesToRemove="2" scope="_7e" id="_108" type="_3a" provider="_38" description="2 cyclic components">
+					<element ref="_ba"></element>
+					<element ref="_bc"></element>
+				</cycleGroup>
+			</cycleGroups>
+		</elementIssues>
+	</issues>
+	<resolutions numberOfResolutions="1">
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:xsdRenameRefactoring" newName="B_renamed" elementKind="Component" status="Applicable" numberOfPotentiallyDoneElements="0" type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:Modifiable.vm:1576736922" issueIds="_fd" description="" information="" assignee="" date="2019-12-06T09:35:44.851+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="true" descriptor="bc9d618e282b5030c196e2c2fc12c05e">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:unmodified:B.java</elementPattern>
+		</resolution>
+	</resolutions>
+</ns2:report>

@@ -312,18 +312,22 @@ public final class XmlReportReader extends XmlAccess
         assert xsdReport != null : "Parameter 'xsdReport' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
 
-        final String systemDescription = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
+        String description = xsdReport.getDescription();
+        if (description == null)
+        {
+            description = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
+        }
 
         final SoftwareSystemImpl softwareSystemImpl;
         if (basePath == null)
         {
-            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), description,
                     xsdReport.getSystemPath(), xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
                     xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         }
         else
         {
-            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), description,
                     xsdReport.getSystemPath(), basePath, xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
                     xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         }
@@ -443,7 +447,7 @@ public final class XmlReportReader extends XmlAccess
         namedElementContainerImpl.addElement(namedElementImpl);
         if (xsdNamedElement.getOriginalFqName() != null)
         {
-            namedElementImpl.setOriginalFqName(xsdNamedElement.getFqName());
+            namedElementImpl.setOriginalFqName(xsdNamedElement.getOriginalFqName());
         }
         globalXmlToElementMap.put(xsdNamedElement, namedElementImpl);
     }

@@ -793,6 +793,8 @@
 
 	<xs:complexType name="xsdSoftwareSystemReport">
 		<xs:sequence>
+			<xs:element name="reportContextInfo" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="0" />
 			<xs:element name="systemMetaData" type="xsdMap"
 				minOccurs="0" maxOccurs="1" /><!-- allows to add arbitrary info -->
 			<xs:element name="metaData"
@@ -835,7 +837,7 @@
 			<xs:element name="issues" type="xsdIssues" minOccurs="0"
 				maxOccurs="1" />
 			<xs:element name="resolutions" type="xsdResolutions"
-				minOccurs="0" maxOccurs="1" />
+				minOccurs="0" maxOccurs="1" />			
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:ID" />
 		<xs:attribute name="systemId" type="xs:string"
@@ -853,7 +855,7 @@
 		<xs:attribute name="workspaceProfile" type="xs:string" />
 		<xs:attribute name="qualityModel" type="xs:string" />
 		<xs:attribute name="analyzerExecutionLevel"
-			type="xsdAnalyzerExecutionLevel" default="full" />
+			type="xsdAnalyzerExecutionLevel" default="full" />		
 	</xs:complexType>
 
 	<xs:element name="report" type="xsdSoftwareSystemReport" />
