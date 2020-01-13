@@ -71,4 +71,10 @@ public class MoveRefactoringImpl extends AbstractRefactoringImpl implements IMov
     {
         return elementKind;
     }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return "MoveRefactoring";
+    }
 }

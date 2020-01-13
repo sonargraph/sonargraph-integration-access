@@ -27,7 +27,7 @@ abstract class AbstractWildcardPatternImpl extends NamedElementImpl implements I
     public AbstractWildcardPatternImpl(final String fqName, final String kind, final String presentationKind, final String name,
             final String presentationName, final int numberOfMatches)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, null);
         this.numberOfMatches = numberOfMatches;
     }
 

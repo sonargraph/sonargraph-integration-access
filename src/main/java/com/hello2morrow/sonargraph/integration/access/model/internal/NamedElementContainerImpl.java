@@ -50,9 +50,9 @@ public abstract class NamedElementContainerImpl extends NamedElementImpl impleme
 
     public NamedElementContainerImpl(final String kind, final String presentationKind, final String name, final String presentationName,
             final String fqName, final String description, final MetaDataAccessImpl metaDataAccessImpl,
-            final NamedElementRegistry elementRegistryImpl)
+            final NamedElementRegistry elementRegistryImpl, final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description);
+        super(kind, presentationKind, name, presentationName, fqName, description, imageResourceName);
         assert metaDataAccessImpl != null : "Parameter 'metaDataAccessImpl' of method 'NamedElementContainerImpl' must not be null";
         assert elementRegistryImpl != null : "Parameter 'elementRegistryImpl' of method 'NamedElementContainerImpl' must not be null";
         this.metaDataAccessImpl = metaDataAccessImpl;

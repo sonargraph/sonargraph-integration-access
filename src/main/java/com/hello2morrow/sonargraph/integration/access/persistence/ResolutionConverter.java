@@ -40,7 +40,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DeleteRefactoringImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ElementPatternImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.FixMeResolutionImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.FixResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IgnoreResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MatchingImpl;
@@ -165,7 +165,7 @@ public class ResolutionConverter
             }
             else if (nextXsdResolution instanceof XsdFixMe)
             {
-                resolutionToAdd = new FixMeResolutionImpl(fqName, priority, issues, matchingElementsCount, description, information, assignee,
+                resolutionToAdd = new FixResolutionImpl(fqName, priority, issues, matchingElementsCount, description, information, assignee,
                         dateTime, elementPatterns, dependencyPatterns, matching, descriptor);
             }
             else if (nextXsdResolution instanceof XsdRefactoring)

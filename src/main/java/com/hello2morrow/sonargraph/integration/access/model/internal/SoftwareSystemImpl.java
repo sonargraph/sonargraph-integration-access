@@ -111,7 +111,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
             final AnalyzerExecutionLevel analyzerExecutionLevel)
     {
         super(kind, presentationKind, name, name, name, description, new MetaDataAccessImpl(path, systemId, version, timestamp),
-                new NamedElementRegistry());
+                new NamedElementRegistry(), "SoftwareSystem");
 
         assert systemId != null && systemId.length() > 0 : "Parameter 'systemId' of method 'SoftwareSystem' must not be empty";
         assert path != null && path.length() > 0 : "Parameter 'path' of method 'SoftwareSystem' must not be empty";

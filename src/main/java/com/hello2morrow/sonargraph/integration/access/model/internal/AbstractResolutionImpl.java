@@ -32,7 +32,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-class AbstractResolutionImpl extends ElementImpl implements IResolution
+abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
 {
     private static final long serialVersionUID = 6480407569513366548L;
     private final List<IIssue> issues;
@@ -112,6 +112,9 @@ class AbstractResolutionImpl extends ElementImpl implements IResolution
     {
         return getType().getPresentationName();
     }
+
+    @Override
+    public abstract String getImageResourceName();
 
     @Override
     public List<IIssue> getIssues()

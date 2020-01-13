@@ -66,4 +66,10 @@ public final class ExternalImpl extends LanguageBasedContainerImpl implements IE
     {
         return Collections.unmodifiableSet(programmingElements);
     }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return "External";
+    }
 }

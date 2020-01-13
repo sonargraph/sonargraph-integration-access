@@ -438,7 +438,8 @@ public final class XmlReportReader extends XmlAccess
         assert xsdElementKind != null : "Parameter 'xsdElementKind' of method 'createNamedElementImpl' must not be null";
 
         final NamedElementImpl namedElementImpl = new NamedElementImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
-                xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName());
+                xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName(),
+                extractImageResourceName(xsdElementKind));
         namedElementContainerImpl.addElement(namedElementImpl);
         if (xsdNamedElement.getOriginalFqName() != null)
         {
@@ -457,7 +458,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind sourceKind = (XsdElementKind) xsdSourceFile.getKind();
         final SourceFileImpl sourceFileImpl = new SourceFileImpl(sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
                 xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), xsdSourceFile.isLocationOnly(),
-                rootDirectoryImpl.getRelativePath());
+                rootDirectoryImpl.getRelativePath(), extractImageResourceName(sourceKind));
         if (xsdSourceFile.getOriginalFqName() != null)
         {
             sourceFileImpl.setOriginalFqName(xsdSourceFile.getOriginalFqName());
@@ -477,7 +478,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdProgrammingElement);
         final ProgrammingElementImpl programmingElementImpl = new ProgrammingElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdProgrammingElement.getName(), xsdProgrammingElement.getPresentationName(),
-                xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine());
+                xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine(), extractImageResourceName(xsdElementKind));
         programmingElementContainer.addProgrammingElement(programmingElementImpl);
         namedElementContainerImpl.addElement(programmingElementImpl);
 
@@ -501,7 +502,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
         final PhysicalRecursiveElementImpl physicalRecursiveElementImpl = new PhysicalRecursiveElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdPhysicalRecursiveElement.getName(), xsdPhysicalRecursiveElement.getPresentationName(),
-                xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly());
+                xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly(), extractImageResourceName(xsdElementKind));
 
         final String nextRelativeDirectory = xsdPhysicalRecursiveElement.getRelativeDirectoryPath();
         if (nextRelativeDirectory != null)
@@ -526,7 +527,7 @@ public final class XmlReportReader extends XmlAccess
 
         final XsdElementKind xsdElementKind = (XsdElementKind) xsdRootDirectory.getKind();
         final RootDirectoryImpl rootDirectoryImpl = new RootDirectoryImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
-                xsdRootDirectory.getPresentationName(), xsdRootDirectory.getFqName());
+                xsdRootDirectory.getPresentationName(), xsdRootDirectory.getFqName(), extractImageResourceName(xsdElementKind));
         languageBasedContainerImpl.addRootDirectory(rootDirectoryImpl);
         languageBasedContainerImpl.addElement(rootDirectoryImpl);
         globalXmlToElementMap.put(xsdRootDirectory, rootDirectoryImpl);
@@ -896,7 +897,7 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalNamespace);
             final LogicalNamespaceImpl logicalNamespaceImpl = new LogicalNamespaceImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalNamespace.getName(), nextXsdLogicalNamespace.getPresentationName(),
-                    nextXsdLogicalNamespace.getFqName());
+                    nextXsdLogicalNamespace.getFqName(), extractImageResourceName(xsdElementKind));
             globalXmlToElementMap.put(nextXsdLogicalNamespace, logicalNamespaceImpl);
             namedElementContainerImpl.addElement(logicalNamespaceImpl);
             namedElementContainerImpl.addLogicalNamespace(logicalNamespaceImpl);
@@ -907,12 +908,18 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalProgrammingElement);
             final LogicalProgrammingElementImpl logicalProgrammingElementImpl = new LogicalProgrammingElementImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalProgrammingElement.getName(),
-                    nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName());
+                    nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName(),
+                    extractImageResourceName(xsdElementKind));
             globalXmlToElementMap.put(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
             namedElementContainerImpl.addElement(logicalProgrammingElementImpl);
             namedElementContainerImpl.addLogicalProgrammingElement(logicalProgrammingElementImpl);
             setDerivedFrom(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
         }
+    }
+
+    public String extractImageResourceName(final XsdElementKind xsdElementKind)
+    {
+        return xsdElementKind.getStandardKind().equals(xsdElementKind.getImageResourceName()) ? null : xsdElementKind.getImageResourceName();
     }
 
     private void createSystemElements(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport report)

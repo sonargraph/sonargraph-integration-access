@@ -100,6 +100,12 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
+    public String getImageResourceName()
+    {
+        return null;
+    }
+
+    @Override
     public String toString()
     {
         final StringBuilder builder = new StringBuilder(type.name());

@@ -28,14 +28,15 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
     private String relativeDirectory;
 
     public PhysicalRecursiveElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final boolean isLocationOnly)
+            final String fqName, final boolean isLocationOnly, final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName, isLocationOnly);
+        super(kind, presentationKind, name, presentationName, fqName, isLocationOnly, imageResourceName);
     }
 
     public void setRelativeRootDirectory(final String relativeRootDirectory)
     {
-        assert relativeRootDirectory != null && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'setRelativeRootDirectory' must not be empty";
+        assert relativeRootDirectory != null
+                && relativeRootDirectory.length() > 0 : "Parameter 'relativeRootDirectory' of method 'setRelativeRootDirectory' must not be empty";
         this.relativeRootDirectory = relativeRootDirectory;
     }
 
@@ -47,7 +48,8 @@ public final class PhysicalRecursiveElementImpl extends PhysicalElementImpl impl
 
     public void setRelativeDirectory(final String relativeDirectory)
     {
-        assert relativeDirectory != null && relativeDirectory.length() > 0 : "Parameter 'relativeDirectory' of method 'setRelativeDirectory' must not be empty";
+        assert relativeDirectory != null
+                && relativeDirectory.length() > 0 : "Parameter 'relativeDirectory' of method 'setRelativeDirectory' must not be empty";
         this.relativeDirectory = relativeDirectory;
     }
 

@@ -29,9 +29,10 @@ public abstract class LogicalElementImpl extends NamedElementImpl implements ILo
     private static final long serialVersionUID = 3261903219177865016L;
     private Set<NamedElementImpl> derivedFrom;
 
-    public LogicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
+    public LogicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
+            final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, imageResourceName);
     }
 
     public final boolean addDerivedFrom(final NamedElementImpl element)

@@ -33,7 +33,7 @@ import com.hello2morrow.sonargraph.integration.access.model.RefactoringStatus;
 public class MoveRenameRefactoringImpl extends AbstractRefactoringImpl implements IMoveRenameRefactoring
 {
     private static final long serialVersionUID = -3826123794372026966L;
-
+    private static final String MOVE_RENAME_REFACTORING = "MoveRenameRefactoring";
     private final String targetRootDirectoryFqName;
     private final String moveToParentName;
     private final String elementKind;
@@ -81,5 +81,11 @@ public class MoveRenameRefactoringImpl extends AbstractRefactoringImpl implement
     public String getNewName()
     {
         return newName;
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return MOVE_RENAME_REFACTORING;
     }
 }

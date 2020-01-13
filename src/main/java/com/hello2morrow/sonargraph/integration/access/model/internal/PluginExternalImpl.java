@@ -35,7 +35,7 @@ public final class PluginExternalImpl extends NamedElementContainerImpl implemen
     public PluginExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final MetaDataAccessImpl metaDataAccess, final NamedElementRegistry elementRegistry)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccess, elementRegistry);
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccess, elementRegistry, "External");
     }
 
     @Override

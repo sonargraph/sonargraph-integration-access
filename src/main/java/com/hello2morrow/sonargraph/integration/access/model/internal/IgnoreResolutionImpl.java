@@ -30,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class IgnoreResolutionImpl extends AbstractResolutionImpl implements IIgnoreDefinition
 {
+    private static final String IGNORE = "Ignore";
     private static final long serialVersionUID = -1531788741806837805L;
 
     public IgnoreResolutionImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
@@ -39,5 +40,11 @@ public final class IgnoreResolutionImpl extends AbstractResolutionImpl implement
     {
         super(fqName, ResolutionType.IGNORE, priority, issues, matchingElementsCount, description, information, assignee, dateTime, elementPatterns,
                 dependencyPatterns, matching, descriptor);
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return IGNORE;
     }
 }

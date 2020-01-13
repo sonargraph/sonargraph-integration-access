@@ -31,6 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.model.RefactoringStatus;
 public final class RenameRefactoringImpl extends AbstractRefactoringImpl implements IRenameRefactoring
 {
     private static final long serialVersionUID = -3510760355084015932L;
+    private static final String RENAME_REFACTORING = "RenameRefactoring";
     private final String newName;
 
     public RenameRefactoringImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
@@ -49,5 +50,11 @@ public final class RenameRefactoringImpl extends AbstractRefactoringImpl impleme
     public String getNewName()
     {
         return newName;
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return RENAME_REFACTORING;
     }
 }

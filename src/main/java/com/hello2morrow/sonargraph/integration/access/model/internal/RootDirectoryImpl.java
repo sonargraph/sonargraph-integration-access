@@ -34,9 +34,10 @@ public final class RootDirectoryImpl extends NamedElementImpl implements IProgra
     private final Set<IPhysicalRecursiveElement> physicalRecursiveElements = new TreeSet<>(new NamedElementComparator());
     private final Set<IProgrammingElement> programmingElements = new TreeSet<>(new NamedElementComparator());
 
-    public RootDirectoryImpl(final String kind, final String presentationKind, final String relativePath, final String fqName)
+    public RootDirectoryImpl(final String kind, final String presentationKind, final String relativePath, final String fqName,
+            final String imageResourceName)
     {
-        super(kind, presentationKind, relativePath, relativePath, fqName);
+        super(kind, presentationKind, relativePath, relativePath, fqName, imageResourceName);
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.hello2morrow.sonargraph.integration.access.model.RefactoringStatus;
 
 public final class DeleteRefactoringImpl extends AbstractRefactoringImpl implements IDeleteRefactoring
 {
+    private static final String DELETE_REFACTORING = "DeleteRefactoring";
     private static final long serialVersionUID = 982688526561531015L;
     private final int numberOfAffectedParserDependencies;
 
@@ -47,5 +48,11 @@ public final class DeleteRefactoringImpl extends AbstractRefactoringImpl impleme
     public int getNumberOfAffectedParserDependencies()
     {
         return numberOfAffectedParserDependencies;
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return DELETE_REFACTORING;
     }
 }

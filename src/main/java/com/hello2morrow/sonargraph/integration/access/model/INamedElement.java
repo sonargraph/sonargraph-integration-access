@@ -25,6 +25,8 @@ public interface INamedElement extends IElement
 
     public String getPresentationKind();
 
+    public String getImageResourceName();
+
     public String getFqName();
 
     public boolean isLocationOnly();

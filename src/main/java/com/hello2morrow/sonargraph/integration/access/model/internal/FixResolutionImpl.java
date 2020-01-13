@@ -28,11 +28,12 @@ import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-public class FixMeResolutionImpl extends TaskResolutionImpl implements IFixDefinition
+public class FixResolutionImpl extends TaskResolutionImpl implements IFixDefinition
 {
+    private static final String FIX = "Fix";
     private static final long serialVersionUID = -7590979592940151582L;
 
-    public FixMeResolutionImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
+    public FixResolutionImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
             final String description, final String information, final String assignee, final Date dateTime,
             final List<IElementPattern> elementPatterns, final List<IDependencyPattern> dependencyPatterns, final IMatching matching,
             final String descriptor)
@@ -40,4 +41,11 @@ public class FixMeResolutionImpl extends TaskResolutionImpl implements IFixDefin
         super(fqName, ResolutionType.FIX, priority, issues, matchingElementsCount, description, information, assignee, dateTime, elementPatterns,
                 dependencyPatterns, matching, descriptor);
     }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return FIX;
+    }
+
 }

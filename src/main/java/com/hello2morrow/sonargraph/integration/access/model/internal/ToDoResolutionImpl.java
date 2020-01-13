@@ -31,6 +31,7 @@ import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 public class ToDoResolutionImpl extends TaskResolutionImpl implements IToDoDefinition
 {
     private static final long serialVersionUID = -6690045425225809050L;
+    private static final String TODO = "Todo";
 
     public ToDoResolutionImpl(final String fqName, final Priority priority, final List<IIssue> issues, final int matchingElementsCount,
             final String description, final String information, final String assignee, final Date dateTime,
@@ -39,5 +40,11 @@ public class ToDoResolutionImpl extends TaskResolutionImpl implements IToDoDefin
     {
         super(fqName, ResolutionType.TODO, priority, issues, matchingElementsCount, description, information, assignee, dateTime, elementPatterns,
                 dependencyPatterns, matching, descriptor);
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return TODO;
     }
 }

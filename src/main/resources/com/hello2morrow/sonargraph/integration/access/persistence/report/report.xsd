@@ -404,8 +404,8 @@
 	<xs:complexType name="xsdElementKind">
 		<xs:attribute name="id" type="xs:ID" use="required" />
 		<xs:attribute name="standardKind" type="xs:string" />
-		<xs:attribute name="presentationKind" type="xs:string"
-			use="required" />
+		<xs:attribute name="presentationKind" type="xs:string" use="required" />
+		<xs:attribute name="imageResourceName" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="xsdMetricLevelValues">
@@ -781,8 +781,7 @@
 
 	<xs:complexType name="xsdMapEntry">
 		<xs:attribute name="key" type="xs:string" use="required" />
-		<xs:attribute name="value" type="xs:string"
-			use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="xsdMap">
