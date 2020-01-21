@@ -19,14 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 
-abstract class AbstractWildcardPatternImpl extends ElementImpl implements IWildcardPattern
+abstract class AbstractWildcardPatternImpl extends NamedElementImpl implements IWildcardPattern
 {
     private static final long serialVersionUID = 1L;
     private final int numberOfMatches;
 
-    public AbstractWildcardPatternImpl(final String name, final int numberOfMatches)
+    public AbstractWildcardPatternImpl(final String fqName, final String kind, final String presentationKind, final String name,
+            final String presentationName, final int numberOfMatches)
     {
-        super(name, name);
+        super(kind, presentationKind, name, presentationName, fqName, null);
         this.numberOfMatches = numberOfMatches;
     }
 

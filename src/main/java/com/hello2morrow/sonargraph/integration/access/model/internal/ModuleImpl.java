@@ -35,8 +35,8 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
     private final String moduleId;
 
     public ModuleImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
-            final String description, final String moduleId, final MetaDataAccessImpl metaDataAccessImpl, final NamedElementRegistry elementRegistryImpl,
-            final String language, final ISourceFileLookup sourceFileLookup)
+            final String description, final String moduleId, final MetaDataAccessImpl metaDataAccessImpl,
+            final NamedElementRegistry elementRegistryImpl, final String language, final ISourceFileLookup sourceFileLookup)
     {
         super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccessImpl, elementRegistryImpl, language);
         assert sourceFileLookup != null : "Parameter 'sourceFileLookup' of method 'ModuleImpl' must not be null";
@@ -78,5 +78,11 @@ public final class ModuleImpl extends LanguageBasedContainerImpl implements IMod
         }
         return getRootDirectories().stream().flatMap(r -> r.getSourceFiles().stream())
                 .filter((final ISourceFile e) -> namedElement.getFqName().startsWith(e.getFqName())).findFirst();
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return "Module";
     }
 }

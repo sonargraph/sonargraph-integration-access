@@ -28,9 +28,9 @@ public abstract class PhysicalElementImpl extends NamedElementImpl implements IP
     private PhysicalElementImpl originalLocation;
 
     public PhysicalElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final boolean isLocationOnly)
+            final String fqName, final boolean isLocationOnly, final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, imageResourceName);
         this.isLocationOnly = isLocationOnly;
     }
 

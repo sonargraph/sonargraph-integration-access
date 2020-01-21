@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.model.internal;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
+import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public final class MetricThreshold implements IMetricThreshold
 {
@@ -28,18 +29,22 @@ public final class MetricThreshold implements IMetricThreshold
     private final Number lowerThreshold;
     private final IMetricId metricId;
     private final IMetricLevel metricLevel;
+    private final Severity severity;
 
-    public MetricThreshold(final IMetricId metricId, final IMetricLevel metricLevel, final Number lowerThreshold, final Number upperThreshold)
+    public MetricThreshold(final IMetricId metricId, final IMetricLevel metricLevel, final Number lowerThreshold, final Number upperThreshold,
+            final Severity severity)
     {
         assert metricId != null : "Parameter 'metricId' of method 'MetricThreshold' must not be null";
         assert metricLevel != null : "Parameter 'metricLevel' of method 'MetricThreshold' must not be null";
         assert lowerThreshold != null : "Parameter 'lowerThreshold' of method 'MetricThreshold' must not be null";
         assert upperThreshold != null : "Parameter 'upperThreshold' of method 'MetricThreshold' must not be null";
+        assert severity != null : "Parameter 'severity' of method 'MetricThreshold' must not be null";
 
         this.metricId = metricId;
         this.metricLevel = metricLevel;
         this.lowerThreshold = lowerThreshold;
         this.upperThreshold = upperThreshold;
+        this.severity = severity;
     }
 
     @Override
@@ -105,6 +110,12 @@ public final class MetricThreshold implements IMetricThreshold
 
         final MetricThreshold other = (MetricThreshold) obj;
         return metricId.equals(other.metricId) && metricLevel.equals(other.metricLevel);
+    }
+
+    @Override
+    public Severity getSeverity()
+    {
+        return severity;
     }
 
     @Override

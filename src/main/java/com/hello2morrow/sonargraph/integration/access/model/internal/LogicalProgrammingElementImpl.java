@@ -24,8 +24,8 @@ public final class LogicalProgrammingElementImpl extends LogicalElementImpl impl
     private static final long serialVersionUID = -1327978719883213140L;
 
     public LogicalProgrammingElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName)
+            final String fqName, final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, imageResourceName);
     }
 }

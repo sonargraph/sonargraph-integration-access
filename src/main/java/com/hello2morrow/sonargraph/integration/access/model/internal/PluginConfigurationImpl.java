@@ -15,11 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
-public interface IProgrammingElementContainer
-{
-    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl);
+import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 
-    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl);
+public final class PluginConfigurationImpl extends AbstractConfigurationImpl implements IPluginConfiguration
+{
+    private static final long serialVersionUID = 1340926548847217077L;
+    private final IPlugin plugin;
+
+    public PluginConfigurationImpl(final String name, final String presentationName, final IPlugin plugin)
+    {
+        super(name, presentationName, "");
+        this.plugin = plugin;
+    }
+
+    @Override
+    public IPlugin getPlugin()
+    {
+        return plugin;
+    }
 }

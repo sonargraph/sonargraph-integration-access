@@ -126,9 +126,23 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public List<IResolution> getResolutions(final Predicate<IResolution> filter)
     {
         final List<IResolution> systemResolutions = systemInfoProcessor.getResolutions(filter);
-
         final List<IResolution> moduleResolutions = new ArrayList<>();
         for (final IResolution next : systemResolutions)
+        {
+            if (next.getIssues().stream().filter(this::isModuleElementOriginOfIssue).findAny().isPresent())
+            {
+                moduleResolutions.add(next);
+            }
+        }
+        return Collections.unmodifiableList(moduleResolutions);
+    }
+
+    @Override
+    public <T extends IResolution> List<T> getResolutions(final Predicate<T> filter, final Class<T> resolutionClass)
+    {
+        final List<T> systemResolutions = systemInfoProcessor.getResolutions(filter, resolutionClass);
+        final List<T> moduleResolutions = new ArrayList<>();
+        for (final T next : systemResolutions)
         {
             if (next.getIssues().stream().filter(this::isModuleElementOriginOfIssue).findAny().isPresent())
             {

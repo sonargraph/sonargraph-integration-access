@@ -35,19 +35,22 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
     private final int componentDependenciesToRemove;
     private final int structuralDebtIndex;
     private final int parserDependenciesToRemove;
+    private final INamedElement scope;
 
     public CycleGroupIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
             final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements, final int structuralDebtIndex,
-            final int componentDependenciesToRemove, final int parserDependenciesToRemove)
+            final int componentDependenciesToRemove, final int parserDependenciesToRemove, final INamedElement scope)
     {
         super(name, presentationName, description, issueType, provider);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
         assert cyclicElements != null && !cyclicElements.isEmpty() : "Parameter 'cyclicElements' of method 'CycleGroupIssueImpl' must not be empty";
+
         this.analyzer = analyzer;
         this.cyclicElements = cyclicElements;
         this.structuralDebtIndex = structuralDebtIndex;
         this.componentDependenciesToRemove = componentDependenciesToRemove;
         this.parserDependenciesToRemove = parserDependenciesToRemove;
+        this.scope = scope;
     }
 
     @Override
@@ -84,6 +87,12 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
     public int getParserDependenciesToRemove()
     {
         return parserDependenciesToRemove;
+    }
+
+    @Override
+    public INamedElement getScope()
+    {
+        return scope;
     }
 
     @Override

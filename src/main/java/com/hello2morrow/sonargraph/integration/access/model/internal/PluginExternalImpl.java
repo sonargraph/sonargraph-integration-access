@@ -29,22 +29,22 @@ public final class PluginExternalImpl extends NamedElementContainerImpl implemen
 {
     private static final long serialVersionUID = -5155691967957343798L;
 
-    private final Set<PhysicalRecursiveElementImpl> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
-    private final Set<ProgrammingElementImpl> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
+    private final Set<IPhysicalRecursiveElement> physicalRecursiveElementImpls = new TreeSet<>(new NamedElementComparator());
+    private final Set<IProgrammingElement> programmingElementImpls = new TreeSet<>(new NamedElementComparator());
 
     public PluginExternalImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
             final String description, final MetaDataAccessImpl metaDataAccess, final NamedElementRegistry elementRegistry)
     {
-        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccess, elementRegistry);
+        super(kind, presentationKind, name, presentationName, fqName, description, metaDataAccess, elementRegistry, "External");
     }
 
     @Override
-    public void addPhysicalRecursiveElement(final PhysicalRecursiveElementImpl physicalRecursiveElementImpl)
+    public void addPhysicalRecursiveElement(final IPhysicalRecursiveElement physicalRecursiveElement)
     {
-        assert physicalRecursiveElementImpl != null : "Parameter 'physicalRecursiveElementImpl' of method 'addPhysicalRecursiveElement' must not be null";
-        assert !physicalRecursiveElementImpls.contains(physicalRecursiveElementImpl) : "Already added physical recursive element: "
-                + physicalRecursiveElementImpl.getFqName();
-        physicalRecursiveElementImpls.add(physicalRecursiveElementImpl);
+        assert physicalRecursiveElement != null : "Parameter 'physicalRecursiveElement' of method 'addPhysicalRecursiveElement' must not be null";
+        assert !physicalRecursiveElementImpls.contains(physicalRecursiveElement) : "Already added physical recursive element: "
+                + physicalRecursiveElement.getFqName();
+        physicalRecursiveElementImpls.add(physicalRecursiveElement);
     }
 
     @Override
@@ -54,11 +54,11 @@ public final class PluginExternalImpl extends NamedElementContainerImpl implemen
     }
 
     @Override
-    public void addProgrammingElement(final ProgrammingElementImpl programmingElementImpl)
+    public void addProgrammingElement(final IProgrammingElement programmingElement)
     {
-        assert programmingElementImpl != null : "Parameter 'programmingElementImpl' of method 'addProgrammingElement' must not be null";
-        assert !programmingElementImpls.contains(programmingElementImpl) : "Already added programming element: " + programmingElementImpl.getFqName();
-        programmingElementImpls.add(programmingElementImpl);
+        assert programmingElement != null : "Parameter 'programmingElement' of method 'addProgrammingElement' must not be null";
+        assert !programmingElementImpls.contains(programmingElement) : "Already added programming element: " + programmingElement.getFqName();
+        programmingElementImpls.add(programmingElement);
     }
 
     @Override

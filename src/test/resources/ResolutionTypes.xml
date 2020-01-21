@@ -1,0 +1,594 @@
+<?xml version="1.0" ?>
+<ns3:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/report" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/export" id="_0" systemId="69a12d69703845e4c71b63a40dd07e0cr_b" name="RefactoringsDiffBaseline" version="9.12.3.100" systemPath="D:\00_repo\sgng\com.hello2morrow.sonargraph.language.provider.java\src\test\diffRefactorings\baseline\RefactoringsDiffBaseline.sonargraph" timestamp="2019-12-17T18:40:49.268+01:00" currentVirtualModel="AllRefactoringTypes.vm" systemDescription="" analyzerExecutionLevel="full">
+	<metaData>
+		<issueProviders>
+			<issueProvider id="_37" name="Core" presentationName="Core"></issueProvider>
+		</issueProviders>
+		<issueCategories>
+			<category id="_28" name="ArchitecturalView" presentationName="Architectural View"></category>
+			<category id="_29" name="ArchitectureConsistency" presentationName="Architecture Consistency"></category>
+			<category id="_2a" name="ArchitectureDefinition" presentationName="Architecture Definition"></category>
+			<category id="_2b" name="ArchitectureViolation" presentationName="Architecture Violation"></category>
+			<category id="_2c" name="CycleGroup" presentationName="Cycle Group"></category>
+			<category id="_2d" name="DuplicateCode" presentationName="Duplicate Code"></category>
+			<category id="_2e" name="InstallationConfiguration" presentationName="Installation Configuration"></category>
+			<category id="_2f" name="PluginBased" presentationName="Plugin Based"></category>
+			<category id="_30" name="Refactoring" presentationName="Refactoring"></category>
+			<category id="_31" name="ScriptBased" presentationName="Script Based"></category>
+			<category id="_32" name="ScriptDefinition" presentationName="Script Definition"></category>
+			<category id="_33" name="SystemConfiguration" presentationName="System Configuration"></category>
+			<category id="_34" name="ThresholdViolation" presentationName="Threshold Violation"></category>
+			<category id="_35" name="Todo" presentationName="Todo"></category>
+			<category id="_36" name="Workspace" presentationName="Workspace"></category>
+		</issueCategories>
+		<issueTypes>
+			<issueType severity="Warning" category="_2c" id="_38" name="ComponentCycleGroup" presentationName="Component Cycle Group"></issueType>
+			<issueType severity="None" category="_30" id="_39" name="DeleteRefactoring" presentationName="Delete Refactoring"></issueType>
+			<issueType severity="None" category="_30" id="_3a" name="MoveRefactoring" presentationName="Move Refactoring"></issueType>
+			<issueType severity="None" category="_30" id="_3b" name="MoveRenameRefactoring" presentationName="Move/Rename Refactoring"></issueType>
+			<issueType severity="None" category="_30" id="_3c" name="RenameRefactoring" presentationName="Rename Refactoring"></issueType>
+			<issueType severity="Warning" category="_34" id="_3d" name="ThresholdViolation" presentationName="Threshold Violation"></issueType>
+			<issueType severity="None" category="_35" id="_3e" name="Todo" presentationName="Todo"></issueType>
+		</issueTypes>
+		<metricProviders>
+			<provider id="_44" name="Core" presentationName="Core"></provider>
+			<provider id="_47" name="JavaLanguageProvider" presentationName="Java"></provider>
+		</metricProviders>
+		<metricCategories>
+			<category id="_5a" name="Architecture" presentationName="Architecture" orderNumber="0"></category>
+			<category id="_46" name="CodeAnalysis" presentationName="Code Analysis" orderNumber="1"></category>
+			<category id="_49" name="Cycle" presentationName="Cycle" orderNumber="2"></category>
+			<category id="_40" name="CohesionAndCoupling" presentationName="Cohesion/Coupling" orderNumber="3"></category>
+			<category id="_52" name="Dependency" presentationName="Dependency" orderNumber="4"></category>
+			<category id="_4c" name="Size" presentationName="Size" orderNumber="5"></category>
+			<category id="_41" name="JohnLakos" presentationName="John Lakos" orderNumber="7"></category>
+			<category id="_78" name="MacCormack" presentationName="MacCormack, Rusnak, Baldwin" orderNumber="11"></category>
+		</metricCategories>
+		<metricLevels>
+			<level id="_42" name="System" presentationName="System" orderNumber="0"></level>
+			<level id="_43" name="Module" presentationName="Module" orderNumber="10"></level>
+		</metricLevels>
+		<metricIds>
+			<metricId id="_3f" name="CoreAcd" presentationName="ACD" description="Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components." categories="_40 _41" provider="_44" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_45" name="JavaAveragePackagePublicVisibility" presentationName="Average Java Public Visibility (%)" description="Average of Java public visibility for all Java packages in a Java module" categories="_46" provider="_47" isFloat="true" levels="_43" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_48" name="CoreBiggestComponentCycleGroup" presentationName="Biggest Component Cycle Group" description="Number of components in biggest cycle." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4a" name="JavaBiggestPackageCycleGroup" presentationName="Biggest Java Package Cycle Group" description="Biggest Java package cycle group." categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4b" name="JavaByteCodeInstructions" presentationName="Byte Code Instructions" description="Number of Java byte code instructions." categories="_4c" provider="_47" isFloat="false" levels="_42" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4d" name="CoreCcd" presentationName="CCD" description="Cumulative component dependency according to John Lakos. Cumulated depends upon values." categories="_40 _41" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4e" name="CoreCodeCommentLines" presentationName="Code Comment Lines" description="Counts all comment lines excluding header comments and blank comment lines." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4f" name="CoreCommentLines" presentationName="Comment Lines" description="Counts all comment lines excluding blank comment lines." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_50" name="CoreComponentDependenciesToRemoveComponents" presentationName="Component Dependencies to Remove (Components)" description="Number of component dependencies to remove to break up all  component cycles." categories="_46 _49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_51" name="JavaComponentDependenciesToRemovePackages" presentationName="Component Dependencies to Remove (Java Packages)" description="Number of component dependencies to remove to break up all Java package cycle groups." categories="_46 _52" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_53" name="CoreCyclicityComponents" presentationName="Cyclicity (Components)" description="Cumulated cyclicity of component cycles." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_54" name="JavaCyclicityPackages" presentationName="Cyclicity (Java Packages)" description="Cumulated cyclicity of Java package cycle groups." categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_55" name="CoreMaxAcd" presentationName="Highest ACD" description="Highest ACD." categories="_40 _41" provider="_44" isFloat="true" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_56" name="CoreLinesOfCode" presentationName="Lines of Code" description="Lines of code excluding blank and comment lines." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_57" name="CoreMaintainabilityLevel" presentationName="Maintainability Level" description="This metric estimates maintainability as a percentage. 100% is the best possible value. To do that it looks at the dependency structure between components (source files in most languages). Cyclic dependencies and low level classes with a lot of incoming dependencies have a negative influence on the metric. Keeping good vertical boundaries and not having too many layers will have a positive influence. It is also recommended to have as many components as possible that are independent, i.e. have no incoming dependencies and therefore can be changed without influencing the rest of the system. In Java and C# the metric also considers the value of the relative cyclicity metric for packages/namespaces. If you have large cycle groups they will have a negative influence on the metric value." categories="_40" provider="_44" isFloat="true" levels="_42 _43" bestValue="100.0" worstValue="0.0" minValue="0.0" maxValue="100.0" direction="LowerWorse"></metricId>
+			<metricId id="_58" name="CoreNccd" presentationName="NCCD" description="Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more vertical design. A value less than 1 indicates a more horizontal design." categories="_40 _41" provider="_44" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_59" name="CoreArtifactCount" presentationName="Number of Artifacts" description="Number of active architecture artifacts" categories="_5a" provider="_44" isFloat="false" levels="_42" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_5b" name="CoreDuplicates" presentationName="Number of Code Duplicates" description="Number of duplicated code blocks." categories="_46" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5c" name="CoreComponentCycleGroups" presentationName="Number of Component Cycle Groups" description="Number of all component cycle groups, warnings and errors." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5d" name="CoreComponents" presentationName="Number of Components" description="Number of components." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_5e" name="CoreComponentsIgnoringIssues" presentationName="Number of Components (Ignoring Issues)" description="Number of components ignoring issues." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_5f" name="CoreComponentsInDeprecatedArtifacts" presentationName="Number of Components in Deprecated Artifacts" description="Number of components that are assigned to deprecated artifact" categories="_5a" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_60" name="CoreViolatingComponents" presentationName="Number of Components with Violations" description="Number of components that contain architecture violations" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_61" name="CoreCriticalComponentCycleGroups" presentationName="Number of Critical Component Cycle Groups" description="Number of component cycle groups marked as errors." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_62" name="JavaCriticalPackageCycleGroups" presentationName="Number of Critical Java Package Cycle Groups" description="Number of Java package cycle groups marked as errors." categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_63" name="CoreCyclicComponents" presentationName="Number of Cyclic Components" description="Number of cyclic components." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_64" name="JavaCyclicPackages" presentationName="Number of Cyclic Java Packages" description="Number of cyclic Java packages." categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_65" name="CoreCyclicModules" presentationName="Number of Cyclic Modules" description="Number of cyclic modules." categories="_49" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_66" name="CoreDuplicatedLines" presentationName="Number of Duplicated Code Lines" description="Number of duplicated lines in duplicated code blocks." categories="_46" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_67" name="CoreEmptyArtifactCount" presentationName="Number of Empty Artifacts" description="Number of active architecture artifacts that are empty" categories="_5a" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_68" name="CoreIgnoredDuplicates" presentationName="Number of Ignored Code Duplicates" description="Number of ignored duplicated code blocks." categories="_46" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_69" name="CoreIgnoredCyclicComponents" presentationName="Number of Ignored Cyclic Components" description="Number of ignored cyclic components." categories="_49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6a" name="JavaIgnoredCyclicPackages" presentationName="Number of Ignored Cyclic Java Packages" description="Number of ignored cyclic Java packages." categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6b" name="CoreIgnoredViolationsParserDependencies" presentationName="Number of Ignored Violations (Parser Dependencies)" description="Number of parser dependencies in ignored architecture violations" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6c" name="JavaPackages" presentationName="Number of Java Packages" description="Number of Java packages containing types." categories="_4c" provider="_47" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6d" name="CoreElementsInDeprecatedArtifacts" presentationName="Number of Logical Elements in Deprecated Artifacts" description="Number of logical programming elements that are assigned to deprecated artifact" categories="_5a" provider="_44" isFloat="false" levels="_42" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6e" name="CoreModules" presentationName="Number of Modules" description="Number of modules." categories="_4c" provider="_44" isFloat="false" levels="_42" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6f" name="CoreStatements" presentationName="Number of Statements" description="Counts all statements." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_70" name="CoreUnassignedLogicalElements" presentationName="Number of Unassigned Logical Elements" description="Number of internal logical elements that are not assigned to any artifact" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_71" name="CoreUnassignedComponents" presentationName="Number of Unassigned Physical Components" description="Number of internal physical components that are not assigned to any artifact" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_72" name="CoreViolationsComponentDependencies" presentationName="Number of Violations (Component Dependencies)" description="Number of architecture-violating component dependencies" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_73" name="CoreViolationsParserDependencies" presentationName="Number of Violations (Parser Dependencies)" description="Number of architecture-violating parser dependencies" categories="_5a" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_74" name="JavaPackageCycleGroups" presentationName="Number of all Java Package Cycle Groups" description="Number of all Java package cycle groups, errors and warnings" categories="_49" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_75" name="CoreParserDependenciesToRemoveComponents" presentationName="Parser Dependencies to Remove (Components)" description="Number of code lines to change to break up all  component cycles." categories="_46 _49" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_76" name="JavaParserDependenciesToRemovePackages" presentationName="Parser Dependencies to Remove (Java Packages)" description="Number of code lines to change to break up all Java package cycle groups)." categories="_46 _52" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_77" name="CorePropagationCost" presentationName="Propagation Cost" description="Propagation cost metric according to MacCormack, Rusnak and Baldwin." categories="_40 _78" provider="_44" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_79" name="CoreRacd" presentationName="RACD" description="Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent)." categories="_40 _41" provider="_44" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7a" name="CoreRelativeCyclicityComponents" presentationName="Relative Cyclicity (Components)" description="Relative component cyclicity in percent." categories="_49" provider="_44" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7b" name="JavaRelativeCyclicityPackages" presentationName="Relative Cyclicity (Java Packages)" description="Relative Java package cyclicity in percent." categories="_49" provider="_47" isFloat="true" levels="_42 _43" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7c" name="CoreSourceElementCount" presentationName="Source Element Count" description="Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_7d" name="CoreStructuralDebtIndexComponents" presentationName="Structural Debt Index (Components)" description="Cumulative structural debt index of component cycles." categories="_46" provider="_44" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7e" name="JavaStructuralDebtIndexPackages" presentationName="Structural Debt Index (Java Packages)" description="Cumulative structural debt index of all Java package cycle groups." categories="_46" provider="_47" isFloat="false" levels="_42 _43" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7f" name="CoreTotalLines" presentationName="Total Lines" description="Counts all lines including empty and comment lines." categories="_4c" provider="_44" isFloat="false" levels="_42 _43" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+		</metricIds>
+	</metaData>
+	<features>
+		<feature name="Architecture" presentationName="Architecture" licensed="true"></feature>
+		<feature name="CohesionAndCouplingMetrics" presentationName="Cohesion And Coupling Metrics" licensed="true"></feature>
+		<feature name="CycleBreakUp" presentationName="Cycle Break Up" licensed="true"></feature>
+		<feature name="DuplicateCode" presentationName="Duplicate Code" licensed="true"></feature>
+		<feature name="Platform" presentationName="Platform" licensed="true"></feature>
+		<feature name="Plugins" presentationName="Plugins" licensed="true"></feature>
+		<feature name="Reporting" presentationName="Reporting" licensed="true"></feature>
+		<feature name="Scripts" presentationName="Scripts" licensed="true"></feature>
+		<feature name="ScriptsAutomated" presentationName="Scripts Automated" licensed="true"></feature>
+		<feature name="Snapshots" presentationName="Snapshots" licensed="true"></feature>
+		<feature name="Systems" presentationName="Systems" licensed="true"></feature>
+		<feature name="VirtualModels" presentationName="Virtual Models" licensed="true"></feature>
+	</features>
+	<analyzers>
+		<analyzer description="Checks for architecture violations" licensed="true" executionLevel="minimal" executed="true" id="_4" name="ArchitectureCheck" presentationName="Architecture Check"></analyzer>
+		<analyzer description="Calculates number of violatong/ignored parser dependencies" licensed="true" executionLevel="minimal" executed="true" id="_5" name="ArchitectureCheckMetrics" presentationName="Architecture Metrics"></analyzer>
+		<analyzer description="Calculates cohesion and coupling metrics" licensed="true" executionLevel="full" executed="true" id="_1f" name="CohesionAndCouplingMetrics" presentationName="Cohesion and Coupling Metrics"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on module level" licensed="true" executionLevel="advanced" executed="true" id="_1d" name="ComponentCyclesModule" presentationName="Component Cycles (Module)"></analyzer>
+		<analyzer description="Computes component cycle metrics on module level" licensed="true" executionLevel="advanced" executed="true" id="_1b" name="ComponentCyclesModuleMetrics" presentationName="Component Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on system level" licensed="true" executionLevel="advanced" executed="true" id="_1e" name="ComponentCyclesSystem" presentationName="Component Cycles (System)"></analyzer>
+		<analyzer description="Computes component cycle metrics on system level" licensed="true" executionLevel="advanced" executed="true" id="_1c" name="ComponentCyclesSystemMetrics" presentationName="Component Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes directory cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_d" name="CppDirectoryCyclesModule" presentationName="C/C++ Directory Cycles (Module)"></analyzer>
+		<analyzer description="Computes directory cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_c" name="CppDirectoryCyclesModuleMetrics" presentationName="C/C++ Directory Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes directory cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_19" name="CppDirectoryCyclesSystem" presentationName="C/C++ Directory Cycles (System)"></analyzer>
+		<analyzer description="Computes directory cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_18" name="CppDirectoryCyclesSystemMetrics" presentationName="C/C++ Directory Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_b" name="CppNamespaceCyclesModule" presentationName="C++ Namespace Cycles (Module)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_a" name="CppNamespaceCyclesModuleMetrics" presentationName="C++ Namespace Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_17" name="CppNamespaceCyclesSystem" presentationName="C++ Namespace Cycles (System)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_16" name="CppNamespaceCyclesSystemMetrics" presentationName="C++ Namespace Cycle Metrics (System)"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on module level" licensed="true" executionLevel="full" executed="true" id="_22" name="CumulateDependenciesModule" presentationName="Module Dependencies"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on system level" licensed="true" executionLevel="full" executed="true" id="_24" name="CumulateDependenciesSystem" presentationName="System Dependencies"></analyzer>
+		<analyzer description="Cumulates sizes" licensed="true" executionLevel="minimal" executed="true" id="_6" name="CumulateSize" presentationName="Cumulate size"></analyzer>
+		<analyzer description="Search duplicate code on system level" licensed="true" executionLevel="full" executed="true" id="_20" name="DuplicateCode" presentationName="Duplicate Code"></analyzer>
+		<analyzer description="Calculates duplicate code metrics" licensed="true" executionLevel="full" executed="true" id="_21" name="DuplicateCodeMetrics" presentationName="Duplicate Code Metrics"></analyzer>
+		<analyzer description="Computes Java visibility metrics" licensed="true" executionLevel="basic" executed="true" id="_e" name="JavaVisibilityMetrics" presentationName="Java Visibility Metrics"></analyzer>
+		<analyzer description="Calculates maintainability level metrics" licensed="true" executionLevel="advanced" executed="true" id="_1a" name="MaintainabilityLevel" presentationName="Calculate Maintainability Level"></analyzer>
+		<analyzer description="Checks for metric threshold violations" licensed="true" executionLevel="minimal" executed="true" id="_7" name="MetricThresholds" presentationName="Metric Thresholds"></analyzer>
+		<analyzer description="Analyzes module cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_f" name="ModuleCyclesSystem" presentationName="Module Cycles"></analyzer>
+		<analyzer description="Analyzes namespace cycles on module level" licensed="true" executionLevel="basic" executed="false" id="_9" name="NamespaceCyclesModule" presentationName="C# Namespace Cycles (Module)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on module level" licensed="true" executionLevel="basic" executed="false" id="_8" name="NamespaceCyclesModuleMetrics" presentationName="C# Namespace Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes namespace cycles on system level" licensed="true" executionLevel="advanced" executed="false" id="_15" name="NamespaceCyclesSystem" presentationName="C# Namespace Cycles (System)"></analyzer>
+		<analyzer description="Computes namespace cycle metrics on system level" licensed="true" executionLevel="advanced" executed="false" id="_14" name="NamespaceCyclesSystemMetrics" presentationName="C# Namespace Cycle Metrics (System)"></analyzer>
+		<analyzer description="Analyzes package cycles on module level" licensed="true" executionLevel="basic" executed="true" id="_12" name="PackageCyclesModule" presentationName="Package Cycles (Module)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on module level" licensed="true" executionLevel="basic" executed="true" id="_10" name="PackageCyclesModuleMetrics" presentationName="Package Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes package cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_13" name="PackageCyclesSystem" presentationName="Package Cycles (System)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on system level" licensed="true" executionLevel="basic" executed="true" id="_11" name="PackageCyclesSystemMetrics" presentationName="Package Cycle Metrics (System)"></analyzer>
+		<analyzer description="Runs scripts configured for automated execution" licensed="true" executionLevel="full" executed="true" id="_23" name="ScriptRunner" presentationName="Script Runner"></analyzer>
+	</analyzers>
+	<plugins>
+		<plugin description="Plugin that uses PMD to find issues" version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_1" name="com.hello2morrow.sonargraph.plugin.pmd" presentationName="Sonargraph PMD Plugin">
+			<supportedExecutionPhase>analyzer</supportedExecutionPhase>
+		</plugin>
+		<plugin description="Plugin that uses Spotbugs to find issues" version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_2" name="com.hello2morrow.sonargraph.plugin.spotbugs" presentationName="Sonargraph Spotbugs Plugin">
+			<supportedExecutionPhase>analyzer</supportedExecutionPhase>
+		</plugin>
+		<plugin description="Plugin that exposes webresources and dependencies between them." version="9.12.3.qualifier" vendor="hello2morrow GmbH" licensed="true" enabled="false" id="_3" name="com.hello2morrow.sonargraph.plugin.swagger" presentationName="Sonargraph Swagger Plugin">
+			<supportedExecutionPhase>model</supportedExecutionPhase>
+		</plugin>
+	</plugins>
+	<duplicateCodeConfiguration>
+		<entry>MinimalLineLength:3</entry>
+		<entry>MinimalBlockLength:25</entry>
+		<entry>MaximalNumberOfCopies:100</entry>
+		<entry>MaximalTolerancePerEdit:3</entry>
+		<entry>MaximalRelativeTolerancePercentage:35</entry>
+	</duplicateCodeConfiguration>
+	<metricThresholds>
+		<threshold id="_80" metricId="_3f" metricLevel="_42" lowerThreshold="2" upperThreshold="20" severity="Warning"></threshold>
+	</metricThresholds>
+	<cycleGroupAnalyzerConfiguration analyzer="_1e" name="ComponentCyclesSystem">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_1d" name="ComponentCyclesModule">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_f" name="ModuleCyclesSystem">
+		<intEntry name="CriticalModuleCycleSize" value="2"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_12" name="PackageCyclesModule">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_13" name="PackageCyclesSystem">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<pluginConfiguration plugin="_1" id="_25" name="./com.hello2morrow.sonargraph.plugin.pmd.xml" presentationName="./com.hello2morrow.sonargraph.plugin.pmd.xml">
+		<stringEntry name="HIGH" value="error"></stringEntry>
+		<stringEntry name="MEDIUM_HIGH" value="error"></stringEntry>
+		<stringEntry name="MEDIUM" value="error"></stringEntry>
+		<stringEntry name="MEDIUM_LOW" value="warning"></stringEntry>
+		<stringEntry name="LOW" value="warning"></stringEntry>
+		<stringEntry name="RuleSets" value="/rulesets/java/basic.xml"></stringEntry>
+		<intEntry name="Minimum Priority" value="5"></intEntry>
+		<intEntry name="Number of Threads" value="0"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+		<booleanEntry name="Cache" value="true"></booleanEntry>
+	</pluginConfiguration>
+	<pluginConfiguration plugin="_3" id="_26" name="./com.hello2morrow.sonargraph.plugin.swagger.xml" presentationName="./com.hello2morrow.sonargraph.plugin.swagger.xml">
+		<intEntry name="Ranking" value="10"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+	</pluginConfiguration>
+	<pluginConfiguration plugin="_2" id="_27" name="./com.hello2morrow.sonargraph.plugin.spotbugs.xml" presentationName="./com.hello2morrow.sonargraph.plugin.spotbugs.xml">
+		<stringEntry name="Analysis Effort" value="default"></stringEntry>
+		<stringEntry name="Scariest" value="warning"></stringEntry>
+		<stringEntry name="Scary" value="warning"></stringEntry>
+		<stringEntry name="Troubling" value="warning"></stringEntry>
+		<stringEntry name="OfConcern" value="warning"></stringEntry>
+		<intEntry name="Ranking" value="12"></intEntry>
+		<intEntry name="Minimum Rank" value="15"></intEntry>
+		<intEntry name="Minimum Confidence" value="2"></intEntry>
+		<booleanEntry name="Enabled" value="false"></booleanEntry>
+		<booleanEntry name="Bad practice" value="true"></booleanEntry>
+		<booleanEntry name="Malicious code vulnerability" value="true"></booleanEntry>
+		<booleanEntry name="Correctness" value="true"></booleanEntry>
+		<booleanEntry name="Performance" value="true"></booleanEntry>
+		<booleanEntry name="Security" value="true"></booleanEntry>
+		<booleanEntry name="Dodgy code" value="true"></booleanEntry>
+		<booleanEntry name="Multithreaded correctness" value="true"></booleanEntry>
+		<booleanEntry name="Internationalization" value="true"></booleanEntry>
+		<booleanEntry name="Experimental" value="false"></booleanEntry>
+	</pluginConfiguration>
+	<elementKinds>
+		<elementKind id="_88" standardKind="JavaExternal" presentationKind="Java External"></elementKind>
+		<elementKind id="_84" standardKind="JavaClassRootDirectoryPath" presentationKind="Java Class Root Directory/Archive"></elementKind>
+		<elementKind id="_95" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+		<elementKind id="_8a" standardKind="JavaInternalCompilationUnit" presentationKind="Java Internal Compilation Unit"></elementKind>
+		<elementKind id="_86" standardKind="JavaSourceRootDirectoryPath" presentationKind="Java Source Root Directory/Archive"></elementKind>
+		<elementKind id="_82" standardKind="JavaModule" presentationKind="Java Module"></elementKind>
+	</elementKinds>
+	<workspace>
+		<workspaceFilter description="Exclude files from the workspace" information="Excluded 0 files(s)" numberOfExcludedElements="0"></workspaceFilter>
+		<productionCodeFilter description="Exclude internal components containing test code" information="Excluded 0 internal component(s) (processed 11)" numberOfExcludedElements="0" numberOfIncludedElements="11"></productionCodeFilter>
+		<issueFilter description="Ignore analysis issues of internal components containing legacy/generated code" information="Ignoring analysis issues of 0 internal component(s) (processed 11)" numberOfExcludedElements="0" numberOfIncludedElements="11"></issueFilter>
+		<module moduleId="2deffe74712e8f3cebfeb80b59a58b8a" language="Java" description="" kind="_82" fqName="Workspace:m1" id="_81" name="m1" presentationName="m1">
+			<rootDirectory kind="_84" fqName="Workspace:m1:Class|./bin" id="_83" name="Class|./bin" presentationName="./bin"></rootDirectory>
+			<rootDirectory kind="_86" fqName="Workspace:m1:./src" id="_85" name="./src" presentationName="./src">
+				<sourceElement kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:changedMatches:C11.java" id="_89" name="C11.java" presentationName="./com/h2m/test/refactoring/modified/changedMatches/C11.java"></sourceElement>
+				<sourceElement kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:changedMatches:C22.java" id="_8b" name="C22.java" presentationName="./com/h2m/test/refactoring/modified/changedMatches/C22.java"></sourceElement>
+				<sourceElement kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:description:DescriptionChanged.java" id="_8c" name="DescriptionChanged.java" presentationName="./com/h2m/test/refactoring/modified/description/DescriptionChanged.java"></sourceElement>
+				<sourceElement locationOnly="true" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists1.java" id="_8d" name="Exists1.java" presentationName="./com/h2m/test/refactoring/modified/exists/Exists1_renamed.java"></sourceElement>
+				<sourceElement originalLocation="_8d" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists1_renamed.java" originalFqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists1.java" id="_8e" name="Exists1_renamed.java" presentationName="./com/h2m/test/refactoring/modified/exists/Exists1_renamed.java"></sourceElement>
+				<sourceElement locationOnly="true" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists2.java" id="_8f" name="Exists2.java" presentationName="./com/h2m/test/refactoring/modified/exists/Exists2.java"></sourceElement>
+				<sourceElement originalLocation="_8f" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:moved:Exists2.java" originalFqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists2.java" id="_90" name="Exists2.java" presentationName="./com/h2m/test/refactoring/modified/exists/moved/Exists2.java"></sourceElement>
+				<sourceElement locationOnly="true" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:matched:Baseline.java" id="_91" name="Baseline.java" presentationName="./com/h2m/test/refactoring/modified/matched/Baseline_renamed.java"></sourceElement>
+				<sourceElement originalLocation="_91" kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:matched:moved:Baseline_renamed.java" originalFqName="Workspace:m1:./src:com:h2m:test:refactoring:modified:matched:Baseline.java" id="_92" name="Baseline_renamed.java" presentationName="./com/h2m/test/refactoring/modified/matched/moved/Baseline_renamed.java"></sourceElement>
+				<sourceElement kind="_8a" fqName="Workspace:m1:./src:com:h2m:test:refactoring:unmodified:C1.java" id="_93" name="C1.java" presentationName="./com/h2m/test/refactoring/unmodified/C1.java"></sourceElement>
+			</rootDirectory>
+		</module>
+		<external language="Java" description="Contains external Java elements" kind="_88" fqName="Workspace:External [Java]" id="_87" name="External [Java]" presentationName="External [Java]"></external>
+	</workspace>
+	<systemElements ref="_0">
+		<element kind="_95" fqName="RefactoringsDiffBaseline" id="_94" name="RefactoringsDiffBaseline" presentationName="RefactoringsDiffBaseline"></element>
+	</systemElements>
+	<moduleElements ref="_81"></moduleElements>
+	<systemMetricValues elementRef="_0">
+		<levelValues levelRef="_42">
+			<metric ref="_68">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_6f">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_4a">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_6a">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_54">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_94">2</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_5e">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_67">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_5b">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_74">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_7a">
+				<float ref="_94">18.18</float>
+			</metric>
+			<metric ref="_70">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_94">47</int>
+			</metric>
+			<metric ref="_5d">
+				<int ref="_94">11</int>
+			</metric>
+			<metric ref="_48">
+				<int ref="_94">2</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_94">2</int>
+			</metric>
+			<metric ref="_60">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_94">17</int>
+			</metric>
+			<metric ref="_5c">
+				<int ref="_94">1</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_94">4</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_94">18</int>
+			</metric>
+			<metric ref="_4b">
+				<int ref="_94">104</int>
+			</metric>
+			<metric ref="_62">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_66">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_65">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_94">2</int>
+			</metric>
+			<metric ref="_6e">
+				<int ref="_94">1</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_69">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_94">12</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_94">5</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_63">
+				<int ref="_94">2</int>
+			</metric>
+			<metric ref="_3f">
+				<float ref="_94">1.8</float>
+			</metric>
+			<metric ref="_55">
+				<float ref="_94">1.8</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_94">0.64</float>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_94">62</int>
+			</metric>
+			<metric ref="_61">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_7b">
+				<float ref="_94">0.0</float>
+			</metric>
+			<metric ref="_57">
+				<float ref="_94">97.0</float>
+			</metric>
+			<metric ref="_77">
+				<float ref="_94">18.0</float>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_6d">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_59">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_50">
+				<int ref="_94">1</int>
+			</metric>
+			<metric ref="_51">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_5f">
+				<int ref="_94">0</int>
+			</metric>
+			<metric ref="_79">
+				<float ref="_94">18.0</float>
+			</metric>
+		</levelValues>
+	</systemMetricValues>
+	<moduleMetricValues elementRef="_81">
+		<levelValues levelRef="_43">
+			<metric ref="_60">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_6b">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_70">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_71">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_72">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_73">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_45">
+				<float ref="_81">100.0</float>
+			</metric>
+			<metric ref="_50">
+				<int ref="_81">1</int>
+			</metric>
+			<metric ref="_51">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_75">
+				<int ref="_81">2</int>
+			</metric>
+			<metric ref="_76">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_7d">
+				<int ref="_81">12</int>
+			</metric>
+			<metric ref="_7e">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_3f">
+				<float ref="_81">1.8</float>
+			</metric>
+			<metric ref="_4d">
+				<int ref="_81">18</int>
+			</metric>
+			<metric ref="_57">
+				<float ref="_81">97.0</float>
+			</metric>
+			<metric ref="_58">
+				<float ref="_81">0.64</float>
+			</metric>
+			<metric ref="_77">
+				<float ref="_81">18.0</float>
+			</metric>
+			<metric ref="_79">
+				<float ref="_81">18.0</float>
+			</metric>
+			<metric ref="_48">
+				<int ref="_81">2</int>
+			</metric>
+			<metric ref="_4a">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_53">
+				<int ref="_81">4</int>
+			</metric>
+			<metric ref="_54">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_74">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_5c">
+				<int ref="_81">1</int>
+			</metric>
+			<metric ref="_61">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_62">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_63">
+				<int ref="_81">2</int>
+			</metric>
+			<metric ref="_64">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_69">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_6a">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_7a">
+				<float ref="_81">18.18</float>
+			</metric>
+			<metric ref="_7b">
+				<float ref="_81">0.0</float>
+			</metric>
+			<metric ref="_4e">
+				<int ref="_81">2</int>
+			</metric>
+			<metric ref="_4f">
+				<int ref="_81">2</int>
+			</metric>
+			<metric ref="_56">
+				<int ref="_81">47</int>
+			</metric>
+			<metric ref="_5d">
+				<int ref="_81">11</int>
+			</metric>
+			<metric ref="_5e">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_6c">
+				<int ref="_81">5</int>
+			</metric>
+			<metric ref="_6f">
+				<int ref="_81">0</int>
+			</metric>
+			<metric ref="_7c">
+				<int ref="_81">17</int>
+			</metric>
+			<metric ref="_7f">
+				<int ref="_81">62</int>
+			</metric>
+		</levelValues>
+	</moduleMetricValues>
+	<issues modelName="./AllRefactoringTypes.vm" numberOfIssues="7" numberOfUnresolvedIssues="0">
+		<elementIssues>
+			<issue affectedElement="_92" id="_96" type="_3b" provider="_37" description="Move to 'm1:./src/com.h2m.test.refactoring.modified.matched.moved' and rename to 'Baseline_renamed'"></issue>
+			<issue affectedElement="_8e" id="_97" type="_3c" provider="_37" description="Rename to 'Exists1_renamed'"></issue>
+			<issue affectedElement="_93" id="_98" type="_3e" provider="_37" description="TODO"></issue>
+			<issue affectedElement="_8c" id="_99" type="_39" provider="_37" description="Delete 'DescriptionChanged.java'"></issue>
+			<issue affectedElement="_90" id="_9a" type="_3a" provider="_37" description="Move to 'm1:./src/com.h2m.test.refactoring.modified.exists.moved'"></issue>
+			<cycleGroups analyzerRef="_1d">
+				<cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:23905955ed9d7ca6edb064e3bd3e3037|76eb2fbbb794b0f5298b93250646580b" structuralDebtIndex="12" componentDependenciesToRemove="1" parserDependenciesToRemove="2" scope="_81" id="_9b" type="_38" provider="_37" description="2 cyclic components">
+					<element ref="_89"></element>
+					<element ref="_8b"></element>
+				</cycleGroup>
+			</cycleGroups>
+			<thresholdViolation thresholdRef="_80" metricValue="1.7999999523162841796875" affectedElement="_94" id="_9c" type="_3d" provider="_37" description="ACD = 1,80 (allowed range: 2,00 to 20,00)"></thresholdViolation>
+		</elementIssues>
+	</issues>
+	<resolutions numberOfResolutions="7">
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdIgnore" type="Ignore" prio="None" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:1444405220" issueIds="_9c" description="Ignore" information="Threshold Violation, CoreAcd:System" assignee="" date="2019-12-17T16:26:22.906+01:00" applicable="true" matchingElementsCount="1" task="false" refactoring="false" descriptor="ThresholdViolation:CoreAcd:System">
+			<elementPattern type="Wildcard">RefactoringsDiffBaseline</elementPattern>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdToDo" type="Todo" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:808191181" issueIds="_98" description="TODO" information="Todo" assignee="Ingmar" date="2019-12-17T16:25:24.181+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="false" descriptor="2d04b989c1a1203650452b36d6b2219a">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:unmodified:C1.java</elementPattern>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdFixMe" type="Fix" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:1018050250" issueIds="_9b" description="FixMe" information="Component Cycle Group" assignee="Ingmar" date="2019-12-17T16:25:35.456+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="false" descriptor="">
+			<elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:23905955ed9d7ca6edb064e3bd3e3037|76eb2fbbb794b0f5298b93250646580b</elementPattern>
+			<matching info="Java Module 'm1' contains 2 cyclic components">
+				<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:changedMatches:C11.java</elementPattern>
+				<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:changedMatches:C22.java</elementPattern>
+			</matching>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdDeleteRefactoring" affectedParserDependencyCount="0" status="Applicable" numberOfPotentiallyDoneElements="0" type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:1843232122" issueIds="_99" description="Delete refactoring" information="" assignee="Ingmar" date="2019-12-17T16:22:51.743+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="true" descriptor="c70d94c49a721eee162e000a81a8bb9d">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:description:DescriptionChanged.java</elementPattern>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdRenameRefactoring" newName="Exists1_renamed" elementKind="Component" status="Applicable" numberOfPotentiallyDoneElements="0" type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:1517085408" issueIds="_97" description="Rename refactoring" information="" assignee="IK" date="2019-12-17T16:23:08.255+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="true" descriptor="673f5eea18410dc91121cfcd80364875">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists1.java</elementPattern>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdMoveRefactoring" targetRootDirectoryFqName="Workspace:m1:./src" moveToParentName="com.h2m.test.refactoring.modified.exists.moved" elementKind="Component" status="Applicable" numberOfPotentiallyDoneElements="0" type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:512494230" issueIds="_9a" description="Move refactoring" information="" assignee="Ingmar" date="2019-12-17T16:23:33.658+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="true" descriptor="db762d058a7ed0cea2407375c484a9a7">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:exists:Exists2.java</elementPattern>
+		</resolution>
+		<resolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns3:xsdMoveRenameRefactoring" newName="Baseline_renamed" targetRootDirectoryFqName="Workspace:m1:./src" moveToParentName="com.h2m.test.refactoring.modified.matched.moved" elementKind="Component" status="Applicable" numberOfPotentiallyDoneElements="0" type="Refactoring" prio="Medium" fqName="Files:BaseDirectory:SystemDirectory:Models:Parser:AllRefactoringTypes.vm:1284524722" issueIds="_96" description="Move/rename refactoring." information="" assignee="Ingmar" date="2019-12-17T16:24:01.882+01:00" applicable="true" matchingElementsCount="1" task="true" refactoring="true" descriptor="0d1cd2a59492fd7c777a9d3e739ad239">
+			<elementPattern type="FullyQualifiedName">Workspace:m1:./src:com:h2m:test:refactoring:modified:matched:Baseline.java</elementPattern>
+		</resolution>
+	</resolutions>
+</ns3:report>

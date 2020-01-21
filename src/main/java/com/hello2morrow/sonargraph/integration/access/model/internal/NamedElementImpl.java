@@ -25,12 +25,14 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 {
     private static final long serialVersionUID = 7897215356427497745L;
 
+    private final String fqName;
+    private String m_originalFqName;
     private final String kind;
     private final String presentationKind;
-    private final String fqName;
+    private final String imageResourceName;
 
     protected NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName, final String description)
+            final String fqName, final String description, final String imageResourceName)
     {
         super(name, presentationName, description);
 
@@ -39,11 +41,13 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         this.kind = kind;
         this.presentationKind = presentationKind;
         this.fqName = fqName;
+        this.imageResourceName = imageResourceName;
     }
 
-    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName)
+    public NamedElementImpl(final String kind, final String presentationKind, final String name, final String presentationName, final String fqName,
+            final String imageResourceName)
     {
-        this(kind, presentationKind, name, presentationName, fqName, "");
+        this(kind, presentationKind, name, presentationName, fqName, "", imageResourceName);
     }
 
     @Override
@@ -62,6 +66,24 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     public final String getPresentationKind()
     {
         return presentationKind;
+    }
+
+    @Override
+    public String getImageResourceName()
+    {
+        return imageResourceName != null ? imageResourceName : kind;
+    }
+
+    public final void setOriginalFqName(final String originalFqName)
+    {
+        assert originalFqName != null && originalFqName.length() > 0 : "Parameter 'originalFqName' of method 'setOriginalFqName' must not be empty";
+        m_originalFqName = originalFqName;
+    }
+
+    @Override
+    public Optional<String> getOriginalFqName()
+    {
+        return Optional.ofNullable(m_originalFqName);
     }
 
     @Override

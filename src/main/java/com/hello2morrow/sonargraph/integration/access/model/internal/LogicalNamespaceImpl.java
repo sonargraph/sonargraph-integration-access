@@ -24,8 +24,8 @@ public final class LogicalNamespaceImpl extends LogicalElementImpl implements IL
     private static final long serialVersionUID = -5879292544809212404L;
 
     public LogicalNamespaceImpl(final String kind, final String presentationKind, final String name, final String presentationName,
-            final String fqName)
+            final String fqName, final String imageResourceName)
     {
-        super(kind, presentationKind, name, presentationName, fqName);
+        super(kind, presentationKind, name, presentationName, fqName, imageResourceName);
     }
 }
