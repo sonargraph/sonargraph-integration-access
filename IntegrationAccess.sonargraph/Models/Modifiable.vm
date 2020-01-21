@@ -1,4 +1,29 @@
 <?xml version="1.0" ?>
-<virtualModel version="9.8.1.100">
-    <resolutions></resolutions>
+<virtualModel version="9.12.4.100">
+	<resolutions>
+		<ignore date="2020-01-21T16:10:24.314Z" description="ResolutionImpl is deprecated and will be removed soon.">
+			<type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
+			<elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:Result:7878ef8ead0abe667f8dbc4d642bfb74|1e8b8ace4207275a90dfde589e6004ba</elementPattern>
+			<matching info="2 occurrences with 122 line(s) found in 2 file(s)">
+				<elementPattern type="FullyQualifiedName">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:AbstractResolutionImpl.java</elementPattern>
+				<elementPattern type="FullyQualifiedName">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:ResolutionImpl.java</elementPattern>
+			</matching>
+		</ignore>
+		<ignore date="2020-01-21T16:10:24.315Z" description="ResolutionImpl is deprecated and will be removed soon.">
+			<type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>
+			<elementPattern type="FullyQualifiedName">Files:BaseDirectory:SystemDirectory:Analyzers:DuplicateCode:Result:7878ef8ead0abe667f8dbc4d642bfb74|88a1e22027afa708c64742fa82f64613</elementPattern>
+			<matching info="2 occurrences with 57 line(s) found in 2 file(s)">
+				<elementPattern type="FullyQualifiedName">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:AbstractResolutionImpl.java</elementPattern>
+				<elementPattern type="FullyQualifiedName">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:ResolutionImpl.java</elementPattern>
+			</matching>
+		</ignore>
+		<ignore date="2020-01-21T16:10:33.966Z" description="Tolerated.">
+			<type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ThresholdViolation" descriptor="ThresholdViolation:CoreLinesOfCode:SourceFile"></type>
+			<elementPattern type="Wildcard">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:persistence:XmlReportReader.java</elementPattern>
+		</ignore>
+		<ignore date="2020-01-21T16:10:33.967Z" description="Tolerated.">
+			<type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="ThresholdViolation" descriptor="ThresholdViolation:CoreModifiedCcn:Routine"></type>
+			<elementPattern type="Wildcard">Workspace:sonargraph-integration-access:./src/main/java:com:hello2morrow:sonargraph:integration:access:model:internal:ReportDeltaImpl.java:ReportDeltaImpl:toString()</elementPattern>
+		</ignore>
+	</resolutions>
 </virtualModel>
