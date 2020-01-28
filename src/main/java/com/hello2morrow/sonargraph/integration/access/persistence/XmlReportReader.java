@@ -332,7 +332,7 @@ public final class XmlReportReader extends XmlAccess
                     xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         }
         softwareSystemImpl.addElement(softwareSystemImpl);
-
+        softwareSystemImpl.setContextInfo(xsdReport.getReportContextInfo() != null ? xsdReport.getReportContextInfo() : "");
         processSystemMetaData(softwareSystemImpl, xsdReport);
         processAnalyzers(softwareSystemImpl, xsdReport);
         processPlugins(softwareSystemImpl, xsdReport);
