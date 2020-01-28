@@ -99,6 +99,8 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     private final Map<String, String> metaData = new HashMap<>();
 
+    private String m_contextInfo;
+
     public SoftwareSystemImpl(final String kind, final String presentationKind, final String systemId, final String name, final String description,
             final String path, final String version, final long timestamp, final String virtualModel,
             final AnalyzerExecutionLevel analyzerExecutionLevel)
@@ -573,5 +575,18 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     public Map<String, IPluginConfiguration> getPluginConfigurations()
     {
         return Collections.unmodifiableMap(pluginIdToConfigurationMap);
+    }
+
+    public void setContextInfo(final String contextInfo)
+    {
+        assert contextInfo != null : "Parameter 'contextInfo' of method 'setContextInfo' must not be null";
+
+        m_contextInfo = contextInfo;
+    }
+
+    @Override
+    public String getContextInfo()
+    {
+        return m_contextInfo;
     }
 }
