@@ -64,10 +64,11 @@ public final class XmlElementContentExtractor
     }
 
     /**
-     * Processes only the root element of an XML file.
+     * Processes an XML file until an element is found and returns its value. Must only be used for elements of simple data types, e.g.
+     * &lt;name&gt;Rudolf&lt;/name&gt;
      *
      * @param file
-     * @return if the attribute exists, returns the value. If it does not exist, returns empty string. If the XML processing fails, returns null.
+     * @return if the element exists, returns the value. If it does not exist, returns empty string. If the XML processing fails, returns null.
      */
     public static String process(final File file, final String elementName)
     {
