@@ -18,7 +18,6 @@
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.io.File;
 
@@ -35,6 +34,6 @@ public class XmlElementContentExtractorTest
                 REPORT_CONTEXT_INFO);
         assertEquals("Wrong context info", "Multi-\nline\ncontext\ninfo", contextInfo);
 
-        assertNull(XmlElementContentExtractor.process(new File("./src/test/resources/ReportStandard.xml"), REPORT_CONTEXT_INFO));
+        assertEquals("", XmlElementContentExtractor.process(new File("./src/test/resources/ReportStandard.xml"), REPORT_CONTEXT_INFO));
     }
 }

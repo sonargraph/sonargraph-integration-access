@@ -75,6 +75,7 @@ public final class XmlElementContentExtractor
         assert file != null : "Parameter 'file' of method 'process' must not be null";
         assert elementName != null && elementName.length() > 0 : "Parameter 'elementName' of method 'process' must not be empty";
 
+        boolean error = false;
         try (InputStream is = new FileInputStream(file))
         {
             if (s_factory == null)
@@ -130,23 +131,29 @@ public final class XmlElementContentExtractor
         catch (final SAXParseException ex)
         {
             //input file is not a valid XML file
+            error = true;
         }
         catch (final FileNotFoundException ex)
         {
             //input file does not exist
+            error = true;
         }
         catch (final IOException ex)
         {
             LOGGER.error("Failed to determine root element of " + file.getAbsolutePath(), ex);
+            error = true;
         }
         catch (final ParserConfigurationException ex)
         {
             LOGGER.error("Fatal configuration exception", ex);
+            error = true;
         }
         catch (final SAXException ex)
         {
             LOGGER.error("Generic SAXException while processing " + file.getAbsolutePath(), ex);
+            error = true;
         }
-        return null;
+
+        return error ? null : "";
     }
 }
