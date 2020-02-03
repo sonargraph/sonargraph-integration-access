@@ -61,4 +61,10 @@ public enum Severity implements IEnumeration
 
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return getPresentationName();
+    }
 }

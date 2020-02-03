@@ -44,6 +44,12 @@ public class Result implements Serializable
         {
             return Utility.convertConstantNameToPresentationName(name());
         }
+
+        @Override
+        public String toString()
+        {
+            return getPresentationName();
+        }
     }
 
     public interface ICause extends IEnumeration
@@ -178,8 +184,8 @@ public class Result implements Serializable
     {
         assert cause != null : "Parameter 'cause' of method 'addWarning' must not be null";
         assert throwable != null : "Parameter 'throwable' of method 'addWarning' must not be null";
-        final Message message = new Message(Level.WARNING, cause, cause.getPresentationName() + "." + Utility.LINE_SEPARATOR
-                + Utility.collectAll(throwable));
+        final Message message = new Message(Level.WARNING, cause,
+                cause.getPresentationName() + "." + Utility.LINE_SEPARATOR + Utility.collectAll(throwable));
         messages.add(message);
     }
 
@@ -202,8 +208,8 @@ public class Result implements Serializable
     {
         assert cause != null : "Parameter 'cause' of method 'addError' must not be null";
         assert throwable != null : "Parameter 'throwable' of method 'addError' must not be null";
-        final Message message = new Message(Level.ERROR, cause, cause.getPresentationName() + "." + Utility.LINE_SEPARATOR
-                + Utility.collectAll(throwable));
+        final Message message = new Message(Level.ERROR, cause,
+                cause.getPresentationName() + "." + Utility.LINE_SEPARATOR + Utility.collectAll(throwable));
         messages.add(message);
     }
 
@@ -212,8 +218,8 @@ public class Result implements Serializable
         assert cause != null : "Parameter 'cause' of method 'addError' must not be null";
         assert throwable != null : "Parameter 'throwable' of method 'addError' must not be null";
         assert detail != null && detail.length() > 0 : "Parameter 'detail' of method 'addError' must not be empty";
-        final Message message = new Message(Level.ERROR, cause, cause.getPresentationName() + ". " + String.format(detail, args)
-                + Utility.LINE_SEPARATOR + Utility.collectAll(throwable));
+        final Message message = new Message(Level.ERROR, cause,
+                cause.getPresentationName() + ". " + String.format(detail, args) + Utility.LINE_SEPARATOR + Utility.collectAll(throwable));
         messages.add(message);
     }
 
