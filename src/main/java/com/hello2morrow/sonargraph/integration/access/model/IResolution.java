@@ -64,7 +64,7 @@ public interface IResolution extends INamedElement
 
     /**
      * @deprecated use {@link #getMatchingElementsCount()} instead
-     * @return true if matching element count is > 0, false otherwise
+     * @return true if matching element count is &gt; 0, false otherwise
      */
     @Deprecated
     default public boolean isApplicable()
