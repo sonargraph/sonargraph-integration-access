@@ -254,7 +254,7 @@ public final class ResolutionImpl extends ElementImpl implements IResolution
     @Override
     public String getDate()
     {
-        return Utility.getDateTimeStringFromLocale(dateTime);
+        return Utility.formatDateAndTimeForUniversalTimezone(dateTime);
     }
 
     @Override

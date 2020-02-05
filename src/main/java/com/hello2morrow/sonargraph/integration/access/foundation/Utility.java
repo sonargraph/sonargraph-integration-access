@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.foundation;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,6 +28,8 @@ public final class Utility
     public static final String INDENTATION = "   ";
     private static final char PATH_SEPARATOR_CHAR = '/';
     private static final char PATH_SEPARATOR_CHAR_TO_BE_CONVERTED = '\\';
+
+    private static final String ISO_8601_DATA_AN_TIME_UNIVERSAL_TIMEZONE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ss Z";
 
     private Utility()
     {
@@ -56,8 +59,9 @@ public final class Utility
 
     /**
      * Replace Windows path separators with slashes
-     * @param path  path string to be converted
-     * @return      path in universal form
+     *
+     * @param path path string to be converted
+     * @return path in universal form
      */
     public static String convertPathToUniversalForm(final String path)
     {
@@ -68,6 +72,11 @@ public final class Utility
     public static String getDateTimeStringFromLocale(final Date date)
     {
         return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault()).format(date);
+    }
+
+    public static String formatDateAndTimeForUniversalTimezone(final Date date)
+    {
+        return new SimpleDateFormat(ISO_8601_DATA_AN_TIME_UNIVERSAL_TIMEZONE_FORMAT_STRING).format(date);
     }
 
     public static String convertConstantNameToMixedCaseString(final String input, final boolean capitalizeFirstLetter, final boolean insertSpace)
