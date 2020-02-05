@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -35,6 +36,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 
 public interface ISystemInfoProcessor extends IInfoProcessor
@@ -54,6 +56,8 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<IFeature> getFeatures();
 
     public List<IPlugin> getPlugins();
+
+    public Map<String, IPluginConfiguration> getPluginConfigurations();
 
     public List<IAnalyzer> getAnalyzers();
 
@@ -78,4 +82,7 @@ public interface ISystemInfoProcessor extends IInfoProcessor
     public List<String> getElementKinds();
 
     public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
+
+    /** @return map of analyzers's standardNames to configurations */
+    public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations();
 }

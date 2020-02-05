@@ -1,575 +1,862 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.hello2morrow.com/sonargraph/core/report"
-    xmlns:export="http://www.hello2morrow.com/sonargraph/core/export"
-    targetNamespace="http://www.hello2morrow.com/sonargraph/core/report">
+<xs:schema version="1.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.hello2morrow.com/sonargraph/core/report"
+	xmlns:export="http://www.hello2morrow.com/sonargraph/core/export"
+	targetNamespace="http://www.hello2morrow.com/sonargraph/core/report">
 
 	<!-- Note: If you want to get the debugInfo attributes printed, set the 
 		log level of the ReportXmlWriter to "DEBUG" in logback.xml -->
 
-    <xs:import schemaLocation="./exportMetaData.xsd"
-        namespace="http://www.hello2morrow.com/sonargraph/core/export" />
+	<xs:import schemaLocation="./exportMetaData.xsd"
+		namespace="http://www.hello2morrow.com/sonargraph/core/export" />
 
-    <xs:complexType name="xsdFeature">
-        <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="presentationName" type="xs:string" use="required" />
-        <xs:attribute name="licensed" type="xs:boolean" default="false" />
-    </xs:complexType>
+	<xs:complexType name="xsdFeature">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="presentationName" type="xs:string"
+			use="required" />
+		<xs:attribute name="licensed" type="xs:boolean"
+			default="false" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdFeatures">
-        <xs:sequence>
-            <xs:element name="feature" type="xsdFeature" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="xsdFeatures">
+		<xs:sequence>
+			<xs:element name="feature" type="xsdFeature" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdAnalyzer">
-        <xs:complexContent>
-            <xs:extension base="export:xsdElement">
-                <xs:attribute name="description" type="xs:string" />
-                <xs:attribute name="licensed" type="xs:boolean" default="false" />
-                <xs:attribute name="executionLevel" type="xsdAnalyzerExecutionLevel" use="optional"
-                    default="full" />
-                <xs:attribute name="executed" type="xs:boolean" use="optional" default="true" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdAnalyzer">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:attribute name="description" type="xs:string" />
+				<xs:attribute name="licensed" type="xs:boolean"
+					default="false" />
+				<xs:attribute name="executionLevel"
+					type="xsdAnalyzerExecutionLevel" use="optional" default="full" />
+				<xs:attribute name="executed" type="xs:boolean"
+					use="optional" default="true" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdAnalyzers">
-        <xs:sequence>
-            <xs:element name="analyzer" type="xsdAnalyzer" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="xsdAnalyzers">
+		<xs:sequence>
+			<xs:element name="analyzer" type="xsdAnalyzer"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdPlugin">
-        <xs:complexContent>
-            <xs:extension base="export:xsdElement">
-                <xs:sequence>
-                    <xs:element name="supportedExecutionPhase" type="xsdExecutionPhase" minOccurs="1"
-                        maxOccurs="unbounded" />
-                    <xs:element name="activeExecutionPhase" type="xsdExecutionPhase" minOccurs="0"
-                        maxOccurs="unbounded" />
-                </xs:sequence>
-                <xs:attribute name="description" type="xs:string" use="optional" />
-                <xs:attribute name="version" type="xs:string" />
-                <xs:attribute name="vendor" type="xs:string" />
-                <xs:attribute name="licensed" type="xs:boolean" />
-                <xs:attribute name="enabled" type="xs:boolean" />                
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdPlugin">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:sequence>
+					<xs:element name="supportedExecutionPhase"
+						type="xsdExecutionPhase" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="activeExecutionPhase"
+						type="xsdExecutionPhase" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="description" type="xs:string"
+					use="optional" />
+				<xs:attribute name="version" type="xs:string" />
+				<xs:attribute name="vendor" type="xs:string" />
+				<xs:attribute name="licensed" type="xs:boolean" />
+				<xs:attribute name="enabled" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:simpleType name="xsdExecutionPhase">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="analyzer" />
-            <xs:enumeration value="model" />
-        </xs:restriction>
-    </xs:simpleType>
+	<xs:simpleType name="xsdExecutionPhase">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="analyzer" />
+			<xs:enumeration value="model" />
+		</xs:restriction>
+	</xs:simpleType>
 
-    <xs:complexType name="xsdPlugins">
-        <xs:sequence>
-            <xs:element name="plugin" type="xsdPlugin" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="xsdPlugins">
+		<xs:sequence>
+			<xs:element name="plugin" type="xsdPlugin" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:simpleType name="xsdAnalyzerExecutionLevel">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="full" />
-            <xs:enumeration value="advanced" />
-            <xs:enumeration value="basic" />
-            <xs:enumeration value="minimal" />
-        </xs:restriction>
-    </xs:simpleType>
+	<xs:simpleType name="xsdAnalyzerExecutionLevel">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="full" />
+			<xs:enumeration value="advanced" />
+			<xs:enumeration value="basic" />
+			<xs:enumeration value="minimal" />
+		</xs:restriction>
+	</xs:simpleType>
 
-    <xs:complexType name="xsdDuplicateCodeConfiguration">
-        <xs:sequence>
-            <xs:element name="entry" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<!-- Concrete analyzer configuration for duplicate code -->
+	<xs:complexType name="xsdDuplicateCodeConfiguration">
+		<xs:sequence>
+			<xs:element name="entry" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdScriptRunnerConfiguration">
-        <xs:sequence>
-            <xs:element name="entry" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<!-- Concrete analyzer configuration for script runner -->
+	<xs:complexType name="xsdScriptRunnerConfiguration">
+		<xs:sequence>
+			<xs:element name="entry" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdArchitectureCheckConfiguration">
-        <xs:sequence>
-            <xs:element name="entry" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<!-- Concrete analyzer configuration for architecture check -->
+	<xs:complexType name="xsdArchitectureCheckConfiguration">
+		<xs:sequence>
+			<xs:element name="entry" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdNamedElement">
-        <xs:complexContent>
-            <xs:extension base="export:xsdElement">
-                <xs:attribute name="kind" type="xs:IDREF" use="required" />
-                <xs:attribute name="fqName" type="xs:string" use="required" />
-                <xs:attribute name="source" type="xs:IDREF" />
-                <xs:attribute name="debugInfo" type="xs:string" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<!-- Generic analyzer configuration for all other analyzers -->
+	<xs:complexType name="xsdAnalyzerConfiguration"
+		abstract="true">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:sequence>
+					<xs:element name="stringEntry" type="xsdStringEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="intEntry" type="xsdIntEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="analyzer" type="xs:IDREF"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdRootDirectory">
+	<xs:complexType name="xsdCycleGroupAnalyzerConfiguration">
+		<xs:complexContent>
+			<xs:extension base="xsdAnalyzerConfiguration" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdPluginConfiguration">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:sequence>
+					<xs:element name="stringEntry" type="xsdStringEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="intEntry" type="xsdIntEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="floatEntry" type="xsdFloatEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="booleanEntry" type="xsdBooleanEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="plugin" type="xs:IDREF" use="required" />				
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdStringEntry">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdIntEntry">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="value" type="xs:int" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdFloatEntry">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="value" type="xs:float" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdBooleanEntry">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:boolean" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdNamedElement">
+		<xs:complexContent>
+			<xs:extension base="export:xsdElement">
+				<xs:attribute name="kind" type="xs:IDREF"
+					use="required" />
+				<xs:attribute name="fqName" type="xs:string"
+					use="required" />
+				<xs:attribute name="originalFqName" type="xs:string" use="optional" />
+				<xs:attribute name="source" type="xs:IDREF" />
+				<xs:attribute name="debugInfo" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdRootDirectory">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:sequence>
+					<xs:element name="physicalRecursiveElement"
+						type="xsdPhysicalRecursiveElement" minOccurs="0"
+						maxOccurs="unbounded" />
+					<xs:element name="sourceElement" type="xsdSourceFile"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="programmingElement"
+						type="xsdProgrammingElement" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdLanguageBasedContainer"
+		abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:sequence>
+					<xs:element name="rootDirectory" type="xsdRootDirectory"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="language" type="xs:string"
+					use="required" />
+				<xs:attribute name="description" type="xs:string"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdExternal">
+		<xs:complexContent>
+			<xs:extension base="xsdLanguageBasedContainer">
+				<xs:sequence>
+					<xs:element name="physicalRecursiveElement"
+						type="xsdPhysicalRecursiveElement" minOccurs="0"
+						maxOccurs="unbounded" />
+					<xs:element name="programmingElement"
+						type="xsdProgrammingElement" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdPluginExternal">
         <xs:complexContent>
             <xs:extension base="xsdNamedElement">
                 <xs:sequence>
                     <xs:element name="physicalRecursiveElement" type="xsdPhysicalRecursiveElement"
                         minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="sourceElement" type="xsdSourceFile" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="programmingElement" type="xsdProgrammingElement" minOccurs="0"
                         maxOccurs="unbounded" />
                 </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdLanguageBasedContainer" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="xsdNamedElement">
-                <xs:sequence>
-                    <xs:element name="rootDirectory" type="xsdRootDirectory" minOccurs="0"
-                        maxOccurs="unbounded" />
-                </xs:sequence>
-                <xs:attribute name="language" type="xs:string" use="required" />
                 <xs:attribute name="description" type="xs:string" use="required" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="xsdExternal">
-        <xs:complexContent>
-            <xs:extension base="xsdLanguageBasedContainer">
-                <xs:sequence>
-                    <xs:element name="physicalRecursiveElement" type="xsdPhysicalRecursiveElement"
-                        minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="programmingElement" type="xsdProgrammingElement" minOccurs="0"
-                        maxOccurs="unbounded" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdPluginExternal">
-        <xs:complexContent>
-            <xs:extension base="xsdNamedElement">
-                <xs:sequence>
-                    <xs:element name="physicalRecursiveElement" type="xsdPhysicalRecursiveElement"
-                        minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="programmingElement" type="xsdProgrammingElement" minOccurs="0"
-                        maxOccurs="unbounded" />
-                </xs:sequence>
-                <xs:attribute name="description" type="xs:string" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdModule">
+		<xs:complexContent>
+			<xs:extension base="xsdLanguageBasedContainer">
+				<xs:attribute name="moduleId" type="xs:string"
+					use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdModule">
-        <xs:complexContent>
-            <xs:extension base="xsdLanguageBasedContainer" >
-                <xs:attribute name="moduleId" type="xs:string" use="optional" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdWorkspace">
+		<xs:sequence>
+			<!-- Filter elements are included since 9.9.3 -->
+			<xs:element name="workspaceFilter" type="xsdFilter"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="productionCodeFilter" type="xsdFilter"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="issueFilter" type="xsdFilter"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="genericRoot" type="xsdRootDirectory"
+				minOccurs="0" maxOccurs="unbounded" /><!-- for backwards compatibility -->
+			<xs:element name="module" type="xsdModule" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="external" type="xsdExternal"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="pluginExternal" type="xsdPluginExternal" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdWorkspace">
-        <xs:sequence>
-            <!-- Filter elements are included since 9.9.3 -->
-            <xs:element name="workspaceFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
-            <xs:element name="productionCodeFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
-            <xs:element name="issueFilter" type="xsdFilter" minOccurs="0" maxOccurs="1" />
-            <xs:element name="genericRoot" type="xsdRootDirectory" minOccurs="0" maxOccurs="unbounded" /><!-- for backwards compatibility -->
-            <xs:element name="module" type="xsdModule" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="external" type="xsdExternal" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="pluginExternal" type="xsdPluginExternal" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdWildcardPattern">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="numberOfMatches" type="xs:int" />
-          </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    
-    <xs:complexType name="xsdFilter">
-        <xs:sequence>
-            <xs:element name="include" type="xsdWildcardPattern" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="exclude" type="xsdWildcardPattern" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="description" type="xs:string" use="optional" />
-        <xs:attribute name="information" type="xs:string" />
-        <xs:attribute name="numberOfExcludedElements" type="xs:int" />
-        <xs:attribute name="numberOfIncludedElements" type="xs:int" use="optional"/>
-    </xs:complexType>
+	<xs:complexType name="xsdWildcardPattern">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:attribute name="numberOfMatches" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdPhysicalElement" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="xsdNamedElement">
-                <xs:attribute name="locationOnly" type="xs:boolean" default="false" />
-                <xs:attribute name="originalLocation" type="xs:IDREF" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdFilter">
+		<xs:sequence>
+			<xs:element name="include" type="xsdWildcardPattern"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="exclude" type="xsdWildcardPattern"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="description" type="xs:string"
+			use="optional" />
+		<xs:attribute name="information" type="xs:string" />
+		<xs:attribute name="numberOfExcludedElements"
+			type="xs:int" />
+		<xs:attribute name="numberOfIncludedElements"
+			type="xs:int" use="optional" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdPhysicalRecursiveElement">
-        <xs:complexContent>
-            <xs:extension base="xsdPhysicalElement">
+	<xs:complexType name="xsdPhysicalElement"
+		abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:attribute name="locationOnly" type="xs:boolean"
+					default="false" />
+				<xs:attribute name="originalLocation" type="xs:IDREF" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdPhysicalRecursiveElement">
+		<xs:complexContent>
+			<xs:extension base="xsdPhysicalElement">
 				<!-- Either the 'relativeDirectoryPath' or the 'source' (xsdNamedElement) 
 					is present -->
-                <xs:attribute name="relativeDirectoryPath" type="xs:string" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+				<xs:attribute name="relativeDirectoryPath"
+					type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdSourceFile">
-        <xs:complexContent>
-            <xs:extension base="xsdPhysicalElement" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdSourceFile">
+		<xs:complexContent>
+			<xs:extension base="xsdPhysicalElement" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdProgrammingElement">
-        <xs:complexContent>
-            <xs:extension base="xsdNamedElement">
-                <xs:attribute name="line" type="xs:int" default="-1" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdProgrammingElement">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:attribute name="line" type="xs:int" default="-1" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdLogicalElement" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="xsdNamedElement">
-                <xs:attribute name="derivedFrom" type="xs:IDREFS" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdLogicalElement" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdNamedElement">
+				<xs:attribute name="derivedFrom" type="xs:IDREFS"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdLogicalNamespace">
-        <xs:complexContent>
-            <xs:extension base="xsdLogicalElement" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdLogicalNamespace">
+		<xs:complexContent>
+			<xs:extension base="xsdLogicalElement" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdLogicalProgrammingElement">
-        <xs:complexContent>
-            <xs:extension base="xsdLogicalElement" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdLogicalProgrammingElement">
+		<xs:complexContent>
+			<xs:extension base="xsdLogicalElement" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdElements" abstract="true">
-        <xs:sequence>
-            <xs:element name="element" type="xsdNamedElement" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="logicalNamespace" type="xsdLogicalNamespace" minOccurs="0"
-                maxOccurs="unbounded" />
-            <xs:element name="logicalProgrammingElement" type="xsdLogicalProgrammingElement" minOccurs="0"
-                maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="ref" type="xs:IDREF" use="required" />
-    </xs:complexType>
+	<xs:complexType name="xsdElements" abstract="true">
+		<xs:sequence>
+			<xs:element name="element" type="xsdNamedElement"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="logicalNamespace"
+				type="xsdLogicalNamespace" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="logicalProgrammingElement"
+				type="xsdLogicalProgrammingElement" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="ref" type="xs:IDREF" use="required" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdSystemElements">
-        <xs:complexContent>
-            <xs:extension base="xsdElements" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdSystemElements">
+		<xs:complexContent>
+			<xs:extension base="xsdElements" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdModuleElements">
-        <xs:complexContent>
-            <xs:extension base="xsdElements" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdModuleElements">
+		<xs:complexContent>
+			<xs:extension base="xsdElements" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdExternalModuleScopeElements">
-        <xs:complexContent>
-            <xs:extension base="xsdElements" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdExternalModuleScopeElements">
+		<xs:complexContent>
+			<xs:extension base="xsdElements" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdExternalSystemScopeElements">
-        <xs:complexContent>
-            <xs:extension base="xsdElements" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdExternalSystemScopeElements">
+		<xs:complexContent>
+			<xs:extension base="xsdElements" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdElementKinds">
-        <xs:sequence>
-            <xs:element name="elementKind" type="xsdElementKind" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="xsdElementKinds">
+		<xs:sequence>
+			<xs:element name="elementKind" type="xsdElementKind"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdElementKind">
-        <xs:attribute name="id" type="xs:ID" use="required" />
-        <xs:attribute name="standardKind" type="xs:string" />
-        <xs:attribute name="presentationKind" type="xs:string" use="required" />
-    </xs:complexType>
+	<xs:complexType name="xsdElementKind">
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="standardKind" type="xs:string" />
+		<xs:attribute name="presentationKind" type="xs:string" use="required" />
+		<xs:attribute name="imageResourceName" type="xs:string" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdMetricLevelValues">
-        <xs:sequence>
-            <xs:element name="metric" type="xsdMetricValue" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="levelRef" type="xs:IDREF" use="required" />
-    </xs:complexType>
+	<xs:complexType name="xsdMetricLevelValues">
+		<xs:sequence>
+			<xs:element name="metric" type="xsdMetricValue"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="levelRef" type="xs:IDREF"
+			use="required" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdMetricLevelContainer" abstract="true">
-        <xs:sequence>
-            <xs:element name="levelValues" type="xsdMetricLevelValues" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="elementRef" type="xs:IDREF" use="required" />
-    </xs:complexType>
+	<xs:complexType name="xsdMetricLevelContainer"
+		abstract="true">
+		<xs:sequence>
+			<xs:element name="levelValues" type="xsdMetricLevelValues"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="elementRef" type="xs:IDREF"
+			use="required" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdSystemMetricValues">
-        <xs:complexContent>
-            <xs:extension base="xsdMetricLevelContainer" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdSystemMetricValues">
+		<xs:complexContent>
+			<xs:extension base="xsdMetricLevelContainer" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdModuleMetricValues">
-        <xs:complexContent>
-            <xs:extension base="xsdMetricLevelContainer" />
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:complexType name="xsdModuleMetricValues">
+		<xs:complexContent>
+			<xs:extension base="xsdMetricLevelContainer" />
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="xsdMetricValue">
-        <xs:sequence>
-            <xs:choice>
-                <xs:element name="float" type="xsdMetricFloatValue" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element name="int" type="xsdMetricIntValue" minOccurs="0" maxOccurs="unbounded" />
-            </xs:choice>
-        </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" /> <!-- for backwards compatibility -->
-        <xs:attribute name="ref" type="xs:IDREF" use="required" /><!-- 
+	<xs:complexType name="xsdMetricValue">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="float" type="xsdMetricFloatValue"
+					minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="int" type="xsdMetricIntValue"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" /> <!-- for backwards compatibility -->
+		<xs:attribute name="ref" type="xs:IDREF" use="required" /><!-- 
 			references the metric -->
-        <xs:attribute name="debugInfo" type="xs:string" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdMetricFloatValue">
+		<xs:simpleContent>
+			<xs:extension base="xs:float">
+				<xs:attribute name="ref" type="xs:IDREF" use="required" /> <!-- references the element -->
+				<xs:attribute name="debugInfo" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdMetricIntValue">
+		<xs:simpleContent>
+			<xs:extension base="xs:int">
+				<xs:attribute name="ref" type="xs:IDREF" use="required" /> <!-- references the element -->
+				<xs:attribute name="debugInfo" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdMetricThresholds">
+		<xs:sequence>
+			<xs:element name="threshold" type="xsdMetricThreshold"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdMetricThreshold">
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="metricId" type="xs:IDREF"
+			use="required" />
+		<xs:attribute name="metricLevel" type="xs:IDREF"
+			use="required" />
+		<xs:attribute name="lowerThreshold" type="xs:decimal"
+			default="0" />
+		<xs:attribute name="upperThreshold" type="xs:decimal"
+			default="0" />
+		<xs:attribute name="severity" type="xs:string" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdIssues">
+		<xs:sequence>
+			<xs:element name="elementIssues" type="xsdElementIssues"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="depencencyIssues"
+				type="xsdDependencyIssues" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="modelName" type="xs:string"
+			use="required" />
+		<xs:attribute name="numberOfIssues" type="xs:int"
+			use="required" />
+		<xs:attribute name="numberOfUnresolvedIssues"
+			type="xs:int" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdElementIssues">
+		<xs:sequence>
+			<xs:element name="issue" type="xsdSimpleElementIssue"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="duplicate" type="xsdDuplicateBlockIssue"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="cycleGroups"
+				type="xsdCycleGroupContainer" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="thresholdViolation"
+				type="xsdMetricThresholdViolationIssue" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdDependencyIssues">
+		<xs:sequence>
+			<xs:element name="issue" type="xsdDependencyIssue"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdIssue" abstract="true">
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="type" type="xs:IDREF" use="required" />
+		<xs:attribute name="provider" type="xs:IDREF"
+			use="required" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+		<xs:attribute name="description" type="xs:string" />
+		<xs:attribute name="line" type="xs:int" default="-1" />
+		<xs:attribute name="column" type="xs:int" default="-1" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdDependencyIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdIssue">
+				<xs:attribute name="dependencyType" type="xs:string" />
+				<xs:attribute name="from" type="xs:IDREF" />
+				<xs:attribute name="to" type="xs:IDREF" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdAbstractElementIssue"
+		abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdIssue" />
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdSimpleElementIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdAbstractElementIssue">
+				<xs:attribute name="affectedElement" type="xs:IDREF" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdMetricThresholdViolationIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdSimpleElementIssue">
+				<xs:attribute name="thresholdRef" type="xs:IDREF"
+					use="required" />
+				<xs:attribute name="metricValue" type="xs:decimal"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdDuplicateCodeBlockOccurrence">
+		<xs:attribute name="source" type="xs:IDREF" />
+		<xs:attribute name="startLine" type="xs:int" />
+		<xs:attribute name="blockSize" type="xs:int" />
+		<xs:attribute name="tolerance" type="xs:int" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdDuplicateBlockIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdAbstractElementIssue">
+				<xs:sequence>
+					<xs:element name="occurrence"
+						type="xsdDuplicateCodeBlockOccurrence" minOccurs="1"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:string"
+					use="required" />
+				<xs:attribute name="fqName" type="xs:string"
+					use="required" />
+				<xs:attribute name="blockSize" type="xs:int"
+					use="required" />
+				<xs:attribute name="numberOfOccurrences" type="xs:int"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdCycleGroupContainer">
+		<xs:sequence>
+			<xs:element name="cycleGroup" type="xsdCycleIssue"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="analyzerRef" type="xs:IDREF"
+			use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdCycleIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdAbstractElementIssue">
+				<xs:sequence>
+					<xs:element name="element" type="xsdCycleElement"
+						minOccurs="2" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="numberOfCyclicElements"
+					type="xs:int" use="required" />
+				<xs:attribute name="name" type="xs:string"
+					use="required" />
+				<xs:attribute name="fqName" type="xs:string"
+					use="required" />
+				<!-- additional attributes. Optional, so that older reports can also 
+					be read. -->
+				<xs:attribute name="structuralDebtIndex" type="xs:int"
+					use="optional" default="-1" />
+				<xs:attribute name="componentDependenciesToRemove"
+					type="xs:int" use="optional" default="-1" />
+				<xs:attribute name="parserDependenciesToRemove"
+					type="xs:int" use="optional" default="-1" />
+				<xs:attribute name="scope" type="xs:IDREF" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="xsdCycleElement">
+		<xs:attribute name="ref" type="xs:IDREF" use="required" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdResolutions">
+		<xs:sequence>
+			<xs:element name="resolution" type="xsdResolution"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="numberOfResolutions" type="xs:int"
+			use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdResolution">
+		<xs:sequence>
+			<xs:element name="elementPattern" type="xsdElementPattern" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="dependencyPattern" type="xsdDependencyPattern" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="matching" type="xsdMatching" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string" use="required" /> 
+		<xs:attribute name="prio" type="xs:string" use="optional" />           
+		<xs:attribute name="fqName" type="xs:string" use="required" />
+		<xs:attribute name="issueIds" type="xs:IDREFS" />
+		<xs:attribute name="description" type="xs:string" />
+		<xs:attribute name="information" type="xs:string" />
+		<xs:attribute name="assignee" type="xs:string" />	                 
+		<xs:attribute name="date" type="xs:dateTime" use="required" />
+		<xs:attribute name="applicable" type="xs:boolean" default="false" />  <!--  deprecated since 3.4 -->
+		<xs:attribute name="matchingElementsCount" type="xs:int" use="optional" default="-1"/>
+		<xs:attribute name="task" type="xs:boolean" default="false" />		  <!-- deprecated since 3.4 -->
+		<xs:attribute name="refactoring" type="xs:boolean" default="false" /> <!-- deprecated since 3.4 -->
+		<xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" /> <!-- deprecated since 3.4 -->
+		<xs:attribute name="descriptor" type="xs:string" />
+		<xs:attribute name="debugInfo" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdIgnore">
+		<xs:complexContent>
+			<xs:extension base="xsdResolution"/>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdTask" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="xsdResolution" />
+		</xs:complexContent>
+	</xs:complexType>
+		
+	<xs:complexType name="xsdToDo">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdFixMe">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdTask" >
+				<xs:attribute name="status" type="xs:string" use="required" />
+				<xs:attribute name="numberOfPotentiallyDoneElements" type="xs:int" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdDeleteRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+			<xs:attribute name="affectedParserDependencyCount" type="xs:int" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdMoveRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+				<xs:attribute name="targetRootDirectoryFqName" type="xs:string" use="required" />
+				<xs:attribute name="moveToParentName" type="xs:string" use="required" />
+				<xs:attribute name="elementKind" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdRenameRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdRefactoring">
+				<xs:attribute name="newName" type="xs:string" use="required" />
+				<xs:attribute name="elementKind" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdMoveRenameRefactoring">
+		<xs:complexContent>
+			<xs:extension base="xsdMoveRefactoring">
+				<xs:attribute name="newName" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:simpleType name="xsdDependencyPatternType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Wildcard"/>
+            <xs:enumeration value="ParserDependencyEndpoint"/>
+         </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xsdDependencyPattern">
+        <xs:attribute name="type" type="xsdDependencyPatternType"/>
+        <xs:attribute name="from" type="xs:string" use="required"/>
+        <xs:attribute name="to" type="xs:string" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="xsdMetricFloatValue">
-        <xs:simpleContent>
-            <xs:extension base="xs:float">
-                <xs:attribute name="ref" type="xs:IDREF" use="required" /> <!-- references the element -->
-                <xs:attribute name="debugInfo" type="xs:string" />
+    <xs:simpleType name="xsdElementPatternType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Wildcard"/>
+            <xs:enumeration value="FullyQualifiedName"/>
+         </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xsdElementPattern">
+    	<xs:simpleContent>
+        	<xs:extension base="xs:string">
+            	<xs:attribute name="type" type="xsdElementPatternType"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
 
-    <xs:complexType name="xsdMetricIntValue">
-        <xs:simpleContent>
-            <xs:extension base="xs:int">
-                <xs:attribute name="ref" type="xs:IDREF" use="required" /> <!-- references the element -->
-                <xs:attribute name="debugInfo" type="xs:string" />
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdMetricThresholds">
+    <xs:complexType name="xsdMatching">
         <xs:sequence>
-            <xs:element name="threshold" type="xsdMetricThreshold" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="elementPattern" type="xsdElementPattern" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
+        <xs:attribute name="info" type="xs:string" use="required" />
     </xs:complexType>
 
-    <xs:complexType name="xsdMetricThreshold">
-        <xs:attribute name="id" type="xs:ID" use="required" />
-        <xs:attribute name="metricId" type="xs:IDREF" use="required" />
-        <xs:attribute name="metricLevel" type="xs:IDREF" use="required" />
-        <xs:attribute name="lowerThreshold" type="xs:decimal" default="0" />
-        <xs:attribute name="upperThreshold" type="xs:decimal" default="0" />
-        <xs:attribute name="debugInfo" type="xs:string" />
-    </xs:complexType>
+	<xs:complexType name="xsdMapEntry">
+		<xs:attribute name="key" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
 
-    <xs:complexType name="xsdIssues">
-        <xs:sequence>
-            <xs:element name="elementIssues" type="xsdElementIssues" minOccurs="0" maxOccurs="1" />
-            <xs:element name="depencencyIssues" type="xsdDependencyIssues" minOccurs="0" maxOccurs="1" />
-        </xs:sequence>
-        <xs:attribute name="modelName" type="xs:string" use="required" />
-        <xs:attribute name="numberOfIssues" type="xs:int" use="required" />
-        <xs:attribute name="numberOfUnresolvedIssues" type="xs:int" use="required" />
-    </xs:complexType>
+	<xs:complexType name="xsdMap">
+		<xs:sequence>
+			<xs:element name="entry" type="xsdMapEntry" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-    <xs:complexType name="xsdElementIssues">
-        <xs:sequence>
-            <xs:element name="issue" type="xsdSimpleElementIssue" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="duplicate" type="xsdDuplicateBlockIssue" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="cycleGroups" type="xsdCycleGroupContainer" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="thresholdViolation" type="xsdMetricThresholdViolationIssue" minOccurs="0"
-                maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="xsdSoftwareSystemReport">
+		<xs:sequence>
+			<xs:element name="reportContextInfo" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="0" />
+			<xs:element name="systemMetaData" type="xsdMap"
+				minOccurs="0" maxOccurs="1" /><!-- allows to add arbitrary info -->
+			<xs:element name="metaData"
+				type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
+			<xs:element name="features" type="xsdFeatures"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="analyzers" type="xsdAnalyzers"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="plugins" type="xsdPlugins" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="duplicateCodeConfiguration"
+				type="xsdDuplicateCodeConfiguration" minOccurs="1" maxOccurs="1" />
+			<xs:element name="scriptRunnerConfiguration"
+				type="xsdScriptRunnerConfiguration" minOccurs="1" maxOccurs="1" />
+			<xs:element name="architectureCheckConfiguration"
+				type="xsdArchitectureCheckConfiguration" minOccurs="1" maxOccurs="1" />
+			<xs:element name="metricThresholds"
+				type="xsdMetricThresholds" minOccurs="0" maxOccurs="1" />
+			<xs:element name="cycleGroupAnalyzerConfiguration"
+				type="xsdCycleGroupAnalyzerConfiguration" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="elementKinds" type="xsdElementKinds"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="workspace" type="xsdWorkspace"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="systemElements" type="xsdSystemElements"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="moduleElements" type="xsdModuleElements"
+				minOccurs="1" maxOccurs="unbounded" />
+			<xs:element name="externalSystemScopeElements"
+				type="xsdExternalSystemScopeElements" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="externalModuleScopeElements"
+				type="xsdExternalModuleScopeElements" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="systemMetricValues"
+				type="xsdSystemMetricValues" minOccurs="0" maxOccurs="1" />
+			<xs:element name="moduleMetricValues"
+				type="xsdModuleMetricValues" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="issues" type="xsdIssues" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="resolutions" type="xsdResolutions"
+				minOccurs="0" maxOccurs="1" />			
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" />
+		<xs:attribute name="systemId" type="xs:string"
+			use="required" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="version" type="xs:string"
+			use="required" />
+		<xs:attribute name="systemPath" type="xs:string"
+			use="required" />
+		<xs:attribute name="timestamp" type="xs:dateTime"
+			use="required" />
+		<xs:attribute name="currentVirtualModel" type="xs:string"
+			use="required" />
+		<xs:attribute name="systemDescription" type="xs:string" />
+		<xs:attribute name="workspaceProfile" type="xs:string" />
+		<xs:attribute name="qualityModel" type="xs:string" />
+		<xs:attribute name="analyzerExecutionLevel"
+			type="xsdAnalyzerExecutionLevel" default="full" />		
+	</xs:complexType>
 
-    <xs:complexType name="xsdDependencyIssues">
-        <xs:sequence>
-            <xs:element name="issue" type="xsdDependencyIssue" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="xsdIssue" abstract="true">
-        <xs:attribute name="id" type="xs:ID" use="required" />
-        <xs:attribute name="type" type="xs:IDREF" use="required" />
-        <xs:attribute name="provider" type="xs:IDREF" use="required" />
-        <xs:attribute name="debugInfo" type="xs:string" />
-        <xs:attribute name="description" type="xs:string" />
-        <xs:attribute name="line" type="xs:int" default="-1" />
-        <xs:attribute name="column" type="xs:int" default="-1" />
-    </xs:complexType>
-
-    <xs:complexType name="xsdDependencyIssue">
-        <xs:complexContent>
-            <xs:extension base="xsdIssue">
-                <xs:attribute name="dependencyType" type="xs:string" />
-                <xs:attribute name="from" type="xs:IDREF" />
-                <xs:attribute name="to" type="xs:IDREF" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdAbstractElementIssue" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="xsdIssue" />
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdSimpleElementIssue">
-        <xs:complexContent>
-            <xs:extension base="xsdAbstractElementIssue">
-                <xs:attribute name="affectedElement" type="xs:IDREF" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdMetricThresholdViolationIssue">
-        <xs:complexContent>
-            <xs:extension base="xsdSimpleElementIssue">
-                <xs:attribute name="thresholdRef" type="xs:IDREF" use="required" />
-                <xs:attribute name="metricValue" type="xs:decimal" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdDuplicateCodeBlockOccurrence">
-        <xs:attribute name="source" type="xs:IDREF" />
-        <xs:attribute name="startLine" type="xs:int" />
-        <xs:attribute name="blockSize" type="xs:int" />
-        <xs:attribute name="tolerance" type="xs:int" />
-        <xs:attribute name="debugInfo" type="xs:string" />
-    </xs:complexType>
-
-    <xs:complexType name="xsdDuplicateBlockIssue">
-        <xs:complexContent>
-            <xs:extension base="xsdAbstractElementIssue">
-                <xs:sequence>
-                    <xs:element name="occurrence" type="xsdDuplicateCodeBlockOccurrence" minOccurs="1"
-                        maxOccurs="unbounded" />
-                </xs:sequence>
-                <xs:attribute name="name" type="xs:string" use="required" />
-                <xs:attribute name="fqName" type="xs:string" use="required" />
-                <xs:attribute name="blockSize" type="xs:int" use="required" />
-                <xs:attribute name="numberOfOccurrences" type="xs:int" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdCycleGroupContainer">
-        <xs:sequence>
-            <xs:element name="cycleGroup" type="xsdCycleIssue" minOccurs="1" maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="analyzerRef" type="xs:IDREF" use="required" />
-    </xs:complexType>
-
-    <xs:complexType name="xsdCycleIssue">
-        <xs:complexContent>
-            <xs:extension base="xsdAbstractElementIssue">
-                <xs:sequence>
-                    <xs:element name="element" type="xsdCycleElement" minOccurs="2" maxOccurs="unbounded" />
-                </xs:sequence>
-                <xs:attribute name="numberOfCyclicElements" type="xs:int" use="required" />
-                <xs:attribute name="name" type="xs:string" use="required" />
-                <xs:attribute name="fqName" type="xs:string" use="required" />
-                <!--  additional attributes. Optional, so that older reports can also be read.  -->
-                <xs:attribute name="structuralDebtIndex" type="xs:int" use="optional" default="-1"/>
-                <xs:attribute name="componentDependenciesToRemove" type="xs:int" use="optional" default="-1" />
-                <xs:attribute name="parserDependenciesToRemove" type="xs:int" use="optional" default="-1"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="xsdCycleElement">
-        <xs:attribute name="ref" type="xs:IDREF" use="required" />
-        <xs:attribute name="debugInfo" type="xs:string" />
-    </xs:complexType>
-
-    <xs:complexType name="xsdResolutions">
-        <xs:sequence>
-            <xs:element name="resolution" type="xsdResolution" minOccurs="1" maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="numberOfResolutions" type="xs:int" use="required" />
-    </xs:complexType>
-
-    <xs:complexType name="xsdResolution">
-        <xs:attribute name="type" type="xs:string" use="required" />
-        <xs:attribute name="prio" type="xs:string" use="required" />
-        <xs:attribute name="fqName" type="xs:string" use="required" />
-        <xs:attribute name="issueIds" type="xs:IDREFS" />
-        <xs:attribute name="description" type="xs:string" />
-        <xs:attribute name="information" type="xs:string" />
-        <xs:attribute name="assignee" type="xs:string" />
-        <xs:attribute name="date" type="xs:dateTime" use="required" />
-        <xs:attribute name="applicable" type="xs:boolean" default="false" />
-        <xs:attribute name="task" type="xs:boolean" default="false" />
-        <xs:attribute name="refactoring" type="xs:boolean" default="false" />
-        <xs:attribute name="numberOfAffectedParserDependencies" type="xs:int" default="-1" />
-        <xs:attribute name="debugInfo" type="xs:string" />
-    </xs:complexType>
-    
-    <xs:complexType name="xsdMapEntry">
-    	<xs:attribute name="key" type="xs:string" use="required" />
-    	<xs:attribute name="value" type="xs:string" use="required" />
-    </xs:complexType>
-    
-    <xs:complexType name="xsdMap">
-    	<xs:sequence>
-            <xs:element name="entry" type="xsdMapEntry" minOccurs="1" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="xsdSoftwareSystemReport">
-        <xs:sequence>
-            <xs:element name="systemMetaData" type="xsdMap" minOccurs="0" maxOccurs="1" /><!-- allows to add arbitrary info -->
-            <xs:element name="metaData" type="export:xsdExportMetaData" minOccurs="1" maxOccurs="1" />
-            <xs:element name="features" type="xsdFeatures" minOccurs="1" maxOccurs="1" />
-            <xs:element name="analyzers" type="xsdAnalyzers" minOccurs="1" maxOccurs="1" />
-            <xs:element name="plugins" type="xsdPlugins" minOccurs="0" maxOccurs="1" />
-            <xs:element name="duplicateCodeConfiguration" type="xsdDuplicateCodeConfiguration" minOccurs="1"
-                maxOccurs="1" />
-            <xs:element name="scriptRunnerConfiguration" type="xsdScriptRunnerConfiguration" minOccurs="1"
-                maxOccurs="1" />
-            <xs:element name="architectureCheckConfiguration" type="xsdArchitectureCheckConfiguration"
-                minOccurs="1" maxOccurs="1" />
-            <xs:element name="metricThresholds" type="xsdMetricThresholds" minOccurs="0" maxOccurs="1" />
-            <xs:element name="elementKinds" type="xsdElementKinds" minOccurs="1" maxOccurs="1" />
-            <xs:element name="workspace" type="xsdWorkspace" minOccurs="1" maxOccurs="1" />
-            <xs:element name="systemElements" type="xsdSystemElements" minOccurs="0" maxOccurs="1" />
-            <xs:element name="moduleElements" type="xsdModuleElements" minOccurs="1" maxOccurs="unbounded" />
-            <xs:element name="externalSystemScopeElements" type="xsdExternalSystemScopeElements"
-                minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="externalModuleScopeElements" type="xsdExternalModuleScopeElements"
-                minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="systemMetricValues" type="xsdSystemMetricValues" minOccurs="0" maxOccurs="1" />
-            <xs:element name="moduleMetricValues" type="xsdModuleMetricValues" minOccurs="0"
-                maxOccurs="unbounded" />
-            <xs:element name="issues" type="xsdIssues" minOccurs="0" maxOccurs="1" />
-            <xs:element name="resolutions" type="xsdResolutions" minOccurs="0" maxOccurs="1" />
-        </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" />
-        <xs:attribute name="systemId" type="xs:string" use="required" />
-        <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="version" type="xs:string" use="required" />
-        <xs:attribute name="systemPath" type="xs:string" use="required" />
-        <xs:attribute name="timestamp" type="xs:dateTime" use="required" />
-        <xs:attribute name="currentVirtualModel" type="xs:string" use="required" />
-        <xs:attribute name="systemDescription" type="xs:string" />
-        <xs:attribute name="workspaceProfile" type="xs:string" />
-        <xs:attribute name="qualityModel" type="xs:string" />
-        <xs:attribute name="analyzerExecutionLevel" type="xsdAnalyzerExecutionLevel" default="full" />
-    </xs:complexType>
-
-    <xs:element name="report" type="xsdSoftwareSystemReport" />
+	<xs:element name="report" type="xsdSoftwareSystemReport" />
 </xs:schema>

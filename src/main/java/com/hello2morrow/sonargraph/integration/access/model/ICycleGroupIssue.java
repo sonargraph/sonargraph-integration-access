@@ -26,4 +26,6 @@ public interface ICycleGroupIssue extends INamedElementIssue
     public int getParserDependenciesToRemove();
 
     public int getComponentDependenciesToRemove();
+
+    public INamedElement getScope();
 }

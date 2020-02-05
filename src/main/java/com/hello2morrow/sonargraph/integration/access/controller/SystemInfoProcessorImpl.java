@@ -17,6 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,9 +27,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
+import com.hello2morrow.sonargraph.integration.access.model.IAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IFeature;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -43,6 +45,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
@@ -76,12 +79,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections
-                    .unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).collect(Collectors.toList()));
+            return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).collect(toList()));
         }
 
-        return Collections.unmodifiableList(
-                softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter).collect(Collectors.toList()));
+        return Collections
+                .unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter).collect(toList()));
     }
 
     @Override
@@ -100,11 +102,10 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         if (filter == null)
         {
             return softwareSystem.getIssues().entrySet().stream().filter(entry -> entry.getKey().getCategory().getName().equals("ThresholdViolation"))
-                    .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).collect(Collectors.toList());
+                    .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).collect(toList());
         }
         return softwareSystem.getIssues().entrySet().stream().filter(entry -> entry.getKey().getCategory().getName().equals("ThresholdViolation"))
-                .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).filter(filter)
-                .collect(Collectors.toList());
+                .flatMap(entry -> entry.getValue().stream()).map(issue -> (IThresholdViolationIssue) issue).filter(filter).collect(toList());
     }
 
     @Override
@@ -113,11 +114,25 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         if (filter == null)
         {
             return Collections.unmodifiableList(
-                    softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream()).collect(Collectors.toList()));
+                    softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream()).collect(toList()));
+        }
+
+        return Collections.unmodifiableList(
+                softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream()).filter(filter).collect(toList()));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IResolution> List<T> getResolutions(final Predicate<T> filter, final Class<T> resolutionClass)
+    {
+        if (filter == null)
+        {
+            return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
+                    .filter(r -> resolutionClass.isAssignableFrom(r.getClass())).map(r -> (T) r).collect(toList()));
         }
 
         return Collections.unmodifiableList(softwareSystem.getResolutions().values().stream().flatMap(resolutions -> resolutions.stream())
-                .filter(filter).collect(Collectors.toList()));
+                .filter(r -> resolutionClass.isAssignableFrom(r.getClass())).map(r -> (T) r).filter(filter).collect(toList()));
     }
 
     @Override
@@ -170,7 +185,7 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
             filter2 = (final ICycleGroupIssue group) -> true;
         }
         return getIssues(issue -> issue instanceof ICycleGroupIssue).stream().map(issue -> (ICycleGroupIssue) issue).filter(filter2)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -302,5 +317,17 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
         assert module != null : "Parameter 'module' of method 'createModuleInfoProcessor' must not be null";
         assert module instanceof ModuleImpl : "Unexpected class in method 'createModuleInfoProcessor': " + module.getClass();
         return new ModuleInfoProcessorImpl(this, (ModuleImpl) module);
+    }
+
+    @Override
+    public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations()
+    {
+        return softwareSystem.getAnalyzerConfigurations();
+    }
+
+    @Override
+    public Map<String, IPluginConfiguration> getPluginConfigurations()
+    {
+        return softwareSystem.getPluginConfigurations();
     }
 }

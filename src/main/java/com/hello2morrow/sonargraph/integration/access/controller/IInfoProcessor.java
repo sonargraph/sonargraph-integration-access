@@ -51,6 +51,8 @@ public interface IInfoProcessor
      */
     public List<IResolution> getResolutions(Predicate<IResolution> filter);
 
+    public <T extends IResolution> List<T> getResolutions(Predicate<T> filter, Class<T> resolutionClass);
+
     /**
      * @param issue the issue - must not be 'null'
      * @return the resolution or 'null' if the issue has no resolution

@@ -45,17 +45,26 @@ import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLev
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IComponentFilter;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IDeleteRefactoring;
+import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
+import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IFilter;
+import com.hello2morrow.sonargraph.integration.access.model.IIgnoreDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
+import com.hello2morrow.sonargraph.integration.access.model.IMatching;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId.SortDirection;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricLevel;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.IModule;
+import com.hello2morrow.sonargraph.integration.access.model.IMoveRefactoring;
+import com.hello2morrow.sonargraph.integration.access.model.IMoveRenameRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IRenameRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.IToDoDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
@@ -390,8 +399,9 @@ public final class ReportReaderTest
             final Optional<IComponentFilter> issueFilterOpt = softwareSystem.getIssueFilter();
             assertTrue("Issue filter must exist", issueFilterOpt.isPresent());
             final IComponentFilter issueFilter = issueFilterOpt.get();
-            assertEquals("Wrong description", "Ignore issues of internal components containing legacy/generated code", issueFilter.getDescription());
-            assertEquals("Wrong information", "Ignoring issues of 2 internal component(s) (processed 9)", issueFilter.getInformation());
+            assertEquals("Wrong description", "Ignore analysis issues of internal components containing legacy/generated code",
+                    issueFilter.getDescription());
+            assertEquals("Wrong information", "Ignoring analysis issues of 2 internal component(s) (processed 9)", issueFilter.getInformation());
             assertEquals("Wrong number of included elements", 7, issueFilter.getNumberOfIncludedElements());
             assertEquals("Wrong number of excluded elements", 2, issueFilter.getNumberOfExcludedElements());
             final List<IWildcardPattern> includePatterns = issueFilter.getIncludePatterns();
@@ -454,6 +464,72 @@ public final class ReportReaderTest
         assertExternalTodo(todos.get(index++), "Plugin External Todo", PluginExternalImpl.class,
                 "Workspace:External [com.hello2morrow.sonargraph.plugin.swagger]");
         assertExternalTodo(todos.get(index), "TODO on Java External", NamedElementImpl.class, "Workspace:External [Java]:[Unknown]:java:io:File");
+    }
+
+    @Test
+    public void processReportWithResolutionPatterns()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_RESOLUTION_PATTERNS));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<IResolution> ignores = systemProcessor.getResolutions(r -> r.getType() == ResolutionType.IGNORE);
+        assertEquals("Wrong number of ignores", 9, ignores.size());
+
+        {
+            final IResolution ignoreArchViolations = ignores.get(0);
+            assertEquals("Wrong description", "C11 -> C22", ignoreArchViolations.getDescription());
+            final List<IDependencyPattern> dependencyPatterns = ignoreArchViolations.getDependencyPatterns();
+            assertEquals("Wrong number of dependency patterns", 4, dependencyPatterns.size());
+        }
+        {
+            final IResolution ignoreFixme = ignores.get(1);
+            assertEquals("Wrong description", "Only present in baseline", ignoreFixme.getDescription());
+            final List<IElementPattern> elementPatterns = ignoreFixme.getElementPatterns();
+            assertEquals("Wrong number of element patterns", 1, elementPatterns.size());
+        }
+        {
+            final IResolution ignoreCycle = ignores.get(5);
+            assertEquals("Wrong description", "Unmodified", ignoreCycle.getDescription());
+            final IMatching matching = ignoreCycle.getMatching();
+            assertNotNull("Matching missing", matching);
+            final List<IElementPattern> elementPatterns = matching.getPatterns();
+            assertEquals("Wrong number of matching patterns", 2, elementPatterns.size());
+        }
+    }
+
+    @Test
+    public void processReportWithResolutionTypes()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_INDIVIDUAL_RESOLUTION_TYPES));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+
+        final List<IResolution> resolutions = systemProcessor.getResolutions(null);
+        assertEquals("Wrong number of resolutions", 7, resolutions.size());
+
+        final List<IIgnoreDefinition> ignores = systemProcessor.getResolutions(null, IIgnoreDefinition.class);
+        assertEquals("Wrong number of ignore resolutions", 1, ignores.size());
+
+        final List<IToDoDefinition> todos = systemProcessor.getResolutions(null, IToDoDefinition.class);
+        assertEquals("Wrong number of todo resolutions", 1, todos.size());
+
+        final List<IDeleteRefactoring> deletes = systemProcessor.getResolutions(null, IDeleteRefactoring.class);
+        assertEquals("Wrong number of delete refactorings", 1, deletes.size());
+
+        final List<IRenameRefactoring> renames = systemProcessor.getResolutions(null, IRenameRefactoring.class);
+        assertEquals("Wrong number of rename refactorings", 1, renames.size());
+
+        final List<IMoveRefactoring> moves = systemProcessor.getResolutions(null, IMoveRefactoring.class);
+        assertEquals("Wrong number of move refactorings (move + move/rename)", 1, moves.size());
+
+        final List<IMoveRenameRefactoring> moveRename = systemProcessor.getResolutions(null, IMoveRenameRefactoring.class);
+        assertEquals("Wrong number of move/rename refactorings", 1, moveRename.size());
     }
 
     private void assertExternalTodo(final IResolution todo, final String description, final Class<?> clazzOfAffectedElement,

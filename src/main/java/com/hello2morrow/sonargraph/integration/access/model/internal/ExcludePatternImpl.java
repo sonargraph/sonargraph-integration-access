@@ -21,8 +21,9 @@ public final class ExcludePatternImpl extends AbstractWildcardPatternImpl
 {
     private static final long serialVersionUID = 1L;
 
-    public ExcludePatternImpl(final String name, final int numberOfMatches)
+    public ExcludePatternImpl(final String fqName, final String kind, final String presentationKind, final String name, final String presentationName,
+            final int numberOfMatches)
     {
-        super(name, numberOfMatches);
+        super(fqName, kind, presentationKind, name, presentationName, numberOfMatches);
     }
 }

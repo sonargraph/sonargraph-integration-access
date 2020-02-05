@@ -18,7 +18,6 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -280,36 +279,6 @@ final class ReportDifferenceProcessorImpl implements IReportDifferenceProcessor
             final ThresholdViolationIssue baselineThresholdViolationIssue = (ThresholdViolationIssue) baseline;
             final ThresholdViolationIssue currentThresholdViolationIssue = (ThresholdViolationIssue) current;
             processThreshold(baselineThresholdViolationIssue, currentThresholdViolationIssue, issueDeltaImpl);
-        }
-    }
-
-    private static final class IssueComparator implements Comparator<IIssue>
-    {
-        IssueComparator()
-        {
-            super();
-        }
-
-        @Override
-        public int compare(final IIssue i1, final IIssue i2)
-        {
-            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
-            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
-
-            int compared = i1.getLine() - i2.getLine();
-            if (compared == 0)
-            {
-                compared = i1.getColumn() - i2.getColumn();
-                if (compared == 0)
-                {
-                    compared = i1.getName().compareToIgnoreCase(i2.getName());
-                    if (compared == 0)
-                    {
-                        compared = 1;
-                    }
-                }
-            }
-            return compared;
         }
     }
 

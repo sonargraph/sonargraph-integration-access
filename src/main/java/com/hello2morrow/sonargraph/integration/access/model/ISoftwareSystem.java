@@ -67,4 +67,7 @@ public interface ISoftwareSystem extends IBasicSoftwareSystemInfo, INamedElement
     public Map<String, String> getMetaData();
 
     public Map<String, IPluginExternal> getPluginExternals();
+
+    /** Info that describes the context when the system was created. */
+    public String getContextInfo();
 }

@@ -41,7 +41,6 @@ import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLev
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
-import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -51,12 +50,12 @@ import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricValue;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
+import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
-import com.hello2morrow.sonargraph.integration.access.model.Priority;
-import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
@@ -65,7 +64,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCo
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IncludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueCategoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueFilterImpl;
@@ -88,11 +86,11 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElemen
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PhysicalRecursiveElementImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.PluginConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProductionCodeFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
-import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
@@ -102,7 +100,9 @@ import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEven
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdArchitectureCheckConfiguration;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdBooleanEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupAnalyzerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleGroupContainer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdCycleIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDependencyIssue;
@@ -117,6 +117,8 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExte
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalModuleScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternalSystemScopeElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFilter;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdFloatEntry;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIntEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
@@ -141,15 +143,16 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdName
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPhysicalRecursiveElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugin;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
-import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdResolution;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdScriptRunnerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdStringEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
@@ -309,23 +312,27 @@ public final class XmlReportReader extends XmlAccess
         assert xsdReport != null : "Parameter 'xsdReport' of method 'convertXmlReportToPojo' must not be null";
         assert result != null : "Parameter 'result' of method 'convertXmlReportToPojo' must not be null";
 
-        final String systemDescription = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
+        String description = xsdReport.getDescription();
+        if (description == null)
+        {
+            description = xsdReport.getSystemDescription() != null ? xsdReport.getSystemDescription().trim() : "";
+        }
 
         final SoftwareSystemImpl softwareSystemImpl;
         if (basePath == null)
         {
-            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), description,
                     xsdReport.getSystemPath(), xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
                     xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         }
         else
         {
-            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), systemDescription,
+            softwareSystemImpl = new SoftwareSystemImpl("SoftwareSystem", "System", xsdReport.getSystemId(), xsdReport.getName(), description,
                     xsdReport.getSystemPath(), basePath, xsdReport.getVersion(), xsdReport.getTimestamp().toGregorianCalendar().getTimeInMillis(),
                     xsdReport.getCurrentVirtualModel(), convertXmlExecutionLevel(xsdReport.getAnalyzerExecutionLevel()));
         }
         softwareSystemImpl.addElement(softwareSystemImpl);
-
+        softwareSystemImpl.setContextInfo(xsdReport.getReportContextInfo() != null ? xsdReport.getReportContextInfo() : "");
         processSystemMetaData(softwareSystemImpl, xsdReport);
         processAnalyzers(softwareSystemImpl, xsdReport);
         processPlugins(softwareSystemImpl, xsdReport);
@@ -333,6 +340,8 @@ public final class XmlReportReader extends XmlAccess
         processDuplicateCodeConfiguration(softwareSystemImpl, xsdReport);
         processScriptRunnerConfiguration(softwareSystemImpl, xsdReport);
         processArchitectureCheckConfiguration(softwareSystemImpl, xsdReport);
+        processCycleGroupAnalyzerConfigurations(softwareSystemImpl, xsdReport);
+        processPluginConfigurations(softwareSystemImpl, xsdReport);
 
         final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -353,7 +362,8 @@ public final class XmlReportReader extends XmlAccess
         processMetricThresholds(softwareSystemImpl, xsdReport);
 
         processIssues(softwareSystemImpl, xsdReport, result);
-        processResolutions(softwareSystemImpl, xsdReport, result);
+        final ResolutionConverter resolutionConverter = new ResolutionConverter(softwareSystemImpl, xsdReport, globalXmlIdToIssueMap);
+        resolutionConverter.convert(result);
 
         globalXmlToElementMap.clear();
         globalXmlIdToIssueMap.clear();
@@ -432,8 +442,13 @@ public final class XmlReportReader extends XmlAccess
         assert xsdElementKind != null : "Parameter 'xsdElementKind' of method 'createNamedElementImpl' must not be null";
 
         final NamedElementImpl namedElementImpl = new NamedElementImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
-                xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName());
+                xsdNamedElement.getName(), xsdNamedElement.getPresentationName(), xsdNamedElement.getFqName(),
+                extractImageResourceName(xsdElementKind));
         namedElementContainerImpl.addElement(namedElementImpl);
+        if (xsdNamedElement.getOriginalFqName() != null)
+        {
+            namedElementImpl.setOriginalFqName(xsdNamedElement.getOriginalFqName());
+        }
         globalXmlToElementMap.put(xsdNamedElement, namedElementImpl);
     }
 
@@ -447,7 +462,11 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind sourceKind = (XsdElementKind) xsdSourceFile.getKind();
         final SourceFileImpl sourceFileImpl = new SourceFileImpl(sourceKind.getStandardKind(), sourceKind.getPresentationKind(),
                 xsdSourceFile.getName(), xsdSourceFile.getPresentationName(), xsdSourceFile.getFqName(), xsdSourceFile.isLocationOnly(),
-                rootDirectoryImpl.getRelativePath());
+                rootDirectoryImpl.getRelativePath(), extractImageResourceName(sourceKind));
+        if (xsdSourceFile.getOriginalFqName() != null)
+        {
+            sourceFileImpl.setOriginalFqName(xsdSourceFile.getOriginalFqName());
+        }
         rootDirectoryImpl.addSourceFile(sourceFileImpl);
         softwareSystemImpl.addSourceFile(sourceFileImpl, sourceFileImpl);
         namedElementContainerImpl.addElement(sourceFileImpl);
@@ -463,9 +482,14 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdProgrammingElement);
         final ProgrammingElementImpl programmingElementImpl = new ProgrammingElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdProgrammingElement.getName(), xsdProgrammingElement.getPresentationName(),
-                xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine());
+                xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine(), extractImageResourceName(xsdElementKind));
         programmingElementContainer.addProgrammingElement(programmingElementImpl);
         namedElementContainerImpl.addElement(programmingElementImpl);
+
+        if (xsdProgrammingElement.getOriginalFqName() != null)
+        {
+            programmingElementImpl.setOriginalFqName(xsdProgrammingElement.getOriginalFqName());
+        }
         globalXmlToElementMap.put(xsdProgrammingElement, programmingElementImpl);
     }
 
@@ -482,7 +506,7 @@ public final class XmlReportReader extends XmlAccess
         final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
         final PhysicalRecursiveElementImpl physicalRecursiveElementImpl = new PhysicalRecursiveElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdPhysicalRecursiveElement.getName(), xsdPhysicalRecursiveElement.getPresentationName(),
-                xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly());
+                xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly(), extractImageResourceName(xsdElementKind));
 
         final String nextRelativeDirectory = xsdPhysicalRecursiveElement.getRelativeDirectoryPath();
         if (nextRelativeDirectory != null)
@@ -507,7 +531,7 @@ public final class XmlReportReader extends XmlAccess
 
         final XsdElementKind xsdElementKind = (XsdElementKind) xsdRootDirectory.getKind();
         final RootDirectoryImpl rootDirectoryImpl = new RootDirectoryImpl(xsdElementKind.getStandardKind(), xsdElementKind.getPresentationKind(),
-                xsdRootDirectory.getPresentationName(), xsdRootDirectory.getFqName());
+                xsdRootDirectory.getPresentationName(), xsdRootDirectory.getFqName(), extractImageResourceName(xsdElementKind));
         languageBasedContainerImpl.addRootDirectory(rootDirectoryImpl);
         languageBasedContainerImpl.addElement(rootDirectoryImpl);
         globalXmlToElementMap.put(xsdRootDirectory, rootDirectoryImpl);
@@ -606,86 +630,35 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getExclude())
         {
-            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
+                    nextXsdPattern.getNumberOfMatches());
             filter.addExcludePattern(pattern);
         }
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getInclude())
         {
-            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getValue(), nextXsdPattern.getNumberOfMatches());
+            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
+                    xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
+                    nextXsdPattern.getNumberOfMatches());
             filter.addIncludePattern(pattern);
         }
     }
 
-    private void processResolutions(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final Result result)
-    {
-        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processResolutions' must not be null";
-        assert report != null : "Parameter 'report' of method 'processResolutions' must not be null";
-        assert result != null : "Parameter 'result' of method 'processResolutions' must not be null";
-
-        if (report.getResolutions() == null)
-        {
-            //no resolutions to be processed
-            return;
-        }
-
-        for (final XsdResolution nextResolution : report.getResolutions().getResolution())
-        {
-            ResolutionType type;
-            if (nextResolution.isRefactoring())
-            {
-                type = ResolutionType.REFACTORING;
-            }
-            else
-            {
-                try
-                {
-                    type = ResolutionType.valueOf(nextResolution.getType().toUpperCase());
-                }
-                catch (final Exception e)
-                {
-                    LOGGER.error("Failed to process resolution type '" + nextResolution.getType() + "'", e);
-                    result.addError(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                            "Resolution type '" + nextResolution.getType() + "' is not supported and will be ignored.");
-                    continue;
-                }
-            }
-
-            Priority priority;
-            try
-            {
-                priority = Priority.valueOf(Utility.convertStandardNameToConstantName(nextResolution.getPrio()));
-            }
-            catch (final Exception e)
-            {
-                LOGGER.error("Failed to process priority type '" + nextResolution.getPrio() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                        "Priority type '" + nextResolution.getPrio() + "' is not supported, setting to '" + Priority.NONE + "'");
-                priority = Priority.NONE;
-            }
-
-            final List<IIssue> issues = new ArrayList<>();
-            for (final Object nextXsdIssue : nextResolution.getIssueIds())
-            {
-                final XsdIssue xsdIssue = (XsdIssue) nextXsdIssue;
-                final IssueImpl nextIssueImpl = globalXmlIdToIssueMap.get(xsdIssue);
-                assert nextIssueImpl != null : "No issue with id '" + xsdIssue.getId() + "' exists";
-                nextIssueImpl.setResolutionType(type);
-                issues.add(nextIssueImpl);
-            }
-
-            final ResolutionImpl resolution = new ResolutionImpl(nextResolution.getFqName(), type, priority, issues, nextResolution.isApplicable(),
-                    nextResolution.getNumberOfAffectedParserDependencies(), nextResolution.getDescription(), nextResolution.getAssignee(),
-                    nextResolution.getDate().toString());
-            softwareSystem.addResolution(resolution);
-        }
-    }
-
-    private static void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processAnalyzers(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processAnalyzers' must not be null";
         assert report != null : "Parameter 'report' of method 'processAnalyzers' must not be null";
-        report.getAnalyzers().getAnalyzer().forEach(a -> softwareSystem.addAnalyzer(new AnalyzerImpl(a.getName(), a.getPresentationName(),
-                a.getDescription(), a.isLicensed(), convertXmlExecutionLevel(a.getExecutionLevel()), a.isExecuted())));
+
+        for (final XsdAnalyzer nextXsdAnalyzer : report.getAnalyzers().getAnalyzer())
+        {
+            final IAnalyzer analyzer = new AnalyzerImpl(nextXsdAnalyzer.getName(), nextXsdAnalyzer.getPresentationName(),
+                    nextXsdAnalyzer.getDescription(), nextXsdAnalyzer.isLicensed(), convertXmlExecutionLevel(nextXsdAnalyzer.getExecutionLevel()),
+                    nextXsdAnalyzer.isExecuted());
+            softwareSystem.addAnalyzer(analyzer);
+            globalXmlToElementMap.put(nextXsdAnalyzer, analyzer);
+        }
     }
 
     private static AnalyzerExecutionLevel convertXmlExecutionLevel(final XsdAnalyzerExecutionLevel xsdExecutionLevel)
@@ -708,7 +681,7 @@ public final class XmlReportReader extends XmlAccess
         return null;
     }
 
-    private static void processPlugins(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    private void processPlugins(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPlugins' must not be null";
         assert report != null : "Parameter 'report' of method 'processPlugins' must not be null";
@@ -722,6 +695,7 @@ public final class XmlReportReader extends XmlAccess
                 final IPlugin plugin = new PluginImpl(next.getName(), next.getPresentationName(), next.getDescription(), next.getVendor(),
                         next.getVersion(), next.isLicensed(), next.isEnabled(), supportedExecutionPhases, activeExecutionPhases);
                 softwareSystem.addPlugin(plugin);
+                globalXmlToElementMap.put(next, plugin);
             }
         }
     }
@@ -789,6 +763,70 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
+    private void processCycleGroupAnalyzerConfigurations(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processCycleAnalyzerConfigurations' must not be null";
+        assert report != null : "Parameter 'report' of method 'processCycleAnalyzerConfigurations' must not be null";
+
+        for (final XsdCycleGroupAnalyzerConfiguration nextXsdCycleGroupConfiguration : report.getCycleGroupAnalyzerConfiguration())
+        {
+            final Object xsdAnalyzer = nextXsdCycleGroupConfiguration.getAnalyzer();
+            final IElement analyzer = globalXmlToElementMap.get(xsdAnalyzer);
+            assert analyzer != null : "Missing analyzer for configuration '" + nextXsdCycleGroupConfiguration.getName() + "'";
+            assert analyzer instanceof IAnalyzer : "Wrong class " + analyzer.getClass().getCanonicalName();
+
+            final AnalyzerConfigurationImpl configuration = new AnalyzerConfigurationImpl((IAnalyzer) analyzer);
+            globalXmlToElementMap.put(nextXsdCycleGroupConfiguration, configuration);
+            softwareSystem.addAnalyzerConfiguration(configuration);
+
+            for (final XsdIntEntry nextXsdIntEntry : nextXsdCycleGroupConfiguration.getIntEntry())
+            {
+                configuration.addIntConfigurationValue(nextXsdIntEntry.getName(), nextXsdIntEntry.getValue().intValue());
+            }
+            for (final XsdStringEntry nextXsdStringEntry : nextXsdCycleGroupConfiguration.getStringEntry())
+            {
+                configuration.addStringConfigurationValue(nextXsdStringEntry.getName(), nextXsdStringEntry.getValue());
+            }
+        }
+    }
+
+    private void processPluginConfigurations(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processPluginConfigurations' must not be null";
+        assert report != null : "Parameter 'report' of method 'processPluginConfigurations' must not be null";
+
+        for (final XsdPluginConfiguration nextXsdPluginConfiguration : report.getPluginConfiguration())
+        {
+            final Object xsdPluginObject = nextXsdPluginConfiguration.getPlugin();
+            final Object pluginObject = globalXmlToElementMap.get(xsdPluginObject);
+            assert pluginObject != null : "Missing plugin for configuration: " + nextXsdPluginConfiguration.getId();
+            final IPlugin plugin = (IPlugin) pluginObject;
+            final PluginConfigurationImpl pluginConfiguration = new PluginConfigurationImpl(nextXsdPluginConfiguration.getName(),
+                    nextXsdPluginConfiguration.getPresentationName(), plugin);
+            softwareSystem.addPluginConfiguration(pluginConfiguration);
+
+            for (final XsdStringEntry nextXsdStringEntry : nextXsdPluginConfiguration.getStringEntry())
+            {
+                pluginConfiguration.addStringConfigurationValue(nextXsdStringEntry.getName(), nextXsdStringEntry.getValue());
+            }
+
+            for (final XsdIntEntry nextXsdIntEntry : nextXsdPluginConfiguration.getIntEntry())
+            {
+                pluginConfiguration.addIntConfigurationValue(nextXsdIntEntry.getName(), nextXsdIntEntry.getValue().intValue());
+            }
+
+            for (final XsdFloatEntry nextXsdFloatEntry : nextXsdPluginConfiguration.getFloatEntry())
+            {
+                pluginConfiguration.addFloatConfigurationValue(nextXsdFloatEntry.getName(), nextXsdFloatEntry.getValue().floatValue());
+            }
+
+            for (final XsdBooleanEntry nextXsdBooleanEntry : nextXsdPluginConfiguration.getBooleanEntry())
+            {
+                pluginConfiguration.addBooleanConfigurationValue(nextXsdBooleanEntry.getName(), nextXsdBooleanEntry.isValue().booleanValue());
+            }
+        }
+    }
+
     private void processMetricThresholds(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
         assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processMetricThresholds' must not be null";
@@ -809,7 +847,19 @@ public final class XmlReportReader extends XmlAccess
             assert level != null : "metric level '" + next.getMetricLevel() + "' of threshold '" + next.getDebugInfo() + "' must exist";
             final IMetricLevel metricLevel = (IMetricLevel) level;
 
-            final MetricThreshold threshold = new MetricThreshold(metricId, metricLevel, next.getLowerThreshold(), next.getUpperThreshold());
+            final String xsdSeverity = next.getSeverity();
+            Severity severity;
+            if (xsdSeverity != null)
+            {
+                severity = Severity.fromString(xsdSeverity);
+            }
+            else
+            {
+                severity = Severity.WARNING;
+            }
+
+            final MetricThreshold threshold = new MetricThreshold(metricId, metricLevel, next.getLowerThreshold(), next.getUpperThreshold(),
+                    severity);
             softwareSystem.addMetricThreshold(threshold);
             globalXmlToElementMap.put(next, threshold);
         }
@@ -851,7 +901,7 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalNamespace);
             final LogicalNamespaceImpl logicalNamespaceImpl = new LogicalNamespaceImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalNamespace.getName(), nextXsdLogicalNamespace.getPresentationName(),
-                    nextXsdLogicalNamespace.getFqName());
+                    nextXsdLogicalNamespace.getFqName(), extractImageResourceName(xsdElementKind));
             globalXmlToElementMap.put(nextXsdLogicalNamespace, logicalNamespaceImpl);
             namedElementContainerImpl.addElement(logicalNamespaceImpl);
             namedElementContainerImpl.addLogicalNamespace(logicalNamespaceImpl);
@@ -862,12 +912,18 @@ public final class XmlReportReader extends XmlAccess
             final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalProgrammingElement);
             final LogicalProgrammingElementImpl logicalProgrammingElementImpl = new LogicalProgrammingElementImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalProgrammingElement.getName(),
-                    nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName());
+                    nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName(),
+                    extractImageResourceName(xsdElementKind));
             globalXmlToElementMap.put(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
             namedElementContainerImpl.addElement(logicalProgrammingElementImpl);
             namedElementContainerImpl.addLogicalProgrammingElement(logicalProgrammingElementImpl);
             setDerivedFrom(nextXsdLogicalProgrammingElement, logicalProgrammingElementImpl);
         }
+    }
+
+    public String extractImageResourceName(final XsdElementKind xsdElementKind)
+    {
+        return xsdElementKind.getStandardKind().equals(xsdElementKind.getImageResourceName()) ? null : xsdElementKind.getImageResourceName();
     }
 
     private void createSystemElements(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport report)
@@ -1092,7 +1148,7 @@ public final class XmlReportReader extends XmlAccess
             Severity severity;
             try
             {
-                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
+                severity = Severity.fromString(next.getSeverity());
             }
             catch (final Exception e)
             {
@@ -1208,12 +1264,26 @@ public final class XmlReportReader extends XmlAccess
                     cyclicElements.add((INamedElement) element);
                 }
 
+                final Object scopeObject = nextCycle.getScope();
+                final INamedElement scope;
+                if (scopeObject != null)
+                {
+                    final IElement scopeElement = globalXmlToElementMap.get(scopeObject);
+                    assert scopeElement != null && scopeElement instanceof INamedElement : "Unexpected class in method 'processCycleGroupIssues': "
+                            + scopeElement;
+                    scope = (INamedElement) scopeElement;
+                }
+                else
+                {
+                    scope = null;
+                }
+
                 final String name = nextCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()'
                 final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
                         name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
                         issueProvider, analyzer, cyclicElements, nextCycle.getStructuralDebtIndex(), nextCycle.getComponentDependenciesToRemove(),
-                        nextCycle.getParserDependenciesToRemove());
+                        nextCycle.getParserDependenciesToRemove(), scope);
 
                 softwareSystem.addIssue(cycleGroup);
                 globalXmlIdToIssueMap.put(nextCycle, cycleGroup);

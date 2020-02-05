@@ -47,6 +47,7 @@ artifact Report
             include "**/XmlReportReader"
             include "**/XmlExportMetaDataReader"
             include "**/XmlAccess"
+            include "**/ResolutionConverter"
         }
         
         public artifact JaxbAdapter

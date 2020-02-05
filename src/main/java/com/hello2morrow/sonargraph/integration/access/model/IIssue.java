@@ -17,10 +17,9 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface IIssue extends Serializable
+public interface IIssue extends IElement
 {
     public static final String KEY_SEPARATOR = ":";
 
@@ -28,10 +27,6 @@ public interface IIssue extends Serializable
      * @return the key that identifies the issue regardless of it's line/column and the element(s) it is attached to
      */
     public String getKey();
-
-    public String getName();
-
-    public String getPresentationName();
 
     public IIssueProvider getIssueProvider();
 

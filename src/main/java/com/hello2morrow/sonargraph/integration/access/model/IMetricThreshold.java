@@ -26,4 +26,6 @@ public interface IMetricThreshold extends IElement
     public IMetricId getMetricId();
 
     public IMetricLevel getMetricLevel();
+
+    public Severity getSeverity();
 }

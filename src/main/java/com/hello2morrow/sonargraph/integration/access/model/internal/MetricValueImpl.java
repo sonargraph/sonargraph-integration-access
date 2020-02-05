@@ -74,4 +74,10 @@ public class MetricValueImpl implements IMetricValue
     {
         return id.isFloat();
     }
+
+    @Override
+    public String toString()
+    {
+        return "MetricValueImpl [id=" + id + ", level=" + level + ", value=" + value + "]";
+    }
 }
