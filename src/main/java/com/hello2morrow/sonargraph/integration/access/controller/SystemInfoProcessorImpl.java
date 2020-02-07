@@ -48,6 +48,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
@@ -329,5 +330,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public Map<String, IPluginConfiguration> getPluginConfigurations()
     {
         return softwareSystem.getPluginConfigurations();
+    }
+
+    @Override
+    public List<ISystemFile> getSystemFiles()
+    {
+        return softwareSystem.getSystemFiles();
     }
 }

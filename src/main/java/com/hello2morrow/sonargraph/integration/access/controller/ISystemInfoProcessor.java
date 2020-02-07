@@ -38,6 +38,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IModule;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
 
 public interface ISystemInfoProcessor extends IInfoProcessor
 {
@@ -85,4 +86,6 @@ public interface ISystemInfoProcessor extends IInfoProcessor
 
     /** @return map of analyzers's standardNames to configurations */
     public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations();
+
+    public List<ISystemFile> getSystemFiles();
 }

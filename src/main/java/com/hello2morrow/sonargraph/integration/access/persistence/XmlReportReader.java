@@ -54,6 +54,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElementC
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
+import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AbstractFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerConfigurationImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.AnalyzerImpl;
@@ -94,6 +95,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.Programming
 import com.hello2morrow.sonargraph.integration.access.model.internal.RootDirectoryImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.SystemFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceFileFilterImpl;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
@@ -154,6 +156,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoft
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSourceFile;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdStringEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemFile;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
@@ -342,6 +345,7 @@ public final class XmlReportReader extends XmlAccess
         processArchitectureCheckConfiguration(softwareSystemImpl, xsdReport);
         processCycleGroupAnalyzerConfigurations(softwareSystemImpl, xsdReport);
         processPluginConfigurations(softwareSystemImpl, xsdReport);
+        processCheckedArchitectureFiles(softwareSystemImpl, xsdReport);
 
         final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -716,6 +720,20 @@ public final class XmlReportReader extends XmlAccess
         default:
             assert false : "Unsupported execution phase: " + xsdExecutionPhase.name();
             return null;
+        }
+    }
+
+    private void processCheckedArchitectureFiles(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processCheckedArchitectureFiles' must not be null";
+        assert report != null : "Parameter 'report' of method 'processCheckedArchitectureFiles' must not be null";
+
+        for (final XsdSystemFile next : report.getSystemFile())
+        {
+            final SystemFileType type = SystemFileType.fromString(next.getType());
+            final SystemFileImpl systemFile = new SystemFileImpl(next.getPath(), type, next.getLastModified().toGregorianCalendar().getTimeInMillis(),
+                    next.getHash());
+            softwareSystem.addSystemFile(systemFile);
         }
     }
 
