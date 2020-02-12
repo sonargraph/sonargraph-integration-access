@@ -1,6 +1,17 @@
 Sonargraph Integration Access
 ===============================
 
+3.4.2
+=====
+
+- Maintenance release to fix problem in Sonargraph product update. This release 
+  contains no changes in functionality, but simply increases the version.
+
+3.4.1
+=====
+
+- Skipped.
+
 3.4.0
 =====
 
