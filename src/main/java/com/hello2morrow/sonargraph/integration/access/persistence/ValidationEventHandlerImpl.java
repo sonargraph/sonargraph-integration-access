@@ -59,20 +59,31 @@ public final class ValidationEventHandlerImpl implements ValidationEventHandler
     {
         assert event != null : "'event' must not be null";
 
-        boolean returnResult = false;
         final ValidationEventLocator locator = event.getLocator();
+        operationResult.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, event.getMessage() + getLocation(locator));
 
-        if (event.getSeverity() == ValidationEvent.WARNING)
-        {
-            operationResult.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, event.getMessage() + getLocation(locator));
-            returnResult = true;
-        }
-        else
-        {
-            operationResult.addError(ValidationMessageCauses.XML_VALIDATION_ERROR, event.getMessage() + getLocation(locator));
-        }
+        //Right now, we simply skip all validation problems and simply put them in the operation result as warnings.
+        //        if (event.getSeverity() == ValidationEvent.WARNING)
+        //        {
+        //            returnResult = true;
+        //        }
+        //        else
+        //        {
+        //            if (event.getMessage().toLowerCase().startsWith("unexpected element") || event.getMessage().toLowerCase().contains("<{}workspace>"))
+        //            {
+        //                //Pretty likely an unexpected element. Unfortunately, the message is localized, so we cannot rely on the text alone. E.g. for french locale this looks like:
+        //                //[severity=ERROR,message=élément inattendu (URI : "", local : "unknown"). Les éléments attendus sont <{}systemFile>,<{}workspace>,<{}pluginConfiguration>,
+        //                //<{}plugins>,<{}metricThresholds>,<{}systemMetricValues>,<{}description>,<{}resolutions>,<{}systemMetaData>,<{}issues>,<{}metaData>,<{}features>,<{}systemElements>,
+        //                //<{}cycleGroupAnalyzerConfiguration>,<{}analyzers>,<{}elementKinds>,<{}scriptRunnerConfiguration>,<{}externalModuleScopeElements>,<{}duplicateCodeConfiguration>,
+        //                //<{}moduleElements>,<{}moduleMetricValues>,<{}reportContextInfo>,<{}externalSystemScopeElements>,<{}architectureCheckConfiguration>,
+        //                //locator=[node=null,object=null,url=null,line=3,col=11,offset=-1]]
+        //                operationResult.addWarning(ValidationMessageCauses.XML_VALIDATION_ERROR, event.getMessage() + getLocation(locator));
+        //                return true;
+        //            }
+        //            operationResult.addError(ValidationMessageCauses.XML_VALIDATION_ERROR, event.getMessage() + getLocation(locator));
+        //        }
 
-        return returnResult;
+        return true;
     }
 
     private static String getLocation(final ValidationEventLocator locator)

@@ -170,8 +170,15 @@
 	</xs:complexType>
 	
 	<xs:complexType name="xsdBooleanEntry">
-		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string" />
 		<xs:attribute name="value" type="xs:boolean" />
+	</xs:complexType>
+
+	<xs:complexType name="xsdSystemFile">
+		<xs:attribute name="path" type="xs:string" />
+		<xs:attribute name="type" type="xs:string" />
+		<xs:attribute name="lastModified" type="xs:dateTime" />
+		<xs:attribute name="hash" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<xs:complexType name="xsdNamedElement">
@@ -815,6 +822,7 @@
 				type="xsdMetricThresholds" minOccurs="0" maxOccurs="1" />
 			<xs:element name="cycleGroupAnalyzerConfiguration"
 				type="xsdCycleGroupAnalyzerConfiguration" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="systemFile" minOccurs="0" type="xsdSystemFile" maxOccurs="unbounded" />
 			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="elementKinds" type="xsdElementKinds"
 				minOccurs="1" maxOccurs="1" />

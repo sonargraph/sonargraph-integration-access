@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.apitest;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -64,10 +64,12 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IRenameRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
 import com.hello2morrow.sonargraph.integration.access.model.IToDoDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
+import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
 import com.hello2morrow.sonargraph.integration.access.model.internal.NamedElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.PluginExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
@@ -308,7 +310,7 @@ public final class ReportReaderTest
     private List<ICycleGroupIssue> getCycleGroup(final ISystemInfoProcessor infoProcessor, final String issueTypeName)
     {
         return infoProcessor.getIssues(i -> i.getIssueType().getName().equals(issueTypeName)).stream().map(i -> (ICycleGroupIssue) i)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Test
@@ -551,5 +553,43 @@ public final class ReportReaderTest
         assertEquals("Wrong maxValue", max, metric.getMax(), 0.001);
         assertEquals("Wrong direction", direction, metric.getSortDirection());
         return metric;
+    }
+
+    @Test
+    public void processArchitectureFiles()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_ARCHITECTURE_SYSTEM_FILES));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<ISystemFile> architectureFiles = systemProcessor.getSystemFiles().stream().filter(f -> f.getType() == SystemFileType.ARCHITECTURE)
+                .collect(toList());
+        assertEquals("Wrong number of checked architecture files", 1, architectureFiles.size());
+        final ISystemFile architectureFile = architectureFiles.get(0);
+        assertEquals("Wrong path", "./arch1.arc", architectureFile.getPath());
+        assertEquals("Wrong type", SystemFileType.ARCHITECTURE, architectureFile.getType());
+        assertEquals("Wrong lastModified", 1580913201550L, architectureFile.getLastModified());
+        assertEquals("Wrong hash", "34186e7369e51bd6e9dafd6fa9e7942a", architectureFile.getHash());
+    }
+
+    @Test
+    public void processReportWithUnknownElement()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_UNKNOWN_ELEMENT));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<ISystemFile> architectureFiles = systemProcessor.getSystemFiles().stream().filter(f -> f.getType() == SystemFileType.ARCHITECTURE)
+                .collect(toList());
+        assertEquals("Wrong number of checked architecture files", 1, architectureFiles.size());
+        final ISystemFile architectureFile = architectureFiles.get(0);
+        assertEquals("Wrong path", "./arch1.arc", architectureFile.getPath());
+        assertEquals("Wrong type", SystemFileType.ARCHITECTURE, architectureFile.getType());
+        assertEquals("Wrong lastModified", 1580913201550L, architectureFile.getLastModified());
+        assertEquals("Wrong hash", "34186e7369e51bd6e9dafd6fa9e7942a", architectureFile.getHash());
     }
 }

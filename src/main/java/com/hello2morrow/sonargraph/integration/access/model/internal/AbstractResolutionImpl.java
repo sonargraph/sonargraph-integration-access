@@ -261,7 +261,7 @@ abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
     @Override
     public String getDate()
     {
-        return Utility.getDateTimeStringFromLocale(dateTime);
+        return Utility.formatDateAndTimeForUniversalTimezone(dateTime);
     }
 
     @Override
