@@ -25,6 +25,7 @@ The following lists the compatibility with Sonargraph releases.
 
 | Sonargraph Version | Integration Access Version | 
 |:------------------:|:--------------------------:| 
+| 9.14.0 and newer   | 4.0.0 and newer            |
 | 9.13.0 and newer   | 3.4.2 and newer            |
 | 9.12.0 and newer   | 3.3.0 and newer            |
 | 9.9.3 and newer    | 3.2.0 and newer            |

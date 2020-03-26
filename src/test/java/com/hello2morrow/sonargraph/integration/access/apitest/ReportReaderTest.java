@@ -573,4 +573,23 @@ public final class ReportReaderTest
         assertEquals("Wrong lastModified", 1580913201550L, architectureFile.getLastModified());
         assertEquals("Wrong hash", "34186e7369e51bd6e9dafd6fa9e7942a", architectureFile.getHash());
     }
+
+    @Test
+    public void processReportWithUnknownElement()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_UNKNOWN_ELEMENT));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<ISystemFile> architectureFiles = systemProcessor.getSystemFiles().stream().filter(f -> f.getType() == SystemFileType.ARCHITECTURE)
+                .collect(toList());
+        assertEquals("Wrong number of checked architecture files", 1, architectureFiles.size());
+        final ISystemFile architectureFile = architectureFiles.get(0);
+        assertEquals("Wrong path", "./arch1.arc", architectureFile.getPath());
+        assertEquals("Wrong type", SystemFileType.ARCHITECTURE, architectureFile.getType());
+        assertEquals("Wrong lastModified", 1580913201550L, architectureFile.getLastModified());
+        assertEquals("Wrong hash", "34186e7369e51bd6e9dafd6fa9e7942a", architectureFile.getHash());
+    }
 }
