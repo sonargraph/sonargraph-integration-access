@@ -209,7 +209,7 @@ public final class XmlReportReader extends XmlAccess
                 return convertXmlReportToPojo(xmlRoot.getValue(), baseDirectoryPath, result);
             }
         }
-        catch (final Exception ex)
+        catch (final Throwable ex)
         {
             LOGGER.error("Failed to read report from '" + reportFile.getAbsolutePath() + "'", ex);
             result.addError(ResultCause.READ_ERROR, ex);
