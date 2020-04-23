@@ -24,4 +24,6 @@ public interface IDuplicateCodeBlockIssue extends INamedElementIssue
     public int getBlockSize();
 
     public List<IDuplicateCodeBlockOccurrence> getOccurrences();
+
+    public int getTotalDuplicateLineCount();
 }

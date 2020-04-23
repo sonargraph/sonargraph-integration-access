@@ -17,9 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
-import java.io.Serializable;
-
-public interface IDuplicateCodeBlockOccurrence extends Serializable
+public interface IDuplicateCodeBlockOccurrence extends IElement
 {
     public ISourceFile getSourceFile();
 
@@ -28,4 +26,6 @@ public interface IDuplicateCodeBlockOccurrence extends Serializable
     public int getBlockSize();
 
     public int getStartLine();
+
+    public int getEndLine();
 }

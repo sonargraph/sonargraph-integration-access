@@ -1,12 +1,19 @@
 Sonargraph Integration Access
 ===============================
 
+4.1.0
+=====
+
+- Some minor improvements to store information about duplicate code blocks.
+
+
 4.0.0
 =====
 
 - Disable validation of XML and only report problems instead of aborting the processing.
   This allows processing of newer Sonargraph reports with older Integration Access versions in the future and there 
   won't be the need anymore to release this and dependend libraries in lockstep with new Sonargraph releases.
+
 
 3.4.2
 =====

@@ -33,12 +33,21 @@ public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImp
     private static final long serialVersionUID = 3572308291532903170L;
     private int blockSize;
     private final List<IDuplicateCodeBlockOccurrence> occurrences;
+    private final int duplicateLineCount;
 
     public DuplicateCodeBlockIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final List<IDuplicateCodeBlockOccurrence> occurrences)
+            final IIssueProvider provider, final List<IDuplicateCodeBlockOccurrence> occurrences, final int duplicateLineCount)
     {
         super(name, presentationName, description, issueType, provider);
         this.occurrences = occurrences;
+        if (duplicateLineCount == -1)
+        {
+            this.duplicateLineCount = occurrences.stream().mapToInt(occ -> occ.getBlockSize()).sum();
+        }
+        else
+        {
+            this.duplicateLineCount = duplicateLineCount;
+        }
     }
 
     @Override
@@ -84,11 +93,18 @@ public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImp
     }
 
     @Override
+    public int getTotalDuplicateLineCount()
+    {
+        return duplicateLineCount;
+    }
+
+    @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + blockSize;
+        result = prime * result + duplicateLineCount;
         result = prime * result + ((occurrences == null) ? 0 : occurrences.hashCode());
         return result;
     }
@@ -104,8 +120,16 @@ public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImp
         {
             return false;
         }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final DuplicateCodeBlockIssueImpl other = (DuplicateCodeBlockIssueImpl) obj;
         if (blockSize != other.blockSize)
+        {
+            return false;
+        }
+        if (duplicateLineCount != other.duplicateLineCount)
         {
             return false;
         }

@@ -27,17 +27,28 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
     private final int blockSize;
     private final int startLine;
     private final int tolerance;
+    private final int endLine;
 
-    public DuplicateCodeBlockOccurrenceImpl(final ISourceFile sourceFile, final int blockSize, final int startLine, final int tolerance)
+    public DuplicateCodeBlockOccurrenceImpl(final ISourceFile sourceFile, final int blockSize, final int startLine, final int endLine,
+            final int tolerance)
     {
         assert sourceFile != null : "Parameter 'sourceFile' of method 'DuplicateCodeBlockOccurrenceImpl' must not be null";
         assert blockSize > 0 : "Parameter 'blockSize' must be > 0";
         assert startLine >= 0 : "Parameter 'startLine' must be >= 0";
+        //endLine might be -1 for older reports because that attribute was added later.
         assert tolerance >= 0 : "Parameter 'tolerance' must be >= 0";
 
         this.sourceFile = sourceFile;
         this.blockSize = blockSize;
         this.startLine = startLine;
+        if (endLine == -1)
+        {
+            this.endLine = startLine + blockSize - 1;
+        }
+        else
+        {
+            this.endLine = endLine;
+        }
         this.tolerance = tolerance;
     }
 
@@ -66,6 +77,12 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
     }
 
     @Override
+    public int getEndLine()
+    {
+        return endLine;
+    }
+
+    @Override
     public int hashCode()
     {
         final int prime = 31;
@@ -73,6 +90,7 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
         result = prime * result + blockSize;
         result = prime * result + ((sourceFile == null) ? 0 : sourceFile.hashCode());
         result = prime * result + startLine;
+        result = prime * result + endLine;
         result = prime * result + tolerance;
         return result;
     }
@@ -112,6 +130,10 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
         {
             return false;
         }
+        if (endLine != other.endLine)
+        {
+            return false;
+        }
         if (tolerance != other.tolerance)
         {
             return false;
@@ -122,7 +144,22 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
     @Override
     public String toString()
     {
-        return "DuplicateCodeBlockOccurrenceImpl [sourceFile=" + sourceFile + ", blockSize=" + blockSize + ", startLine=" + startLine
-                + ", tolerance=" + tolerance + "]";
+        return "DuplicateCodeBlockOccurrenceImpl [sourceFile=" + sourceFile + ", blockSize=" + blockSize + ", startLine=" + startLine + ", tolerance="
+                + tolerance + ", endLine=" + endLine + "]";
+    }
+
+    @Override
+    public String getName()
+    {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(sourceFile.getIdentifyingPath());
+        stringBuilder.append(" (").append(startLine).append("-").append(endLine).append(")");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public String getPresentationName()
+    {
+        return getName();
     }
 }
