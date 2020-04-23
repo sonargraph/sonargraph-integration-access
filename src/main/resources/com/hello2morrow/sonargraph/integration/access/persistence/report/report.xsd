@@ -586,6 +586,7 @@
 	<xs:complexType name="xsdDuplicateCodeBlockOccurrence">
 		<xs:attribute name="source" type="xs:IDREF" />
 		<xs:attribute name="startLine" type="xs:int" />
+		<xs:attribute name="endLine" type="xs:int" use="optional" default="-1"/><!-- added for duplicate code block issue diff -->
 		<xs:attribute name="blockSize" type="xs:int" />
 		<xs:attribute name="tolerance" type="xs:int" />
 		<xs:attribute name="debugInfo" type="xs:string" />
@@ -607,6 +608,8 @@
 					use="required" />
 				<xs:attribute name="numberOfOccurrences" type="xs:int"
 					use="required" />
+				<xs:attribute name="duplicateLineCount" type="xs:int" use="optional" 
+					default="-1"/><!-- added for duplicate code block issue diff -->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

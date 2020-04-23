@@ -1243,17 +1243,19 @@ public final class XmlReportReader extends XmlAccess
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextDuplicate);
 
             final List<IDuplicateCodeBlockOccurrence> occurrences = new ArrayList<>(nextDuplicate.getNumberOfOccurrences());
-            for (final XsdDuplicateCodeBlockOccurrence nextOccurence : nextDuplicate.getOccurrence())
+            for (final XsdDuplicateCodeBlockOccurrence nextOccurrence : nextDuplicate.getOccurrence())
             {
-                final IElement element = globalXmlToElementMap.get(nextOccurence.getSource());
+                final IElement element = globalXmlToElementMap.get(nextOccurrence.getSource());
                 assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
+                final Integer endLine = nextOccurrence.getEndLine();
                 final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl((ISourceFile) element,
-                        nextOccurence.getBlockSize(), nextOccurence.getStartLine(), nextOccurence.getTolerance());
+                        nextOccurrence.getBlockSize(), nextOccurrence.getStartLine(), endLine != null ? endLine.intValue() : -1,
+                        nextOccurrence.getTolerance());
                 occurrences.add(occurrence);
             }
 
             final DuplicateCodeBlockIssueImpl duplicate = new DuplicateCodeBlockIssueImpl(nextDuplicate.getFqName(), nextDuplicate.getName(),
-                    nextDuplicate.getDescription(), issueType, issueProvider, occurrences);
+                    nextDuplicate.getDescription(), issueType, issueProvider, occurrences, nextDuplicate.getDuplicateLineCount());
             duplicate.setBlockSize(nextDuplicate.getBlockSize());
             softwareSystem.addIssue(duplicate);
 
