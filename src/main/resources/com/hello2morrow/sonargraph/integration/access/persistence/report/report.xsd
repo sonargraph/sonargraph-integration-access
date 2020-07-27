@@ -112,6 +112,22 @@
 				maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
+	
+	<!-- Concrete analyzer configuration for system diff -->
+	<xs:complexType name="xsdSystemDiffConfiguration">
+		<xs:sequence>
+			<xs:element name="path" type="xs:string" minOccurs="1"
+				maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Concrete analyzer configuration for quality gate -->
+	<xs:complexType name="xsdQualityGateConfiguration">
+		<xs:sequence>
+			<xs:element name="entry" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
 	<!-- Generic analyzer configuration for all other analyzers -->
 	<xs:complexType name="xsdAnalyzerConfiguration"
@@ -180,7 +196,47 @@
 		<xs:attribute name="lastModified" type="xs:dateTime" />
 		<xs:attribute name="hash" type="xs:string" use="optional" />
 	</xs:complexType>
+	
+	<xs:complexType name="xsdQualityGate">
+		<xs:complexContent>
+			<xs:extension base="xsdSystemFile">
+				<xs:sequence>
+					<xs:element name="currentSystemConditions" type="xsdConditions"/>
+					<xs:element name="baselineSystemConditions" type="xsdConditions"/>
+				</xs:sequence>	
+				<xs:attribute name="id" type="xs:ID"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
+	<xs:complexType name="xsdConditions">
+		<xs:sequence>
+			<xs:element name="condition" type="xsdQualityGateElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="xsdQualityGateElement" abstract="true">
+		<xs:attribute name="shortName" type="xs:string"/>
+		<xs:attribute name="information" type="xs:string"/>
+		<xs:attribute name="matches" type="xs:int" />
+	</xs:complexType>
+	
+	<xs:complexType name="xsdQualityGateCondition">
+		<xs:complexContent>
+			<xs:extension base="xsdQualityGateElement">
+				<xs:attribute name="status" type="xs:string" />
+				<xs:attribute name="excludes" type="xs:int" />
+				<xs:attribute name="omitted" type="xs:int" />				
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="xsdQualityGateExclude">
+		<xs:complexContent>
+			<xs:extension base="xsdQualityGateElement"/>
+		</xs:complexContent>
+	</xs:complexType>
+	
 	<xs:complexType name="xsdNamedElement">
 		<xs:complexContent>
 			<xs:extension base="export:xsdElement">
@@ -825,6 +881,10 @@
 				type="xsdMetricThresholds" minOccurs="0" maxOccurs="1" />
 			<xs:element name="cycleGroupAnalyzerConfiguration"
 				type="xsdCycleGroupAnalyzerConfiguration" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="systemDiffConfiguration"
+				type="xsdSystemDiffConfiguration" minOccurs="1" maxOccurs="1" />				
+			<xs:element name="qualityGateConfiguration"
+				type="xsdQualityGateConfiguration" minOccurs="1" maxOccurs="1"/>							
 			<xs:element name="systemFile" minOccurs="0" type="xsdSystemFile" maxOccurs="unbounded" />
 			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="elementKinds" type="xsdElementKinds"

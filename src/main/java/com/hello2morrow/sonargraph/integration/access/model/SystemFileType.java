@@ -22,7 +22,8 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
 public enum SystemFileType implements IEnumeration
 {
-    ARCHITECTURE;
+    ARCHITECTURE,
+    QUALITY_GATE;
 
     @Override
     public String getStandardName()

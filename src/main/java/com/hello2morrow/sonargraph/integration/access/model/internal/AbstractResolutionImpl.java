@@ -53,7 +53,7 @@ abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
             final List<IElementPattern> elementPatterns, final List<IDependencyPattern> dependencyPatterns, final IMatching matching,
             final String descriptor)
     {
-        super(fqName, type != null ? type.name() : "");
+        super(fqName, type != null ? type.getPresentationName() : "");
 
         assert type != null : "Parameter 'type' of method 'ResolutionImpl' must not be null";
         assert priority != null : "Parameter 'priority' of method 'ResolutionImpl' must not be null";

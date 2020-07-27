@@ -363,6 +363,7 @@ public final class SonargraphSystemControllerTest
                         .size());
     }
 
+    @SuppressWarnings("deprecation")
     private void verifyResolutions()
     {
         final ISystemInfoProcessor infoProcessor = m_controller.createSystemInfoProcessor();

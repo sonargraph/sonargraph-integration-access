@@ -731,9 +731,12 @@ public final class XmlReportReader extends XmlAccess
         for (final XsdSystemFile next : report.getSystemFile())
         {
             final SystemFileType type = SystemFileType.fromString(next.getType());
-            final SystemFileImpl systemFile = new SystemFileImpl(next.getPath(), type, next.getLastModified().toGregorianCalendar().getTimeInMillis(),
-                    next.getHash());
-            softwareSystem.addSystemFile(systemFile);
+            if (type == SystemFileType.ARCHITECTURE)
+            {
+                final SystemFileImpl systemFile = new SystemFileImpl(next.getPath(), type,
+                        next.getLastModified().toGregorianCalendar().getTimeInMillis(), next.getHash());
+                softwareSystem.addSystemFile(systemFile);
+            }
         }
     }
 
