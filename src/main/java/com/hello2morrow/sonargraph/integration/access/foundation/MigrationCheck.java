@@ -15,36 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hello2morrow.sonargraph.integration.access.model;
+package com.hello2morrow.sonargraph.integration.access.foundation;
 
-import java.util.List;
-
-public interface IIssue extends IElement
+public final class MigrationCheck
 {
-    String KEY_SEPARATOR = ":";
+    public static final String PRE_UNIFICATION_OF_ISSUEIDS_VERSION = "10.3.1";
 
-    /**
-     * @return the key that identifies the issue regardless of it's line/column and the element(s) it is attached to
-     */
-    String getKey();
-
-    IIssueProvider getIssueProvider();
-
-    IIssueType getIssueType();
-
-    boolean hasResolution();
-
-    boolean isIgnored();
-
-    String getDescription();
-
-    int getLine();
-
-    int getColumn();
-
-    ResolutionType getResolutionType();
-
-    List<INamedElement> getAffectedNamedElements();
-
-    Severity getSeverity();
+    public static boolean isPreUnificationOfIssueIds(final String version)
+    {
+        assert version != null && version.length() > 0 : "Parameter 'version' of method 'isPreUnificationOfIssueIds' must not be empty";
+        return Version.fromString(version).compareTo(Version.fromString(PRE_UNIFICATION_OF_ISSUEIDS_VERSION)) < 0;
+    }
 }

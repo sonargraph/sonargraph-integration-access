@@ -295,9 +295,8 @@ abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
-    public String getDescriptor()
+    public final String getDescriptor()
     {
         return descriptor;
     }
-
 }

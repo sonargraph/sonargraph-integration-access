@@ -601,6 +601,7 @@
 		<xs:attribute name="description" type="xs:string" />
 		<xs:attribute name="line" type="xs:int" default="-1" />
 		<xs:attribute name="column" type="xs:int" default="-1" />
+		<xs:attribute name="severity" type="xs:string" use="optional" /> <!-- only required if issueType allows several severities -->
 	</xs:complexType>
 
 	<xs:complexType name="xsdDependencyIssue">

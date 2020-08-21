@@ -21,6 +21,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import javax.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.MigrationCheck;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
@@ -169,6 +172,11 @@ public final class XmlReportReader extends XmlAccess
     private static final String EXTERNAL_STANDARD_KIND_SUFFIX = "External";
     private final Map<Object, IElement> globalXmlToElementMap = new HashMap<>();
     private final Map<Object, IssueImpl> globalXmlIdToIssueMap = new HashMap<>();
+
+    //For old reports, we need to track the usage of deprecatedIssueTypes and map them to the new ones.
+    private final Map<String, IssueTypeImpl> deprecatedIssueTypeNameToIssueType = new HashMap<>();
+    private final Map<String, IssueTypeImpl> deprecatedIssueTypeNameToNewIssueType = new HashMap<>();
+
     private File currentlyReading;
 
     /**
@@ -1164,37 +1172,7 @@ public final class XmlReportReader extends XmlAccess
         issueCategoryXsdToPojoMap.values().forEach(c -> softwareSystem.addIssueCategory(c));
         globalXmlToElementMap.putAll(issueCategoryXsdToPojoMap);
 
-        for (final XsdIssueType next : report.getMetaData().getIssueTypes().getIssueType())
-        {
-            Severity severity;
-            try
-            {
-                severity = Severity.fromString(next.getSeverity());
-            }
-            catch (final Exception e)
-            {
-                LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
-                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
-                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
-                severity = Severity.ERROR;
-            }
-            final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
-            assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
-
-            final IElement provider;
-            if (next.getProvider() != null)
-            {
-                provider = globalXmlToElementMap.get(next.getProvider());
-            }
-            else
-            {
-                provider = null;
-            }
-
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, (IIssueCategory) namedElement,
-                    (IIssueProvider) provider, next.getDescription());
-            softwareSystem.addIssueType(issueType);
-        }
+        processIssueTypes(softwareSystem, report, result);
 
         processSimpleElementIssues(softwareSystem, report);
 
@@ -1209,6 +1187,158 @@ public final class XmlReportReader extends XmlAccess
         {
             processDependencyIssues(softwareSystem, report);
         }
+    }
+
+    private void processIssueTypes(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report, final Result result)
+    {
+        final boolean migrationNeeded = MigrationCheck.isPreUnificationOfIssueIds(softwareSystem.getVersion());
+
+        for (final XsdIssueType next : report.getMetaData().getIssueTypes().getIssueType())
+        {
+            final List<Severity> severities = new ArrayList<>();
+            try
+            {
+                for (final String nextSeverityString : next.getSeverity().split(", "))
+                {
+                    severities.add(Severity.fromString(nextSeverityString));
+                }
+            }
+            catch (final Exception e)
+            {
+                LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
+                result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
+                        "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
+                severities.add(Severity.ERROR);
+            }
+
+            if (migrationNeeded)
+            {
+                final IssueTypeImpl convertedIssueType = handledDeprecatedIssueTypes(next, severities);
+                if (convertedIssueType != null)
+                {
+                    if (!softwareSystem.getIssueTypes().containsKey(convertedIssueType.getName()))
+                    {
+                        softwareSystem.addIssueType(convertedIssueType);
+                    }
+                    continue;
+                }
+            }
+
+            final IElement namedElement = globalXmlToElementMap.get(next.getCategory());
+            assert namedElement != null && namedElement instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + namedElement;
+
+            final IElement provider;
+            if (next.getProvider() != null)
+            {
+                provider = globalXmlToElementMap.get(next.getProvider());
+            }
+            else
+            {
+                provider = null;
+            }
+
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severities, (IIssueCategory) namedElement,
+                    (IIssueProvider) provider, next.getDescription());
+            softwareSystem.addIssueType(issueType);
+        }
+    }
+
+    private IssueTypeImpl handledDeprecatedIssueTypes(final XsdIssueType xsdIssueType, final List<Severity> severities)
+    {
+        assert xsdIssueType != null : "Parameter 'xsdIssueType' of method 'handledDeprecatedIssueTypes' must not be null";
+        assert severities != null && !severities.isEmpty() : "Parameter 'severities' of method 'handledDeprecatedIssueTypes' must not be empty";
+
+        if (severities.size() > 1)
+        {
+            //more than one severity indicates that this cannot be a deprecated issue type.
+            return null;
+        }
+
+        final String thresholdErrorStandardName = "ThresholdViolationError";
+        final String thresholdWarningStandardName = "ThresholdViolation";
+        if (xsdIssueType.getName().equals(thresholdErrorStandardName) || xsdIssueType.getName().equals(thresholdWarningStandardName))
+        {
+            return createDeprecatedIssueType(xsdIssueType, thresholdWarningStandardName, "Threshold Violation", thresholdErrorStandardName,
+                    "Threshold Violation (Error)");
+        }
+
+        final String moduleCycleWarningStandardName = "ModuleCycleGroup";
+        final String moduleCycleErrorStandardName = "CriticalModuleCycleGroup";
+        if (xsdIssueType.getName().equals(moduleCycleWarningStandardName) || xsdIssueType.getName().equals(moduleCycleErrorStandardName))
+        {
+            return createDeprecatedIssueType(xsdIssueType, moduleCycleWarningStandardName, "Module Cycle Group", moduleCycleErrorStandardName,
+                    "Critical Module Cycle Group");
+        }
+
+        final String directoryCycleWarningStandardName = "DirectoryCycleGroup";
+        final String directoryCycleErrorStandardName = "CriticalDirectoryCycleGroup";
+        if (xsdIssueType.getName().equals(directoryCycleWarningStandardName) || xsdIssueType.getName().equals(directoryCycleErrorStandardName))
+        {
+            return createDeprecatedIssueType(xsdIssueType, directoryCycleWarningStandardName, "Directory Cycle Group",
+                    directoryCycleErrorStandardName, "Critical Directory Cycle Group");
+        }
+
+        final String namespaceCycleWarningStandardName = "NamespaceCycleGroup";
+        final String namespaceCycleErrorStandardName = "CriticalNamespaceCycleGroup";
+        if (xsdIssueType.getName().equals(namespaceCycleWarningStandardName) || xsdIssueType.getName().equals(namespaceCycleErrorStandardName))
+        {
+            return createDeprecatedIssueType(xsdIssueType, namespaceCycleWarningStandardName, "Namespace Cycle Group",
+                    namespaceCycleErrorStandardName, "Critical Namespace Cycle Group");
+        }
+
+        final String componentCycleWarningStandardName = "ComponentCycleGroup";
+        final String componentCycleErrorStandardName = "CriticalComponentCycleGroup";
+        if (xsdIssueType.getName().equals(componentCycleWarningStandardName) || xsdIssueType.getName().equals(componentCycleErrorStandardName))
+        {
+            return createDeprecatedIssueType(xsdIssueType, componentCycleWarningStandardName, "Component Cycle Group",
+                    componentCycleErrorStandardName, "Critical Component Cycle Group");
+        }
+
+        return null;
+    }
+
+    private IssueTypeImpl createDeprecatedIssueType(final XsdIssueType xsdIssueType, final String warningStandardName,
+            final String warningPresentationName, final String errorStandardName, final String errorPresentationName)
+    {
+        final IElement provider;
+        if (xsdIssueType.getProvider() != null)
+        {
+            provider = globalXmlToElementMap.get(xsdIssueType.getProvider());
+        }
+        else
+        {
+            provider = null;
+        }
+
+        final IElement issueCategory = globalXmlToElementMap.get(xsdIssueType.getCategory());
+        assert issueCategory != null && issueCategory instanceof IIssueCategory : "Unexpected class in method 'processIssues': " + issueCategory;
+
+        if (!deprecatedIssueTypeNameToIssueType.containsKey(warningStandardName))
+        {
+            final IssueTypeImpl deprecatedIssueTypeWarning = new IssueTypeImpl(warningStandardName, warningPresentationName,
+                    Collections.singletonList(Severity.WARNING), (IIssueCategory) issueCategory, (IIssueProvider) provider,
+                    xsdIssueType.getDescription());
+            deprecatedIssueTypeNameToIssueType.put(warningStandardName, deprecatedIssueTypeWarning);
+        }
+
+        if (!deprecatedIssueTypeNameToIssueType.containsKey(errorStandardName))
+        {
+            final IssueTypeImpl deprecatedIssueTypeError = new IssueTypeImpl(errorStandardName, errorPresentationName,
+                    Collections.singletonList(Severity.ERROR), (IIssueCategory) issueCategory, (IIssueProvider) provider,
+                    xsdIssueType.getDescription());
+            deprecatedIssueTypeNameToIssueType.put(errorStandardName, deprecatedIssueTypeError);
+        }
+
+        if (!deprecatedIssueTypeNameToNewIssueType.containsKey(xsdIssueType.getName()))
+        {
+            final IssueTypeImpl issueType = new IssueTypeImpl(warningStandardName, warningPresentationName,
+                    Arrays.asList(Severity.ERROR, Severity.WARNING), (IIssueCategory) issueCategory, (IIssueProvider) provider,
+                    xsdIssueType.getDescription());
+            deprecatedIssueTypeNameToNewIssueType.put(xsdIssueType.getName(), issueType);
+            return issueType;
+        }
+
+        return deprecatedIssueTypeNameToNewIssueType.get(xsdIssueType.getName());
     }
 
     private void processDependencyIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
@@ -1252,8 +1382,7 @@ public final class XmlReportReader extends XmlAccess
                 assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
                 final Integer endLine = nextOccurrence.getEndLine();
                 final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl((ISourceFile) element,
-                        nextOccurrence.getBlockSize(), nextOccurrence.getStartLine(), endLine != null ? endLine.intValue() : -1,
-                        nextOccurrence.getTolerance());
+                        nextOccurrence.getBlockSize(), nextOccurrence.getStartLine(), endLine.intValue(), nextOccurrence.getTolerance());
                 occurrences.add(occurrence);
             }
 
@@ -1268,26 +1397,53 @@ public final class XmlReportReader extends XmlAccess
 
     private void processCycleGroupIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
-        for (final XsdCycleGroupContainer nextCycleContainer : report.getIssues().getElementIssues().getCycleGroups())
+        final boolean handleDeprecatedIssues = MigrationCheck.isPreUnificationOfIssueIds(softwareSystem.getVersion());
+
+        for (final XsdCycleGroupContainer nextXsdCycleContainer : report.getIssues().getElementIssues().getCycleGroups())
         {
-            final String analyzerName = ((XsdAnalyzer) nextCycleContainer.getAnalyzerRef()).getName();
+            final String analyzerName = ((XsdAnalyzer) nextXsdCycleContainer.getAnalyzerRef()).getName();
             final IAnalyzer analyzer = softwareSystem.getAnalyzers().get(analyzerName);
             assert analyzer != null : "Analyzer '" + analyzerName + "' does not exist!";
 
-            for (final XsdCycleIssue nextCycle : nextCycleContainer.getCycleGroup())
+            for (final XsdCycleIssue nextXsdCycle : nextXsdCycleContainer.getCycleGroup())
             {
-                final IIssueType issueType = getIssueType(softwareSystem, nextCycle);
-                final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextCycle);
+                final Severity severity;
+                final IIssueType issueType;
+                if (handleDeprecatedIssues)
+                {
+                    final IIssueType deprecatedIssueType = getDeprecatedIssueType(nextXsdCycle);
+                    if (deprecatedIssueType != null)
+                    {
+                        severity = deprecatedIssueType.getSupportedSeverities().get(0);
+                        issueType = getConvertedIssueType(nextXsdCycle);
+                    }
+                    else
+                    {
+                        issueType = getIssueType(softwareSystem, nextXsdCycle);
+                        final String severityString = nextXsdCycle.getSeverity();
+                        assert severityString != null : "Missing severity for cycle group issue: " + nextXsdCycle.getId();
+                        severity = Severity.fromString(severityString);
+                    }
+                }
+                else
+                {
+                    issueType = getIssueType(softwareSystem, nextXsdCycle);
+                    final String severityString = nextXsdCycle.getSeverity();
+                    assert severityString != null : "Missing severity for cycle group issue: " + nextXsdCycle.getId();
+                    severity = Severity.fromString(severityString);
+                }
+
+                final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextXsdCycle);
 
                 final List<INamedElement> cyclicElements = new ArrayList<>();
-                for (final XsdCycleElement nextElement : nextCycle.getElement())
+                for (final XsdCycleElement nextElement : nextXsdCycle.getElement())
                 {
                     final IElement element = globalXmlToElementMap.get(nextElement.getRef());
                     assert element instanceof INamedElement : "Unexpected class " + element.getClass().getName();
                     cyclicElements.add((INamedElement) element);
                 }
 
-                final Object scopeObject = nextCycle.getScope();
+                final Object scopeObject = nextXsdCycle.getScope();
                 final INamedElement scope;
                 if (scopeObject != null)
                 {
@@ -1301,48 +1457,73 @@ public final class XmlReportReader extends XmlAccess
                     scope = null;
                 }
 
-                final String name = nextCycle.getName();
+                final String name = nextXsdCycle.getName();
                 //This name might not not be set -> use the old name 'issueProvider.getPresentationName()'
-                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextCycle.getFqName(),
-                        name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextCycle.getDescription(), issueType,
-                        issueProvider, analyzer, cyclicElements, nextCycle.getStructuralDebtIndex(), nextCycle.getComponentDependenciesToRemove(),
-                        nextCycle.getParserDependenciesToRemove(), scope);
+                final CycleGroupIssueImpl cycleGroup = new CycleGroupIssueImpl(nextXsdCycle.getFqName(),
+                        name != null && !name.isEmpty() ? name : issueProvider.getPresentationName(), nextXsdCycle.getDescription(), issueType,
+                        severity, issueProvider, analyzer, cyclicElements, nextXsdCycle.getStructuralDebtIndex(),
+                        nextXsdCycle.getComponentDependenciesToRemove(), nextXsdCycle.getParserDependenciesToRemove(), scope);
 
                 softwareSystem.addIssue(cycleGroup);
-                globalXmlIdToIssueMap.put(nextCycle, cycleGroup);
+                globalXmlIdToIssueMap.put(nextXsdCycle, cycleGroup);
             }
         }
     }
 
-    private void processThresholdIssues(final SoftwareSystemImpl softwareSystemImpl, final XsdSoftwareSystemReport report)
+    private void processThresholdIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
     {
-        assert softwareSystemImpl != null : "Parameter 'softwareSystemImpl' of method 'processThresholdIssues' must not be null";
+        assert softwareSystem != null : "Parameter 'softwareSystemImpl' of method 'processThresholdIssues' must not be null";
         assert report != null : "Parameter 'report' of method 'processThresholdIssues' must not be null";
 
-        for (final XsdMetricThresholdViolationIssue nextXsdMetricThresholdViolationIssue : report.getIssues().getElementIssues()
-                .getThresholdViolation())
+        final boolean handleDeprecatedIssues = MigrationCheck.isPreUnificationOfIssueIds(softwareSystem.getVersion());
+
+        for (final XsdMetricThresholdViolationIssue nextXsdThresholdViolation : report.getIssues().getElementIssues().getThresholdViolation())
         {
-            final XsdElement nextAffectedXsdElement = (XsdElement) nextXsdMetricThresholdViolationIssue.getAffectedElement();
+            final XsdElement nextAffectedXsdElement = (XsdElement) nextXsdThresholdViolation.getAffectedElement();
             final IElement nextAffectedElement = globalXmlToElementMap.get(nextAffectedXsdElement);
-            assert nextAffectedElement != null : "Affected element of issue '" + nextXsdMetricThresholdViolationIssue
+            assert nextAffectedElement != null : "Affected element of issue '" + nextXsdThresholdViolation
                     + "' has not been processed - xsd element id: " + nextAffectedXsdElement.getId();
             assert nextAffectedElement instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + nextAffectedElement;
 
-            final IIssueType issueType = getIssueType(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
-            final IIssueProvider issueProvider = getIssueProvider(softwareSystemImpl, nextXsdMetricThresholdViolationIssue);
+            final Severity severity;
+            final IIssueType issueType;
+            if (handleDeprecatedIssues)
+            {
+                final IIssueType deprecatedIssueType = getDeprecatedIssueType(nextXsdThresholdViolation);
+                if (deprecatedIssueType != null)
+                {
+                    severity = deprecatedIssueType.getSupportedSeverities().get(0);
+                    issueType = getConvertedIssueType(nextXsdThresholdViolation);
+                }
+                else
+                {
+                    issueType = getIssueType(softwareSystem, nextXsdThresholdViolation);
+                    final String severityString = nextXsdThresholdViolation.getSeverity();
+                    assert severityString != null : "Missing severity for threshold issue: " + nextXsdThresholdViolation.getId();
+                    severity = Severity.fromString(severityString);
+                }
+            }
+            else
+            {
+                issueType = getIssueType(softwareSystem, nextXsdThresholdViolation);
+                final String severityString = nextXsdThresholdViolation.getSeverity();
+                assert severityString != null : "Missing severity for threshold issue: " + nextXsdThresholdViolation.getId();
+                severity = Severity.fromString(severityString);
+            }
 
-            final IElement threshold = globalXmlToElementMap.get(nextXsdMetricThresholdViolationIssue.getThresholdRef());
-            assert threshold != null : "threshold has not been added to system for '" + nextXsdMetricThresholdViolationIssue.getDescription() + "'";
+            final IIssueProvider issueProvider = getIssueProvider(softwareSystem, nextXsdThresholdViolation);
+
+            final IElement threshold = globalXmlToElementMap.get(nextXsdThresholdViolation.getThresholdRef());
+            assert threshold != null : "threshold has not been added to system for '" + nextXsdThresholdViolation.getDescription() + "'";
 
             final IMetricThreshold metricThreshold = (IMetricThreshold) threshold;
-            final String nextName = issueType.getName();
-            final String nextPresentationName = issueType.getPresentationName();
-            final ThresholdViolationIssue issue = new ThresholdViolationIssue(nextName, nextPresentationName,
-                    nextXsdMetricThresholdViolationIssue.getDescription() != null ? nextXsdMetricThresholdViolationIssue.getDescription() : "",
-                    issueType, issueProvider, nextXsdMetricThresholdViolationIssue.getLine(), nextXsdMetricThresholdViolationIssue.getColumn(),
-                    (INamedElement) nextAffectedElement, nextXsdMetricThresholdViolationIssue.getMetricValue(), metricThreshold);
-            softwareSystemImpl.addIssue(issue);
-            globalXmlIdToIssueMap.put(nextXsdMetricThresholdViolationIssue, issue);
+
+            final ThresholdViolationIssue issue = new ThresholdViolationIssue(issueType.getName(), issueType.getPresentationName(),
+                    nextXsdThresholdViolation.getDescription() != null ? nextXsdThresholdViolation.getDescription() : "", issueType, severity,
+                    issueProvider, nextXsdThresholdViolation.getLine(), nextXsdThresholdViolation.getColumn(), (INamedElement) nextAffectedElement,
+                    nextXsdThresholdViolation.getMetricValue(), metricThreshold);
+            softwareSystem.addIssue(issue);
+            globalXmlIdToIssueMap.put(nextXsdThresholdViolation, issue);
         }
     }
 
@@ -1363,11 +1544,23 @@ public final class XmlReportReader extends XmlAccess
             assert affected instanceof INamedElement : "Unexpected class in method 'processSimpleElementIssues': " + affected;
 
             final IIssueType issueType = getIssueType(softwareSystem, next);
+            Severity severity;
+            if (issueType.getSupportedSeverities().size() == 1)
+            {
+                severity = issueType.getSupportedSeverities().get(0);
+            }
+            else
+            {
+                final String severityString = next.getSeverity();
+                assert severityString != null : "Missing severity for " + next;
+                severity = Severity.fromString(severityString);
+            }
+
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
             final String nextName = issueType.getName();
             final String nextPresentationName = issueType.getPresentationName();
             final NamedElementIssueImpl issue = new NamedElementIssueImpl(nextName, nextPresentationName,
-                    next.getDescription() != null ? next.getDescription() : "", issueType, issueProvider, next.getLine(), next.getColumn(),
+                    next.getDescription() != null ? next.getDescription() : "", issueType, severity, issueProvider, next.getLine(), next.getColumn(),
                     (INamedElement) affected);
             softwareSystem.addIssue(issue);
             globalXmlIdToIssueMap.put(next, issue);
@@ -1386,7 +1579,20 @@ public final class XmlReportReader extends XmlAccess
     {
         final String issueTypeName = ((XsdIssueType) xsdIssue.getType()).getName();
         final IIssueType issueType = softwareSystem.getIssueTypes().get(issueTypeName);
-        assert issueType != null : "issueType '" + issueTypeName + "' has not been added to system";
+        return issueType;
+    }
+
+    private IIssueType getDeprecatedIssueType(final XsdIssue xsdIssue)
+    {
+        final String issueTypeName = ((XsdIssueType) xsdIssue.getType()).getName();
+        final IIssueType issueType = deprecatedIssueTypeNameToIssueType.get(issueTypeName);
+        return issueType;
+    }
+
+    private IIssueType getConvertedIssueType(final XsdIssue xsdIssue)
+    {
+        final String issueTypeName = ((XsdIssueType) xsdIssue.getType()).getName();
+        final IIssueType issueType = deprecatedIssueTypeNameToNewIssueType.get(issueTypeName);
         return issueType;
     }
 }

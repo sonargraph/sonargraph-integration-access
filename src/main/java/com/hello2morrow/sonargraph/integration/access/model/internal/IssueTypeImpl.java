@@ -17,6 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.List;
+
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -24,20 +26,20 @@ import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public class IssueTypeImpl extends ElementImpl implements IIssueType
 {
-    private static final long serialVersionUID = -8081570866899153886L;
+    private static final long serialVersionUID = 5614397098070123775L;
     private final IIssueCategory category;
-    private final Severity severity;
+    private final List<Severity> supportedSeverities;
     private final String description;
     private final IIssueProvider provider;
 
-    public IssueTypeImpl(final String name, final String presentationName, final Severity severity, final IIssueCategory category,
+    public IssueTypeImpl(final String name, final String presentationName, final List<Severity> severities, final IIssueCategory category,
             final IIssueProvider provider, final String description)
     {
         super(name, presentationName);
-        assert severity != null : "Parameter 'severity' of method 'IssueType' must not be null";
+        assert severities != null : "Parameter 'severities' of method 'IssueType' must not be null";
         assert category != null : "Parameter 'category' of method 'IssueType' must not be null";
 
-        this.severity = severity;
+        this.supportedSeverities = severities;
         this.category = category;
         this.description = description != null ? description : "";
         this.provider = provider;
@@ -50,9 +52,9 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
     }
 
     @Override
-    public Severity getSeverity()
+    public List<Severity> getSupportedSeverities()
     {
-        return severity;
+        return supportedSeverities;
     }
 
     @Override

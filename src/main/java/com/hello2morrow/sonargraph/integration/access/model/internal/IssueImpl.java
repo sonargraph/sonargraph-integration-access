@@ -17,14 +17,17 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model.internal;
 
+import java.util.List;
+
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
+import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public abstract class IssueImpl extends ElementWithDescriptionImpl implements IIssue
 {
-    private static final long serialVersionUID = -693212815143740221L;
+    private static final long serialVersionUID = -5954212635522758181L;
     private final IIssueType issueType;
     private final IIssueProvider issueProvider;
     private final int line;
@@ -54,6 +57,14 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
     public final IIssueType getIssueType()
     {
         return issueType;
+    }
+
+    @Override
+    public Severity getSeverity()
+    {
+        final List<Severity> supportedSeverities = issueType.getSupportedSeverities();
+        assert supportedSeverities.size() == 1 : "No unique severity for issue " + this;
+        return supportedSeverities.get(0);
     }
 
     @Override
@@ -163,6 +174,8 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
         builder.append("type:").append(issueType.getPresentationName());
         builder.append("\n");
         builder.append("provider:").append(issueProvider.getPresentationName());
+        builder.append("\n");
+        builder.append("severity:").append(getSeverity());
         builder.append("\n");
         builder.append("line:").append(line);
         builder.append("\n");

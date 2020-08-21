@@ -21,11 +21,28 @@ import java.io.Serializable;
 
 public interface IMetricValue extends Serializable
 {
-    public IMetricId getId();
+    IMetricId getId();
 
-    public IMetricLevel getLevel();
+    IMetricLevel getLevel();
 
-    public Number getValue();
+    Number getValue();
 
-    public boolean isFloat();
+    boolean isFloat();
+
+    default String getIdString()
+    {
+        final StringBuilder builder = new StringBuilder();
+        final String provider = getId().getProvider().getPresentationName();
+        builder.append(provider);
+        builder.append(':');
+        builder.append(getLevel().getName());
+        builder.append(':');
+        String metric = getId().getName();
+        if (metric.startsWith(provider))
+        {
+            metric = metric.substring(provider.length());
+        }
+        builder.append(metric);
+        return builder.toString();
+    }
 }

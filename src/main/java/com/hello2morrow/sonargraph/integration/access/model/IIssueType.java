@@ -17,6 +17,8 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+import java.util.List;
+
 import com.hello2morrow.sonargraph.integration.access.foundation.IEnumeration;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 
@@ -39,14 +41,14 @@ public interface IIssueType extends IElement
         }
     }
 
-    public IIssueCategory getCategory();
+    IIssueCategory getCategory();
 
-    public Severity getSeverity();
+    List<Severity> getSupportedSeverities();
 
     /**
      * @return the {@link IIssueProvider} - can be null.
      */
-    public IIssueProvider getProvider();
+    IIssueProvider getProvider();
 
-    public String getDescription();
+    String getDescription();
 }
