@@ -1,0 +1,1751 @@
+<?xml version="1.0" ?>
+<ns2:report xmlns:ns3="http://www.hello2morrow.com/sonargraph/core/export" xmlns:ns2="http://www.hello2morrow.com/sonargraph/core/report" id="_0" systemId="ee6df0ca7ae86f49238d18fce3851b933" name="AlarmClock" version="10.3.0.100" systemPath="D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock.sonargraph" timestamp="2020-07-16T13:54:21.365+02:00" currentVirtualModel="Modifiable.vm" systemDescription="" analyzerExecutionLevel="full">
+	<reportContextInfo>Baseline created by JUnit Test</reportContextInfo>
+	<description></description>
+	<metaData>
+		<issueProviders>
+			<issueProvider id="_29" name="./No_Additional_CycleGroups.xml" presentationName="./No_Additional_CycleGroups.xml"></issueProvider>
+			<issueProvider id="_2a" name="./No_Threshold_Violations.xml" presentationName="./No_Threshold_Violations.xml"></issueProvider>
+			<issueProvider id="_2b" name="./UsageOfSystemOutPrintln.scr" presentationName="./UsageOfSystemOutPrintln.scr"></issueProvider>
+			<issueProvider id="_2c" name="./createViolations.arc" presentationName="./createViolations.arc"></issueProvider>
+			<issueProvider id="_2d" name="Core" presentationName="Core"></issueProvider>
+		</issueProviders>
+		<issueCategories>
+			<category id="_19" name="ArchitecturalView" presentationName="Architectural View"></category>
+			<category id="_1a" name="ArchitectureConsistency" presentationName="Architecture Consistency"></category>
+			<category id="_1b" name="ArchitectureDefinition" presentationName="Architecture Definition"></category>
+			<category id="_1c" name="ArchitectureViolation" presentationName="Architecture Violation"></category>
+			<category id="_1d" name="CycleGroup" presentationName="Cycle Group"></category>
+			<category id="_1e" name="DuplicateCode" presentationName="Duplicate Code"></category>
+			<category id="_1f" name="InstallationConfiguration" presentationName="Installation Configuration"></category>
+			<category id="_20" name="PluginBased" presentationName="Plugin Based"></category>
+			<category id="_21" name="QualityGate" presentationName="Quality Gate"></category>
+			<category id="_22" name="Refactoring" presentationName="Refactoring"></category>
+			<category id="_23" name="ScriptBased" presentationName="Script Based"></category>
+			<category id="_24" name="ScriptDefinition" presentationName="Script Definition"></category>
+			<category id="_25" name="SystemConfiguration" presentationName="System Configuration"></category>
+			<category id="_26" name="ThresholdViolation" presentationName="Threshold Violation"></category>
+			<category id="_27" name="Todo" presentationName="Todo"></category>
+			<category id="_28" name="Workspace" presentationName="Workspace"></category>
+		</issueCategories>
+		<issueTypes>
+			<issueType severity="Error" category="_1c" id="_2e" name="ArchitectureViolation" presentationName="Architecture Violation"></issueType>
+			<issueType severity="Warning" category="_1d" id="_2f" name="ComponentCycleGroup" presentationName="Component Cycle Group"></issueType>
+			<issueType severity="Warning" category="_1d" id="_30" name="NamespaceCycleGroup" presentationName="Namespace Cycle Group"></issueType>
+			<issueType severity="Error" category="_21" id="_31" name="QualityGateIssue" presentationName="Quality Gate Issue"></issueType>
+			<issueType severity="Warning" category="_23" provider="_2b" id="_32" name="Don't use System.out" presentationName="Don't use System.out"></issueType>
+			<issueType severity="Warning" category="_26" id="_33" name="ThresholdViolation" presentationName="Threshold Violation"></issueType>
+			<issueType severity="Info" category="_28" id="_34" name="WorkspaceDependencyNotDefined" presentationName="Undefined Workspace Dependency"></issueType>
+			<issueType severity="Info" category="_28" id="_35" name="WorkspaceDependencyNotImplemented" presentationName="Unimplemented Workspace Dependency"></issueType>
+		</issueTypes>
+		<metricProviders>
+			<provider id="_3b" name="Core" presentationName="Core"></provider>
+			<provider id="_3f" name="JavaLanguageProvider" presentationName="Java"></provider>
+			<provider id="_73" name="./UsageOfSystemOutPrintln.scr" presentationName="./UsageOfSystemOutPrintln.scr"></provider>
+		</metricProviders>
+		<metricCategories>
+			<category id="_54" name="Architecture" presentationName="Architecture" orderNumber="0"></category>
+			<category id="_46" name="CodeAnalysis" presentationName="Code Analysis" orderNumber="1"></category>
+			<category id="_3d" name="Cycle" presentationName="Cycle" orderNumber="2"></category>
+			<category id="_37" name="CohesionAndCoupling" presentationName="Cohesion/Coupling" orderNumber="3"></category>
+			<category id="_48" name="Dependency" presentationName="Dependency" orderNumber="4"></category>
+			<category id="_41" name="Size" presentationName="Size" orderNumber="5"></category>
+			<category id="_38" name="JohnLakos" presentationName="John Lakos" orderNumber="7"></category>
+			<category id="_50" name="ThomasMccabe" presentationName="Thomas J. McCabe" orderNumber="10"></category>
+			<category id="_77" name="MacCormack" presentationName="MacCormack, Rusnak, Baldwin" orderNumber="11"></category>
+			<category id="_71" name="Code Analysis" presentationName="Code Analysis" orderNumber="2147483646"></category>
+			<category id="_72" name="Script" presentationName="Script" orderNumber="2147483646"></category>
+		</metricCategories>
+		<metricLevels>
+			<level id="_39" name="System" presentationName="System" orderNumber="0"></level>
+			<level id="_3a" name="Module" presentationName="Module" orderNumber="10"></level>
+			<level id="_4d" name="SourceFile" presentationName="Source File" orderNumber="60"></level>
+			<level id="_7c" name="Type" presentationName="Type" orderNumber="70"></level>
+			<level id="_51" name="Routine" presentationName="Routine" orderNumber="80"></level>
+		</metricLevels>
+		<metricIds>
+			<metricId id="_36" name="CoreAcd" presentationName="ACD" description="Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components." categories="_37 _38" provider="_3b" isFloat="true" levels="_39 _3a" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_3c" name="CoreBiggestComponentCycleGroup" presentationName="Biggest Component Cycle Group" description="Number of components in biggest cycle." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_3e" name="JavaBiggestPackageCycleGroup" presentationName="Biggest Java Package Cycle Group" description="Biggest Java package cycle group." categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_40" name="JavaByteCodeInstructions" presentationName="Byte Code Instructions" description="Number of Java byte code instructions." categories="_41" provider="_3f" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_42" name="CoreCcd" presentationName="CCD" description="Cumulative component dependency according to John Lakos. Cumulated depends upon values." categories="_37 _38" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_43" name="CoreCodeCommentLines" presentationName="Code Comment Lines" description="Counts all comment lines excluding header comments and blank comment lines." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_44" name="CoreCommentLines" presentationName="Comment Lines" description="Counts all comment lines excluding blank comment lines." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_45" name="CoreComponentDependenciesToRemoveComponents" presentationName="Component Dependencies to Remove (Components)" description="Number of component dependencies to remove to break up all  component cycles." categories="_46 _3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_47" name="JavaComponentDependenciesToRemovePackages" presentationName="Component Dependencies to Remove (Java Packages)" description="Number of component dependencies to remove to break up all Java package cycle groups." categories="_46 _48" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_49" name="CoreCyclicityComponents" presentationName="Cyclicity (Components)" description="Cumulated cyclicity of component cycles." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4a" name="JavaCyclicityPackages" presentationName="Cyclicity (Java Packages)" description="Cumulated cyclicity of Java package cycle groups." categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4b" name="CoreMaxAcd" presentationName="Highest ACD" description="Highest ACD." categories="_37 _38" provider="_3b" isFloat="true" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_4c" name="CoreLinesOfCode" presentationName="Lines of Code" description="Lines of code excluding blank and comment lines." categories="_41" provider="_3b" isFloat="false" levels="_39 _4d" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_4e" name="CoreMaintainabilityLevel" presentationName="Maintainability Level" description="This metric estimates maintainability as a percentage. 100% is the best possible value. To do that it looks at the dependency structure between components (source files in most languages). Cyclic dependencies and low level classes with a lot of incoming dependencies have a negative influence on the metric. Keeping good vertical boundaries and not having too many layers will have a positive influence. It is also recommended to have as many components as possible that are independent, i.e. have no incoming dependencies and therefore can be changed without influencing the rest of the system. In Java and C# the metric also considers the value of the relative cyclicity metric for packages/namespaces. If you have large cycle groups they will have a negative influence on the metric value." categories="_37" provider="_3b" isFloat="true" levels="_39" bestValue="100.0" worstValue="0.0" minValue="0.0" maxValue="100.0" direction="LowerWorse"></metricId>
+			<metricId id="_4f" name="CoreModifiedCcn" presentationName="Modified Cyclomatic Complexity" description="As cyclomatic complexity but switch statements only add 1 independent from the number of cases." categories="_50" provider="_3b" isFloat="false" levels="_51" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_52" name="CoreNccd" presentationName="NCCD" description="Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more vertical design. A value less than 1 indicates a more horizontal design." categories="_37 _38" provider="_3b" isFloat="true" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_53" name="CoreArtifactCount" presentationName="Number of Artifacts" description="Number of architecture artifacts in checked files" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_55" name="CoreDuplicates" presentationName="Number of Code Duplicates" description="Number of duplicated code blocks." categories="_46" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_56" name="CoreComponentCycleGroups" presentationName="Number of Component Cycle Groups" description="Number of all component cycle groups, warnings and errors." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_57" name="CoreComponents" presentationName="Number of Components" description="Number of components." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_58" name="CoreComponentsIgnoringIssues" presentationName="Number of Components (Ignoring Issues)" description="Number of components ignoring issues." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_59" name="CoreComponentsInDeprecatedArtifacts" presentationName="Number of Components in Deprecated Artifacts" description="Number of components that are assigned to deprecated artifact" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5a" name="CoreViolatingComponents" presentationName="Number of Components with Violations" description="Number of components that contain architecture violations" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5b" name="CoreCriticalComponentCycleGroups" presentationName="Number of Critical Component Cycle Groups" description="Number of component cycle groups marked as errors." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5c" name="JavaCriticalPackageCycleGroups" presentationName="Number of Critical Java Package Cycle Groups" description="Number of Java package cycle groups marked as errors." categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5d" name="CoreCyclicComponents" presentationName="Number of Cyclic Components" description="Number of cyclic components." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5e" name="JavaCyclicPackages" presentationName="Number of Cyclic Java Packages" description="Number of cyclic Java packages." categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_5f" name="CoreCyclicModules" presentationName="Number of Cyclic Modules" description="Number of cyclic modules." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_60" name="CoreDuplicatedLines" presentationName="Number of Duplicated Code Lines" description="Number of duplicated lines in duplicated code blocks. The duplicated lines of each code block are calculated as the sum of involved occurrences excluding the largest, which is treated as the reference." categories="_46" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_61" name="CoreEmptyArtifactCount" presentationName="Number of Empty Artifacts" description="Number of architecture artifacts that are empty in checked files" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_62" name="CoreIgnoredDuplicates" presentationName="Number of Ignored Code Duplicates" description="Number of ignored duplicated code blocks." categories="_46" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_63" name="CoreIgnoredCyclicComponents" presentationName="Number of Ignored Cyclic Components" description="Number of ignored cyclic components." categories="_3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_64" name="JavaIgnoredCyclicPackages" presentationName="Number of Ignored Cyclic Java Packages" description="Number of ignored cyclic Java packages." categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_65" name="CoreIgnoredViolationsParserDependencies" presentationName="Number of Ignored Violations (Parser Dependencies)" description="Number of parser dependencies in ignored architecture violations" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_66" name="JavaPackages" presentationName="Number of Java Packages" description="Number of Java packages containing types." categories="_41" provider="_3f" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_67" name="CoreElementsInDeprecatedArtifacts" presentationName="Number of Logical Elements in Deprecated Artifacts" description="Number of logical programming elements that are assigned to deprecated artifact" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_68" name="CoreModules" presentationName="Number of Modules" description="Number of modules." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_69" name="CoreStatements" presentationName="Number of Statements" description="Counts all statements." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6a" name="CoreTypes" presentationName="Number of Types" description="Number of types (classes, enums or similar) in container." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_6b" name="CoreUnassignedLogicalElements" presentationName="Number of Unassigned Logical Elements" description="Number of internal logical elements that are not assigned to any artifact" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6c" name="CoreUnassignedComponents" presentationName="Number of Unassigned Physical Components" description="Number of internal physical components that are not assigned to any artifact" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6d" name="CoreViolationsComponentDependencies" presentationName="Number of Violations (Component Dependencies)" description="Number of architecture-violating component dependencies" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6e" name="CoreViolationsParserDependencies" presentationName="Number of Violations (Parser Dependencies)" description="Number of architecture-violating parser dependencies" categories="_54" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_6f" name="JavaPackageCycleGroups" presentationName="Number of all Java Package Cycle Groups" description="Number of all Java package cycle groups, errors and warnings" categories="_3d" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_70" name="UsageOfSystemOutPrintln" presentationName="Number of references to System.out.println" description="Number of references to System.out.println" categories="_71 _72" provider="_73" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_74" name="CoreParserDependenciesToRemoveComponents" presentationName="Parser Dependencies to Remove (Components)" description="Number of code lines to change to break up all  component cycles." categories="_46 _3d" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_75" name="JavaParserDependenciesToRemovePackages" presentationName="Parser Dependencies to Remove (Java Packages)" description="Number of code lines to change to break up all Java package cycle groups)." categories="_46 _48" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_76" name="CorePropagationCost" presentationName="Propagation Cost" description="Propagation cost metric according to MacCormack, Rusnak and Baldwin." categories="_37 _77" provider="_3b" isFloat="true" levels="_39" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_78" name="CoreRacd" presentationName="RACD" description="Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent)." categories="_37 _38" provider="_3b" isFloat="true" levels="_39" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_79" name="CoreRelativeCyclicityComponents" presentationName="Relative Cyclicity (Components)" description="Relative component cyclicity in percent." categories="_3d" provider="_3b" isFloat="true" levels="_39" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7a" name="JavaRelativeCyclicityPackages" presentationName="Relative Cyclicity (Java Packages)" description="Relative Java package cyclicity in percent." categories="_3d" provider="_3f" isFloat="true" levels="_39" bestValue="0.0" worstValue="100.0" minValue="0.0" maxValue="100.0" direction="HigherWorse"></metricId>
+			<metricId id="_7b" name="CoreSourceElementCount" presentationName="Source Element Count" description="Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements." categories="_41" provider="_3b" isFloat="false" levels="_39 _7c" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+			<metricId id="_7d" name="CoreStructuralDebtIndexComponents" presentationName="Structural Debt Index (Components)" description="Cumulative structural debt index of component cycles." categories="_46" provider="_3b" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7e" name="JavaStructuralDebtIndexPackages" presentationName="Structural Debt Index (Java Packages)" description="Cumulative structural debt index of all Java package cycle groups." categories="_46" provider="_3f" isFloat="false" levels="_39" bestValue="0.0" worstValue="INF" minValue="0.0" maxValue="INF" direction="HigherWorse"></metricId>
+			<metricId id="_7f" name="CoreTotalLines" presentationName="Total Lines" description="Counts all lines including empty and comment lines." categories="_41" provider="_3b" isFloat="false" levels="_39" bestValue="NaN" worstValue="NaN" minValue="0.0" maxValue="INF" direction="Indifferent"></metricId>
+		</metricIds>
+	</metaData>
+	<features>
+		<feature name="Architecture" presentationName="Architecture" licensed="true"></feature>
+		<feature name="CohesionAndCouplingMetrics" presentationName="Cohesion And Coupling Metrics" licensed="true"></feature>
+		<feature name="CycleBreakUp" presentationName="Cycle Break Up" licensed="true"></feature>
+		<feature name="DuplicateCode" presentationName="Duplicate Code" licensed="true"></feature>
+		<feature name="Platform" presentationName="Platform" licensed="true"></feature>
+		<feature name="Reporting" presentationName="Reporting" licensed="true"></feature>
+		<feature name="Scripts" presentationName="Scripts" licensed="true"></feature>
+		<feature name="ScriptsAutomated" presentationName="Scripts Automated" licensed="true"></feature>
+		<feature name="Snapshots" presentationName="Snapshots" licensed="true"></feature>
+		<feature name="Systems" presentationName="Systems" licensed="true"></feature>
+		<feature name="VirtualModels" presentationName="Virtual Models" licensed="true"></feature>
+		<feature name="Plugins" presentationName="Plugins" licensed="false"></feature>
+	</features>
+	<analyzers>
+		<analyzer description="Checks for architecture violations" licensed="true" executionLevel="minimal" executed="true" id="_1" name="ArchitectureCheck" presentationName="Architecture Check"></analyzer>
+		<analyzer description="Calculates number of violatong/ignored parser dependencies" licensed="true" executionLevel="minimal" executed="true" id="_2" name="ArchitectureCheckMetrics" presentationName="Architecture Metrics"></analyzer>
+		<analyzer description="Calculates cohesion and coupling metrics" licensed="true" executionLevel="full" executed="true" id="_11" name="CohesionAndCouplingMetrics" presentationName="Cohesion and Coupling Metrics"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on module level" licensed="true" executionLevel="advanced" executed="true" id="_c" name="ComponentCyclesModule" presentationName="Component Cycles (Module)"></analyzer>
+		<analyzer description="Computes component cycle metrics on module level" licensed="true" executionLevel="advanced" executed="true" id="_d" name="ComponentCyclesModuleMetrics" presentationName="Component Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes component / compilation unit cycles on system level" licensed="true" executionLevel="advanced" executed="true" id="_e" name="ComponentCyclesSystem" presentationName="Component Cycles (System)"></analyzer>
+		<analyzer description="Computes component cycle metrics on system level" licensed="true" executionLevel="advanced" executed="true" id="_f" name="ComponentCyclesSystemMetrics" presentationName="Component Cycle Metrics (System)"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on module level" licensed="true" executionLevel="full" executed="true" id="_12" name="CumulateDependenciesModule" presentationName="Module Dependencies"></analyzer>
+		<analyzer description="Calculates John Lakos metrics on system level" licensed="true" executionLevel="full" executed="true" id="_13" name="CumulateDependenciesSystem" presentationName="System Dependencies"></analyzer>
+		<analyzer description="Search duplicate code on system level" licensed="true" executionLevel="full" executed="true" id="_14" name="DuplicateCode" presentationName="Duplicate Code"></analyzer>
+		<analyzer description="Calculates duplicate code metrics" licensed="true" executionLevel="full" executed="true" id="_15" name="DuplicateCodeMetrics" presentationName="Duplicate Code Metrics"></analyzer>
+		<analyzer description="Calculates average complexity metrics" licensed="true" executionLevel="minimal" executed="true" id="_3" name="JavaAverageComplexityMetrics" presentationName="Java Average Complexity Metrics"></analyzer>
+		<analyzer description="Computes Java visibility metrics" licensed="true" executionLevel="basic" executed="true" id="_6" name="JavaVisibilityMetrics" presentationName="Java Visibility Metrics"></analyzer>
+		<analyzer description="Calculates maintainability level metrics" licensed="true" executionLevel="advanced" executed="true" id="_10" name="MaintainabilityLevel" presentationName="Calculate Maintainability Level"></analyzer>
+		<analyzer description="Checks for metric threshold violations" licensed="true" executionLevel="minimal" executed="true" id="_4" name="MetricThresholds" presentationName="Metric Thresholds"></analyzer>
+		<analyzer description="Analyzes module cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_7" name="ModuleCyclesSystem" presentationName="Module Cycles"></analyzer>
+		<analyzer description="Analyzes package cycles on module level" licensed="true" executionLevel="basic" executed="true" id="_8" name="PackageCyclesModule" presentationName="Package Cycles (Module)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on module level" licensed="true" executionLevel="basic" executed="true" id="_9" name="PackageCyclesModuleMetrics" presentationName="Package Cycle Metrics (Module)"></analyzer>
+		<analyzer description="Analyzes package cycles on system level" licensed="true" executionLevel="basic" executed="true" id="_a" name="PackageCyclesSystem" presentationName="Package Cycles (System)"></analyzer>
+		<analyzer description="Computes package cycle metrcis on system level" licensed="true" executionLevel="basic" executed="true" id="_b" name="PackageCyclesSystemMetrics" presentationName="Package Cycle Metrics (System)"></analyzer>
+		<analyzer description="Checks compliance against defined quality gates" licensed="true" executionLevel="full" executed="true" id="_16" name="QualityGates" presentationName="Quality Gate"></analyzer>
+		<analyzer description="Runs scripts configured for automated execution" licensed="true" executionLevel="full" executed="true" id="_17" name="ScriptRunner" presentationName="Script Runner"></analyzer>
+		<analyzer description="Calculates size metrics" licensed="true" executionLevel="minimal" executed="true" id="_5" name="SizeMetrics" presentationName="Size Metrics"></analyzer>
+		<analyzer description="Computes the system diff against a baseline" licensed="true" executionLevel="full" executed="true" id="_18" name="SystemDiff" presentationName="System Diff"></analyzer>
+	</analyzers>
+	<plugins></plugins>
+	<duplicateCodeConfiguration>
+		<entry>MinimalLineLength:4</entry>
+		<entry>MinimalBlockLength:25</entry>
+		<entry>MaximalNumberOfCopies:100</entry>
+		<entry>MaximalTolerancePerEdit:3</entry>
+		<entry>MaximalRelativeTolerancePercentage:35</entry>
+	</duplicateCodeConfiguration>
+	<scriptRunnerConfiguration>
+		<entry>./UsageOfSystemOutPrintln.scr:[Default]</entry>
+	</scriptRunnerConfiguration>
+	<architectureCheckConfiguration>
+		<entry>./architecture.arc</entry>
+		<entry>./createViolations.arc</entry>
+		<entry>./layers.arc</entry>
+	</architectureCheckConfiguration>
+	<metricThresholds>
+		<threshold id="_80" metricId="_7b" metricLevel="_7c" lowerThreshold="5" upperThreshold="10" severity="Warning" debugInfo="Source Element Count (Type)"></threshold>
+		<threshold id="_81" metricId="_4c" metricLevel="_4d" lowerThreshold="5" upperThreshold="900" severity="Warning" debugInfo="Lines of Code (Source File)"></threshold>
+		<threshold id="_82" metricId="_36" metricLevel="_39" lowerThreshold="0" upperThreshold="75" severity="Warning" debugInfo="ACD (System)"></threshold>
+		<threshold id="_83" metricId="_4f" metricLevel="_51" lowerThreshold="0" upperThreshold="25" severity="Warning" debugInfo="Modified Cyclomatic Complexity (Routine)"></threshold>
+		<threshold id="_84" metricId="_36" metricLevel="_3a" lowerThreshold="0" upperThreshold="48" severity="Warning" debugInfo="ACD (Module)"></threshold>
+		<threshold id="_85" metricId="_70" metricLevel="_39" lowerThreshold="0" upperThreshold="0" severity="Warning" debugInfo="Number of references to System.out.println (System)"></threshold>
+	</metricThresholds>
+	<cycleGroupAnalyzerConfiguration analyzer="_7" name="ModuleCyclesSystem">
+		<intEntry name="CriticalModuleCycleSize" value="2"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_c" name="ComponentCyclesModule">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_e" name="ComponentCyclesSystem">
+		<intEntry name="CriticalComponentCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_a" name="PackageCyclesSystem">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<cycleGroupAnalyzerConfiguration analyzer="_8" name="PackageCyclesModule">
+		<intEntry name="CriticalNamespaceCycleSize" value="6"></intEntry>
+	</cycleGroupAnalyzerConfiguration>
+	<systemDiffConfiguration>
+		<path>../baseline_report.xml</path>
+	</systemDiffConfiguration>
+	<qualityGateConfiguration>
+		<entry>./No_Additional_CycleGroups.xml</entry>
+		<entry>./No_Threshold_Violations.xml</entry>
+	</qualityGateConfiguration>
+	<systemFile path="./architecture.arc" type="Architecture" lastModified="2020-07-16T13:51:32.299+02:00" hash="0c192a5032a7f553dce179de9ce3e232"></systemFile>
+	<systemFile path="./createViolations.arc" type="Architecture" lastModified="2020-07-16T13:51:32.301+02:00" hash="294f05bb764d0ea8a531829acb027b72"></systemFile>
+	<systemFile path="./layers.arc" type="Architecture" lastModified="2020-07-16T13:51:32.303+02:00" hash="b95383ddbc31bd07f10266d083b9bfb8"></systemFile>
+	<elementKinds>
+		<elementKind id="_98" standardKind="JavaNonInitializer" presentationKind="Java Non Initializer" imageResourceName="JavaMethod"></elementKind>
+		<elementKind id="_a8" standardKind="JavaLogicalModuleNamespace" presentationKind="Package" imageResourceName="NamespaceFragment"></elementKind>
+		<elementKind id="_89" standardKind="JavaClassRootDirectoryPath" presentationKind="Java Class Root Directory/Archive" imageResourceName="RootDirectoryPath"></elementKind>
+		<elementKind id="_9a" standardKind="JavaInternalCompilationUnit" presentationKind="Java Internal Compilation Unit" imageResourceName="JavaCompilationUnit"></elementKind>
+		<elementKind id="_87" standardKind="JavaModule" presentationKind="Java Module" imageResourceName="Module"></elementKind>
+		<elementKind id="_ba" standardKind="ThresholdIssueQualityGateCondition" presentationKind="Threshold Issue Quality Gate Condition" imageResourceName="QualityGateCondition"></elementKind>
+		<elementKind id="_96" standardKind="JavaExternal" presentationKind="Java External" imageResourceName="External"></elementKind>
+		<elementKind id="_9c" standardKind="JavaType" presentationKind="Java Type" imageResourceName="JavaClass"></elementKind>
+		<elementKind id="_a2" standardKind="JavaField" presentationKind="Java Field"></elementKind>
+		<elementKind id="_b5" standardKind="SoftwareSystem" presentationKind="System"></elementKind>
+		<elementKind id="_aa" standardKind="JavaPackageFragment" presentationKind="Package" imageResourceName="NamespaceFragment"></elementKind>
+		<elementKind id="_8b" standardKind="JavaSourceRootDirectoryPath" presentationKind="Java Source Root Directory/Archive"></elementKind>
+		<elementKind id="_a4" standardKind="JavaConstructor" presentationKind="Java Constructor" imageResourceName="JavaMethod"></elementKind>
+		<elementKind id="_b7" standardKind="MetricValueDiffQualityGateCondition" presentationKind="Metric Value Diff Quality Gate Condition" imageResourceName="QualityGateCondition"></elementKind>
+	</elementKinds>
+	<workspace>
+		<workspaceFilter description="Exclude files (matches against the 'Identifying Path' property)" information="Excluded 0 files(s)" numberOfExcludedElements="0"></workspaceFilter>
+		<productionCodeFilter description="Exclude internal components containing test code (matches against the 'Workspace Filter Name' property)" information="Excluded 0 internal component(s) (processed 7)" numberOfExcludedElements="0" numberOfIncludedElements="7"></productionCodeFilter>
+		<issueFilter description="Ignore analysis issues of internal components containing legacy/generated code (matches against the 'Workspace Filter Name' property)" information="Ignoring analysis issues of 0 internal component(s) (processed 7)" numberOfExcludedElements="0" numberOfIncludedElements="7"></issueFilter>
+		<module moduleId="View" language="Java" description="Second-level module containing other modules." kind="_87" fqName="Workspace:View" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule [21005f6c]
+Name: View
+Short name: View
+Presentation name: View
+Presentation name (short): View
+Raw presentation name: View
+Raw presentation name (short): View
+Description: Second-level module containing other modules.
+Information: 3 internal component(s)
+Property: type = Manually defined Java module
+Property: name = View
+Property: description = Second-level module containing other modules.
+Property: workspaceFilterName = View/**
+Property: level = 3
+Property: domainInfo = View [Physical Java]
+Property: domain = Physical
+Property: information = 3 internal component(s)
+Property: fullyQualifiedName = Workspace:View
+Property: originalFullyQualifiedName = Workspace:View
+Property: architectureFilterNamePhysical = View/**
+Is Original
+This: 21005f6c
+Original: 21005f6c
+Representative: 21005f6c
+Original fully qualified name: Workspace:View
+Original fully qualified name (part): View
+Fully qualified name: Workspace:View
+Fully qualified name (part): View
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Workspace dependency to: Model
+Workspace dependency to: Foundation" id="_86" name="View" presentationName="View">
+			<rootDirectory kind="_89" fqName="Workspace:View:Class|./AlarmClock/View/target/classes" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaClassRootDirectoryPath [1de9b505]
+Name: ./AlarmClock/View/target/classes
+Short name: classes
+Presentation name: ./AlarmClock/View/target/classes
+Presentation name (short): ./AlarmClock/View/target/classes
+Raw presentation name: ./AlarmClock/View/target/classes
+Raw presentation name (short): classes
+Information: 3 Java class file(s) found
+Property: name = ./AlarmClock/View/target/classes
+Property: workspaceFilterName = View/AlarmClock/View/target/classes/**
+Property: identifyingPath = ./AlarmClock/View/target/classes
+Property: information = 3 Java class file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\target\classes
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:Class|./AlarmClock/View/target/classes
+Property: originalFullyQualifiedName = Workspace:View:Class|./AlarmClock/View/target/classes
+Is Original
+This: 1de9b505
+Original: 1de9b505
+Representative: 1de9b505
+Original fully qualified name: Workspace:View:Class|./AlarmClock/View/target/classes
+Original fully qualified name (part): Class|./AlarmClock/View/target/classes
+Fully qualified name: Workspace:View:Class|./AlarmClock/View/target/classes
+Fully qualified name (part): Class|./AlarmClock/View/target/classes
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/View/target/classes
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/View/target/classes
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\target\classes" id="_88" name="Class|./AlarmClock/View/target/classes" presentationName="./AlarmClock/View/target/classes"></rootDirectory>
+			<rootDirectory kind="_8b" fqName="Workspace:View:./AlarmClock/View/src/main/java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath [7b122839]
+Name: ./AlarmClock/View/src/main/java
+Short name: java
+Presentation name: ./AlarmClock/View/src/main/java
+Presentation name (short): ./AlarmClock/View/src/main/java
+Raw presentation name: ./AlarmClock/View/src/main/java
+Raw presentation name (short): java
+Information: 3 Java source file(s) found
+Property: name = ./AlarmClock/View/src/main/java
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/**
+Property: identifyingPath = ./AlarmClock/View/src/main/java
+Property: information = 3 Java source file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java
+Is Original
+This: 7b122839
+Original: 7b122839
+Representative: 7b122839
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java
+Original fully qualified name (part): ./AlarmClock/View/src/main/java
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java
+Fully qualified name (part): ./AlarmClock/View/src/main/java
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/View/src/main/java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/View/src/main/java
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java" id="_8a" name="./AlarmClock/View/src/main/java" presentationName="./AlarmClock/View/src/main/java">
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/presentation/console" kind="_aa" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment [37d28f02]
+Name: com.h2m.alarm.presentation.console
+Short name: console
+Presentation name: com.h2m.alarm.presentation.console
+Presentation name (short): console
+Raw presentation name: com.h2m.alarm.presentation.console
+Raw presentation name (short): console
+Information: View [Physical Java]
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/com/h2m/alarm/presentation/console/**
+Property: relativeDirectoryPath = ./com/h2m/alarm/presentation/console
+Property: name = com.h2m.alarm.presentation.console
+Property: information = View [Physical Java]
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console
+Property: architectureFilterNamePhysical = View/com/h2m/alarm/presentation/console/**
+Is Original
+This: 37d28f02
+Original: 37d28f02
+Representative: 37d28f02
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console
+Original fully qualified name (part): console
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console
+Fully qualified name (part): console
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)" id="_a9" name="console" presentationName="com.h2m.alarm.presentation.console"></physicalRecursiveElement>
+				<physicalRecursiveElement relativeDirectoryPath="./com/h2m/alarm/presentation/file" kind="_aa" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment [330c1f61]
+Name: com.h2m.alarm.presentation.file
+Short name: file
+Presentation name: com.h2m.alarm.presentation.file
+Presentation name (short): file
+Raw presentation name: com.h2m.alarm.presentation.file
+Raw presentation name (short): file
+Information: View [Physical Java]
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/com/h2m/alarm/presentation/file/**
+Property: relativeDirectoryPath = ./com/h2m/alarm/presentation/file
+Property: name = com.h2m.alarm.presentation.file
+Property: information = View [Physical Java]
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file
+Property: architectureFilterNamePhysical = View/com/h2m/alarm/presentation/file/**
+Is Original
+This: 330c1f61
+Original: 330c1f61
+Representative: 330c1f61
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file
+Original fully qualified name (part): file
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file
+Fully qualified name (part): file
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)" id="_ac" name="file" presentationName="com.h2m.alarm.presentation.file"></physicalRecursiveElement>
+				<sourceElement kind="_9a" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [54067fdc]
+Name: ./com/h2m/alarm/presentation/AlarmHandler.java
+Short name: AlarmHandler.java
+Presentation name: ./com/h2m/alarm/presentation/AlarmHandler.java
+Presentation name (short): AlarmHandler.java
+Raw presentation name: ./com/h2m/alarm/presentation/AlarmHandler.java
+Raw presentation name (short): AlarmHandler.java
+Property: name = ./com/h2m/alarm/presentation/AlarmHandler.java
+Property: size = 66
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/com/h2m/alarm/presentation/AlarmHandler
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java\com\h2m\alarm\presentation\AlarmHandler.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 36
+Property: linesOfCode = 28
+Property: identifyingPath = ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/AlarmHandler.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java
+Property: architectureFilterNamePhysical = View/com/h2m/alarm/presentation/AlarmHandler
+Is Original
+This: 54067fdc
+Original: 54067fdc
+Representative: 54067fdc
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java
+Original fully qualified name (part): AlarmHandler.java
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java
+Fully qualified name (part): AlarmHandler.java
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/alarm/presentation/AlarmHandler.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java
+Identifying path: ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/AlarmHandler.java" id="_ae" name="AlarmHandler.java" presentationName="./com/h2m/alarm/presentation/AlarmHandler.java"></sourceElement>
+				<sourceElement kind="_9a" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [49c17ba4]
+Name: ./com/h2m/alarm/presentation/console/AlarmToConsole.java
+Short name: AlarmToConsole.java
+Presentation name: ./com/h2m/alarm/presentation/console/AlarmToConsole.java
+Presentation name (short): AlarmToConsole.java
+Raw presentation name: ./com/h2m/alarm/presentation/console/AlarmToConsole.java
+Raw presentation name (short): AlarmToConsole.java
+Property: name = ./com/h2m/alarm/presentation/console/AlarmToConsole.java
+Property: size = 21
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/com/h2m/alarm/presentation/console/AlarmToConsole
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java\com\h2m\alarm\presentation\console\AlarmToConsole.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 26
+Property: linesOfCode = 19
+Property: identifyingPath = ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/console/AlarmToConsole.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java
+Property: architectureFilterNamePhysical = View/com/h2m/alarm/presentation/console/AlarmToConsole
+Is Original
+This: 49c17ba4
+Original: 49c17ba4
+Representative: 49c17ba4
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java
+Original fully qualified name (part): AlarmToConsole.java
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java
+Fully qualified name (part): AlarmToConsole.java
+Parent: com.h2m.alarm.presentation.console (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/alarm/presentation/console/AlarmToConsole.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java
+Identifying path: ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/console/AlarmToConsole.java" id="_b0" name="AlarmToConsole.java" presentationName="./com/h2m/alarm/presentation/console/AlarmToConsole.java"></sourceElement>
+				<sourceElement kind="_9a" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [63cd2cd2]
+Name: ./com/h2m/alarm/presentation/file/AlarmToFile.java
+Short name: AlarmToFile.java
+Presentation name: ./com/h2m/alarm/presentation/file/AlarmToFile.java
+Presentation name (short): AlarmToFile.java
+Raw presentation name: ./com/h2m/alarm/presentation/file/AlarmToFile.java
+Raw presentation name (short): AlarmToFile.java
+Property: name = ./com/h2m/alarm/presentation/file/AlarmToFile.java
+Property: size = 49
+Property: workspaceFilterName = View/AlarmClock/View/src/main/java/com/h2m/alarm/presentation/file/AlarmToFile
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java\com\h2m\alarm\presentation\file\AlarmToFile.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 40
+Property: linesOfCode = 34
+Property: identifyingPath = ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/file/AlarmToFile.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java
+Property: architectureFilterNamePhysical = View/com/h2m/alarm/presentation/file/AlarmToFile
+Is Original
+This: 63cd2cd2
+Original: 63cd2cd2
+Representative: 63cd2cd2
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java
+Original fully qualified name (part): AlarmToFile.java
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java
+Fully qualified name (part): AlarmToFile.java
+Parent: com.h2m.alarm.presentation.file (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/alarm/presentation/file/AlarmToFile.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\View\src\main\java
+Identifying path: ./AlarmClock/View/src/main/java/com/h2m/alarm/presentation/file/AlarmToFile.java" id="_b2" name="AlarmToFile.java" presentationName="./com/h2m/alarm/presentation/file/AlarmToFile.java"></sourceElement>
+				<programmingElement line="9" kind="_9c" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler" source="_ae" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType [3ed34ef5]
+Name: com.h2m.alarm.presentation.AlarmHandler
+Short name: AlarmHandler
+Presentation name: com.h2m.alarm.presentation.AlarmHandler
+Presentation name (short): AlarmHandler
+Raw presentation name: com.h2m.alarm.presentation.AlarmHandler
+Raw presentation name (short): AlarmHandler
+Property: name = com.h2m.alarm.presentation.AlarmHandler
+Property: numberOfMethods = 5
+Property: isAbstract = true
+Property: isPublic = true
+Property: isClass = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler
+Property: sourceElementCount = 1
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 3ed34ef5
+Original: 3ed34ef5
+Representative: 3ed34ef5
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler
+Original fully qualified name (part): AlarmHandler
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler
+Fully qualified name (part): AlarmHandler
+Parent: ./com/h2m/alarm/presentation/AlarmHandler.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [3ed34ef5] Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]
+Flag: Class
+Flag: Public
+Flag: Abstract
+Flag: FoundInSource
+FqName: com.h2m.alarm.presentation.AlarmHandler" id="_ad" name="AlarmHandler" presentationName="com.h2m.alarm.presentation.AlarmHandler"></programmingElement>
+				<programmingElement line="27" kind="_98" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)" source="_ae" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer [37c41ec0]
+Name: com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String)
+Short name: handleEvent
+Presentation name: com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String) : void
+Presentation name (short): handleEvent(Observable,String) : void
+Raw presentation name: com.h2m.alarm.presentation.AlarmHandler.handleEvent
+Raw presentation name (short): handleEvent
+Property: name = com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String)
+Property: cyclomaticComplexity = 1
+Property: numberOfStatements = 4
+Property: extendedCyclomaticComplexity = 1
+Property: modifiedCyclomaticComplexity = 1
+Property: numberOfParameters = 2
+Property: modifiedExtendedCyclomaticComplexity = 1
+Property: sourceElementCount = 5
+Property: maxNesting = 0
+Property: numberOfLogicalOperations = 0
+Property: isFinal = true
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Issue: com.hello2morrow.sonargraph.core.model.script.ScriptElementIssueWithDescription: Don't use System.out (Don't use System.out)
+Is Original
+This: 37c41ec0
+Original: 37c41ec0
+Representative: 37c41ec0
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Original fully qualified name (part): handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Fully qualified name (part): handleEvent(com.h2m.common.observer.Observable,java.lang.String)
+Parent: com.h2m.alarm.presentation.AlarmHandler (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/presentation/AlarmHandler.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [37c41ec0] Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:AlarmHandler.java:AlarmHandler:handleEvent(com.h2m.common.observer.Observable,java.lang.String) [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]
+Flag: Public
+Flag: Final
+Flag: FoundInSource" id="_af" name="handleEvent(com.h2m.common.observer.Observable,java.lang.String)" presentationName="com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String) : void"></programmingElement>
+				<programmingElement line="20" kind="_98" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()" source="_b0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer [6deee370]
+Name: com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm()
+Short name: handleAlarm
+Presentation name: com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm() : void
+Presentation name (short): handleAlarm() : void
+Raw presentation name: com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm
+Raw presentation name (short): handleAlarm
+Property: name = com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm()
+Property: cyclomaticComplexity = 1
+Property: numberOfStatements = 1
+Property: extendedCyclomaticComplexity = 1
+Property: modifiedCyclomaticComplexity = 1
+Property: numberOfParameters = 0
+Property: modifiedExtendedCyclomaticComplexity = 1
+Property: sourceElementCount = 2
+Property: maxNesting = 0
+Property: numberOfLogicalOperations = 0
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()
+Issue: com.hello2morrow.sonargraph.core.model.script.ScriptElementIssueWithDescription: Don't use System.out (Don't use System.out)
+Is Original
+This: 6deee370
+Original: 6deee370
+Representative: 6deee370
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()
+Original fully qualified name (part): handleAlarm()
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm()
+Fully qualified name (part): handleAlarm()
+Parent: com.h2m.alarm.presentation.console.AlarmToConsole (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/presentation/console/AlarmToConsole.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.presentation.console (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [6deee370] Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java:AlarmToConsole:handleAlarm() [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]
+Flag: Public
+Flag: Overrides
+Flag: FoundInSource" id="_b1" name="handleAlarm()" presentationName="com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm() : void"></programmingElement>
+				<programmingElement line="10" kind="_9c" fqName="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile" source="_b2" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType [76464795]
+Name: com.h2m.alarm.presentation.file.AlarmToFile
+Short name: AlarmToFile
+Presentation name: com.h2m.alarm.presentation.file.AlarmToFile
+Presentation name (short): AlarmToFile
+Raw presentation name: com.h2m.alarm.presentation.file.AlarmToFile
+Raw presentation name (short): AlarmToFile
+Property: name = com.h2m.alarm.presentation.file.AlarmToFile
+Property: numberOfMethods = 3
+Property: isFinal = true
+Property: isPublic = true
+Property: isClass = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile
+Property: originalFullyQualifiedName = Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile
+Property: sourceElementCount = 1
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 76464795
+Original: 76464795
+Representative: 76464795
+Original fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile
+Original fully qualified name (part): AlarmToFile
+Fully qualified name: Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile
+Fully qualified name (part): AlarmToFile
+Parent: ./com/h2m/alarm/presentation/file/AlarmToFile.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.presentation.file (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/View/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: View (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [76464795] Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java:AlarmToFile [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]
+Flag: Class
+Flag: Public
+Flag: Final
+Flag: FoundInSource
+FqName: com.h2m.alarm.presentation.file.AlarmToFile" id="_b3" name="AlarmToFile" presentationName="com.h2m.alarm.presentation.file.AlarmToFile"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module moduleId="Model" language="Java" description="Second-level module containing other modules." kind="_87" fqName="Workspace:Model" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule [7e242b4d]
+Name: Model
+Short name: Model
+Presentation name: Model
+Presentation name (short): Model
+Raw presentation name: Model
+Raw presentation name (short): Model
+Description: Second-level module containing other modules.
+Information: 1 internal component(s)
+Property: type = Manually defined Java module
+Property: name = Model
+Property: description = Second-level module containing other modules.
+Property: workspaceFilterName = Model/**
+Property: level = 2
+Property: domainInfo = Model [Physical Java]
+Property: domain = Physical
+Property: information = 1 internal component(s)
+Property: fullyQualifiedName = Workspace:Model
+Property: originalFullyQualifiedName = Workspace:Model
+Property: architectureFilterNamePhysical = Model/**
+Is Original
+This: 7e242b4d
+Original: 7e242b4d
+Representative: 7e242b4d
+Original fully qualified name: Workspace:Model
+Original fully qualified name (part): Model
+Fully qualified name: Workspace:Model
+Fully qualified name (part): Model
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Workspace dependency to: Foundation" id="_8c" name="Model" presentationName="Model">
+			<rootDirectory kind="_89" fqName="Workspace:Model:Class|./AlarmClock/Model/target/classes" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaClassRootDirectoryPath [5db6b845]
+Name: ./AlarmClock/Model/target/classes
+Short name: classes
+Presentation name: ./AlarmClock/Model/target/classes
+Presentation name (short): ./AlarmClock/Model/target/classes
+Raw presentation name: ./AlarmClock/Model/target/classes
+Raw presentation name (short): classes
+Information: 1 Java class file(s) found
+Property: name = ./AlarmClock/Model/target/classes
+Property: workspaceFilterName = Model/AlarmClock/Model/target/classes/**
+Property: identifyingPath = ./AlarmClock/Model/target/classes
+Property: information = 1 Java class file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\target\classes
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:Class|./AlarmClock/Model/target/classes
+Property: originalFullyQualifiedName = Workspace:Model:Class|./AlarmClock/Model/target/classes
+Is Original
+This: 5db6b845
+Original: 5db6b845
+Representative: 5db6b845
+Original fully qualified name: Workspace:Model:Class|./AlarmClock/Model/target/classes
+Original fully qualified name (part): Class|./AlarmClock/Model/target/classes
+Fully qualified name: Workspace:Model:Class|./AlarmClock/Model/target/classes
+Fully qualified name (part): Class|./AlarmClock/Model/target/classes
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/Model/target/classes
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/Model/target/classes
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\target\classes" id="_8d" name="Class|./AlarmClock/Model/target/classes" presentationName="./AlarmClock/Model/target/classes"></rootDirectory>
+			<rootDirectory kind="_8b" fqName="Workspace:Model:./AlarmClock/Model/src/main/java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath [378f002a]
+Name: ./AlarmClock/Model/src/main/java
+Short name: java
+Presentation name: ./AlarmClock/Model/src/main/java
+Presentation name (short): ./AlarmClock/Model/src/main/java
+Raw presentation name: ./AlarmClock/Model/src/main/java
+Raw presentation name (short): java
+Information: 1 Java source file(s) found
+Property: name = ./AlarmClock/Model/src/main/java
+Property: workspaceFilterName = Model/AlarmClock/Model/src/main/java/**
+Property: identifyingPath = ./AlarmClock/Model/src/main/java
+Property: information = 1 Java source file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\src\main\java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java
+Is Original
+This: 378f002a
+Original: 378f002a
+Representative: 378f002a
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java
+Original fully qualified name (part): ./AlarmClock/Model/src/main/java
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java
+Fully qualified name (part): ./AlarmClock/Model/src/main/java
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/Model/src/main/java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/Model/src/main/java
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\src\main\java" id="_8e" name="./AlarmClock/Model/src/main/java" presentationName="./AlarmClock/Model/src/main/java">
+				<sourceElement kind="_9a" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [57f847af]
+Name: ./com/h2m/alarm/model/AlarmClock.java
+Short name: AlarmClock.java
+Presentation name: ./com/h2m/alarm/model/AlarmClock.java
+Presentation name (short): AlarmClock.java
+Raw presentation name: ./com/h2m/alarm/model/AlarmClock.java
+Raw presentation name (short): AlarmClock.java
+Property: name = ./com/h2m/alarm/model/AlarmClock.java
+Property: size = 41
+Property: workspaceFilterName = Model/AlarmClock/Model/src/main/java/com/h2m/alarm/model/AlarmClock
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\src\main\java\com\h2m\alarm\model\AlarmClock.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 35
+Property: linesOfCode = 29
+Property: identifyingPath = ./AlarmClock/Model/src/main/java/com/h2m/alarm/model/AlarmClock.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java
+Property: architectureFilterNamePhysical = Model/com/h2m/alarm/model/AlarmClock
+Is Original
+This: 57f847af
+Original: 57f847af
+Representative: 57f847af
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java
+Original fully qualified name (part): AlarmClock.java
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java
+Fully qualified name (part): AlarmClock.java
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/alarm/model/AlarmClock.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Model\src\main\java
+Identifying path: ./AlarmClock/Model/src/main/java/com/h2m/alarm/model/AlarmClock.java" id="_a0" name="AlarmClock.java" presentationName="./com/h2m/alarm/model/AlarmClock.java"></sourceElement>
+				<programmingElement line="5" kind="_9c" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock" source="_a0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType [661d88a]
+Name: com.h2m.alarm.model.AlarmClock
+Short name: AlarmClock
+Presentation name: com.h2m.alarm.model.AlarmClock
+Presentation name (short): AlarmClock
+Raw presentation name: com.h2m.alarm.model.AlarmClock
+Raw presentation name (short): AlarmClock
+Property: name = com.h2m.alarm.model.AlarmClock
+Property: numberOfMethods = 3
+Property: isFinal = true
+Property: isPublic = true
+Property: isClass = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock
+Property: sourceElementCount = 1
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 661d88a
+Original: 661d88a
+Representative: 661d88a
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock
+Original fully qualified name (part): AlarmClock
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock
+Fully qualified name (part): AlarmClock
+Parent: ./com/h2m/alarm/model/AlarmClock.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [661d88a] Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]
+Flag: Class
+Flag: Public
+Flag: Final
+Flag: FoundInSource
+FqName: com.h2m.alarm.model.AlarmClock" id="_9f" name="AlarmClock" presentationName="com.h2m.alarm.model.AlarmClock"></programmingElement>
+				<programmingElement line="7" kind="_a2" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT" source="_a0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaField [643d2dae]
+Name: com.h2m.alarm.model.AlarmClock.ALARM_EVENT
+Short name: ALARM_EVENT
+Presentation name: com.h2m.alarm.model.AlarmClock.ALARM_EVENT
+Presentation name (short): ALARM_EVENT
+Raw presentation name: com.h2m.alarm.model.AlarmClock.ALARM_EVENT
+Raw presentation name (short): ALARM_EVENT
+Property: name = com.h2m.alarm.model.AlarmClock.ALARM_EVENT
+Property: isStatic = true
+Property: isFinal = true
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT
+Property: sourceElementCount = 1
+Is Original
+This: 643d2dae
+Original: 643d2dae
+Representative: 643d2dae
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT
+Original fully qualified name (part): ALARM_EVENT
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT
+Fully qualified name (part): ALARM_EVENT
+Parent: com.h2m.alarm.model.AlarmClock (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/model/AlarmClock.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [643d2dae] Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:ALARM_EVENT [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaField]
+Flag: Public
+Flag: Static
+Flag: Final
+Flag: Inlineable
+Flag: FoundInSource" id="_a1" name="ALARM_EVENT" presentationName="com.h2m.alarm.model.AlarmClock.ALARM_EVENT"></programmingElement>
+				<programmingElement line="13" kind="_a4" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()" source="_a0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaConstructor [1f1e58ca]
+Name: com.h2m.alarm.model.AlarmClock.AlarmClock()
+Short name: AlarmClock
+Presentation name: com.h2m.alarm.model.AlarmClock.AlarmClock()
+Presentation name (short): AlarmClock()
+Raw presentation name: com.h2m.alarm.model.AlarmClock.AlarmClock
+Raw presentation name (short): AlarmClock
+Property: name = com.h2m.alarm.model.AlarmClock.AlarmClock()
+Property: cyclomaticComplexity = 1
+Property: numberOfStatements = 1
+Property: extendedCyclomaticComplexity = 1
+Property: modifiedCyclomaticComplexity = 1
+Property: numberOfParameters = 0
+Property: modifiedExtendedCyclomaticComplexity = 1
+Property: sourceElementCount = 2
+Property: maxNesting = 0
+Property: numberOfLogicalOperations = 0
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()
+Is Original
+This: 1f1e58ca
+Original: 1f1e58ca
+Representative: 1f1e58ca
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()
+Original fully qualified name (part): AlarmClock()
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock()
+Fully qualified name (part): AlarmClock()
+Parent: com.h2m.alarm.model.AlarmClock (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/model/AlarmClock.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [1f1e58ca] Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:AlarmClock() [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaConstructor]
+Flag: Public
+Flag: FoundInSource" id="_a3" name="AlarmClock()" presentationName="com.h2m.alarm.model.AlarmClock.AlarmClock()"></programmingElement>
+				<programmingElement kind="_98" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)" source="_a0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer [541179e7]
+Name: com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String)
+Short name: addObserver
+Presentation name: com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String) : void
+Presentation name (short): addObserver(Observable$IObserver,String) : void
+Raw presentation name: com.h2m.alarm.model.AlarmClock.addObserver
+Raw presentation name (short): addObserver
+Property: isMethodDefinedInSuperType = true
+Property: name = com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String)
+Property: numberOfParameters = 2
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Is Original
+This: 541179e7
+Original: 541179e7
+Representative: 541179e7
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Original fully qualified name (part): addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Fully qualified name (part): addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)
+Parent: com.h2m.alarm.model.AlarmClock (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/model/AlarmClock.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [541179e7] Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String) [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]
+Flag: NotDefinedInEnclosingType" id="_a5" name="addObserver(com.h2m.common.observer.Observable$IObserver,java.lang.String)" presentationName="com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String) : void"></programmingElement>
+				<programmingElement line="18" kind="_98" fqName="Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()" source="_a0" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer [303f1234]
+Name: com.h2m.alarm.model.AlarmClock.run()
+Short name: run
+Presentation name: com.h2m.alarm.model.AlarmClock.run() : void
+Presentation name (short): run() : void
+Raw presentation name: com.h2m.alarm.model.AlarmClock.run
+Raw presentation name (short): run
+Property: name = com.h2m.alarm.model.AlarmClock.run()
+Property: cyclomaticComplexity = 3
+Property: numberOfStatements = 7
+Property: extendedCyclomaticComplexity = 3
+Property: modifiedCyclomaticComplexity = 2
+Property: numberOfParameters = 0
+Property: modifiedExtendedCyclomaticComplexity = 2
+Property: sourceElementCount = 8
+Property: maxNesting = 2
+Property: numberOfLogicalOperations = 0
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()
+Property: originalFullyQualifiedName = Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()
+Issue: com.hello2morrow.sonargraph.core.model.script.ScriptElementIssueWithDescription: Don't use System.out (Don't use System.out)
+Is Original
+This: 303f1234
+Original: 303f1234
+Representative: 303f1234
+Original fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()
+Original fully qualified name (part): run()
+Fully qualified name: Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run()
+Fully qualified name (part): run()
+Parent: com.h2m.alarm.model.AlarmClock (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/model/AlarmClock.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Model/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Model (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [303f1234] Workspace:Model:./AlarmClock/Model/src/main/java:com:h2m:alarm:model:AlarmClock.java:AlarmClock:run() [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]
+Flag: Public
+Flag: FoundInSource" id="_a6" name="run()" presentationName="com.h2m.alarm.model.AlarmClock.run() : void"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module moduleId="Foundation" language="Java" description="Second-level module containing other modules." kind="_87" fqName="Workspace:Foundation" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule [305f031]
+Name: Foundation
+Short name: Foundation
+Presentation name: Foundation
+Presentation name (short): Foundation
+Raw presentation name: Foundation
+Raw presentation name (short): Foundation
+Description: Second-level module containing other modules.
+Information: 1 internal component(s)
+Property: type = Manually defined Java module
+Property: name = Foundation
+Property: description = Second-level module containing other modules.
+Property: workspaceFilterName = Foundation/**
+Property: level = 1
+Property: domainInfo = Foundation [Physical Java]
+Property: domain = Physical
+Property: information = 1 internal component(s)
+Property: fullyQualifiedName = Workspace:Foundation
+Property: originalFullyQualifiedName = Workspace:Foundation
+Property: architectureFilterNamePhysical = Foundation/**
+Is Original
+This: 305f031
+Original: 305f031
+Representative: 305f031
+Original fully qualified name: Workspace:Foundation
+Original fully qualified name (part): Foundation
+Fully qualified name: Workspace:Foundation
+Fully qualified name (part): Foundation
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)" id="_8f" name="Foundation" presentationName="Foundation">
+			<rootDirectory kind="_89" fqName="Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaClassRootDirectoryPath [1afd72ef]
+Name: ./AlarmClock/Foundation/target/classes
+Short name: classes
+Presentation name: ./AlarmClock/Foundation/target/classes
+Presentation name (short): ./AlarmClock/Foundation/target/classes
+Raw presentation name: ./AlarmClock/Foundation/target/classes
+Raw presentation name (short): classes
+Information: 2 Java class file(s) found
+Property: name = ./AlarmClock/Foundation/target/classes
+Property: workspaceFilterName = Foundation/AlarmClock/Foundation/target/classes/**
+Property: identifyingPath = ./AlarmClock/Foundation/target/classes
+Property: information = 2 Java class file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\target\classes
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes
+Property: originalFullyQualifiedName = Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes
+Is Original
+This: 1afd72ef
+Original: 1afd72ef
+Representative: 1afd72ef
+Original fully qualified name: Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes
+Original fully qualified name (part): Class|./AlarmClock/Foundation/target/classes
+Fully qualified name: Workspace:Foundation:Class|./AlarmClock/Foundation/target/classes
+Fully qualified name (part): Class|./AlarmClock/Foundation/target/classes
+Parent: Foundation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/Foundation/target/classes
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/Foundation/target/classes
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\target\classes" id="_90" name="Class|./AlarmClock/Foundation/target/classes" presentationName="./AlarmClock/Foundation/target/classes"></rootDirectory>
+			<rootDirectory kind="_8b" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath [2cc75074]
+Name: ./AlarmClock/Foundation/src/main/java
+Short name: java
+Presentation name: ./AlarmClock/Foundation/src/main/java
+Presentation name (short): ./AlarmClock/Foundation/src/main/java
+Raw presentation name: ./AlarmClock/Foundation/src/main/java
+Raw presentation name (short): java
+Information: 1 Java source file(s) found
+Property: name = ./AlarmClock/Foundation/src/main/java
+Property: workspaceFilterName = Foundation/AlarmClock/Foundation/src/main/java/**
+Property: identifyingPath = ./AlarmClock/Foundation/src/main/java
+Property: information = 1 Java source file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\src\main\java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java
+Property: originalFullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java
+Is Original
+This: 2cc75074
+Original: 2cc75074
+Representative: 2cc75074
+Original fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java
+Original fully qualified name (part): ./AlarmClock/Foundation/src/main/java
+Fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java
+Fully qualified name (part): ./AlarmClock/Foundation/src/main/java
+Parent: Foundation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./AlarmClock/Foundation/src/main/java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./AlarmClock/Foundation/src/main/java
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\src\main\java" id="_91" name="./AlarmClock/Foundation/src/main/java" presentationName="./AlarmClock/Foundation/src/main/java">
+				<sourceElement kind="_9a" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [7c2dfa2]
+Name: ./com/h2m/common/observer/Observable.java
+Short name: Observable.java
+Presentation name: ./com/h2m/common/observer/Observable.java
+Presentation name (short): Observable.java
+Raw presentation name: ./com/h2m/common/observer/Observable.java
+Raw presentation name (short): Observable.java
+Property: name = ./com/h2m/common/observer/Observable.java
+Property: size = 229
+Property: workspaceFilterName = Foundation/AlarmClock/Foundation/src/main/java/com/h2m/common/observer/Observable
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\src\main\java\com\h2m\common\observer\Observable.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 50
+Property: linesOfCode = 43
+Property: identifyingPath = ./AlarmClock/Foundation/src/main/java/com/h2m/common/observer/Observable.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java
+Property: originalFullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java
+Property: architectureFilterNamePhysical = Foundation/com/h2m/common/observer/Observable
+Is Original
+This: 7c2dfa2
+Original: 7c2dfa2
+Representative: 7c2dfa2
+Original fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java
+Original fully qualified name (part): Observable.java
+Fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java
+Fully qualified name (part): Observable.java
+Parent: com.h2m.common.observer (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.common (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Foundation/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Foundation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/common/observer/Observable.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock\Foundation\src\main\java
+Identifying path: ./AlarmClock/Foundation/src/main/java/com/h2m/common/observer/Observable.java" id="_9d" name="Observable.java" presentationName="./com/h2m/common/observer/Observable.java"></sourceElement>
+				<programmingElement line="8" kind="_9c" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable" source="_9d" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType [6732726]
+Name: com.h2m.common.observer.Observable
+Short name: Observable
+Presentation name: com.h2m.common.observer.Observable
+Presentation name (short): Observable
+Raw presentation name: com.h2m.common.observer.Observable
+Raw presentation name (short): Observable
+Property: name = com.h2m.common.observer.Observable
+Property: numberOfMethods = 4
+Property: isAbstract = true
+Property: isPublic = true
+Property: isClass = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable
+Property: originalFullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable
+Property: sourceElementCount = 1
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 6732726
+Original: 6732726
+Representative: 6732726
+Original fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable
+Original fully qualified name (part): Observable
+Fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable
+Fully qualified name (part): Observable
+Parent: ./com/h2m/common/observer/Observable.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.common.observer (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.common (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Foundation/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Foundation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [6732726] Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]
+Flag: Class
+Flag: Public
+Flag: Abstract
+Flag: FoundInSource
+FqName: com.h2m.common.observer.Observable" id="_9b" name="Observable" presentationName="com.h2m.common.observer.Observable"></programmingElement>
+				<programmingElement line="10" kind="_9c" fqName="Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver" source="_9d" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType [28bdbe88]
+Name: com.h2m.common.observer.Observable$IObserver
+Short name: IObserver
+Presentation name: com.h2m.common.observer.Observable$IObserver
+Presentation name (short): IObserver
+Raw presentation name: com.h2m.common.observer.Observable$IObserver
+Raw presentation name (short): IObserver
+Property: name = com.h2m.common.observer.Observable$IObserver
+Property: numberOfMethods = 1
+Property: isInterface = true
+Property: isAbstract = true
+Property: isStatic = true
+Property: isPublic = true
+Property: isNested = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver
+Property: originalFullyQualifiedName = Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver
+Property: sourceElementCount = 1
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 28bdbe88
+Original: 28bdbe88
+Representative: 28bdbe88
+Original fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver
+Original fully qualified name (part): IObserver
+Fully qualified name: Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver
+Fully qualified name (part): IObserver
+Parent: com.h2m.common.observer.Observable (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/common/observer/Observable.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.common.observer (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.common (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./AlarmClock/Foundation/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Foundation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [28bdbe88] Workspace:Foundation:./AlarmClock/Foundation/src/main/java:com:h2m:common:observer:Observable.java:Observable:IObserver [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]
+Flag: Interface
+Flag: Public
+Flag: Static
+Flag: Abstract
+Flag: Nested
+Flag: FoundInSource
+FqName: com.h2m.common.observer.Observable$IObserver" id="_9e" name="IObserver" presentationName="com.h2m.common.observer.Observable$IObserver"></programmingElement>
+			</rootDirectory>
+		</module>
+		<module moduleId="Application" language="Java" description="Main Project" kind="_87" fqName="Workspace:Application" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule [592e843a]
+Name: Application
+Short name: Application
+Presentation name: Application
+Presentation name (short): Application
+Raw presentation name: Application
+Raw presentation name (short): Application
+Description: Main Project
+Information: 2 internal component(s)
+Property: type = Manually defined Java module
+Property: name = Application
+Property: description = Main Project
+Property: workspaceFilterName = Application/**
+Property: level = 4
+Property: domainInfo = Application [Physical Java]
+Property: domain = Physical
+Property: information = 2 internal component(s)
+Property: fullyQualifiedName = Workspace:Application
+Property: originalFullyQualifiedName = Workspace:Application
+Property: architectureFilterNamePhysical = Application/**
+Issue: com.hello2morrow.sonargraph.core.model.programming.WorkspaceDependencyNotDefined: Undefined Workspace Dependency (Undefined Workspace Dependency)
+Is Original
+This: 592e843a
+Original: 592e843a
+Representative: 592e843a
+Original fully qualified name: Workspace:Application
+Original fully qualified name (part): Application
+Fully qualified name: Workspace:Application
+Fully qualified name (part): Application
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Workspace dependency to: View
+Workspace dependency to: Foundation" id="_92" name="Application" presentationName="Application">
+			<rootDirectory kind="_89" fqName="Workspace:Application:Class|./Application/target/classes" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaClassRootDirectoryPath [445bb139]
+Name: ./Application/target/classes
+Short name: classes
+Presentation name: ./Application/target/classes
+Presentation name (short): ./Application/target/classes
+Raw presentation name: ./Application/target/classes
+Raw presentation name (short): classes
+Information: 2 Java class file(s) found
+Property: name = ./Application/target/classes
+Property: workspaceFilterName = Application/Application/target/classes/**
+Property: identifyingPath = ./Application/target/classes
+Property: information = 2 Java class file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\target\classes
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Application:Class|./Application/target/classes
+Property: originalFullyQualifiedName = Workspace:Application:Class|./Application/target/classes
+Is Original
+This: 445bb139
+Original: 445bb139
+Representative: 445bb139
+Original fully qualified name: Workspace:Application:Class|./Application/target/classes
+Original fully qualified name (part): Class|./Application/target/classes
+Fully qualified name: Workspace:Application:Class|./Application/target/classes
+Fully qualified name (part): Class|./Application/target/classes
+Parent: Application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./Application/target/classes
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./Application/target/classes
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\target\classes" id="_93" name="Class|./Application/target/classes" presentationName="./Application/target/classes"></rootDirectory>
+			<rootDirectory kind="_8b" fqName="Workspace:Application:./Application/src/main/java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath [b9a77c8]
+Name: ./Application/src/main/java
+Short name: java
+Presentation name: ./Application/src/main/java
+Presentation name (short): ./Application/src/main/java
+Raw presentation name: ./Application/src/main/java
+Raw presentation name (short): java
+Information: 2 Java source file(s) found
+Property: name = ./Application/src/main/java
+Property: workspaceFilterName = Application/Application/src/main/java/**
+Property: identifyingPath = ./Application/src/main/java
+Property: information = 2 Java source file(s) found
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\src\main\java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Application:./Application/src/main/java
+Property: originalFullyQualifiedName = Workspace:Application:./Application/src/main/java
+Is Original
+This: b9a77c8
+Original: b9a77c8
+Representative: b9a77c8
+Original fully qualified name: Workspace:Application:./Application/src/main/java
+Original fully qualified name (part): ./Application/src/main/java
+Fully qualified name: Workspace:Application:./Application/src/main/java
+Fully qualified name (part): ./Application/src/main/java
+Parent: Application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./Application/src/main/java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Identifying path: ./Application/src/main/java
+Enabled: true
+Base directory: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\src\main\java" id="_94" name="./Application/src/main/java" presentationName="./Application/src/main/java">
+				<sourceElement kind="_9a" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit [12bbfc54]
+Name: ./com/h2m/alarm/application/Main.java
+Short name: Main.java
+Presentation name: ./com/h2m/alarm/application/Main.java
+Presentation name (short): Main.java
+Raw presentation name: ./com/h2m/alarm/application/Main.java
+Raw presentation name (short): Main.java
+Property: name = ./com/h2m/alarm/application/Main.java
+Property: size = 39
+Property: workspaceFilterName = Application/Application/src/main/java/com/h2m/alarm/application/Main
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\src\main\java\com\h2m\alarm\application\Main.java
+Property: codeCommentLines = 0
+Property: commentLines = 0
+Property: totalLines = 18
+Property: linesOfCode = 16
+Property: identifyingPath = ./Application/src/main/java/com/h2m/alarm/application/Main.java
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java
+Property: originalFullyQualifiedName = Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java
+Property: architectureFilterNamePhysical = Application/com/h2m/alarm/application/Main
+Is Original
+This: 12bbfc54
+Original: 12bbfc54
+Representative: 12bbfc54
+Original fully qualified name: Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java
+Original fully qualified name (part): Main.java
+Fully qualified name: Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java
+Fully qualified name (part): Main.java
+Parent: com.h2m.alarm.application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./Application/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Path: ./com/h2m/alarm/application/Main.java
+Base path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\Application\src\main\java
+Identifying path: ./Application/src/main/java/com/h2m/alarm/application/Main.java" id="_99" name="Main.java" presentationName="./com/h2m/alarm/application/Main.java"></sourceElement>
+				<programmingElement line="9" kind="_98" fqName="Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])" source="_99" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer [b112b13]
+Name: com.h2m.alarm.application.Main.main(String[])
+Short name: main
+Presentation name: com.h2m.alarm.application.Main.main(String[]) : void
+Presentation name (short): main(String[]) : void
+Raw presentation name: com.h2m.alarm.application.Main.main
+Raw presentation name (short): main
+Property: name = com.h2m.alarm.application.Main.main(String[])
+Property: cyclomaticComplexity = 1
+Property: numberOfStatements = 6
+Property: extendedCyclomaticComplexity = 1
+Property: modifiedCyclomaticComplexity = 1
+Property: numberOfParameters = 1
+Property: modifiedExtendedCyclomaticComplexity = 1
+Property: sourceElementCount = 7
+Property: maxNesting = 0
+Property: numberOfLogicalOperations = 0
+Property: isStatic = true
+Property: isPublic = true
+Property: domain = Physical
+Property: fullyQualifiedName = Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])
+Property: originalFullyQualifiedName = Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])
+Is Original
+This: b112b13
+Original: b112b13
+Representative: b112b13
+Original fully qualified name: Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])
+Original fully qualified name (part): main(java.lang.String[])
+Fully qualified name: Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[])
+Fully qualified name (part): main(java.lang.String[])
+Parent: com.h2m.alarm.application.Main (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType)
+Parent: ./com/h2m/alarm/application/Main.java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaInternalCompilationUnit)
+Parent: com.h2m.alarm.application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment)
+Parent: ./Application/src/main/java (Class: com.hello2morrow.sonargraph.languageprovider.java.model.path.JavaSourceRootDirectoryPath)
+Parent: Application (Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaModule)
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+PE of Logical group: [b112b13] Workspace:Application:./Application/src/main/java:com:h2m:alarm:application:Main.java:Main:main(java.lang.String[]) [com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]
+Flag: Public
+Flag: Static
+Flag: FoundInSource" id="_97" name="main(java.lang.String[])" presentationName="com.h2m.alarm.application.Main.main(String[]) : void"></programmingElement>
+			</rootDirectory>
+		</module>
+		<external language="Java" description="Contains external Java elements" kind="_96" fqName="Workspace:External [Java]" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.system.JavaExternal [38f77cd9]
+Name: External [Java]
+Short name: External [Java]
+Presentation name: External [Java]
+Presentation name (short): External [Java]
+Raw presentation name: External [Java]
+Raw presentation name (short): External [Java]
+Description: Contains external Java elements
+Information: 15 external component(s)
+Property: description = Contains external Java elements
+Property: domainInfo = External [Physical Java]
+Property: isExternal = true
+Property: domain = Physical
+Property: information = 15 external component(s)
+Property: name = External [Java]
+Property: fullyQualifiedName = Workspace:External [Java]
+Property: originalFullyQualifiedName = Workspace:External [Java]
+Property: architectureFilterNamePhysical = External [Java]/**
+Is Original
+This: 38f77cd9
+Original: 38f77cd9
+Representative: 38f77cd9
+Original fully qualified name: Workspace:External [Java]
+Original fully qualified name (part): External [Java]
+Fully qualified name: Workspace:External [Java]
+Fully qualified name (part): External [Java]
+Parent: Workspace (Class: com.hello2morrow.sonargraph.core.model.workspace.Workspace)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)" id="_95" name="External [Java]" presentationName="External [Java]"></external>
+	</workspace>
+	<systemElements ref="_0">
+		<element kind="_b5" fqName="AlarmClock" debugInfo="Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem [6e16b8b5]
+Name: AlarmClock
+Short name: AlarmClock
+Presentation name: AlarmClock
+Presentation name (short): AlarmClock
+Raw presentation name: AlarmClock
+Raw presentation name (short): AlarmClock
+Property: name = AlarmClock
+Property: absolutePath = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock.sonargraph\system.sonargraph
+Property: baseDirectory = D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject
+Property: numberOfInternalComponents = 7
+Property: fullyQualifiedName = AlarmClock
+Property: originalFullyQualifiedName = AlarmClock
+Issue: com.hello2morrow.sonargraph.core.model.metrics.ThresholdViolationIssue: Threshold Violation (Threshold Violation)
+Is Original
+This: 6e16b8b5
+Original: 6e16b8b5
+Representative: 6e16b8b5
+Original fully qualified name: AlarmClock
+Original fully qualified name (part): AlarmClock
+Fully qualified name: AlarmClock
+Fully qualified name (part): AlarmClock
+Absolute path: D:\00_repo\sgng\com.hello2morrow.sonargraph.build.client\example\javaProject\AlarmClock.sonargraph\system.sonargraph
+Last modified: 2020-07-16 13:51:32" id="_b4" name="AlarmClock" presentationName="AlarmClock"></element>
+		<element kind="_b7" fqName="Files:BaseDirectory:SystemDirectory:QualityGates:No_Additional_CycleGroups:Baseline Conditions:BaselineMetricCondition|Core\:System\:CyclicComponents|LessOrEqual|1.00|n/a|" debugInfo="Core\:System\:CyclicComponents|&lt;=|1.00|n/a" id="_b6" name="BaselineMetricCondition|Core:System:CyclicComponents|LessOrEqual|1.00|n/a|" presentationName="Change of metric value for 'Core:System:CyclicComponents' must be &lt;= 1.00 (absolute)"></element>
+		<element kind="_b7" fqName="Files:BaseDirectory:SystemDirectory:QualityGates:No_Additional_CycleGroups:Baseline Conditions:BaselineMetricCondition|Java\:System\:CyclicityPackages|LessOrEqual|1.00|n/a|" debugInfo="Java\:System\:CyclicityPackages|&lt;=|1.00|n/a" id="_b8" name="BaselineMetricCondition|Java:System:CyclicityPackages|LessOrEqual|1.00|n/a|" presentationName="Change of metric value for 'Java:System:CyclicityPackages' must be &lt;= 1.00 (absolute)"></element>
+		<element kind="_ba" fqName="Files:BaseDirectory:SystemDirectory:QualityGates:No_Threshold_Violations:CurrentSystemConditions:ThresholdIssueQualityGateCondition|ThresholdViolation|Any|None|Core\:Type\:SourceElementCount|LessOrEqual|0" debugInfo="ThresholdViolation|Any|None|&lt;=|0|Core\:Type\:SourceElementCount" id="_b9" name="ThresholdIssueQualityGateCondition|ThresholdViolation|Any|None|Core:Type:SourceElementCount|LessOrEqual|0" presentationName="&lt;= 0 threshold violations for metric 'Core:Type:SourceElementCount' with severity 'Any' and resolution 'None'"></element>
+	</systemElements>
+	<moduleElements ref="_92"></moduleElements>
+	<moduleElements ref="_8f"></moduleElements>
+	<moduleElements ref="_8c"></moduleElements>
+	<moduleElements ref="_86">
+		<logicalNamespace derivedFrom="_a9" kind="_a8" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:console" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace [79b66c03]
+Name: com.h2m.alarm.presentation.console
+Short name: console
+Presentation name: com.h2m.alarm.presentation.console
+Presentation name (short): console
+Raw presentation name: com.h2m.alarm.presentation.console
+Raw presentation name (short): console
+Information: View [Logical Module Scope Java] 
+Property: domain = Logical Module Scope
+Property: name = com.h2m.alarm.presentation.console
+Property: information = View [Logical Module Scope Java] 
+Property: fullyQualifiedName = Logical module namespaces:View:com:h2m:alarm:presentation:console
+Property: originalFullyQualifiedName = Logical module namespaces:View:com:h2m:alarm:presentation:console
+Property: architectureFilterNameLogical = View/com/h2m/alarm/presentation/console/**
+Is Original
+This: 79b66c03
+Original: 79b66c03
+Representative: 79b66c03
+Original fully qualified name: Logical module namespaces:View:com:h2m:alarm:presentation:console
+Original fully qualified name (part): console
+Fully qualified name: Logical module namespaces:View:com:h2m:alarm:presentation:console
+Fully qualified name (part): console
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: View (Class: com.hello2morrow.sonargraph.core.model.workspace.ModuleBasedLogicalNamespaceRoot)
+Parent: Logical module namespaces (Class: com.hello2morrow.sonargraph.core.model.system.LogicalModuleNamespaces)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Original source namespace: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment: com.h2m.alarm.presentation.console (console)
+" id="_a7" name="console" presentationName="com.h2m.alarm.presentation.console"></logicalNamespace>
+		<logicalNamespace derivedFrom="_ac" kind="_a8" fqName="Logical module namespaces:View:com:h2m:alarm:presentation:file" debugInfo="Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace [3cb4f5f1]
+Name: com.h2m.alarm.presentation.file
+Short name: file
+Presentation name: com.h2m.alarm.presentation.file
+Presentation name (short): file
+Raw presentation name: com.h2m.alarm.presentation.file
+Raw presentation name (short): file
+Information: View [Logical Module Scope Java] 
+Property: domain = Logical Module Scope
+Property: name = com.h2m.alarm.presentation.file
+Property: information = View [Logical Module Scope Java] 
+Property: fullyQualifiedName = Logical module namespaces:View:com:h2m:alarm:presentation:file
+Property: originalFullyQualifiedName = Logical module namespaces:View:com:h2m:alarm:presentation:file
+Property: architectureFilterNameLogical = View/com/h2m/alarm/presentation/file/**
+Is Original
+This: 3cb4f5f1
+Original: 3cb4f5f1
+Representative: 3cb4f5f1
+Original fully qualified name: Logical module namespaces:View:com:h2m:alarm:presentation:file
+Original fully qualified name (part): file
+Fully qualified name: Logical module namespaces:View:com:h2m:alarm:presentation:file
+Fully qualified name (part): file
+Parent: com.h2m.alarm.presentation (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com.h2m.alarm (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com.h2m (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: com (Class: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaLogicalModuleNamespace)
+Parent: View (Class: com.hello2morrow.sonargraph.core.model.workspace.ModuleBasedLogicalNamespaceRoot)
+Parent: Logical module namespaces (Class: com.hello2morrow.sonargraph.core.model.system.LogicalModuleNamespaces)
+Parent: AlarmClock (Class: com.hello2morrow.sonargraph.core.model.system.SoftwareSystem)
+Original source namespace: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaPackageFragment: com.h2m.alarm.presentation.file (file)
+" id="_ab" name="file" presentationName="com.h2m.alarm.presentation.file"></logicalNamespace>
+	</moduleElements>
+	<systemMetricValues elementRef="_0">
+		<levelValues levelRef="_39">
+			<metric ref="_7a" debugInfo="Relative Cyclicity (Java Packages)">
+				<float ref="_b4" debugInfo="AlarmClock">33.33</float>
+			</metric>
+			<metric ref="_4b" debugInfo="Highest ACD">
+				<float ref="_b4" debugInfo="AlarmClock">2.33</float>
+			</metric>
+			<metric ref="_63" debugInfo="Number of Ignored Cyclic Components">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_3e" debugInfo="Biggest Java Package Cycle Group">
+				<int ref="_b4" debugInfo="AlarmClock">2</int>
+			</metric>
+			<metric ref="_58" debugInfo="Number of Components (Ignoring Issues)">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_44" debugInfo="Comment Lines">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_5c" debugInfo="Number of Critical Java Package Cycle Groups">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_4e" debugInfo="Maintainability Level">
+				<float ref="_b4" debugInfo="AlarmClock">90.0</float>
+			</metric>
+			<metric ref="_40" debugInfo="Byte Code Instructions">
+				<int ref="_b4" debugInfo="AlarmClock">465</int>
+			</metric>
+			<metric ref="_62" debugInfo="Number of Ignored Code Duplicates">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_5b" debugInfo="Number of Critical Component Cycle Groups">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_68" debugInfo="Number of Modules">
+				<int ref="_b4" debugInfo="AlarmClock">4</int>
+			</metric>
+			<metric ref="_7f" debugInfo="Total Lines">
+				<int ref="_b4" debugInfo="AlarmClock">229</int>
+			</metric>
+			<metric ref="_7e" debugInfo="Structural Debt Index (Java Packages)">
+				<int ref="_b4" debugInfo="AlarmClock">13</int>
+			</metric>
+			<metric ref="_78" debugInfo="RACD">
+				<float ref="_b4" debugInfo="AlarmClock">40.82</float>
+			</metric>
+			<metric ref="_6f" debugInfo="Number of all Java Package Cycle Groups">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_6b" debugInfo="Number of Unassigned Logical Elements">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_70" debugInfo="Number of references to System.out.println">
+				<int ref="_b4" debugInfo="AlarmClock">3</int>
+			</metric>
+			<metric ref="_4a" debugInfo="Cyclicity (Java Packages)">
+				<int ref="_b4" debugInfo="AlarmClock">4</int>
+			</metric>
+			<metric ref="_55" debugInfo="Number of Code Duplicates">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_6a" debugInfo="Number of Types">
+				<int ref="_b4" debugInfo="AlarmClock">8</int>
+			</metric>
+			<metric ref="_7b" debugInfo="Source Element Count">
+				<int ref="_b4" debugInfo="AlarmClock">89</int>
+			</metric>
+			<metric ref="_75" debugInfo="Parser Dependencies to Remove (Java Packages)">
+				<int ref="_b4" debugInfo="AlarmClock">3</int>
+			</metric>
+			<metric ref="_56" debugInfo="Number of Component Cycle Groups">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_53" debugInfo="Number of Artifacts">
+				<int ref="_b4" debugInfo="AlarmClock">13</int>
+			</metric>
+			<metric ref="_65" debugInfo="Number of Ignored Violations (Parser Dependencies)">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_5e" debugInfo="Number of Cyclic Java Packages">
+				<int ref="_b4" debugInfo="AlarmClock">2</int>
+			</metric>
+			<metric ref="_76" debugInfo="Propagation Cost">
+				<float ref="_b4" debugInfo="AlarmClock">40.82</float>
+			</metric>
+			<metric ref="_67" debugInfo="Number of Logical Elements in Deprecated Artifacts">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_79" debugInfo="Relative Cyclicity (Components)">
+				<float ref="_b4" debugInfo="AlarmClock">28.57</float>
+			</metric>
+			<metric ref="_4c" debugInfo="Lines of Code">
+				<int ref="_b4" debugInfo="AlarmClock">189</int>
+			</metric>
+			<metric ref="_5a" debugInfo="Number of Components with Violations">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_61" debugInfo="Number of Empty Artifacts">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_7d" debugInfo="Structural Debt Index (Components)">
+				<int ref="_b4" debugInfo="AlarmClock">13</int>
+			</metric>
+			<metric ref="_60" debugInfo="Number of Duplicated Code Lines">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_64" debugInfo="Number of Ignored Cyclic Java Packages">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_36" debugInfo="ACD">
+				<float ref="_b4" debugInfo="AlarmClock">2.86</float>
+			</metric>
+			<metric ref="_69" debugInfo="Number of Statements">
+				<int ref="_b4" debugInfo="AlarmClock">52</int>
+			</metric>
+			<metric ref="_5f" debugInfo="Number of Cyclic Modules">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_45" debugInfo="Component Dependencies to Remove (Components)">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_6d" debugInfo="Number of Violations (Component Dependencies)">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_47" debugInfo="Component Dependencies to Remove (Java Packages)">
+				<int ref="_b4" debugInfo="AlarmClock">1</int>
+			</metric>
+			<metric ref="_59" debugInfo="Number of Components in Deprecated Artifacts">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_3c" debugInfo="Biggest Component Cycle Group">
+				<int ref="_b4" debugInfo="AlarmClock">2</int>
+			</metric>
+			<metric ref="_6c" debugInfo="Number of Unassigned Physical Components">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_74" debugInfo="Parser Dependencies to Remove (Components)">
+				<int ref="_b4" debugInfo="AlarmClock">3</int>
+			</metric>
+			<metric ref="_43" debugInfo="Code Comment Lines">
+				<int ref="_b4" debugInfo="AlarmClock">0</int>
+			</metric>
+			<metric ref="_57" debugInfo="Number of Components">
+				<int ref="_b4" debugInfo="AlarmClock">7</int>
+			</metric>
+			<metric ref="_5d" debugInfo="Number of Cyclic Components">
+				<int ref="_b4" debugInfo="AlarmClock">2</int>
+			</metric>
+			<metric ref="_66" debugInfo="Number of Java Packages">
+				<int ref="_b4" debugInfo="AlarmClock">6</int>
+			</metric>
+			<metric ref="_52" debugInfo="NCCD">
+				<float ref="_b4" debugInfo="AlarmClock">1.18</float>
+			</metric>
+			<metric ref="_49" debugInfo="Cyclicity (Components)">
+				<int ref="_b4" debugInfo="AlarmClock">4</int>
+			</metric>
+			<metric ref="_42" debugInfo="CCD">
+				<int ref="_b4" debugInfo="AlarmClock">20</int>
+			</metric>
+			<metric ref="_6e" debugInfo="Number of Violations (Parser Dependencies)">
+				<int ref="_b4" debugInfo="AlarmClock">7</int>
+			</metric>
+		</levelValues>
+	</systemMetricValues>
+	<issues modelName="./Modifiable.vm" numberOfIssues="24" numberOfUnresolvedIssues="24">
+		<elementIssues>
+			<issue affectedElement="_af" id="_bb" type="_32" provider="_2b" debugInfo="Don't use System.out, com.h2m.alarm.presentation.AlarmHandler.handleEvent(Observable,String) : void" description="Use LOGGER instead" line="27"></issue>
+			<issue affectedElement="_b6" id="_bc" type="_31" provider="_29" debugInfo="Quality Gate Issue, Change of metric value for 'Core:System:CyclicComponents' must be &lt;= 1.00 (absolute)" description="0 -&gt; 2 (+2)"></issue>
+			<issue affectedElement="_b9" id="_bd" type="_31" provider="_2a" debugInfo="Quality Gate Issue, &lt;= 0 threshold violations for metric 'Core:Type:SourceElementCount' with severity 'Any' and resolution 'None'" description="5 issues matched (0 excluded)"></issue>
+			<issue affectedElement="_a6" id="_be" type="_32" provider="_2b" debugInfo="Don't use System.out, com.h2m.alarm.model.AlarmClock.run() : void" description="Use LOGGER instead" line="18"></issue>
+			<issue affectedElement="_92" id="_bf" type="_34" provider="_2d" debugInfo="Undefined Workspace Dependency, Application" description="Uses 'Model'"></issue>
+			<issue affectedElement="_b8" id="_c0" type="_31" provider="_29" debugInfo="Quality Gate Issue, Change of metric value for 'Java:System:CyclicityPackages' must be &lt;= 1.00 (absolute)" description="0 -&gt; 4 (+4)"></issue>
+			<issue affectedElement="_b1" id="_c1" type="_32" provider="_2b" debugInfo="Don't use System.out, com.h2m.alarm.presentation.console.AlarmToConsole.handleAlarm() : void" description="Use LOGGER instead" line="20"></issue>
+			<cycleGroups analyzerRef="_c">
+				<cycleGroup numberOfCyclicElements="2" name="Component cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:ComponentCyclesModule:Result:7a8ddffb0de6e040b0d7d7ea8207392e|3c2f1e036dc7c36cff32f9bad250b653" structuralDebtIndex="13" componentDependenciesToRemove="1" parserDependenciesToRemove="3" scope="_86" id="_c2" type="_2f" provider="_2d" description="2 cyclic components">
+					<element ref="_b0" debugInfo="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:console:AlarmToConsole.java"></element>
+					<element ref="_b2" debugInfo="Workspace:View:./AlarmClock/View/src/main/java:com:h2m:alarm:presentation:file:AlarmToFile.java"></element>
+				</cycleGroup>
+			</cycleGroups>
+			<cycleGroups analyzerRef="_8">
+				<cycleGroup numberOfCyclicElements="2" name="Java Package cycle group 1.1" fqName="Files:BaseDirectory:SystemDirectory:Analyzers:PackageCyclesModule:Result:ec2c67ff3133cfb08f72426d2dcc3611|3185f62aac2e0d644108f276de970dfe" structuralDebtIndex="13" componentDependenciesToRemove="1" parserDependenciesToRemove="3" scope="_86" id="_c3" type="_30" provider="_2d" description="2 cyclic packages">
+					<element ref="_a7" debugInfo="Logical module namespaces:View:com:h2m:alarm:presentation:console"></element>
+					<element ref="_ab" debugInfo="Logical module namespaces:View:com:h2m:alarm:presentation:file"></element>
+				</cycleGroup>
+			</cycleGroups>
+			<thresholdViolation thresholdRef="_80" metricValue="13" affectedElement="_ad" id="_cd" type="_33" provider="_2d" debugInfo="Threshold Violation, com.h2m.alarm.presentation.AlarmHandler" description="Source Element Count = 13 (allowed range: 5 to 10)" line="9"></thresholdViolation>
+			<thresholdViolation thresholdRef="_80" metricValue="13" affectedElement="_9f" id="_ce" type="_33" provider="_2d" debugInfo="Threshold Violation, com.h2m.alarm.model.AlarmClock" description="Source Element Count = 13 (allowed range: 5 to 10)" line="5"></thresholdViolation>
+			<thresholdViolation thresholdRef="_80" metricValue="14" affectedElement="_b3" id="_cf" type="_33" provider="_2d" debugInfo="Threshold Violation, com.h2m.alarm.presentation.file.AlarmToFile" description="Source Element Count = 14 (allowed range: 5 to 10)" line="10"></thresholdViolation>
+			<thresholdViolation thresholdRef="_80" metricValue="24" affectedElement="_9b" id="_d0" type="_33" provider="_2d" debugInfo="Threshold Violation, com.h2m.common.observer.Observable" description="Source Element Count = 24 (allowed range: 5 to 10)" line="8"></thresholdViolation>
+			<thresholdViolation thresholdRef="_80" metricValue="2" affectedElement="_9e" id="_d1" type="_33" provider="_2d" debugInfo="Threshold Violation, com.h2m.common.observer.Observable$IObserver" description="Source Element Count = 2 (allowed range: 5 to 10)" line="10"></thresholdViolation>
+			<thresholdViolation thresholdRef="_85" metricValue="3" affectedElement="_b4" id="_d2" type="_33" provider="_2b" debugInfo="Threshold Violation, AlarmClock" description="Number of references to System.out.println = 3 (allowed range: 0 to 0)"></thresholdViolation>
+		</elementIssues>
+		<depencencyIssues>
+			<issue from="_97" to="_9f" id="_c4" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.NewDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock (main -&gt; AlarmClock) [New, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]" description="[New] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="13"></issue>
+			<issue from="_92" to="_8f" id="_c5" type="_35" provider="_2d" debugInfo="WorkspaceDependencyNotImplemented: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaManualWorkspaceDependency: Application -&gt; Foundation (Application -&gt; Foundation)"></issue>
+			<issue from="_86" to="_8c" id="_c6" type="_35" provider="_2d" debugInfo="WorkspaceDependencyNotImplemented: com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaManualWorkspaceDependency: View -&gt; Model (View -&gt; Model)"></issue>
+			<issue from="_97" to="_a1" id="_c7" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.ReadFieldInlineDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock.ALARM_EVENT (main -&gt; ALARM_EVENT) [Read Field Inline, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaField]" description="[Read Field Inline] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="14"></issue>
+			<issue from="_97" to="_a3" id="_c8" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.ConstructorCallDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock.AlarmClock() (main -&gt; AlarmClock) [Constructor Call, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaConstructor]" description="[Constructor Call] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="13"></issue>
+			<issue from="_97" to="_a5" id="_c9" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.VirtualMethodCallDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String) (main -&gt; addObserver) [Virtual Method Call, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]" description="[Virtual Method Call] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="15"></issue>
+			<issue from="_97" to="_a1" id="_ca" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.ReadFieldInlineDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock.ALARM_EVENT (main -&gt; ALARM_EVENT) [Read Field Inline, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaField]" description="[Read Field Inline] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="15"></issue>
+			<issue from="_97" to="_9f" id="_cb" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.LocalVariableDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock (main -&gt; AlarmClock) [Local Variable, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaType]" description="[Local Variable] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="13"></issue>
+			<issue from="_97" to="_a5" id="_cc" type="_2e" provider="_2c" debugInfo="ArchitectureViolation: com.hello2morrow.sonargraph.languageprovider.java.model.programming.dependency.VirtualMethodCallDependency: com.h2m.alarm.application.Main.main(String[]) -&gt; com.h2m.alarm.model.AlarmClock.addObserver(Observable$IObserver,String) (main -&gt; addObserver) [Virtual Method Call, com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer -&gt; com.hello2morrow.sonargraph.languageprovider.java.model.programming.JavaNonInitializer]" description="[Virtual Method Call] 'Application' cannot access 'AlarmClock.java' from 'Model'" line="14"></issue>
+		</depencencyIssues>
+	</issues>
+</ns2:report>

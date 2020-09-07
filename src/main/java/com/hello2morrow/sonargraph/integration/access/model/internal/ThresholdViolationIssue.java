@@ -22,6 +22,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricThreshold;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
+import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public final class ThresholdViolationIssue extends NamedElementIssueImpl implements IThresholdViolationIssue
 {
@@ -30,10 +31,10 @@ public final class ThresholdViolationIssue extends NamedElementIssueImpl impleme
     private final Number metricValue;
 
     public ThresholdViolationIssue(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider issueProvider, final int line, final int column, final INamedElement element, final Number metricValue,
-            final IMetricThreshold threshold)
+            final Severity severity, final IIssueProvider issueProvider, final int line, final int column, final INamedElement element,
+            final Number metricValue, final IMetricThreshold threshold)
     {
-        super(name, presentationName, description, issueType, issueProvider, line, column, element);
+        super(name, presentationName, description, issueType, severity, issueProvider, line, column, element);
         assert metricValue != null : "Parameter 'metricValue' of method 'ThresholdViolationIssue' must not be null";
         assert threshold != null : "Parameter 'threshold' of method 'ThresholdViolationIssue' must not be null";
         this.metricValue = metricValue;
@@ -76,6 +77,10 @@ public final class ThresholdViolationIssue extends NamedElementIssueImpl impleme
             return true;
         }
         if (!super.equals(obj))
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
         {
             return false;
         }

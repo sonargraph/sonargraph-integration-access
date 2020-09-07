@@ -25,6 +25,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hello2morrow.sonargraph.integration.access.foundation.MigrationCheck;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.DependencyPatternType;
@@ -150,7 +151,24 @@ public class ResolutionConverter
             final String information = nextXsdResolution.getInformation();
             final String assignee = nextXsdResolution.getAssignee();
             final Date dateTime = nextXsdResolution.getDate().toGregorianCalendar().getTime();
-            final String descriptor = nextXsdResolution.getDescriptor();
+
+            final String descriptor;
+            if (MigrationCheck.isPreUnificationOfIssueIds(softwareSystem.getVersion()))
+            {
+                if (nextXsdResolution.getDescriptor() != null)
+                {
+                    descriptor = convertDeprecatedDescriptor(nextXsdResolution.getDescriptor());
+                }
+                else
+                {
+                    //Tasks that are no longer applicable don't contain a descriptor.
+                    descriptor = null;
+                }
+            }
+            else
+            {
+                descriptor = nextXsdResolution.getDescriptor();
+            }
 
             final IResolution resolutionToAdd;
             if (nextXsdResolution instanceof XsdIgnore)
@@ -165,8 +183,8 @@ public class ResolutionConverter
             }
             else if (nextXsdResolution instanceof XsdFixMe)
             {
-                resolutionToAdd = new FixResolutionImpl(fqName, priority, issues, matchingElementsCount, description, information, assignee,
-                        dateTime, elementPatterns, dependencyPatterns, matching, descriptor);
+                resolutionToAdd = new FixResolutionImpl(fqName, priority, issues, matchingElementsCount, description, information, assignee, dateTime,
+                        elementPatterns, dependencyPatterns, matching, descriptor);
             }
             else if (nextXsdResolution instanceof XsdRefactoring)
             {
@@ -222,6 +240,23 @@ public class ResolutionConverter
             }
             softwareSystem.addResolution(resolutionToAdd);
         }
+    }
+
+    private String convertDeprecatedDescriptor(final String descriptor)
+    {
+        assert descriptor != null : "Parameter 'descriptor' of method 'convertDeprecatedDescriptor' must not be null";
+
+        if (descriptor.equals("ComponentCycleGroup") || descriptor.equals("NamespaceCycleGroup") || descriptor.equals("DirectoryCycleGroup")
+                || descriptor.equals("ModuleCycleGroup"))
+        {
+            return "";
+        }
+
+        final String search = "(ThresholdViolation)Error(:.*)";
+        final String replace = "$1$2";
+
+        final String result = descriptor.replaceFirst(search, replace);
+        return result;
     }
 
     private IMatching createMatching(final Result result, final XsdResolution xsdResolution)

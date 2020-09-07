@@ -1,6 +1,13 @@
 Sonargraph Integration Access
 ===============================
 
+5.0.0
+=====
+
+- Support for changed issue type format: Issue type can now have more than one severity,
+  e.g. ThresholdViolation has severity WARNING and ERROR.
+   
+
 4.1.0
 =====
 
@@ -21,10 +28,12 @@ Sonargraph Integration Access
 - Maintenance release to fix problem in Sonargraph product update. This release 
   contains no changes in functionality, but simply increases the version.
 
+
 3.4.1
 =====
 
 - Skipped.
+
 
 3.4.0
 =====

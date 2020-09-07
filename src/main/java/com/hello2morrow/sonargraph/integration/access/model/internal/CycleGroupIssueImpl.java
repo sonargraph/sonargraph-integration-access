@@ -26,24 +26,27 @@ import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
+import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implements ICycleGroupIssue
 {
-    private static final long serialVersionUID = 3306324924477805018L;
+    private static final long serialVersionUID = 6456637507787653398L;
     private final IAnalyzer analyzer;
     private final List<INamedElement> cyclicElements;
     private final int componentDependenciesToRemove;
     private final int structuralDebtIndex;
     private final int parserDependenciesToRemove;
     private final INamedElement scope;
+    private final Severity severity;
 
     public CycleGroupIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements, final int structuralDebtIndex,
-            final int componentDependenciesToRemove, final int parserDependenciesToRemove, final INamedElement scope)
+            final Severity severity, final IIssueProvider provider, final IAnalyzer analyzer, final List<INamedElement> cyclicElements,
+            final int structuralDebtIndex, final int componentDependenciesToRemove, final int parserDependenciesToRemove, final INamedElement scope)
     {
         super(name, presentationName, description, issueType, provider);
         assert analyzer != null : "Parameter 'analyzer' of method 'CycleGroup' must not be null";
         assert cyclicElements != null && !cyclicElements.isEmpty() : "Parameter 'cyclicElements' of method 'CycleGroupIssueImpl' must not be empty";
+        assert severity != null : "Parameter 'severity' of method 'CycleGroupIssueImpl' must not be null";
 
         this.analyzer = analyzer;
         this.cyclicElements = cyclicElements;
@@ -51,6 +54,13 @@ public final class CycleGroupIssueImpl extends MultiNamedElementIssueImpl implem
         this.componentDependenciesToRemove = componentDependenciesToRemove;
         this.parserDependenciesToRemove = parserDependenciesToRemove;
         this.scope = scope;
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity()
+    {
+        return severity;
     }
 
     @Override

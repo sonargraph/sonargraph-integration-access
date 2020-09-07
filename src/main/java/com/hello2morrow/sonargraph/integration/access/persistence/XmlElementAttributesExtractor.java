@@ -22,6 +22,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -34,43 +37,38 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public final class XmlElementContentExtractor
+public final class XmlElementAttributesExtractor
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(XmlElementContentExtractor.class);
-
-    private static SAXParserFactory s_factory;
-    private static SAXParser s_saxParser;
-    private static DefaultHandler s_processor;
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlElementAttributesExtractor.class);
 
     private static class ElementProcessedException extends SAXException
     {
-        private static final long serialVersionUID = 2126363921505871938L;
-        private final String attributeValue;
+        private static final long serialVersionUID = 4957345534010873888L;
+        private final Map<String, String> attributeValues;
 
-        public ElementProcessedException(final String attributeValue)
+        public ElementProcessedException(final Map<String, String> attributeValues)
         {
-            this.attributeValue = attributeValue;
+            this.attributeValues = attributeValues;
         }
 
-        public String getElementContent()
+        public Map<String, String> getAttributeValues()
         {
-            return attributeValue;
+            return attributeValues;
         }
     }
 
-    private XmlElementContentExtractor()
+    private XmlElementAttributesExtractor()
     {
         super();
     }
 
     /**
-     * Processes an XML file until an element is found and returns its value. Must only be used for elements of simple data types, e.g.
-     * &lt;name&gt;Rudolf&lt;/name&gt;
+     * Processes an XML file until an element is found and returns its attributes.
      *
      * @param file
-     * @return if the element exists, returns the value. If it does not exist, returns empty string. If the XML processing fails, returns null.
+     * @return if the element exists, returns the attributes. If it does not exist, returns an empty map. If the XML processing fails, returns null.
      */
-    public static String process(final File file, final String elementName)
+    public static Map<String, String> process(final File file, final String elementName)
     {
         assert file != null : "Parameter 'file' of method 'process' must not be null";
         assert elementName != null && elementName.length() > 0 : "Parameter 'elementName' of method 'process' must not be empty";
@@ -78,55 +76,50 @@ public final class XmlElementContentExtractor
         boolean error = false;
         try (InputStream is = new FileInputStream(file))
         {
-            if (s_factory == null)
+            final SAXParserFactory factory = SAXParserFactory.newInstance();
+            final SAXParser saxParser = factory.newSAXParser();
+            final DefaultHandler processor = new DefaultHandler()
             {
-                s_factory = SAXParserFactory.newInstance();
-            }
-            if (s_saxParser == null)
-            {
-                s_saxParser = s_factory.newSAXParser();
-            }
-            if (s_processor == null)
-            {
-                s_processor = new DefaultHandler()
+                private StringBuilder m_content;
+                private final Map<String, String> attributeToValues = new LinkedHashMap<>();
+
+                @Override
+                public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+                        throws SAXException
                 {
-                    private StringBuilder m_content;
-
-                    @Override
-                    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
-                            throws SAXException
+                    //throwing an exception is not ideal but the fastest way to terminate the parsing.
+                    if (qName.equals(elementName))
                     {
-                        //throwing an exception is not ideal but the fastest way to terminate the parsing.
-                        if (qName.equals(elementName))
+                        for (int i = 0; i < attributes.getLength(); i++)
                         {
-                            m_content = new StringBuilder();
+                            attributeToValues.put(attributes.getQName(i), attributes.getValue(i));
                         }
                     }
+                }
 
-                    @Override
-                    public void endElement(final String uri, final String localName, final String qName) throws SAXException
+                @Override
+                public void endElement(final String uri, final String localName, final String qName) throws SAXException
+                {
+                    if (qName.equals(elementName))
                     {
-                        if (qName.equals(elementName))
-                        {
-                            throw new ElementProcessedException(m_content.toString());
-                        }
+                        throw new ElementProcessedException(attributeToValues);
                     }
+                }
 
-                    @Override
-                    public void characters(final char[] ch, final int start, final int length) throws SAXException
+                @Override
+                public void characters(final char[] ch, final int start, final int length) throws SAXException
+                {
+                    if (m_content != null)
                     {
-                        if (m_content != null)
-                        {
-                            m_content.append(ch, start, length);
-                        }
+                        m_content.append(ch, start, length);
                     }
-                };
-            }
-            s_saxParser.parse(is, s_processor);
+                }
+            };
+            saxParser.parse(is, processor);
         }
         catch (final ElementProcessedException ex)
         {
-            return ex.getElementContent();
+            return ex.getAttributeValues();
         }
         catch (final SAXParseException ex)
         {
@@ -154,6 +147,6 @@ public final class XmlElementContentExtractor
             error = true;
         }
 
-        return error ? null : "";
+        return error ? null : Collections.emptyMap();
     }
 }

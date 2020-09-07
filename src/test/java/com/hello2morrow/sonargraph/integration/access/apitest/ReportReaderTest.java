@@ -592,4 +592,17 @@ public final class ReportReaderTest
         assertEquals("Wrong lastModified", 1580913201550L, architectureFile.getLastModified());
         assertEquals("Wrong hash", "34186e7369e51bd6e9dafd6fa9e7942a", architectureFile.getHash());
     }
+
+    @Test
+    public void processReportWithQualityGateIssues()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_QUALITYGATE_ISSUES));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<IIssue> qualityGateIssues = systemProcessor.getIssues(i -> i.getIssueType().getName().equals("QualityGateIssue"));
+        assertEquals("Wrong number of quality gate issues", 3, qualityGateIssues.size());
+    }
 }

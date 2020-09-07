@@ -158,6 +158,7 @@ public final class ModuleInfoProcessorTest
         assertEquals("Wrong source of architecture violation", "./com/h2m/alarm/application/Main.java", source.getPresentationName());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testGetResolutionsForModule()
     {

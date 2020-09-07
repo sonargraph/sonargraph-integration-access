@@ -21,18 +21,23 @@ import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.INamedElementIssue;
+import com.hello2morrow.sonargraph.integration.access.model.Severity;
 
 public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implements INamedElementIssue
 {
-    private static final long serialVersionUID = -3705193284431668430L;
+    private static final long serialVersionUID = -9139600683023358335L;
     private final INamedElement namedElement;
+    private final Severity severity;
 
     public NamedElementIssueImpl(final String name, final String presentationName, final String description, final IIssueType issueType,
-            final IIssueProvider issueProvider, final int line, final int column, final INamedElement namedElement)
+            final Severity severity, final IIssueProvider issueProvider, final int line, final int column, final INamedElement namedElement)
     {
         super(name, presentationName, description, issueType, issueProvider, line, column);
         assert namedElement != null : "Parameter 'namedElement' of method 'NamedElementIssueImpl' must not be null";
+        assert severity != null : "Parameter 'severity' of method 'NamedElementIssueImpl' must not be null";
+
         this.namedElement = namedElement;
+        this.severity = severity;
     }
 
     @Override
@@ -42,11 +47,18 @@ public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implement
     }
 
     @Override
+    public Severity getSeverity()
+    {
+        return severity;
+    }
+
+    @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + namedElement.hashCode();
+        result = prime * result + ((namedElement == null) ? 0 : namedElement.hashCode());
+        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
         return result;
     }
 
@@ -61,16 +73,40 @@ public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implement
         {
             return false;
         }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final NamedElementIssueImpl other = (NamedElementIssueImpl) obj;
-        return namedElement.equals(other.namedElement);
+        if (namedElement == null)
+        {
+            if (other.namedElement != null)
+            {
+                return false;
+            }
+        }
+        else if (!namedElement.equals(other.namedElement))
+        {
+            return false;
+        }
+        if (severity != other.severity)
+        {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder(super.toString());
-        builder.append("\n");
-        builder.append("namedElement:").append(namedElement.getFqName());
+        final StringBuilder builder = new StringBuilder();
+        builder.append("NamedElementIssueImpl [namedElement=");
+        builder.append(namedElement);
+        builder.append(", severity=");
+        builder.append(severity);
+        builder.append(", toString()=");
+        builder.append(super.toString());
+        builder.append("]");
         return builder.toString();
     }
 }

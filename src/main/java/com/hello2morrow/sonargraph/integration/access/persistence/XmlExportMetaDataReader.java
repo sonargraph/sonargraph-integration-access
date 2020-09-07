@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
-import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IMetricId.SortDirection;
@@ -308,20 +307,23 @@ public final class XmlExportMetaDataReader extends XmlAccess
             final IIssueCategory category = categories.get(next.getCategory());
             assert category != null : "Category '" + next.getCategory().toString() + "' has not been processed";
 
-            Severity severity;
+            final List<Severity> severities = new ArrayList<>();
             try
             {
-                severity = Severity.valueOf(Utility.convertStandardNameToConstantName(next.getSeverity()));
+                for (final String nextSeverityString : next.getSeverity().split(", "))
+                {
+                    severities.add(Severity.fromString(nextSeverityString));
+                }
             }
             catch (final Exception e)
             {
                 LOGGER.error("Failed to process severity type '" + next.getSeverity() + "'", e);
                 result.addWarning(ValidationMessageCauses.NOT_SUPPORTED_ENUM_CONSTANT,
                         "Severity type '" + next.getSeverity() + "' is not supported, setting to '" + Severity.ERROR + "'");
-                severity = Severity.ERROR;
+                severities.add(Severity.ERROR);
             }
 
-            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severity, category,
+            final IssueTypeImpl issueType = new IssueTypeImpl(next.getName(), next.getPresentationName(), severities, category,
                     providers.get(next.getProvider()), next.getDescription());
             issueTypeXsdToPojoMap.put(next, issueType);
         }
