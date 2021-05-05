@@ -27,7 +27,9 @@ public class MigrationCheckTest
     @Test
     public void testIsPreUnificationOfIssueIds()
     {
-        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.3.0.632"));
-        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.4.0"));
+        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.3.1.632"));
+        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.4.0.100"));
+        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.4.1.640"));
+        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.5.0.100"));
     }
 }

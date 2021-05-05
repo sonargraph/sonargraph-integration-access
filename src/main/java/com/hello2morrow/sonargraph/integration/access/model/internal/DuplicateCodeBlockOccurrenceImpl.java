@@ -28,15 +28,17 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
     private final int startLine;
     private final int tolerance;
     private final int endLine;
+    private final int[] hash;
 
     public DuplicateCodeBlockOccurrenceImpl(final ISourceFile sourceFile, final int blockSize, final int startLine, final int endLine,
-            final int tolerance)
+            final int tolerance, final int[] hash)
     {
         assert sourceFile != null : "Parameter 'sourceFile' of method 'DuplicateCodeBlockOccurrenceImpl' must not be null";
         assert blockSize > 0 : "Parameter 'blockSize' must be > 0";
         assert startLine >= 0 : "Parameter 'startLine' must be >= 0";
         //endLine might be -1 for older reports because that attribute was added later.
         assert tolerance >= 0 : "Parameter 'tolerance' must be >= 0";
+        //hash might be null for older reports.
 
         this.sourceFile = sourceFile;
         this.blockSize = blockSize;
@@ -50,6 +52,7 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
             this.endLine = endLine;
         }
         this.tolerance = tolerance;
+        this.hash = hash;
     }
 
     @Override
@@ -83,14 +86,21 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
     }
 
     @Override
+    public int[] getHash()
+    {
+        return hash;
+    }
+
+    @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = 1;
         result = prime * result + blockSize;
+        result = prime * result + endLine;
+        result = prime * result + ((hash == null) ? 0 : hash.hashCode());
         result = prime * result + ((sourceFile == null) ? 0 : sourceFile.hashCode());
         result = prime * result + startLine;
-        result = prime * result + endLine;
         result = prime * result + tolerance;
         return result;
     }
@@ -115,6 +125,21 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
         {
             return false;
         }
+        if (endLine != other.endLine)
+        {
+            return false;
+        }
+        if (hash == null)
+        {
+            if (other.hash != null)
+            {
+                return false;
+            }
+        }
+        else if (!hash.equals(other.hash))
+        {
+            return false;
+        }
         if (sourceFile == null)
         {
             if (other.sourceFile != null)
@@ -127,10 +152,6 @@ public final class DuplicateCodeBlockOccurrenceImpl implements IDuplicateCodeBlo
             return false;
         }
         if (startLine != other.startLine)
-        {
-            return false;
-        }
-        if (endLine != other.endLine)
         {
             return false;
         }

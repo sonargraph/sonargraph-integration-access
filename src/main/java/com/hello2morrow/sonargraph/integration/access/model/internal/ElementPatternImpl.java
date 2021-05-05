@@ -24,6 +24,7 @@ public final class ElementPatternImpl implements IElementPattern
 {
     private final ElementPatternType type;
     private final String pattern;
+    private String hash = null;
 
     public ElementPatternImpl(final ElementPatternType type, final String pattern)
     {
@@ -32,6 +33,13 @@ public final class ElementPatternImpl implements IElementPattern
 
         this.type = type;
         this.pattern = pattern;
+    }
+
+    public ElementPatternImpl(final ElementPatternType type, final String pattern, final String hash)
+    {
+        this(type, pattern);
+        assert hash != null && hash.length() > 0 : "Parameter 'hash' of method 'ElementPatternImpl' must not be empty";
+        this.hash = hash;
     }
 
     @Override
@@ -44,5 +52,17 @@ public final class ElementPatternImpl implements IElementPattern
     public String getPattern()
     {
         return pattern;
+    }
+
+    @Override
+    public String getHash()
+    {
+        return hash;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new StringBuilder(pattern).append(" [").append(type).append("]").toString();
     }
 }

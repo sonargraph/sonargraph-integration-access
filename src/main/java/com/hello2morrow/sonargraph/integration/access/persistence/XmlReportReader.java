@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,9 +42,11 @@ import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.ResultCause;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
 import com.hello2morrow.sonargraph.integration.access.model.AnalyzerExecutionLevel;
+import com.hello2morrow.sonargraph.integration.access.model.ElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.IAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.model.IDuplicateCodeBlockOccurrence;
 import com.hello2morrow.sonargraph.integration.access.model.IElement;
+import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueCategory;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.model.IIssueType;
@@ -55,6 +58,7 @@ import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IProgrammingElementContainer;
 import com.hello2morrow.sonargraph.integration.access.model.ISourceFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.model.Severity;
 import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
@@ -65,6 +69,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.CycleGroupI
 import com.hello2morrow.sonargraph.integration.access.model.internal.DependencyIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.DuplicateCodeBlockOccurrenceImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ElementPatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExcludePatternImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ExternalImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.FeatureImpl;
@@ -75,6 +80,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueProviderImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.IssueTypeImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LanguageBasedContainerImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.LineBasedIssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalNamespaceImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.LogicalProgrammingElementImpl;
@@ -101,6 +107,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileI
 import com.hello2morrow.sonargraph.integration.access.model.internal.SystemFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceFileFilterImpl;
+import com.hello2morrow.sonargraph.integration.access.persistence.QualityGateReader.InvalidMetricIdException;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
@@ -116,6 +123,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDupl
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdDuplicateCodeConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementKind;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElementPattern;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExecutionPhase;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdExternal;
@@ -127,6 +135,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIntE
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueProvider;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdIssueType;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLineBasedIssue;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalNamespace;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdLogicalProgrammingElement;
@@ -152,6 +161,7 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlug
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdPlugins;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdProgrammingElement;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdQualityGate;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdRootDirectory;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdScriptRunnerConfiguration;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSimpleElementIssue;
@@ -160,13 +170,14 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSour
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdStringEntry;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemElements;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemFile;
+import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemFileElement;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSystemMetricValues;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdWorkspace;
 
 public final class XmlReportReader extends XmlAccess
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(XmlReportReader.class);
     private static final String SOFTWARE_SYSTEM_STANDARD_KIND = "SoftwareSystem";
     private static final String MODULE_STANDARD_KIND_SUFFIX = "Module";
     private static final String EXTERNAL_STANDARD_KIND_SUFFIX = "External";
@@ -177,7 +188,66 @@ public final class XmlReportReader extends XmlAccess
     private final Map<String, IssueTypeImpl> deprecatedIssueTypeNameToIssueType = new HashMap<>();
     private final Map<String, IssueTypeImpl> deprecatedIssueTypeNameToNewIssueType = new HashMap<>();
 
-    private File currentlyReading;
+    /**
+     * Reads an XML report.
+     *
+     * @param reportStream Stream of the XML file that is expected to exist and be readable.
+     * @param baseDir
+     * @param result Contains info about errors.
+     */
+    public Optional<SoftwareSystemImpl> readReportFile(final InputStream reportStream, final File baseDir, final Result result)
+    {
+        assert reportStream != null : "Parameter 'reportFile' of method 'readReportFile' must not be null";
+        assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
+
+        reset();
+
+        JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter;
+        try
+        {
+            jaxbAdapter = createReportJaxbAdapter();
+        }
+        catch (final Exception e)
+        {
+            result.addError(ResultCause.READ_ERROR, "Failed to initialize JAXB", e);
+            return Optional.empty();
+        }
+
+        final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
+        JAXBElement<XsdSoftwareSystemReport> xmlRoot = null;
+        try (BufferedInputStream in = new BufferedInputStream(reportStream))
+        {
+            xmlRoot = jaxbAdapter.load(in, eventHandler);
+            if (xmlRoot != null)
+            {
+                final String baseDirectoryPath = baseDir != null ? Utility.convertPathToUniversalForm(baseDir.getCanonicalPath()) : null;
+                return convertXmlReportToPojo(xmlRoot.getValue(), baseDirectoryPath, result);
+            }
+        }
+        catch (final Throwable ex)
+        {
+            LOGGER.error("Failed to read report from stream", ex);
+            result.addError(ResultCause.READ_ERROR, ex);
+        }
+        finally
+        {
+            if (result.isFailure() || xmlRoot == null)
+            {
+                result.addError(ResultCause.WRONG_FORMAT,
+                        "Report is corrupt. Ensure that the version of Sonargraph/SonargraphBuild used to create the report is compatible with the version of this client.");
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private void reset()
+    {
+        globalXmlIdToIssueMap.clear();
+        globalXmlToElementMap.clear();
+        deprecatedIssueTypeNameToIssueType.clear();
+        deprecatedIssueTypeNameToNewIssueType.clear();
+    }
 
     /**
      * Reads an XML report.
@@ -192,7 +262,8 @@ public final class XmlReportReader extends XmlAccess
         assert reportFile.exists() : "Parameter 'reportFile' of method 'readReportFile' must be an existing file";
         assert reportFile.canRead() : "Parameter 'reportFile' of method 'readReportFile' must be a file with read access";
         assert result != null : "Parameter 'result' of method 'readReportFile' must not be null";
-        assert currentlyReading == null : "'currentlyReading' of method 'readReportFile' must be null";
+
+        reset();
 
         JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> jaxbAdapter;
         try
@@ -205,7 +276,6 @@ public final class XmlReportReader extends XmlAccess
             return Optional.empty();
         }
 
-        currentlyReading = reportFile;
         final ValidationEventHandlerImpl eventHandler = new ValidationEventHandlerImpl(result);
         JAXBElement<XsdSoftwareSystemReport> xmlRoot = null;
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(reportFile)))
@@ -227,34 +297,11 @@ public final class XmlReportReader extends XmlAccess
             if (result.isFailure() || xmlRoot == null)
             {
                 result.addError(ResultCause.WRONG_FORMAT,
-                        "Report is corrupt. Ensure that the version of SonargraphBuild used to create the report is compatible with the version of this client.");
+                        "Report is corrupt. Ensure that the version of Sonargraph/SonargraphBuild used to create the report is compatible with the version of this client.");
             }
-            currentlyReading = null;
         }
 
         return Optional.empty();
-    }
-
-    private XsdElementKind getXsdElementKind(final XsdNamedElement xsdNamedElement)
-    {
-        assert xsdNamedElement != null : "Parameter 'xsdNamedElement' of method 'getXsdElementKind' must not be null";
-        assert currentlyReading != null : "'currentlyReading' of method 'getXsdElementKind' must not be null";
-
-        final Object kind = xsdNamedElement.getKind();
-        if (kind == null)
-        {
-            final String msg = "No associated element kind found for named element: " + xsdNamedElement.getFqName();
-            LOGGER.error(msg);
-            throw new NullPointerException(msg);
-        }
-        if (kind instanceof XsdElementKind == false)
-        {
-            final String msg = "Associated element kind is of wrong class '" + kind.getClass().getName() + "' for named element: "
-                    + xsdNamedElement.getFqName();
-            LOGGER.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
-        return (XsdElementKind) kind;
     }
 
     @SuppressWarnings("unchecked")
@@ -354,6 +401,7 @@ public final class XmlReportReader extends XmlAccess
         processCycleGroupAnalyzerConfigurations(softwareSystemImpl, xsdReport);
         processPluginConfigurations(softwareSystemImpl, xsdReport);
         processCheckedArchitectureFiles(softwareSystemImpl, xsdReport);
+        processActiveQualityGates(softwareSystemImpl, xsdReport);
 
         final XsdWorkspace xsdWorkspace = xsdReport.getWorkspace();
         createWorkspaceElements(softwareSystemImpl, xsdWorkspace, result);
@@ -491,7 +539,7 @@ public final class XmlReportReader extends XmlAccess
         assert programmingElementContainer != null : "Parameter 'programmingElementContainer' of method 'createProgrammingElementImpl' must not be null";
         assert xsdProgrammingElement != null : "Parameter 'xsdProgrammingElement' of method 'createProgrammingElementImpl' must not be null";
 
-        final XsdElementKind xsdElementKind = getXsdElementKind(xsdProgrammingElement);
+        final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(xsdProgrammingElement);
         final ProgrammingElementImpl programmingElementImpl = new ProgrammingElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdProgrammingElement.getName(), xsdProgrammingElement.getPresentationName(),
                 xsdProgrammingElement.getFqName(), xsdProgrammingElement.getLine(), extractImageResourceName(xsdElementKind));
@@ -515,7 +563,7 @@ public final class XmlReportReader extends XmlAccess
         assert xsdPhysicalRecursiveElement != null : "Parameter 'xsdPhysicalRecursiveElement' of method 'createPhysicalRecursiveElementImpl' must not be null";
         //'relativeRootDirectory' might be 'null';
 
-        final XsdElementKind xsdElementKind = getXsdElementKind(xsdPhysicalRecursiveElement);
+        final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(xsdPhysicalRecursiveElement);
         final PhysicalRecursiveElementImpl physicalRecursiveElementImpl = new PhysicalRecursiveElementImpl(xsdElementKind.getStandardKind(),
                 xsdElementKind.getPresentationKind(), xsdPhysicalRecursiveElement.getName(), xsdPhysicalRecursiveElement.getPresentationName(),
                 xsdPhysicalRecursiveElement.getFqName(), xsdPhysicalRecursiveElement.isLocationOnly(), extractImageResourceName(xsdElementKind));
@@ -590,7 +638,7 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdModule nextXsdModule : xsdWorkspace.getModule())
         {
-            final XsdElementKind moduleKind = getXsdElementKind(nextXsdModule);
+            final XsdElementKind moduleKind = XmlReportReaderUtils.getXsdElementKind(nextXsdModule);
             final ModuleImpl nextModuleImpl = new ModuleImpl(moduleKind.getStandardKind(), moduleKind.getPresentationKind(), nextXsdModule.getName(),
                     nextXsdModule.getPresentationName(), nextXsdModule.getFqName(), nextXsdModule.getDescription(), nextXsdModule.getModuleId(),
                     softwareSystemImpl.getMetaDataAccess(), softwareSystemImpl.getElementRegistry(), nextXsdModule.getLanguage(), softwareSystemImpl);
@@ -642,7 +690,7 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getExclude())
         {
-            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(nextXsdPattern);
             final ExcludePatternImpl pattern = new ExcludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
                     nextXsdPattern.getNumberOfMatches());
@@ -650,7 +698,7 @@ public final class XmlReportReader extends XmlAccess
         }
         for (final XsdWildcardPattern nextXsdPattern : xsdFilter.getInclude())
         {
-            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdPattern);
+            final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(nextXsdPattern);
             final IncludePatternImpl pattern = new IncludePatternImpl(nextXsdPattern.getFqName(), xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdPattern.getName(), nextXsdPattern.getPresentationName(),
                     nextXsdPattern.getNumberOfMatches());
@@ -741,9 +789,34 @@ public final class XmlReportReader extends XmlAccess
             final SystemFileType type = SystemFileType.fromString(next.getType());
             if (type == SystemFileType.ARCHITECTURE)
             {
-                final SystemFileImpl systemFile = new SystemFileImpl(next.getPath(), type,
+                final ISystemFile systemFile = new SystemFileImpl(next.getPath(), type,
                         next.getLastModified().toGregorianCalendar().getTimeInMillis(), next.getHash());
                 softwareSystem.addSystemFile(systemFile);
+            }
+        }
+    }
+
+    private void processActiveQualityGates(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
+    {
+        assert softwareSystem != null : "Parameter 'softwareSystem' of method 'processActiveQualityGates' must not be null";
+        assert report != null : "Parameter 'report' of method 'processActiveQualityGates' must not be null";
+
+        final QualityGateReader reader = new QualityGateReader(softwareSystem, globalXmlToElementMap);
+        for (final XsdSystemFileElement next : report.getSystemFileElement())
+        {
+            final SystemFileType type = SystemFileType.fromString(next.getType());
+            if (type == SystemFileType.QUALITY_GATE)
+            {
+                assert next instanceof XsdQualityGate : "Unexpected class " + next.getClass().getCanonicalName();
+
+                try
+                {
+                    reader.addQualityGate((XsdQualityGate) next);
+                }
+                catch (final InvalidMetricIdException e)
+                {
+                    throw new IllegalArgumentException("Failed to process quality gate '" + next.getPath() + "': " + e.getMessage());
+                }
             }
         }
     }
@@ -927,7 +1000,7 @@ public final class XmlReportReader extends XmlAccess
 
         for (final XsdLogicalNamespace nextXsdLogicalNamespace : xsdElements.getLogicalNamespace())
         {
-            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalNamespace);
+            final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(nextXsdLogicalNamespace);
             final LogicalNamespaceImpl logicalNamespaceImpl = new LogicalNamespaceImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalNamespace.getName(), nextXsdLogicalNamespace.getPresentationName(),
                     nextXsdLogicalNamespace.getFqName(), extractImageResourceName(xsdElementKind));
@@ -938,7 +1011,7 @@ public final class XmlReportReader extends XmlAccess
         }
         for (final XsdLogicalProgrammingElement nextXsdLogicalProgrammingElement : xsdElements.getLogicalProgrammingElement())
         {
-            final XsdElementKind xsdElementKind = getXsdElementKind(nextXsdLogicalProgrammingElement);
+            final XsdElementKind xsdElementKind = XmlReportReaderUtils.getXsdElementKind(nextXsdLogicalProgrammingElement);
             final LogicalProgrammingElementImpl logicalProgrammingElementImpl = new LogicalProgrammingElementImpl(xsdElementKind.getStandardKind(),
                     xsdElementKind.getPresentationKind(), nextXsdLogicalProgrammingElement.getName(),
                     nextXsdLogicalProgrammingElement.getPresentationName(), nextXsdLogicalProgrammingElement.getFqName(),
@@ -950,7 +1023,7 @@ public final class XmlReportReader extends XmlAccess
         }
     }
 
-    public String extractImageResourceName(final XsdElementKind xsdElementKind)
+    private String extractImageResourceName(final XsdElementKind xsdElementKind)
     {
         return xsdElementKind.getStandardKind().equals(xsdElementKind.getImageResourceName()) ? null : xsdElementKind.getImageResourceName();
     }
@@ -965,7 +1038,7 @@ public final class XmlReportReader extends XmlAccess
         {
             for (final XsdNamedElement nextElement : xsdSystemElements.getElement())
             {
-                final XsdElementKind elementKind = getXsdElementKind(nextElement);
+                final XsdElementKind elementKind = XmlReportReaderUtils.getXsdElementKind(nextElement);
                 if (!SOFTWARE_SYSTEM_STANDARD_KIND.equals(elementKind.getStandardKind()))
                 {
                     createNamedElementImpl(softwareSystemImpl, nextElement, elementKind);
@@ -992,7 +1065,7 @@ public final class XmlReportReader extends XmlAccess
 
             for (final XsdNamedElement nextModuleElement : nextXsdModuleElements.getElement())
             {
-                final XsdElementKind elementKind = getXsdElementKind(nextModuleElement);
+                final XsdElementKind elementKind = XmlReportReaderUtils.getXsdElementKind(nextModuleElement);
                 if (!elementKind.getStandardKind().endsWith(MODULE_STANDARD_KIND_SUFFIX))
                 {
                     createNamedElementImpl(nextModuleImpl, nextModuleElement, elementKind);
@@ -1014,7 +1087,7 @@ public final class XmlReportReader extends XmlAccess
             final NamedElementContainerImpl nextExternalContainerImpl = (NamedElementContainerImpl) nextElement;
             for (final XsdNamedElement nextNamedElement : nextXsdExternalSystemScopeElements.getElement())
             {
-                final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
+                final XsdElementKind elementKind = XmlReportReaderUtils.getXsdElementKind(nextNamedElement);
                 if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
                 {
                     createNamedElementImpl(nextExternalContainerImpl, nextNamedElement, elementKind);
@@ -1031,7 +1104,7 @@ public final class XmlReportReader extends XmlAccess
 
             for (final XsdNamedElement nextNamedElement : nextXsdExternalModuleScopeElements.getElement())
             {
-                final XsdElementKind elementKind = getXsdElementKind(nextNamedElement);
+                final XsdElementKind elementKind = XmlReportReaderUtils.getXsdElementKind(nextNamedElement);
                 if (!elementKind.getStandardKind().endsWith(EXTERNAL_STANDARD_KIND_SUFFIX))
                 {
                     createNamedElementImpl(nextExternalContainerImpl, nextNamedElement, elementKind);
@@ -1329,16 +1402,21 @@ public final class XmlReportReader extends XmlAccess
             deprecatedIssueTypeNameToIssueType.put(errorStandardName, deprecatedIssueTypeError);
         }
 
-        if (!deprecatedIssueTypeNameToNewIssueType.containsKey(xsdIssueType.getName()))
+        IssueTypeImpl newIssueType = deprecatedIssueTypeNameToNewIssueType.get(warningStandardName);
+        if (newIssueType == null)
         {
-            final IssueTypeImpl issueType = new IssueTypeImpl(warningStandardName, warningPresentationName,
-                    Arrays.asList(Severity.ERROR, Severity.WARNING), (IIssueCategory) issueCategory, (IIssueProvider) provider,
-                    xsdIssueType.getDescription());
-            deprecatedIssueTypeNameToNewIssueType.put(xsdIssueType.getName(), issueType);
-            return issueType;
+            newIssueType = deprecatedIssueTypeNameToNewIssueType.get(errorStandardName);
         }
 
-        return deprecatedIssueTypeNameToNewIssueType.get(xsdIssueType.getName());
+        if (newIssueType == null)
+        {
+            newIssueType = new IssueTypeImpl(warningStandardName, warningPresentationName, Arrays.asList(Severity.ERROR, Severity.WARNING),
+                    (IIssueCategory) issueCategory, (IIssueProvider) provider, xsdIssueType.getDescription());
+
+            deprecatedIssueTypeNameToNewIssueType.put(warningStandardName, newIssueType);
+            deprecatedIssueTypeNameToNewIssueType.put(errorStandardName, newIssueType);
+        }
+        return newIssueType;
     }
 
     private void processDependencyIssues(final SoftwareSystemImpl softwareSystem, final XsdSoftwareSystemReport report)
@@ -1381,8 +1459,10 @@ public final class XmlReportReader extends XmlAccess
                 final IElement element = globalXmlToElementMap.get(nextOccurrence.getSource());
                 assert element instanceof ISourceFile : "Unexpected element class: " + element.getClass().getName();
                 final Integer endLine = nextOccurrence.getEndLine();
+
+                final int[] hash = HashExtractor.decodeHash(nextOccurrence.getHash());
                 final IDuplicateCodeBlockOccurrence occurrence = new DuplicateCodeBlockOccurrenceImpl((ISourceFile) element,
-                        nextOccurrence.getBlockSize(), nextOccurrence.getStartLine(), endLine.intValue(), nextOccurrence.getTolerance());
+                        nextOccurrence.getBlockSize(), nextOccurrence.getStartLine(), endLine.intValue(), nextOccurrence.getTolerance(), hash);
                 occurrences.add(occurrence);
             }
 
@@ -1559,11 +1639,35 @@ public final class XmlReportReader extends XmlAccess
             final IIssueProvider issueProvider = getIssueProvider(softwareSystem, next);
             final String nextName = issueType.getName();
             final String nextPresentationName = issueType.getPresentationName();
-            final NamedElementIssueImpl issue = new NamedElementIssueImpl(nextName, nextPresentationName,
-                    next.getDescription() != null ? next.getDescription() : "", issueType, severity, issueProvider, next.getLine(), next.getColumn(),
-                    (INamedElement) affected);
-            softwareSystem.addIssue(issue);
-            globalXmlIdToIssueMap.put(next, issue);
+            final NamedElementIssueImpl issue;
+            final String description = next.getDescription() != null ? next.getDescription() : "";
+            if (next instanceof XsdLineBasedIssue)
+            {
+                final XsdElementPattern xsdPattern = ((XsdLineBasedIssue) next).getPattern();
+                final String hash = xsdPattern.getHash();
+                final IElementPattern pattern = new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, xsdPattern.getValue(), hash);
+                final LineBasedIssueImpl.PatternInfo info = HashExtractor.extractLineBasedIssuePatternInfo(hash);
+                if (info == null)
+                {
+                    LOGGER.error("Failed to extract info from hash '{}'", hash);
+                    issue = null;
+                }
+                else
+                {
+                    issue = new LineBasedIssueImpl(nextName, nextPresentationName, description, issueType, severity, issueProvider, next.getLine(),
+                            next.getColumn(), (INamedElement) affected, pattern, info.getLineText(), info.getPrefixHashs(), info.getPostfixHashs());
+                }
+            }
+            else
+            {
+                issue = new NamedElementIssueImpl(nextName, nextPresentationName, description, issueType, severity, issueProvider, next.getLine(),
+                        next.getColumn(), (INamedElement) affected);
+            }
+            if (issue != null)
+            {
+                softwareSystem.addIssue(issue);
+                globalXmlIdToIssueMap.put(next, issue);
+            }
         }
     }
 

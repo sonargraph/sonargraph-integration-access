@@ -19,11 +19,19 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 public final class MigrationCheck
 {
-    public static final String PRE_UNIFICATION_OF_ISSUEIDS_VERSION = "10.3.1";
+    private static final Version UNIFICATION_OF_ISSUEIDS_VERSION = Version.fromString("10.4.1");
+    private static final Version MULTIPLE_VALUES_IN_QUALITY_GATE_CONDITIONS_VERSION = Version.fromString("10.4.2");
 
     public static boolean isPreUnificationOfIssueIds(final String version)
     {
         assert version != null && version.length() > 0 : "Parameter 'version' of method 'isPreUnificationOfIssueIds' must not be empty";
-        return Version.fromString(version).compareTo(Version.fromString(PRE_UNIFICATION_OF_ISSUEIDS_VERSION)) < 0;
+        return Version.fromString(version).compareTo(UNIFICATION_OF_ISSUEIDS_VERSION) < 0;
+    }
+
+    public static boolean isPreMultipleValueForSeverityAndResolutionInQualityGateConditions(final String version)
+    {
+        assert version != null && version
+                .length() > 0 : "Parameter 'version' of method 'isSingleValueForSeverityAndResolutionInQualityGateConditions' must not be empty";
+        return Version.fromString(version).compareTo(MULTIPLE_VALUES_IN_QUALITY_GATE_CONDITIONS_VERSION) < 0;
     }
 }

@@ -42,4 +42,9 @@ public final class ProgrammingElementImpl extends NamedElementImpl implements IP
     {
         return super.toString() + "\nline:" + line;
     }
+
+    public void updateFqName(final String newFqName)
+    {
+        setFqName(newFqName);
+    }
 }

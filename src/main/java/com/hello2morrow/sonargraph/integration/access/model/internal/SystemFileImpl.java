@@ -1,8 +1,3 @@
-package com.hello2morrow.sonargraph.integration.access.model.internal;
-
-import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
-import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
-
 /*
  * Sonargraph Integration Access
  * Copyright (C) 2016-2018 hello2morrow GmbH
@@ -20,6 +15,11 @@ import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.hello2morrow.sonargraph.integration.access.model.internal;
+
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
+import com.hello2morrow.sonargraph.integration.access.model.SystemFileType;
+
 public class SystemFileImpl extends ElementImpl implements ISystemFile
 {
     private static final long serialVersionUID = -7804519436007162975L;
@@ -31,10 +31,20 @@ public class SystemFileImpl extends ElementImpl implements ISystemFile
     {
         super(path, extractPresentationName(path));
         assert type != null : "Parameter 'type' of method 'SystemFileImpl' must not be null";
-        //hash migth be null
+        assert hash != null : "Parameter 'hash' of method 'SystemFileImpl' must not be null";
+
         this.type = type;
         this.lastModified = lastModified;
         this.hash = hash;
+    }
+
+    public SystemFileImpl(final String path, final SystemFileType type, final long lastModified)
+    {
+        super(path, extractPresentationName(path));
+        assert type != null : "Parameter 'type' of method 'SystemFileImpl' must not be null";
+        this.hash = null;
+        this.type = type;
+        this.lastModified = lastModified;
     }
 
     @Override

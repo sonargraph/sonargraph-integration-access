@@ -19,7 +19,9 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 public interface IElementPattern
 {
-    public ElementPatternType getType();
+    ElementPatternType getType();
 
-    public String getPattern();
+    String getPattern();
+
+    String getHash();
 }

@@ -143,7 +143,7 @@ public final class ModuleInfoProcessorTest
 
         final List<IIssue> architectureViolations = processor.getIssues((final IIssue issue) ->
         {
-            final boolean matchesCategory = issue.getIssueType().getCategory().equals(architectureViolationCategory);
+            final boolean matchesCategory = issue.getIssueType().getCategory().getName().equals(architectureViolationCategory.getName());
             final boolean matchesDescription = issue.getDescription().startsWith("[New]");
             return matchesCategory && matchesDescription;
         });

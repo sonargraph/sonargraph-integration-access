@@ -49,6 +49,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFileElement;
 import com.hello2morrow.sonargraph.integration.access.model.IThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ModuleImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
@@ -80,11 +81,24 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     {
         if (filter == null)
         {
-            return Collections.unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).collect(toList()));
+            final List<IIssue> issueList = Collections
+                    .unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).collect(toList()));
+            return issueList;
         }
 
         return Collections
                 .unmodifiableList(softwareSystem.getIssues().values().stream().flatMap(list -> list.stream()).filter(filter).collect(toList()));
+    }
+
+    @Override
+    public List<IIssue> getIssues(final Set<IIssue> issuesToSelectFrom, final Predicate<IIssue> filter)
+    {
+        if (filter == null)
+        {
+            Collections.unmodifiableList(new ArrayList<>(issuesToSelectFrom));
+        }
+
+        return Collections.unmodifiableList(issuesToSelectFrom.stream().filter(filter).collect(toList()));
     }
 
     @Override
@@ -336,5 +350,11 @@ final class SystemInfoProcessorImpl implements ISystemInfoProcessor
     public List<ISystemFile> getSystemFiles()
     {
         return softwareSystem.getSystemFiles();
+    }
+
+    @Override
+    public List<ISystemFileElement> getSystemFileElements()
+    {
+        return softwareSystem.getSystemFileElements();
     }
 }

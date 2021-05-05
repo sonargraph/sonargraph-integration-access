@@ -24,7 +24,7 @@ public interface IIssue extends IElement
     String KEY_SEPARATOR = ":";
 
     /**
-     * @return the key that identifies the issue regardless of it's line/column and the element(s) it is attached to
+     * @return the key that identifies the issue regardless of its line/column and the element(s) it is attached to
      */
     String getKey();
 

@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.controller;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,53 +40,91 @@ import com.hello2morrow.sonargraph.integration.access.model.IPlugin;
 import com.hello2morrow.sonargraph.integration.access.model.IPluginConfiguration;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFileElement;
 
 public interface ISystemInfoProcessor extends IInfoProcessor
 {
-    public ISoftwareSystem getSoftwareSystem();
+    public static final class IIssueComparator implements Comparator<IIssue>
+    {
+        public IIssueComparator()
+        {
+            super();
+        }
 
-    public List<IIssueProvider> getIssueProviders();
+        @Override
+        public int compare(final IIssue i1, final IIssue i2)
+        {
+            assert i1 != null : "Parameter 'i1' of method 'compare' must not be null";
+            assert i2 != null : "Parameter 'i2' of method 'compare' must not be null";
 
-    public List<IIssueType> getIssueTypes();
+            if (i1 == i2)
+            {
+                return 0;
+            }
 
-    public List<ICycleGroupIssue> getCycleGroups(Predicate<ICycleGroupIssue> filter);
+            int compared = Integer.compare(i1.getLine(), i2.getLine());
+            if (compared == 0)
+            {
+                compared = Integer.compare(i1.getColumn(), i2.getColumn());
+                if (compared == 0)
+                {
+                    compared = i1.getName().compareToIgnoreCase(i2.getName());
+                    if (compared == 0)
+                    {
+                        compared = Integer.compare(i1.hashCode(), i2.hashCode());
+                    }
+                }
+            }
+            return compared;
+        }
+    }
 
-    public Optional<IMetricId> getMetricId(String name);
+    ISoftwareSystem getSoftwareSystem();
 
-    public List<IMetricId> getMetricIds();
+    List<IIssueProvider> getIssueProviders();
 
-    public List<IFeature> getFeatures();
+    List<IIssueType> getIssueTypes();
 
-    public List<IPlugin> getPlugins();
+    List<ICycleGroupIssue> getCycleGroups(Predicate<ICycleGroupIssue> filter);
 
-    public Map<String, IPluginConfiguration> getPluginConfigurations();
+    Optional<IMetricId> getMetricId(String name);
 
-    public List<IAnalyzer> getAnalyzers();
+    List<IMetricId> getMetricIds();
 
-    public List<String> getDuplicateCodeConfigurationEntries();
+    List<IFeature> getFeatures();
 
-    public List<String> getScriptRunnerConfigurationEntries();
+    List<IPlugin> getPlugins();
 
-    public List<String> getArchitectureCheckConfigurationEntries();
+    Map<String, IPluginConfiguration> getPluginConfigurations();
 
-    public List<IMetricCategory> getMetricCategories();
+    List<IAnalyzer> getAnalyzers();
 
-    public List<IMetricProvider> getMetricProviders();
+    List<String> getDuplicateCodeConfigurationEntries();
 
-    public boolean hasIssue(Predicate<IIssue> filter);
+    List<String> getScriptRunnerConfigurationEntries();
 
-    public Map<String, IModule> getModules();
+    List<String> getArchitectureCheckConfigurationEntries();
 
-    public List<IIssueCategory> getIssueCategories();
+    List<IMetricCategory> getMetricCategories();
 
-    public List<IMetricThreshold> getMetricThresholds();
+    List<IMetricProvider> getMetricProviders();
 
-    public List<String> getElementKinds();
+    boolean hasIssue(Predicate<IIssue> filter);
 
-    public IModuleInfoProcessor createModuleInfoProcessor(IModule module);
+    Map<String, IModule> getModules();
+
+    List<IIssueCategory> getIssueCategories();
+
+    List<IMetricThreshold> getMetricThresholds();
+
+    List<String> getElementKinds();
+
+    IModuleInfoProcessor createModuleInfoProcessor(IModule module);
 
     /** @return map of analyzers's standardNames to configurations */
-    public Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations();
+    Map<String, IAnalyzerConfiguration> getAnalyzerConfigurations();
 
-    public List<ISystemFile> getSystemFiles();
+    List<ISystemFile> getSystemFiles();
+
+    List<ISystemFileElement> getSystemFileElements();
 }

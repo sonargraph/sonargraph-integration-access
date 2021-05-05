@@ -48,6 +48,7 @@ public final class XmlElementAttributesExtractor
 
         public ElementProcessedException(final Map<String, String> attributeValues)
         {
+            super("");
             this.attributeValues = attributeValues;
         }
 

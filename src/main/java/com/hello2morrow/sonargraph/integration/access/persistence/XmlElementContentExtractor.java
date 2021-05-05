@@ -49,6 +49,7 @@ public final class XmlElementContentExtractor
 
         public ElementProcessedException(final String attributeValue)
         {
+            super("");
             this.attributeValue = attributeValue;
         }
 

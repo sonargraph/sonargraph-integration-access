@@ -25,7 +25,7 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
 {
     private static final long serialVersionUID = 7897215356427497745L;
 
-    private final String fqName;
+    private String fqName;
     private String m_originalFqName;
     private final String kind;
     private final String presentationKind;
@@ -80,6 +80,12 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
         m_originalFqName = originalFqName;
     }
 
+    protected final void setFqName(final String newFqName)
+    {
+        assert newFqName != null && newFqName.length() > 0 : "Parameter 'newFqName' of method 'updateFqName' must not be empty";
+        fqName = newFqName;
+    }
+
     @Override
     public Optional<String> getOriginalFqName()
     {
@@ -96,32 +102,6 @@ public class NamedElementImpl extends ElementWithDescriptionImpl implements INam
     public boolean isLocationOnly()
     {
         return false;
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + fqName.hashCode();
-        result = prime * result + (isLocationOnly() ? 1 : 0);
-        return result;
-    }
-
-    @Override
-    public final boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-
-        final NamedElementImpl other = (NamedElementImpl) obj;
-        return fqName.equals(other.fqName) && isLocationOnly() == other.isLocationOnly();
     }
 
     @Override

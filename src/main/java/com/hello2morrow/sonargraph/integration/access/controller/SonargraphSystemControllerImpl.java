@@ -18,6 +18,7 @@
 package com.hello2morrow.sonargraph.integration.access.controller;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Optional;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
@@ -52,6 +53,25 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
         assert baseDirectory.exists() && baseDirectory.isDirectory() : "Must be an existing directory: " + baseDirectory;
 
         return innerLoadSystemReport(systemReportFile, baseDirectory);
+    }
+
+    @Override
+    public Result loadSystemReport(final InputStream systemReport, final File baseDir)
+    {
+        assert systemReport != null : "Parameter 'systemReport' of method 'loadSystemReport' must not be null";
+        assert baseDir != null : "Parameter 'baseDir' of method 'loadSystemReport' must not be null";
+
+        final Result result = new Result("Load data from inputStream");
+
+        final XmlReportReader persistence = new XmlReportReader();
+        final Optional<SoftwareSystemImpl> readResult = persistence.readReportFile(systemReport, baseDir, result);
+        if (!readResult.isPresent() || result.isFailure())
+        {
+            return result;
+        }
+
+        softwareSystem = readResult.get();
+        return result;
     }
 
     private Result innerLoadSystemReport(final File systemReportFile, final File baseDir)
@@ -108,12 +128,5 @@ final class SonargraphSystemControllerImpl implements ISonargraphSystemControlle
     public boolean hasSoftwareSystem()
     {
         return softwareSystem != null;
-    }
-
-    @Override
-    public IReportDifferenceProcessor createReportDifferenceProcessor()
-    {
-        assert softwareSystem != null : "No software system available";
-        return new ReportDifferenceProcessorImpl(new SystemInfoProcessorImpl(softwareSystem));
     }
 }

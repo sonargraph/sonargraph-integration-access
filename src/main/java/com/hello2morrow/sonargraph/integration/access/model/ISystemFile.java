@@ -17,15 +17,16 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+@Deprecated //since 6.1 (integration.access), 11.1.1 (Sonargraph)
 public interface ISystemFile extends IElement
 {
-    public String getPath();
+    String getPath();
 
-    public SystemFileType getType();
+    SystemFileType getType();
 
-    public long getLastModified();
+    long getLastModified();
 
-    public default String getHash()
+    default String getHash()
     {
         return "";
     }

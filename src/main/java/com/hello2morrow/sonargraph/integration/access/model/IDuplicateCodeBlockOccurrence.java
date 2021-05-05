@@ -19,13 +19,15 @@ package com.hello2morrow.sonargraph.integration.access.model;
 
 public interface IDuplicateCodeBlockOccurrence extends IElement
 {
-    public ISourceFile getSourceFile();
+    ISourceFile getSourceFile();
 
-    public int getTolerance();
+    int getTolerance();
 
-    public int getBlockSize();
+    int getBlockSize();
 
-    public int getStartLine();
+    int getStartLine();
 
-    public int getEndLine();
+    int getEndLine();
+
+    int[] getHash();
 }

@@ -39,4 +39,34 @@ public enum ResolutionType implements IEnumeration
     {
         return Utility.convertConstantNameToPresentationName(name());
     }
+
+    public static ResolutionType fromString(final String name)
+    {
+        assert name != null && name.trim().length() > 0 : "Parameter 'name' of method 'fromName' must not be empty";
+
+        final String nameLowerCase = name.toLowerCase().trim();
+        switch (nameLowerCase)
+        {
+        case "todo":
+            return ResolutionType.TODO;
+        case "ignore":
+            return ResolutionType.IGNORE;
+        case "refactoring":
+            return ResolutionType.REFACTORING;
+        case "fix":
+            return ResolutionType.FIX;
+        case "none":
+            return ResolutionType.NONE;
+        default:
+            assert false : "Unspported resolution '" + name + "'";
+        }
+
+        return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPresentationName();
+    }
 }

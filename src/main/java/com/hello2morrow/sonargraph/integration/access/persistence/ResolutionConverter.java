@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.hello2morrow.sonargraph.integration.access.foundation.MigrationCheck;
 import com.hello2morrow.sonargraph.integration.access.foundation.Result;
 import com.hello2morrow.sonargraph.integration.access.foundation.Utility;
+import com.hello2morrow.sonargraph.integration.access.foundation.Version;
 import com.hello2morrow.sonargraph.integration.access.model.DependencyPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.ElementPatternType;
 import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
@@ -94,6 +95,8 @@ public class ResolutionConverter
             //no resolutions to be processed
             return;
         }
+
+        final boolean isPatternMigrationNeeded = ResolutionMigration.isPatternMigrationNeeded(Version.fromString(report.getVersion()));
 
         for (final XsdResolution nextXsdResolution : report.getResolutions().getResolution())
         {
@@ -238,7 +241,15 @@ public class ResolutionConverter
                         nextXsdResolution.getNumberOfAffectedParserDependencies(), description, information, assignee, dateTime, elementPatterns,
                         dependencyPatterns, matching, descriptor);
             }
-            softwareSystem.addResolution(resolutionToAdd);
+
+            if (isPatternMigrationNeeded)
+            {
+                softwareSystem.addResolution(ResolutionMigration.migrate(resolutionToAdd));
+            }
+            else
+            {
+                softwareSystem.addResolution(resolutionToAdd);
+            }
         }
     }
 
@@ -274,19 +285,25 @@ public class ResolutionConverter
                     final XsdElementPatternType nextXsdElementPatternType = nextXsdElementPattern.getType();
                     if (nextXsdElementPatternType != null && nextXsdElementPatternType == XsdElementPatternType.FULLY_QUALIFIED_NAME)
                     {
-                        final String nextXsdValue = nextXsdElementPattern.getValue();
-                        if (nextXsdValue != null && !nextXsdValue.isEmpty())
-                        {
-                            matchingPatterns.add(new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, nextXsdValue));
-                        }
-                        else
+                        final String pattern = nextXsdElementPattern.getValue();
+                        if (pattern == null || pattern.isEmpty())
                         {
                             result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Empty matching pattern");
                             break;
                         }
+                        final String hash = nextXsdElementPattern.getHash();
+                        if (hash != null && hash.trim().length() > 0)
+                        {
+                            matchingPatterns.add(new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, pattern, hash));
+                        }
+                        else
+                        {
+                            matchingPatterns.add(new ElementPatternImpl(ElementPatternType.FULLY_QUALIFIED_NAME, pattern));
+                        }
                     }
                     else
                     {
+                        //[IK] Currently, only fqName patterns are used in matching info.
                         result.addWarning(ValidationMessageCauses.XML_VALIDATION_WARNING, "Unspported pattern type: " + nextXsdElementPatternType);
                     }
                 }

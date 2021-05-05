@@ -110,63 +110,6 @@ public abstract class IssueImpl extends ElementWithDescriptionImpl implements II
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((issueProvider == null) ? 0 : issueProvider.hashCode());
-        result = prime * result + ((issueType == null) ? 0 : issueType.hashCode());
-        result = prime * result + line;
-        result = prime * result + column;
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        final IssueImpl other = (IssueImpl) obj;
-        if (issueProvider == null)
-        {
-            if (other.issueProvider != null)
-            {
-                return false;
-            }
-        }
-        else if (!issueProvider.equals(other.issueProvider))
-        {
-            return false;
-        }
-        if (issueType == null)
-        {
-            if (other.issueType != null)
-            {
-                return false;
-            }
-        }
-        else if (!issueType.equals(other.issueType))
-        {
-            return false;
-        }
-        if (line != other.line)
-        {
-            return false;
-        }
-        if (column != other.column)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString()
     {
         final StringBuilder builder = new StringBuilder(super.toString());

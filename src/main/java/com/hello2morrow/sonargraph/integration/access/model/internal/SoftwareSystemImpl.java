@@ -52,6 +52,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IPluginExternal;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFileElement;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
 public final class SoftwareSystemImpl extends NamedElementContainerImpl implements ISoftwareSystem
@@ -81,6 +82,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
     private final Map<String, IPluginConfiguration> pluginIdToConfigurationMap = new HashMap<>();
 
     private final List<ISystemFile> systemFiles = new ArrayList<>();
+    private final List<ISystemFileElement> m_systemFileElements = new ArrayList<>();
 
     private final Map<ResolutionType, ArrayList<IResolution>> resolutionMap = new EnumMap<>(ResolutionType.class);
     private final Map<IIssue, IResolution> issueToResolution = new HashMap<>();
@@ -598,9 +600,21 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Collections.unmodifiableList(systemFiles);
     }
 
+    @Deprecated
     public void addSystemFile(final ISystemFile systemFile)
     {
         assert systemFile != null : "Parameter 'systemFile' of method 'addSystemFile' must not be null";
         systemFiles.add(systemFile);
+    }
+
+    public void addSystemFileElement(final ISystemFileElement systemFile)
+    {
+        assert systemFile != null : "Parameter 'systemFile' of method 'addSystemFileElement' must not be null";
+        m_systemFileElements.add(systemFile);
+    }
+
+    public List<ISystemFileElement> getSystemFileElements()
+    {
+        return Collections.unmodifiableList(m_systemFileElements);
     }
 }

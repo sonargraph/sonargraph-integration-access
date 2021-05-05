@@ -190,6 +190,7 @@
 		<xs:attribute name="value" type="xs:boolean" />
 	</xs:complexType>
 
+<!-- FIXME [IK] This should be marked deprecated -->
 	<xs:complexType name="xsdSystemFile">
 		<xs:attribute name="path" type="xs:string" />
 		<xs:attribute name="type" type="xs:string" />
@@ -197,46 +198,18 @@
 		<xs:attribute name="hash" type="xs:string" use="optional" />
 	</xs:complexType>
 	
-	<xs:complexType name="xsdQualityGate">
-		<xs:complexContent>
-			<xs:extension base="xsdSystemFile">
-				<xs:sequence>
-					<xs:element name="currentSystemConditions" type="xsdConditions"/>
-					<xs:element name="baselineSystemConditions" type="xsdConditions"/>
-				</xs:sequence>	
-				<xs:attribute name="id" type="xs:ID"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-	<xs:complexType name="xsdConditions">
-		<xs:sequence>
-			<xs:element name="condition" type="xsdQualityGateElement" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-
-	<xs:complexType name="xsdQualityGateElement" abstract="true">
-		<xs:attribute name="shortName" type="xs:string"/>
-		<xs:attribute name="information" type="xs:string"/>
-		<xs:attribute name="matches" type="xs:int" />
-	</xs:complexType>
-	
-	<xs:complexType name="xsdQualityGateCondition">
-		<xs:complexContent>
-			<xs:extension base="xsdQualityGateElement">
-				<xs:attribute name="status" type="xs:string" />
-				<xs:attribute name="excludes" type="xs:int" />
-				<xs:attribute name="omitted" type="xs:int" />				
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:complexType name="xsdQualityGateExclude">
-		<xs:complexContent>
-			<xs:extension base="xsdQualityGateElement"/>
-		</xs:complexContent>
-	</xs:complexType>
-	
+    <xs:complexType name="xsdSystemFileElement">
+        <xs:complexContent>
+            <xs:extension base="xsdNamedElement">
+                <xs:attribute name="path" type="xs:string" />
+                <xs:attribute name="type" type="xs:string" />
+                <xs:attribute name="lastModified" type="xs:dateTime" />
+                <xs:attribute name="hash" type="xs:string" use="optional" />
+                <xs:attribute name="description" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>    
+    
 	<xs:complexType name="xsdNamedElement">
 		<xs:complexContent>
 			<xs:extension base="export:xsdElement">
@@ -629,6 +602,16 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="xsdLineBasedIssue">
+		<xs:complexContent>
+			<xs:extension base="xsdSimpleElementIssue">
+				<xs:sequence>
+					<xs:element name="pattern" type="xsdElementPattern" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 	<xs:complexType name="xsdMetricThresholdViolationIssue">
 		<xs:complexContent>
 			<xs:extension base="xsdSimpleElementIssue">
@@ -647,6 +630,7 @@
 		<xs:attribute name="blockSize" type="xs:int" />
 		<xs:attribute name="tolerance" type="xs:int" />
 		<xs:attribute name="debugInfo" type="xs:string" />
+		<xs:attribute name="hash" type="xs:string" use="optional"/>
 	</xs:complexType>
 
 	<xs:complexType name="xsdDuplicateBlockIssue">
@@ -828,13 +812,14 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="Wildcard"/>
             <xs:enumeration value="FullyQualifiedName"/>
-         </xs:restriction>
+         </xs:restriction>         
     </xs:simpleType>
 
     <xs:complexType name="xsdElementPattern">
     	<xs:simpleContent>
         	<xs:extension base="xs:string">
             	<xs:attribute name="type" type="xsdElementPatternType"/>
+            	<xs:attribute name="hash" type="xs:string" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -857,6 +842,138 @@
 				maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
+    
+<!--  Quality Gate Info -->    
+
+    <xs:simpleType name="xsdOperator">
+    <!-- Not using operator characters, since they need to be escaped in XML -->
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="less"/>
+            <xs:enumeration value="lessOrEqual"/>
+            <xs:enumeration value="equal"/>
+            <xs:enumeration value="greaterOrEqual"/>
+            <xs:enumeration value="greater"/>
+            <xs:enumeration value="n/a"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="xsdCheck">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="relaxed" />
+            <xs:enumeration value="strict" />
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="xsdQualityGateStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="passed" />
+            <xs:enumeration value="failed" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="xsdAbstractFilter" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="xsdNamedElement">
+                <xs:attribute name="issueType" type="xs:string" use="required" />
+                <xs:attribute name="severity" type="xs:string" use="required" />
+                <xs:attribute name="resolution" type="xs:string" use="required" />
+                <xs:attribute name="info" type="xs:string" use="required" />
+            </xs:extension>
+        </xs:complexContent>              
+    </xs:complexType>
+    
+    <xs:complexType name="xsdAbstractCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdAbstractFilter">
+                <xs:attribute name="status" type="xsdQualityGateStatus" use="required"/> 
+            </xs:extension>               
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdThresholdIssueCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdIssueCondition">
+                <xs:attribute name="metricId" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdAbstractCondition">
+                <xs:attribute name="operator" type="xsdOperator" use="required" />      
+                <xs:attribute name="limit" type="xs:int" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdExcludeFilter">
+        <xs:complexContent>
+            <xs:extension base="xsdAbstractFilter">
+                <xs:attribute name="metricId" type="xs:string" use="optional" default="Any" />          
+            </xs:extension>         
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdIssueDiffCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdAbstractCondition">
+                <xs:attribute name="check" type="xsdCheck" use="optional" />        
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdThresholdIssueDiffCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdIssueDiffCondition">
+                <xs:attribute name="metricId" type="xs:string" use="required" />
+                <xs:attribute name="operator" type="xsdOperator" use="optional" />
+                <xs:attribute name="diffThreshold" type="xs:float" use="optional" />
+                <xs:attribute name="diffThresholdRelative" type="xs:float" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+     
+    <xs:complexType name="xsdMetricDiffCondition">
+        <xs:complexContent>
+            <xs:extension base="xsdNamedElement">
+                <xs:attribute name="metricId" type="xs:string" use="required"/>
+                <xs:attribute name="operator" type="xsdOperator" use="required" />
+                <xs:attribute name="diffThreshold" type="xs:float" use="optional" />
+                <xs:attribute name="diffThresholdRelative" type="xs:float" use="optional" />
+                <xs:attribute name="info" type="xs:string" use="required" />
+                <xs:attribute name="status" type="xsdQualityGateStatus" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdCurrentSystemConditions">
+        <xs:sequence>
+            <xs:element name="issueCondition" type="xsdIssueCondition" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="exclude" type="xsdExcludeFilter" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="xsdDiffAgainstBaselineConditions">
+        <xs:sequence>
+            <xs:element name="issueDiffCondition" type="xsdIssueDiffCondition" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="exclude" type="xsdExcludeFilter" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="metricDiffCondition" type="xsdMetricDiffCondition" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+        
+    <xs:complexType name="xsdQualityGate">
+        <xs:complexContent>
+            <xs:extension base="xsdSystemFileElement">
+                <xs:sequence>
+                    <xs:element name="currentSystemConditions" type="xsdCurrentSystemConditions"/>
+                    <xs:element name="baselineConditions" type="xsdDiffAgainstBaselineConditions"/>
+                </xs:sequence>  
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+<!--  End of Quality Gate Info -->
 
 	<xs:complexType name="xsdSoftwareSystemReport">
 		<xs:sequence>
@@ -885,9 +1002,10 @@
 			<xs:element name="systemDiffConfiguration"
 				type="xsdSystemDiffConfiguration" minOccurs="1" maxOccurs="1" />				
 			<xs:element name="qualityGateConfiguration"
-				type="xsdQualityGateConfiguration" minOccurs="1" maxOccurs="1"/>							
-			<xs:element name="systemFile" minOccurs="0" type="xsdSystemFile" maxOccurs="unbounded" />
-			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded"/>
+				type="xsdQualityGateConfiguration" minOccurs="1" maxOccurs="1" />							
+			<xs:element name="systemFile" type="xsdSystemFile" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="systemFileElement" type="xsdSystemFileElement" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="pluginConfiguration" type="xsdPluginConfiguration" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="elementKinds" type="xsdElementKinds"
 				minOccurs="1" maxOccurs="1" />
 			<xs:element name="workspace" type="xsdWorkspace"

@@ -3,7 +3,21 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Sonargraph Integration
 Bundle-SymbolicName: com.hello2morrow.sonargraph.integration.access
 Bundle-Vendor: hello2morrow GmbH
-Bundle-Version: 5.0.0
+Bundle-Version: 6.1.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.hello2morrow.sonargraph.integration.access
 Bundle-ActivationPolicy: lazy
+Export-Package: com.hello2morrow.sonargraph.integration.access.apitest,
+ com.hello2morrow.sonargraph.integration.access.controller,
+ com.hello2morrow.sonargraph.integration.access.foundation,
+ com.hello2morrow.sonargraph.integration.access.migration,
+ com.hello2morrow.sonargraph.integration.access.model,
+ com.hello2morrow.sonargraph.integration.access.model.internal,
+ com.hello2morrow.sonargraph.integration.access.model.internal.qualitygate,
+ com.hello2morrow.sonargraph.integration.access.model.qualitygate,
+ com.hello2morrow.sonargraph.integration.access.persistence,
+ com.hello2morrow.sonargraph.integration.access.persistence.report,
+ com.hello2morrow.sonargraph.integration.architecture,
+ com.hello2morrow.sonargraph.integration.architecture.controller,
+ com.hello2morrow.sonargraph.integration.architecture.model,
+ com.hello2morrow.sonargraph.integration.architecture.persistence

@@ -54,4 +54,10 @@ public final class DependencyPatternImpl implements IDependencyPattern
     {
         return toPattern;
     }
+
+    @Override
+    public String toString()
+    {
+        return new StringBuilder(fromPattern).append(" -> ").append(toPattern).append(" [").append(type.getStandardName()).append("]").toString();
+    }
 }

@@ -46,25 +46,15 @@ public abstract class ElementImpl implements IElement
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
-        return name.hashCode();
+        return super.hashCode();
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass())
-        {
-            return false;
-        }
-
-        final ElementImpl other = (ElementImpl) obj;
-        return name.equals(other.name);
+        return super.equals(obj);
     }
 
     @Override

@@ -59,31 +59,6 @@ public final class DependencyIssueImpl extends SingleNamedElementIssueImpl imple
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + from.hashCode();
-        result = prime * result + to.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        final DependencyIssueImpl other = (DependencyIssueImpl) obj;
-        return from.equals(other.from) && to.equals(other.to);
-    }
-
-    @Override
     public String toString()
     {
         final StringBuilder builder = new StringBuilder(super.toString());
