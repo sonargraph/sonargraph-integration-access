@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<virtualModel version="10.0.0.100">
+<virtualModel version="11.2.0.100">
 	<resolutions>
 		<ignore date="2020-01-21T16:10:24.314Z" description="ResolutionImpl is deprecated and will be removed soon.">
 			<type class="com.hello2morrow.sonargraph.core.model.element.CoreIssueId" name="DuplicateCodeBlock"></type>

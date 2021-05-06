@@ -65,6 +65,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IRenameRefactoring;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.ISoftwareSystem;
 import com.hello2morrow.sonargraph.integration.access.model.ISystemFile;
+import com.hello2morrow.sonargraph.integration.access.model.ISystemFileElement;
 import com.hello2morrow.sonargraph.integration.access.model.IToDoDefinition;
 import com.hello2morrow.sonargraph.integration.access.model.IWildcardPattern;
 import com.hello2morrow.sonargraph.integration.access.model.PluginExecutionPhase;
@@ -604,5 +605,20 @@ public final class ReportReaderTest
         final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
         final List<IIssue> qualityGateIssues = systemProcessor.getIssues(i -> i.getIssueType().getName().equals("QualityGateIssue"));
         assertEquals("Wrong number of quality gate issues", 3, qualityGateIssues.size());
+    }
+
+    @Test
+    public void processReportWithQualityGateElements()
+    {
+        final ISonargraphSystemController controller = ControllerFactory.createController();
+        final Result result = controller.loadSystemReport(new File(TestFixture.REPORT_WITH_QUALITYGATE_ELEMENTS));
+        assertTrue(result.toString(), result.isSuccess());
+        final ISoftwareSystem softwareSystem = controller.getSoftwareSystem();
+        assertNotNull("Missing softwareSystem", softwareSystem);
+        final ISystemInfoProcessor systemProcessor = controller.createSystemInfoProcessor();
+        final List<ISystemFileElement> systemFiles = systemProcessor.getSystemFileElements();
+        assertEquals("Wrong number of system files", 2, systemFiles.size());
+        final List<IIssue> qualityGateIssues = systemProcessor.getIssues(i -> i.getIssueType().getName().equals("QualityGateIssue"));
+        assertEquals("Wrong number of quality gate issues", 1, qualityGateIssues.size());
     }
 }

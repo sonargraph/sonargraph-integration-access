@@ -30,6 +30,7 @@ public abstract class XmlAccess
 {
     private static final String NAMESPACE = "com.hello2morrow.sonargraph.integration.access.persistence.report";
     private static final String EXPORT_METADATA_XSD = "com/hello2morrow/sonargraph/integration/access/persistence/report/exportMetaData.xsd";
+    private static final String DEFAULT_REPORT_NAMESPACE_URI = "http://www.hello2morrow.com/sonargraph/core/report";
 
     protected XmlAccess()
     {
@@ -47,7 +48,7 @@ public abstract class XmlAccess
      */
     public static final JaxbAdapter<JAXBElement<XsdSoftwareSystemReport>> createReportJaxbAdapter()
     {
-        return new JaxbAdapter<>(NAMESPACE, getClassLoader());
+        return new JaxbAdapter<>(NAMESPACE, getClassLoader(), DEFAULT_REPORT_NAMESPACE_URI);
     }
 
     /**
