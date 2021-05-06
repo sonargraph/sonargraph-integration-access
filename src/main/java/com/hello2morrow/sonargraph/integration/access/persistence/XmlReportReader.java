@@ -805,7 +805,7 @@ public final class XmlReportReader extends XmlAccess
         for (final XsdSystemFileElement next : report.getSystemFileElement())
         {
             final SystemFileType type = SystemFileType.fromString(next.getType());
-            if (type == SystemFileType.QUALITY_GATE)
+            if (next instanceof XsdQualityGate && type == SystemFileType.QUALITY_GATE)
             {
                 assert next instanceof XsdQualityGate : "Unexpected class " + next.getClass().getCanonicalName();
 
