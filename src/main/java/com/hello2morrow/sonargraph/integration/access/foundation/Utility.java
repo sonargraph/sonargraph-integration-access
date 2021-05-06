@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ package com.hello2morrow.sonargraph.integration.access.foundation;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Locale;
 
@@ -258,4 +259,18 @@ public final class Utility
 
         return "";
     }
+
+    public static String base64Encode(final String content)
+    {
+        assert content != null : "Parameter 'content' of method 'base64Encode' must not be null";
+        return Base64.getEncoder().encodeToString(content.getBytes());
+    }
+
+    public static String base64Decode(final String encoded)
+    {
+        assert encoded != null : "Parameter 'encoded' of method 'base64Decode' must not be null";
+        final byte[] decodedBytes = Base64.getDecoder().decode(encoded);
+        return new String(decodedBytes);
+    }
+
 }

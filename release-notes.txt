@@ -1,6 +1,18 @@
 Sonargraph Integration Access
 ===============================
 
+6.1.0
+=====
+
+- Support to extract quality gate information from report.
+
+
+6.0.0
+=====
+
+- Remove deprecated 'diff' functionality.
+
+
 5.0.0
 =====
 

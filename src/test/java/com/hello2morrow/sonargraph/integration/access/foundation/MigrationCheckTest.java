@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,9 @@ public class MigrationCheckTest
     @Test
     public void testIsPreUnificationOfIssueIds()
     {
-        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.3.0.632"));
-        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.4.0"));
+        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.3.1.632"));
+        assertTrue(MigrationCheck.isPreUnificationOfIssueIds("10.4.0.100"));
+        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.4.1.640"));
+        assertFalse(MigrationCheck.isPreUnificationOfIssueIds("10.5.0.100"));
     }
 }

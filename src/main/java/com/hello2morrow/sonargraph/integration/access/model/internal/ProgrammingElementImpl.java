@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,5 +41,10 @@ public final class ProgrammingElementImpl extends NamedElementImpl implements IP
     public String toString()
     {
         return super.toString() + "\nline:" + line;
+    }
+
+    public void updateFqName(final String newFqName)
+    {
+        setFqName(newFqName);
     }
 }

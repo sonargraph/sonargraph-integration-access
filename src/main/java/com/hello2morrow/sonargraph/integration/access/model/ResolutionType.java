@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,5 +38,35 @@ public enum ResolutionType implements IEnumeration
     public String getPresentationName()
     {
         return Utility.convertConstantNameToPresentationName(name());
+    }
+
+    public static ResolutionType fromString(final String name)
+    {
+        assert name != null && name.trim().length() > 0 : "Parameter 'name' of method 'fromName' must not be empty";
+
+        final String nameLowerCase = name.toLowerCase().trim();
+        switch (nameLowerCase)
+        {
+        case "todo":
+            return ResolutionType.TODO;
+        case "ignore":
+            return ResolutionType.IGNORE;
+        case "refactoring":
+            return ResolutionType.REFACTORING;
+        case "fix":
+            return ResolutionType.FIX;
+        case "none":
+            return ResolutionType.NONE;
+        default:
+            assert false : "Unspported resolution '" + name + "'";
+        }
+
+        return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPresentationName();
     }
 }

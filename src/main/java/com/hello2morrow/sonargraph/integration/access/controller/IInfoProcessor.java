@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ package com.hello2morrow.sonargraph.integration.access.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
@@ -35,48 +36,50 @@ public interface IInfoProcessor
     /**
      * @return the absolute base directory
      */
-    public String getBaseDirectory();
+    String getBaseDirectory();
 
     /**
      * @param filter the predicate used to filter the existing issues. If <code>null</code>, then all issues are returned.
      * @return Unmodifiable list of issues matching the predicate.
      */
-    public List<IIssue> getIssues(Predicate<IIssue> filter);
+    List<IIssue> getIssues(Predicate<IIssue> filter);
 
-    public List<IThresholdViolationIssue> getThresholdViolationIssues(Predicate<IThresholdViolationIssue> filter);
+    List<IIssue> getIssues(Set<IIssue> issuesToSelectFrom, Predicate<IIssue> filter);
+
+    List<IThresholdViolationIssue> getThresholdViolationIssues(Predicate<IThresholdViolationIssue> filter);
 
     /**
      * @param filter the predicate used to filter the existing resolutions. If <code>null</code>, then all resolutions are returned.
      * @return Unmodifiable list of resolutions matching the predicate.
      */
-    public List<IResolution> getResolutions(Predicate<IResolution> filter);
+    List<IResolution> getResolutions(Predicate<IResolution> filter);
 
-    public <T extends IResolution> List<T> getResolutions(Predicate<T> filter, Class<T> resolutionClass);
+    <T extends IResolution> List<T> getResolutions(Predicate<T> filter, Class<T> resolutionClass);
 
     /**
      * @param issue the issue - must not be 'null'
      * @return the resolution or 'null' if the issue has no resolution
      */
-    public IResolution getResolution(IIssue issue);
+    IResolution getResolution(IIssue issue);
 
     /**
      * @param level
      * @param metricId the metric's 'standard' name, e.g. 'CoreParameter'
      */
-    public Optional<IMetricId> getMetricId(IMetricLevel level, String metricId);
+    Optional<IMetricId> getMetricId(IMetricLevel level, String metricId);
 
-    public Optional<IMetricValue> getMetricValueForElement(IMetricId metricId, IMetricLevel level, String fqName);
+    Optional<IMetricValue> getMetricValueForElement(IMetricId metricId, IMetricLevel level, String fqName);
 
-    public List<IMetricId> getMetricIdsForLevel(IMetricLevel level);
+    List<IMetricId> getMetricIdsForLevel(IMetricLevel level);
 
-    public List<IMetricLevel> getMetricLevels();
+    List<IMetricLevel> getMetricLevels();
 
     /**
      * @param levelName The level's 'standard' name, e.g. 'SourceFile'
      */
-    public Optional<IMetricLevel> getMetricLevel(String levelName);
+    Optional<IMetricLevel> getMetricLevel(String levelName);
 
-    public Map<INamedElement, IMetricValue> getMetricValues(String levelName, String metricIdName);
+    Map<INamedElement, IMetricValue> getMetricValues(String levelName, String metricIdName);
 
-    public Optional<IMetricValue> getMetricValue(String metricName);
+    Optional<IMetricValue> getMetricValue(String metricName);
 }

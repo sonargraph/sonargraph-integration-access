@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
+public abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
 {
     private static final long serialVersionUID = 6480407569513366548L;
     private final List<IIssue> issues;
@@ -148,93 +148,6 @@ abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((assignee == null) ? 0 : assignee.hashCode());
-        result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((issues == null) ? 0 : issues.hashCode());
-        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final AbstractResolutionImpl other = (AbstractResolutionImpl) obj;
-        if (assignee == null)
-        {
-            if (other.assignee != null)
-            {
-                return false;
-            }
-        }
-        else if (!assignee.equals(other.assignee))
-        {
-            return false;
-        }
-        if (dateTime == null)
-        {
-            if (other.dateTime != null)
-            {
-                return false;
-            }
-        }
-        else if (!dateTime.equals(other.dateTime))
-        {
-            return false;
-        }
-        if (description == null)
-        {
-            if (other.description != null)
-            {
-                return false;
-            }
-        }
-        else if (!description.equals(other.description))
-        {
-            return false;
-        }
-
-        if (issues == null)
-        {
-            if (other.issues != null)
-            {
-                return false;
-            }
-        }
-        else if (!issues.equals(other.issues))
-        {
-            return false;
-        }
-
-        if (priority != other.priority)
-        {
-            return false;
-        }
-        if (type != other.type)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public boolean isTask()
     {
         return type != ResolutionType.IGNORE;
@@ -286,6 +199,18 @@ abstract class AbstractResolutionImpl extends ElementImpl implements IResolution
     public List<IDependencyPattern> getDependencyPatterns()
     {
         return Collections.unmodifiableList(dependencyPatterns);
+    }
+
+    public final void updateElementPatterns(final List<IElementPattern> migratedPatterns)
+    {
+        elementPatterns.clear();
+        elementPatterns.addAll(migratedPatterns);
+    }
+
+    public final void updateDependencyPatterns(final List<IDependencyPattern> migratedDependencyPatterns)
+    {
+        dependencyPatterns.clear();
+        dependencyPatterns.addAll(migratedDependencyPatterns);
     }
 
     @Override

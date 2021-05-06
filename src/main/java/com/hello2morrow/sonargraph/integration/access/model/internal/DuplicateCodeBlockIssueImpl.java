@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,54 +96,5 @@ public final class DuplicateCodeBlockIssueImpl extends MultiNamedElementIssueImp
     public int getTotalDuplicateLineCount()
     {
         return duplicateLineCount;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + blockSize;
-        result = prime * result + duplicateLineCount;
-        result = prime * result + ((occurrences == null) ? 0 : occurrences.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final DuplicateCodeBlockIssueImpl other = (DuplicateCodeBlockIssueImpl) obj;
-        if (blockSize != other.blockSize)
-        {
-            return false;
-        }
-        if (duplicateLineCount != other.duplicateLineCount)
-        {
-            return false;
-        }
-        if (occurrences == null)
-        {
-            if (other.occurrences != null)
-            {
-                return false;
-            }
-        }
-        else if (!occurrences.equals(other.occurrences))
-        {
-            return false;
-        }
-        return true;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,49 +25,49 @@ public interface IResolution extends INamedElement
     /**
      * @return the type - never <code>null</code>
      */
-    public ResolutionType getType();
+    ResolutionType getType();
 
     /**
      * @return the priority - never <code>null</code>
      */
-    public Priority getPriority();
+    Priority getPriority();
 
     /**
      * @return the assignee - never <code>null</code>
      */
-    public String getAssignee();
+    String getAssignee();
 
     /**
      * @return the description - never <code>null</code>
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * @return the information - never <code>null</code>
      */
-    public String getInformation();
+    String getInformation();
 
     /**
      * @return the formatted date of creation for this resolution.
      */
-    public String getDate();
+    String getDate();
 
     /**
      * @return the date of creation.
      */
-    public Date getCreationDate();
+    Date getCreationDate();
 
     /**
      * @return the issue - never <code>null</code>
      */
-    public List<IIssue> getIssues();
+    List<IIssue> getIssues();
 
     /**
      * @deprecated use {@link #getMatchingElementsCount()} instead
      * @return true if matching element count is &gt; 0, false otherwise
      */
     @Deprecated
-    default public boolean isApplicable()
+    default boolean isApplicable()
     {
         return true;
     }
@@ -75,39 +75,39 @@ public interface IResolution extends INamedElement
     /**
      * @return the number of elements that this resolution matches.
      */
-    public int getMatchingElementsCount();
+    int getMatchingElementsCount();
 
     /**
      * @return true if the resolution is a task, i.e. todo, fix, or refactoring.
      */
-    public boolean isTask();
+    boolean isTask();
 
     /**
      * @return the element patterns used to connect this resolution to the code.
      */
-    public List<IElementPattern> getElementPatterns();
+    List<IElementPattern> getElementPatterns();
 
     /**
      * @return the dependency patterns used to connect this resolution to the code.
      */
-    public List<IDependencyPattern> getDependencyPatterns();
+    List<IDependencyPattern> getDependencyPatterns();
 
     /**
      * @return the {@link IMatching} object used to connect this resolution to the code.
      */
-    public IMatching getMatching();
+    IMatching getMatching();
 
     /**
      * @return the descriptor that uniquely identifies a resolution.
      */
-    public String getDescriptor();
+    String getDescriptor();
 
     /**
      * @deprecated
      * @return
      */
     @Deprecated
-    default public int getNumberOfAffectedParserDependencies()
+    default int getNumberOfAffectedParserDependencies()
     {
         return -1;
     }

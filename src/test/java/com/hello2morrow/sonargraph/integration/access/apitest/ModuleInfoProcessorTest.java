@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,7 +143,7 @@ public final class ModuleInfoProcessorTest
 
         final List<IIssue> architectureViolations = processor.getIssues((final IIssue issue) ->
         {
-            final boolean matchesCategory = issue.getIssueType().getCategory().equals(architectureViolationCategory);
+            final boolean matchesCategory = issue.getIssueType().getCategory().getName().equals(architectureViolationCategory.getName());
             final boolean matchesDescription = issue.getDescription().startsWith("[New]");
             return matchesCategory && matchesDescription;
         });

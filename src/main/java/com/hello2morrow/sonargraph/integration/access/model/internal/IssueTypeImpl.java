@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,43 +64,8 @@ public class IssueTypeImpl extends ElementImpl implements IIssueType
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
-        return result;
-    }
-
-    @Override
     public IIssueProvider getProvider()
     {
         return provider;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        final IssueTypeImpl other = (IssueTypeImpl) obj;
-        if (provider == null)
-        {
-            if (other.provider != null)
-            {
-                return false;
-            }
-        }
-        else if (!provider.equals(other.provider))
-        {
-            return false;
-        }
-        return true;
     }
 }

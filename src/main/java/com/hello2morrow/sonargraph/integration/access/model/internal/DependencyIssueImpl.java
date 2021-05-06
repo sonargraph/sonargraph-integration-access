@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,31 +56,6 @@ public final class DependencyIssueImpl extends SingleNamedElementIssueImpl imple
     public INamedElement getTo()
     {
         return to;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + from.hashCode();
-        result = prime * result + to.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        final DependencyIssueImpl other = (DependencyIssueImpl) obj;
-        return from.equals(other.from) && to.equals(other.to);
     }
 
     @Override

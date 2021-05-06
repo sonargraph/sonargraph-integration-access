@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,16 @@
  */
 package com.hello2morrow.sonargraph.integration.access.model;
 
+@Deprecated //since 6.1 (integration.access), 11.1.1 (Sonargraph)
 public interface ISystemFile extends IElement
 {
-    public String getPath();
+    String getPath();
 
-    public SystemFileType getType();
+    SystemFileType getType();
 
-    public long getLastModified();
+    long getLastModified();
 
-    public default String getHash()
+    default String getHash()
     {
         return "";
     }

@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,54 +53,10 @@ public class NamedElementIssueImpl extends SingleNamedElementIssueImpl implement
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((namedElement == null) ? 0 : namedElement.hashCode());
-        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final NamedElementIssueImpl other = (NamedElementIssueImpl) obj;
-        if (namedElement == null)
-        {
-            if (other.namedElement != null)
-            {
-                return false;
-            }
-        }
-        else if (!namedElement.equals(other.namedElement))
-        {
-            return false;
-        }
-        if (severity != other.severity)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("NamedElementIssueImpl [namedElement=");
+        final StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
+        builder.append(" [namedElement=");
         builder.append(namedElement);
         builder.append(", severity=");
         builder.append(severity);

@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,6 @@ import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -140,7 +139,7 @@ public final class JaxbAdapter<T>
                 sources[i] = new StreamSource(nextSchemaUrl.openStream());
                 i++;
             }
-            createdReader.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(sources));
+            createdReader.setSchema(SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema").newSchema(sources));
 
             //createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
         }
@@ -185,7 +184,7 @@ public final class JaxbAdapter<T>
     }
 
     @SuppressWarnings("unchecked")
-    public final T load(final InputStream from, final ValidationEventHandler validationHandler)
+    public T load(final InputStream from, final ValidationEventHandler validationHandler)
     {
         assert from != null : "'from' must not be null";
         assert validationHandler != null : "'validationHandler' must not be null";
@@ -193,7 +192,8 @@ public final class JaxbAdapter<T>
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
             reader.setEventHandler(validationHandler);
-            return (T) reader.unmarshal(bufferedIn);
+            final T result = (T) reader.unmarshal(bufferedIn);
+            return result;
         }
         catch (final IOException | JAXBException e)
         {

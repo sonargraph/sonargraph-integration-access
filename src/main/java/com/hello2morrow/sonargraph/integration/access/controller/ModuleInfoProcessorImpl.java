@@ -1,6 +1,6 @@
 /*
  * Sonargraph Integration Access
- * Copyright (C) 2016-2018 hello2morrow GmbH
+ * Copyright (C) 2016-2021 hello2morrow GmbH
  * mailto: support AT hello2morrow DOT com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,13 @@ final class ModuleInfoProcessorImpl implements IModuleInfoProcessor
     public List<IIssue> getIssues(final Predicate<IIssue> filter)
     {
         final List<IIssue> systemIssues = systemInfoProcessor.getIssues(filter);
+        return Collections.unmodifiableList(systemIssues.stream().filter(this::isModuleElementOriginOfIssue).collect(Collectors.toList()));
+    }
+
+    @Override
+    public List<IIssue> getIssues(final Set<IIssue> issuesToSelectFrom, final Predicate<IIssue> filter)
+    {
+        final List<IIssue> systemIssues = systemInfoProcessor.getIssues(issuesToSelectFrom, filter);
         return Collections.unmodifiableList(systemIssues.stream().filter(this::isModuleElementOriginOfIssue).collect(Collectors.toList()));
     }
 
