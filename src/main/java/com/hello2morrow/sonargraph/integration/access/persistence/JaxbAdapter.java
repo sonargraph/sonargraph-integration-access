@@ -80,11 +80,15 @@ public final class JaxbAdapter<T>
         try
         {
             /*
-             * For properties and debugging, check com.sun.xml.bind.api.JAXBRIContext of jaxb-impl
+             * For properties and debugging, check com.sun.xml.bind.api.JAXBRIContext and com.sun.xml.bind.v2.runtime.JAXBContextImpl of jaxb-impl.
              */
             final Map<String, Object> properties = new HashMap<>();
             if (defaultNamespaceRemap != null)
             {
+                //This property is required, so that subtypes like XsdQualityGate as XsdSystemFileElement get correctly resolved.
+                //In some runtimes (e.g. SonarQube Maven Scanner) the lookup of the subtype failed in JAXBContext, where it was
+                //registered with the localPart (xsdQualityGate) but looked up with namespaceURI+localPart ({http://www.hello2morrow.com/sonargraph/core/report}xsdQualityGate).
+                //Using this property, all elements are registered and looked up with namespaceURI+localPart.
                 properties.put("com.sun.xml.bind.defaultNamespaceRemap", defaultNamespaceRemap);
             }
             final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader, properties);
