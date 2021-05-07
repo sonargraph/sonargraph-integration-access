@@ -74,6 +74,7 @@ public class TestFixture
 
     public static final String REPORT_WITH_UNKNOWN_ELEMENT = "./src/test/resources/AlarmClock_with_unknown_elements.xml";
     public static final String REPORT_WITH_QUALITYGATE_ISSUES = "./src/test/resources/Report_with_qualitygate_issues.xml";
+    public static final String REPORT_WITH_QUALITYGATE_ELEMENTS = "./src/test/resources/Report_with_qualitygate_elements.xml";
 
     /** Reports for testing diff functionality */
     public static final String ALARM_CLOCK_BASELINE_PLUGIN_NOT_EXECUTED = "./src/test/diff/AlarmClock_with_plugin_not_executed.xml";

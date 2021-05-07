@@ -1,1 +1,0 @@
-java -cp ../../target/sonargraph-integration-access-3.0.0.jar com.hello2morrow.sonargraph.integration.access.ReportDiff

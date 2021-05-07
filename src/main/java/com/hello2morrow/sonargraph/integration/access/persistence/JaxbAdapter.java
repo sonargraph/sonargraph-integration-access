@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -60,10 +62,11 @@ public final class JaxbAdapter<T>
      * @param namespace the namespace - must not be 'empty'
      * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final String namespace, ClassLoader classLoader)
+    public JaxbAdapter(final String namespace, ClassLoader classLoader, final String defaultNamespaceRemap)
     {
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
+        //defaultNamespaceRemap might be null.
 
         if (!(classLoader instanceof AggregatingClassLoader))
         {
@@ -76,7 +79,19 @@ public final class JaxbAdapter<T>
 
         try
         {
-            final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader);
+            /*
+             * For properties and debugging, check com.sun.xml.bind.api.JAXBRIContext and com.sun.xml.bind.v2.runtime.JAXBContextImpl of jaxb-impl.
+             */
+            final Map<String, Object> properties = new HashMap<>();
+            if (defaultNamespaceRemap != null)
+            {
+                //This property is required, so that subtypes like XsdQualityGate as XsdSystemFileElement get correctly resolved.
+                //In some runtimes (e.g. SonarQube Maven Scanner) the lookup of the subtype failed in JAXBContext, where it was
+                //registered with the localPart (xsdQualityGate) but looked up with namespaceURI+localPart ({http://www.hello2morrow.com/sonargraph/core/report}xsdQualityGate).
+                //Using this property, all elements are registered and looked up with namespaceURI+localPart.
+                properties.put("com.sun.xml.bind.defaultNamespaceRemap", defaultNamespaceRemap);
+            }
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader, properties);
             logJaxbImplementation(jaxbContext);
             verifyJaxbImplementation(jaxbContext);
 
@@ -174,7 +189,7 @@ public final class JaxbAdapter<T>
                     + "\tCheck if the file META-INF/services/javax.xml.bind.JAXBContext exists and contains the correct entry.\n"
                     + "\tIf used in an OSGi environment, check that the correct classloader is used.\n"
                     + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
-                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.runtime.JAXBContextImpl'");
+                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory'");
         }
     }
 
@@ -192,8 +207,7 @@ public final class JaxbAdapter<T>
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
             reader.setEventHandler(validationHandler);
-            final T result = (T) reader.unmarshal(bufferedIn);
-            return result;
+            return (T) reader.unmarshal(bufferedIn);
         }
         catch (final IOException | JAXBException e)
         {
