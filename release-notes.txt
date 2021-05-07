@@ -1,6 +1,11 @@
 Sonargraph Integration Access
 ===============================
 
+6.1.1
+=====
+
+- Fix for JAXB failing to resolve subtypes in some environments.
+
 
 6.1.0
 =====
