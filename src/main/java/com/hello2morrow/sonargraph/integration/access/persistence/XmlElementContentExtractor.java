@@ -17,6 +17,7 @@
  */
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -76,54 +77,10 @@ public final class XmlElementContentExtractor
         assert file != null : "Parameter 'file' of method 'process' must not be null";
         assert elementName != null && elementName.length() > 0 : "Parameter 'elementName' of method 'process' must not be empty";
 
-        boolean error = false;
-        try (InputStream is = new FileInputStream(file))
+        try (InputStream is = new BufferedInputStream(new FileInputStream(file)))
         {
-            if (s_factory == null)
-            {
-                s_factory = SAXParserFactory.newInstance();
-            }
-            if (s_saxParser == null)
-            {
-                s_saxParser = s_factory.newSAXParser();
-            }
-            if (s_processor == null)
-            {
-                s_processor = new DefaultHandler()
-                {
-                    private StringBuilder m_content;
-
-                    @Override
-                    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
-                            throws SAXException
-                    {
-                        //throwing an exception is not ideal but the fastest way to terminate the parsing.
-                        if (qName.equals(elementName))
-                        {
-                            m_content = new StringBuilder();
-                        }
-                    }
-
-                    @Override
-                    public void endElement(final String uri, final String localName, final String qName) throws SAXException
-                    {
-                        if (qName.equals(elementName))
-                        {
-                            throw new ElementProcessedException(m_content.toString());
-                        }
-                    }
-
-                    @Override
-                    public void characters(final char[] ch, final int start, final int length) throws SAXException
-                    {
-                        if (m_content != null)
-                        {
-                            m_content.append(ch, start, length);
-                        }
-                    }
-                };
-            }
-            s_saxParser.parse(is, s_processor);
+            extractElementValue(elementName, is);
+            return "";
         }
         catch (final ElementProcessedException ex)
         {
@@ -132,29 +89,108 @@ public final class XmlElementContentExtractor
         catch (final SAXParseException ex)
         {
             //input file is not a valid XML file
-            error = true;
-        }
-        catch (final FileNotFoundException ex)
-        {
-            //input file does not exist
-            error = true;
-        }
-        catch (final IOException ex)
-        {
-            LOGGER.error("Failed to determine root element of " + file.getAbsolutePath(), ex);
-            error = true;
         }
         catch (final ParserConfigurationException ex)
         {
             LOGGER.error("Fatal configuration exception", ex);
-            error = true;
         }
         catch (final SAXException ex)
         {
             LOGGER.error("Generic SAXException while processing " + file.getAbsolutePath(), ex);
-            error = true;
+        }
+        catch (final FileNotFoundException ex)
+        {
+            //input file does not exist
+        }
+        catch (final IOException ex)
+        {
+            LOGGER.error("Failed to determine root element of " + file.getAbsolutePath(), ex);
         }
 
-        return error ? null : "";
+        return null;
+    }
+
+    public static String process(final InputStream in, final String elementName)
+    {
+        assert in != null : "Parameter 'in' of method 'process' must not be null";
+        assert elementName != null && elementName.length() > 0 : "Parameter 'elementName' of method 'process' must not be empty";
+
+        try
+        {
+            extractElementValue(elementName, in);
+            return "";
+        }
+        catch (final ElementProcessedException ex)
+        {
+            return ex.getElementContent();
+        }
+        catch (final SAXParseException ex)
+        {
+            //input file is not a valid XML file
+        }
+        catch (final ParserConfigurationException ex)
+        {
+            LOGGER.error("Fatal configuration exception", ex);
+        }
+        catch (final SAXException ex)
+        {
+            LOGGER.error("Generic SAXException", ex);
+        }
+        catch (final IOException ex)
+        {
+            LOGGER.error("Failed to value for element '" + elementName + "'", ex);
+        }
+
+        return null;
+    }
+
+    private static void extractElementValue(final String elementName, final InputStream is)
+            throws ParserConfigurationException, SAXException, IOException
+    {
+        if (s_factory == null)
+        {
+            s_factory = SAXParserFactory.newInstance();
+        }
+        if (s_saxParser == null)
+        {
+            s_saxParser = s_factory.newSAXParser();
+        }
+        if (s_processor == null)
+        {
+            s_processor = new DefaultHandler()
+            {
+                private StringBuilder m_content;
+
+                @Override
+                public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+                        throws SAXException
+                {
+                    //throwing an exception is not ideal but the fastest way to terminate the parsing.
+                    if (qName.equals(elementName))
+                    {
+                        m_content = new StringBuilder();
+                    }
+                }
+
+                @Override
+                public void endElement(final String uri, final String localName, final String qName) throws SAXException
+                {
+                    if (qName.equals(elementName))
+                    {
+                        throw new ElementProcessedException(m_content.toString());
+                    }
+                }
+
+                @Override
+                public void characters(final char[] ch, final int start, final int length) throws SAXException
+                {
+                    if (m_content != null)
+                    {
+                        m_content.append(ch, start, length);
+                    }
+                }
+            };
+        }
+        s_saxParser.parse(is, s_processor);
     }
 }

@@ -18,7 +18,9 @@
 package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hello2morrow.sonargraph.integration.access.foundation.Version;
 import com.hello2morrow.sonargraph.integration.access.model.ICycleGroupIssue;
@@ -42,15 +44,18 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionI
 
 public class ResolutionMigration
 {
-    private static final String FIELD_DESCRIPTOR = "|f";
+    static final String FIELD_DESCRIPTOR = "|f";
 
     static boolean isPatternMigrationNeeded(final Version version)
     {
         return version.compareTo(Version.fromString("11.2.0")) < 0;
     }
 
-    public static IResolution migrate(final IResolution resolution)
+    public static IResolution migrate(final IResolution resolution, final Set<INamedElement> elementsToMigrateCollector)
     {
+        assert resolution != null : "Parameter 'resolution' of method 'migrate' must not be null";
+        assert elementsToMigrateCollector != null : "Parameter 'elementsToMigrateCollector' of method 'migrate' must not be null";
+
         if (resolution instanceof ResolutionImpl)
         {
             return resolution;
@@ -73,7 +78,7 @@ public class ResolutionMigration
             return resolution;
         }
 
-        final List<ProgrammingElementImpl> fieldsOfElementIssues = getAffectedFields(resolution.getIssues(), true);
+        final Set<ProgrammingElementImpl> fieldsOfElementIssues = getAffectedFields(resolution.getIssues(), true);
         if (!fieldsOfElementIssues.isEmpty())
         {
             final List<IElementPattern> migratedPatterns = new ArrayList<>();
@@ -83,10 +88,10 @@ public class ResolutionMigration
             {
                 ((AbstractResolutionImpl) resolution).updateElementPatterns(migratedPatterns);
             }
-            updateFields(fieldsOfElementIssues);
+            elementsToMigrateCollector.addAll(fieldsOfElementIssues);
         }
 
-        final List<ProgrammingElementImpl> fieldsOfDependencyIssues = getAffectedFields(resolution.getIssues(), false);
+        final Set<ProgrammingElementImpl> fieldsOfDependencyIssues = getAffectedFields(resolution.getIssues(), false);
         if (!fieldsOfDependencyIssues.isEmpty())
         {
             final List<IDependencyPattern> migratedDependencyPatterns = new ArrayList<>();
@@ -97,21 +102,13 @@ public class ResolutionMigration
                 ((AbstractResolutionImpl) resolution).updateDependencyPatterns(migratedDependencyPatterns);
             }
 
-            updateFields(fieldsOfDependencyIssues);
+            elementsToMigrateCollector.addAll(fieldsOfDependencyIssues);
         }
 
         return resolution;
     }
 
-    private static void updateFields(final List<ProgrammingElementImpl> fields)
-    {
-        for (final ProgrammingElementImpl next : fields)
-        {
-            next.updateFqName(next.getFqName() + FIELD_DESCRIPTOR);
-        }
-    }
-
-    private static boolean migrateDependencyPatterns(final List<ProgrammingElementImpl> fields, final List<IDependencyPattern> dependencyPatterns,
+    private static boolean migrateDependencyPatterns(final Set<ProgrammingElementImpl> fields, final List<IDependencyPattern> dependencyPatterns,
             final List<IDependencyPattern> migratedDependencyPatterns)
     {
         boolean migrated = false;
@@ -126,7 +123,7 @@ public class ResolutionMigration
         return migrated;
     }
 
-    private static String updatePattern(final String pattern, final List<ProgrammingElementImpl> fields)
+    private static String updatePattern(final String pattern, final Set<ProgrammingElementImpl> fields)
     {
         for (final ProgrammingElementImpl next : fields)
         {
@@ -138,7 +135,7 @@ public class ResolutionMigration
         return pattern;
     }
 
-    private static boolean migrateElementPatterns(final List<ProgrammingElementImpl> fields, final List<IElementPattern> elementPatterns,
+    private static boolean migrateElementPatterns(final Set<ProgrammingElementImpl> fields, final List<IElementPattern> elementPatterns,
             final List<IElementPattern> migratedPatterns)
     {
         boolean migrated = false;
@@ -172,9 +169,9 @@ public class ResolutionMigration
         return migrated;
     }
 
-    private static List<ProgrammingElementImpl> getAffectedFields(final List<IIssue> issues, final boolean elementIssue)
+    private static Set<ProgrammingElementImpl> getAffectedFields(final List<IIssue> issues, final boolean elementIssue)
     {
-        final List<ProgrammingElementImpl> fields = new ArrayList<>();
+        final Set<ProgrammingElementImpl> fields = new HashSet<>();
         for (final IIssue nextIssue : issues)
         {
             if (elementIssue && nextIssue instanceof INamedElementIssue)
@@ -194,7 +191,7 @@ public class ResolutionMigration
         return fields;
     }
 
-    private static void collectField(final List<ProgrammingElementImpl> fields, final INamedElement element)
+    private static void collectField(final Set<ProgrammingElementImpl> fields, final INamedElement element)
     {
         final String kind = element.getKind();
         switch (kind)

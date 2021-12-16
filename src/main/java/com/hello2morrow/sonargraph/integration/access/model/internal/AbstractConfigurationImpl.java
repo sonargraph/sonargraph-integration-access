@@ -47,10 +47,10 @@ abstract class AbstractConfigurationImpl extends ElementWithDescriptionImpl impl
     {
         assert property != null && property.length() > 0 : "Parameter 'property' of method 'addIntConfigurationValue' must not be empty";
 
-        final Object prev = properties.put(property, new Integer(value));
+        final Object prev = properties.put(property, Integer.valueOf(value));
         assert prev == null : "Integer property '" + property + "' was already present with value '" + prev + "', now overwritten with '" + value
                 + "'";
-        final Integer previous = intProperties.put(property, new Integer(value));
+        final Integer previous = intProperties.put(property, Integer.valueOf(value));
         assert previous == null : "Property '" + property + "' was already present with value '" + previous + "', now overwritten with '" + value
                 + "'";
     }
