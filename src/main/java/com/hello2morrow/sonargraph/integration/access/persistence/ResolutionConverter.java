@@ -19,8 +19,11 @@ package com.hello2morrow.sonargraph.integration.access.persistence;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,7 @@ import com.hello2morrow.sonargraph.integration.access.model.IDependencyPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IElementPattern;
 import com.hello2morrow.sonargraph.integration.access.model.IIssue;
 import com.hello2morrow.sonargraph.integration.access.model.IMatching;
+import com.hello2morrow.sonargraph.integration.access.model.INamedElement;
 import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.RefactoringStatus;
@@ -48,6 +52,7 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.IssueImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MatchingImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MoveRefactoringImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.MoveRenameRefactoringImpl;
+import com.hello2morrow.sonargraph.integration.access.model.internal.ProgrammingElementImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.RenameRefactoringImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ResolutionImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.SoftwareSystemImpl;
@@ -97,6 +102,7 @@ public class ResolutionConverter
         }
 
         final boolean isPatternMigrationNeeded = ResolutionMigration.isPatternMigrationNeeded(Version.fromString(report.getVersion()));
+        final Set<INamedElement> elementsNeedingMigration = new HashSet<>();
 
         for (final XsdResolution nextXsdResolution : report.getResolutions().getResolution())
         {
@@ -244,12 +250,25 @@ public class ResolutionConverter
 
             if (isPatternMigrationNeeded)
             {
-                softwareSystem.addResolution(ResolutionMigration.migrate(resolutionToAdd));
+                softwareSystem.addResolution(ResolutionMigration.migrate(resolutionToAdd, elementsNeedingMigration));
             }
             else
             {
                 softwareSystem.addResolution(resolutionToAdd);
             }
+        }
+
+        final Set<ProgrammingElementImpl> fieldsToUpdate = elementsNeedingMigration.stream().filter(e -> e instanceof ProgrammingElementImpl)
+                .map(e -> (ProgrammingElementImpl) e).collect(Collectors.toSet());
+        updateFields(fieldsToUpdate);
+    }
+
+    private void updateFields(final Set<ProgrammingElementImpl> fields)
+    {
+        for (final ProgrammingElementImpl next : fields)
+        {
+            assert !next.getFqName().endsWith(ResolutionMigration.FIELD_DESCRIPTOR) : "Already migrated: " + next.getFqName();
+            next.updateFqName(next.getFqName() + ResolutionMigration.FIELD_DESCRIPTOR);
         }
     }
 

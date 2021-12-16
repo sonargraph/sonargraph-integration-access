@@ -33,6 +33,7 @@ public class XmlElementContentExtractorTest
         final String contextInfo = XmlElementContentExtractor.process(new File("./src/test/resources/ReportWithContextInfo.xml"),
                 REPORT_CONTEXT_INFO);
         assertEquals("Wrong context info", "Multi-\nline\ncontext\ninfo", contextInfo);
-        assertEquals("", XmlElementContentExtractor.process(new File("./src/test/resources/ReportStandard.xml"), REPORT_CONTEXT_INFO));
+        assertEquals("Empty string expected if element does not exist", "",
+                XmlElementContentExtractor.process(new File("./src/test/resources/ReportStandard.xml"), REPORT_CONTEXT_INFO));
     }
 }

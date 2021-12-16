@@ -1148,11 +1148,11 @@ public final class XmlReportReader extends XmlAccess
                 {
                     for (final XsdMetricIntValue nextIntValue : nextXsdMetricValue.getInt())
                     {
-                        addMetricValue(softwareSystem, level, nextXsdMetricValue.getRef(), () -> new Integer(nextIntValue.getValue()));
+                        addMetricValue(softwareSystem, level, nextXsdMetricValue.getRef(), () -> Integer.valueOf(nextIntValue.getValue()));
                     }
                     for (final XsdMetricFloatValue nextFloatValue : nextXsdMetricValue.getFloat())
                     {
-                        addMetricValue(softwareSystem, level, nextXsdMetricValue.getRef(), () -> new Float(nextFloatValue.getValue()));
+                        addMetricValue(softwareSystem, level, nextXsdMetricValue.getRef(), () -> Float.valueOf(nextFloatValue.getValue()));
                     }
                 }
             }
@@ -1182,12 +1182,12 @@ public final class XmlReportReader extends XmlAccess
                     for (final XsdMetricIntValue nextIntValue : nextValue.getInt())
                     {
                         addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextIntValue.getRef(),
-                                () -> new Integer(nextIntValue.getValue()));
+                                () -> Integer.valueOf(nextIntValue.getValue()));
                     }
                     for (final XsdMetricFloatValue nextFloatValue : nextValue.getFloat())
                     {
                         addMetricValue(softwareSystem, module, currentLevel, nextValue.getRef(), nextFloatValue.getRef(),
-                                () -> new Float(nextFloatValue.getValue()));
+                                () -> Float.valueOf(nextFloatValue.getValue()));
                     }
                 }
             }

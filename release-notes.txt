@@ -1,6 +1,12 @@
 Sonargraph Integration Access
 ===============================
 
+6.1.3
+=====
+
+- Update with new functionality: Resolution migration, content extraction for single XML element.
+
+
 6.1.1
 =====
 
