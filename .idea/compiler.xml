@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="sonargraph-integration-access" target="1.8" />
+      <module name="sonargraph-integration-access" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
