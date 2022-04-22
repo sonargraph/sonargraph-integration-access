@@ -1,5 +1,5 @@
-[![Build: master](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml)
-[![Build: develop](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml/badge.svg?branch=develop)](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml)
+[![CI Build](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml)
+[![CI Build](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml/badge.svg?branch=develop)](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml)
 
 # Sonargraph Integration Access
 
