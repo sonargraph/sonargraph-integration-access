@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hello2morrow</groupId>
 	<artifactId>sonargraph-integration-access</artifactId>
-	<version>6.1.3</version>
+	<version>6.1.4</version>
 	<name>Sonargraph Integration</name>
 	<description>Sonargraph Integration</description>
 	<url>http://www.hello2morrow.com</url>
@@ -210,7 +210,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.13</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
