@@ -32,7 +32,6 @@ import com.hello2morrow.sonargraph.integration.access.model.IResolution;
 import com.hello2morrow.sonargraph.integration.access.model.Priority;
 import com.hello2morrow.sonargraph.integration.access.model.ResolutionType;
 
-@Deprecated
 public final class ResolutionImpl extends ElementImpl implements IResolution
 {
     private static final long serialVersionUID = 6480407569513366548L;

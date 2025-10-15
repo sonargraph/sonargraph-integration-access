@@ -107,7 +107,6 @@ import com.hello2morrow.sonargraph.integration.access.model.internal.SourceFileI
 import com.hello2morrow.sonargraph.integration.access.model.internal.SystemFileImpl;
 import com.hello2morrow.sonargraph.integration.access.model.internal.ThresholdViolationIssue;
 import com.hello2morrow.sonargraph.integration.access.model.internal.WorkspaceFileFilterImpl;
-import com.hello2morrow.sonargraph.integration.access.persistence.QualityGateReader.InvalidMetricIdException;
 import com.hello2morrow.sonargraph.integration.access.persistence.ValidationEventHandlerImpl.ValidationMessageCauses;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzer;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdAnalyzerExecutionLevel;
@@ -808,15 +807,7 @@ public final class XmlReportReader extends XmlAccess
             if (next instanceof XsdQualityGate && type == SystemFileType.QUALITY_GATE)
             {
                 assert next instanceof XsdQualityGate : "Unexpected class " + next.getClass().getCanonicalName();
-
-                try
-                {
-                    reader.addQualityGate((XsdQualityGate) next);
-                }
-                catch (final InvalidMetricIdException e)
-                {
-                    throw new IllegalArgumentException("Failed to process quality gate '" + next.getPath() + "': " + e.getMessage());
-                }
+                reader.addQualityGate((XsdQualityGate) next);
             }
         }
     }

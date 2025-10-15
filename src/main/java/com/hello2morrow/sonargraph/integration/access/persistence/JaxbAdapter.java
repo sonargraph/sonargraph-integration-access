@@ -51,10 +51,57 @@ public final class JaxbAdapter<T>
     private static final Logger LOGGER = LoggerFactory.getLogger(JaxbAdapter.class);
     private static final String INITIALIZATION_FAILED = "Initialization failed";
     private static final String UTF8_ENCODING = "UTF-8";
-    private final Unmarshaller reader;
-    private final Marshaller writer;
+    private static final AtomicBoolean JAXB_IMPLEMENTATION_VERIFIED = new AtomicBoolean(false);
+    private final Unmarshaller m_reader;
+    private final Marshaller m_writer;
 
-    private static final AtomicBoolean s_hasJaxbImplementationBeenLogged = new AtomicBoolean(false);
+    private static String getInfo(final String info, final String namespaceList, final AggregatingClassLoader classLoader, final Exception exception)
+    {
+        assert info != null && info.length() > 0 : "Parameter 'info' of method 'getInfo' must not be empty";
+        assert namespaceList != null && namespaceList.length() > 0 : "Parameter 'namespaceList' of method 'getInfo' must not be empty";
+        assert classLoader != null : "Parameter 'classLoader' of method 'getInfo' must not be null";
+        assert exception != null : "Parameter 'exception' of method 'getInfo' must not be null";
+
+        final StringBuilder builder = new StringBuilder();
+        builder.append("[").append(info).append("] ");
+        builder.append("Namepaces: ").append(namespaceList);
+
+        builder.append(", Classloaders:");
+        for (final ClassLoader nextClassLoader : classLoader.getClassLoaders())
+        {
+            builder.append(" <").append(nextClassLoader.getClass().getSimpleName());
+            final String nextName = nextClassLoader.getName();
+            if (nextName != null && !nextName.isEmpty())
+            {
+                builder.append(" (").append(nextName).append(")");
+            }
+            builder.append(">");
+        }
+
+        builder.append("\n").append(Utility.collectAll(exception));
+        return builder.toString();
+    }
+
+    private void verifyJaxbImplementation(final JAXBContext jaxbContext)
+    {
+        assert jaxbContext != null : "Parameter 'jaxbContext' of method 'verifyJaxbImplementation' must not be null";
+
+        if (!JAXB_IMPLEMENTATION_VERIFIED.getAndSet(true))
+        {
+            LOGGER.debug("Using JAXBContext implementation: {}", jaxbContext.getClass().getName());
+
+            //Since JAXB is no longer contained from Java11 onwards, we supply a different implementation and check here that it is used.
+            if (!jaxbContext.getClass().getName().equals("com.sun.xml.bind.v2.runtime.JAXBContextImpl"))
+            {
+                throw new RuntimeException("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
+                        + " does not match the expected implementation " + "com.sun.xml.bind.v2.runtime.JAXBContextImpl\n"
+                        + "\tCheck if the file META-INF/services/javax.xml.bind.JAXBContext exists and contains the correct entry.\n"
+                        + "\tIf used in an OSGi environment, check that the correct classloader is used.\n"
+                        + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
+                        + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory'");
+            }
+        }
+    }
 
     /**
      * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation)
@@ -62,16 +109,21 @@ public final class JaxbAdapter<T>
      * @param namespace the namespace - must not be 'empty'
      * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final String namespace, ClassLoader classLoader, final String defaultNamespaceRemap)
+    public JaxbAdapter(final String namespace, final ClassLoader classLoader, final String defaultNamespaceRemap)
     {
         assert namespace != null && namespace.length() > 0 : "Parameter 'namespace' of method 'JaxbAdapter' must not be empty";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
         //defaultNamespaceRemap might be null.
 
-        if (!(classLoader instanceof AggregatingClassLoader))
+        final AggregatingClassLoader aggregatingClassLoader;
+        if (classLoader instanceof AggregatingClassLoader)
+        {
+            aggregatingClassLoader = (AggregatingClassLoader) classLoader;
+        }
+        else
         {
             // We must use this class loader here to enforce the use of a specific JaxB implementation
-            classLoader = new AggregatingClassLoader(classLoader);
+            aggregatingClassLoader = new AggregatingClassLoader(classLoader);
         }
 
         Marshaller createdWriter;
@@ -91,8 +143,7 @@ public final class JaxbAdapter<T>
                 //Using this property, all elements are registered and looked up with namespaceURI+localPart.
                 properties.put("com.sun.xml.bind.defaultNamespaceRemap", defaultNamespaceRemap);
             }
-            final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, classLoader, properties);
-            logJaxbImplementation(jaxbContext);
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespace, aggregatingClassLoader, properties);
             verifyJaxbImplementation(jaxbContext);
 
             createdWriter = jaxbContext.createMarshaller();
@@ -102,15 +153,57 @@ public final class JaxbAdapter<T>
         }
         catch (final Exception ex)
         {
-            LOGGER.error(INITIALIZATION_FAILED, ex);
             createdWriter = null;
             createdReader = null;
-            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(ex);
+
+            final String info = getInfo(INITIALIZATION_FAILED, namespace, aggregatingClassLoader, ex);
+            LOGGER.error(info);
+            assert false : info;
+
             throw new RuntimeException(INITIALIZATION_FAILED, ex);
         }
 
-        this.writer = createdWriter;
-        this.reader = createdReader;
+        m_writer = createdWriter;
+        m_reader = createdReader;
+    }
+
+    /**
+     * Creates a JaxbAdapter - a writer and a reader (reader without XSD validation)
+     *
+     * @param classLoader the class loader - must not be 'null'
+     */
+    public JaxbAdapter(final AggregatingClassLoader aggregatingClassLoader, final String namespaces)
+    {
+        assert aggregatingClassLoader != null : "Parameter 'aggregatingClassLoader' of method 'JaxbAdapter' must not be null";
+        assert namespaces != null && namespaces.length() > 0 : "Parameter 'namespaces' of method 'JaxbAdapter' must not be empty";
+
+        Marshaller createdWriter;
+        Unmarshaller createdReader;
+
+        try
+        {
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespaces, aggregatingClassLoader);
+            verifyJaxbImplementation(jaxbContext);
+
+            createdWriter = jaxbContext.createMarshaller();
+            createdWriter.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            createdWriter.setProperty(Marshaller.JAXB_ENCODING, UTF8_ENCODING);
+            createdReader = jaxbContext.createUnmarshaller();
+        }
+        catch (final Exception e)
+        {
+            createdReader = null;
+            createdWriter = null;
+
+            final String info = getInfo(INITIALIZATION_FAILED, namespaces, aggregatingClassLoader, e);
+            LOGGER.error(info);
+            assert false : info;
+
+            throw new RuntimeException(INITIALIZATION_FAILED, e);
+        }
+
+        m_reader = createdReader;
+        m_writer = createdWriter;
     }
 
     /**
@@ -119,25 +212,29 @@ public final class JaxbAdapter<T>
      * @param persistenceContext the persistent context - must not be 'null'
      * @param classLoader the class loader - must not be 'null'
      */
-    public JaxbAdapter(final XmlPersistenceContext persistenceContext, ClassLoader classLoader)
+    public JaxbAdapter(final XmlPersistenceContext persistenceContext, final ClassLoader classLoader)
     {
         assert persistenceContext != null : "Parameter 'persistenceContext' of method 'JaxbAdapter' must not be null";
         assert classLoader != null : "Parameter 'classLoader' of method 'JaxbAdapter' must not be null";
 
-        if (!(classLoader instanceof AggregatingClassLoader))
+        final AggregatingClassLoader aggregatingClassLoader;
+        if (classLoader instanceof AggregatingClassLoader)
+        {
+            aggregatingClassLoader = (AggregatingClassLoader) classLoader;
+        }
+        else
         {
             // We must use this class loader here to enforce the use of a specific JaxB implementation
-            classLoader = new AggregatingClassLoader(classLoader);
+            aggregatingClassLoader = new AggregatingClassLoader(classLoader);
         }
 
         Marshaller createdWriter;
         Unmarshaller createdReader;
 
+        final String namespaces = persistenceContext.getNamespaceList();
         try
         {
-            final String namespaces = persistenceContext.getNamespaceList();
-            final JAXBContext jaxbContext = JAXBContext.newInstance(namespaces, classLoader);
-            logJaxbImplementation(jaxbContext);
+            final JAXBContext jaxbContext = JAXBContext.newInstance(namespaces, aggregatingClassLoader);
             verifyJaxbImplementation(jaxbContext);
 
             createdWriter = jaxbContext.createMarshaller();
@@ -155,59 +252,40 @@ public final class JaxbAdapter<T>
                 i++;
             }
             createdReader.setSchema(SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema").newSchema(sources));
-
-            //createdReader.setProperty(UnmarshallerProperties.ID_RESOLVER, new XmlIdResolver());
         }
         catch (final Exception e)
         {
-            LOGGER.error(INITIALIZATION_FAILED, e);
             createdReader = null;
             createdWriter = null;
-            assert false : INITIALIZATION_FAILED + ": " + Utility.collectAll(e);
+
+            final String info = getInfo(INITIALIZATION_FAILED, namespaces, aggregatingClassLoader, e);
+            LOGGER.error(info);
+            assert false : info;
+
             throw new RuntimeException(INITIALIZATION_FAILED, e);
         }
 
-        this.reader = createdReader;
-        this.writer = createdWriter;
-    }
-
-    private void logJaxbImplementation(final JAXBContext jaxbContext)
-    {
-        if (!s_hasJaxbImplementationBeenLogged.getAndSet(true))
-        {
-            LOGGER.info("Using JAXBContext implementation: {}", jaxbContext.getClass().getName());
-        }
-    }
-
-    /** Since JAXB is no longer contained from Java11 onwards, we supply a different implementation and check here that it is used. */
-    private void verifyJaxbImplementation(final JAXBContext jaxbContext) throws AssertionError
-    {
-        if (!jaxbContext.getClass().getName().equals("com.sun.xml.bind.v2.runtime.JAXBContextImpl"))
-        {
-            throw new AssertionError("Current JAXBContext implementation '" + jaxbContext.getClass().getName()
-                    + " does not match the expected implementation " + "com.sun.xml.bind.v2.runtime.JAXBContextImpl\n"
-                    + "\tCheck if the file META-INF/services/javax.xml.bind.JAXBContext exists and contains the correct entry.\n"
-                    + "\tIf used in an OSGi environment, check that the correct classloader is used.\n"
-                    + "\tCheck if a jaxb.properties file is located in the packages that contain the JAXB classes.\n"
-                    + "\tAlternatively set the System property 'javax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory'");
-        }
+        m_reader = createdReader;
+        m_writer = createdWriter;
     }
 
     public void setMarshalListener(final Marshaller.Listener listener)
     {
-        writer.setListener(listener);
+        m_writer.setListener(listener);
     }
 
     @SuppressWarnings("unchecked")
     public T load(final InputStream from, final ValidationEventHandler validationHandler)
     {
         assert from != null : "'from' must not be null";
-        assert validationHandler != null : "'validationHandler' must not be null";
 
         try (BufferedInputStream bufferedIn = new BufferedInputStream(from))
         {
-            reader.setEventHandler(validationHandler);
-            return (T) reader.unmarshal(bufferedIn);
+            if (validationHandler != null)
+            {
+                m_reader.setEventHandler(validationHandler);
+            }
+            return (T) m_reader.unmarshal(bufferedIn);
         }
         catch (final IOException | JAXBException e)
         {
@@ -223,16 +301,12 @@ public final class JaxbAdapter<T>
         try (OutputStream bufferedOut = new BufferedOutputStream(out))
         {
             final XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
-            //Disable escaping, since we want to generate <CDATA[[...]]> sections based on the detection of special characters
-            xmlOutputFactory.setProperty("escapeCharacters", false);
-
+            final XMLStreamWriter streamWriter = xmlOutputFactory.createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
             //Using two decorators to correctly handle CDATA sections and output formatting.
             //The output formatting property set on the JAXB marshaller is not respected when using XMLStreamWriters.
-            final XMLStreamWriter streamWriter = xmlOutputFactory.createXMLStreamWriter(bufferedOut, UTF8_ENCODING);
-
             final XmlCDataStreamWriter cdataStreamWriter = new XmlCDataStreamWriter(streamWriter);
             final XmlPrettyPrintWriter xmlPrettyWriter = new XmlPrettyPrintWriter(cdataStreamWriter);
-            writer.marshal(jaxbRoot, xmlPrettyWriter);
+            m_writer.marshal(jaxbRoot, xmlPrettyWriter);
         }
         catch (final JAXBException e)
         {

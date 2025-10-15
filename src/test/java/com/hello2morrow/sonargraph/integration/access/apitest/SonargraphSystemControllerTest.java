@@ -183,6 +183,7 @@ public final class SonargraphSystemControllerTest
         assertEquals("Wrong base directory", Utility.convertPathToUniversalForm(baseDir.getCanonicalPath()), softwareSystem.getBaseDir());
     }
 
+    @SuppressWarnings("deprecation")
     private void verifySystem(final ISoftwareSystem softwareSystem, final String systemPath)
     {
         assertEquals("Wrong id", "4df288656010188b4d84a2a03bb0ecb9", softwareSystem.getSystemId());
@@ -198,6 +199,7 @@ public final class SonargraphSystemControllerTest
         Assert.assertThat("Wrong system element kinds", softwareSystem.getElementKinds(), is(equalTo(expectedSystemElementKinds)));
     }
 
+    @SuppressWarnings("deprecation")
     private void verifyModule(final ISoftwareSystem softwareSystem)
     {
         final IModule moduleApplication = softwareSystem.getModules().get(APPLICATION_MODULE);

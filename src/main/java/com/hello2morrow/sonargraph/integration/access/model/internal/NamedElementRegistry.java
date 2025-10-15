@@ -37,7 +37,8 @@ final class NamedElementRegistry implements Serializable
     void addElement(final INamedElement namedElement)
     {
         assert namedElement != null : "Parameter 'namedElement' of method 'addElement' must not be null";
-        assert !fqNameToElementMap.containsKey(namedElement.getFqName()) : "namedElement '" + namedElement.getFqName() + "' has already been added";
+        // AvZ Workaround for Siemens, Klimowicz
+        //assert !fqNameToElementMap.containsKey(namedElement.getFqName()) : "namedElement '" + namedElement.getFqName() + "' has already been added";
         fqNameToElementMap.put(namedElement.getFqName(), namedElement);
     }
 

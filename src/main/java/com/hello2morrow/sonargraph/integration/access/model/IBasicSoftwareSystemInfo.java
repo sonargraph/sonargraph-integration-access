@@ -21,6 +21,8 @@ import java.io.Serializable;
 
 public interface IBasicSoftwareSystemInfo extends Serializable
 {
+    public static final String DATE_AND_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";//Example: 2020-03-27T20:39:48.000+0000
+
     public String getSystemId();
 
     public String getPath();

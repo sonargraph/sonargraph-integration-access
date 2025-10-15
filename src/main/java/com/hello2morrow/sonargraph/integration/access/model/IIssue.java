@@ -21,30 +21,30 @@ import java.util.List;
 
 public interface IIssue extends IElement
 {
-    String KEY_SEPARATOR = ":";
+    public String KEY_SEPARATOR = ":";
 
     /**
      * @return the key that identifies the issue regardless of its line/column and the element(s) it is attached to
      */
-    String getKey();
+    public String getKey();
 
-    IIssueProvider getIssueProvider();
+    public IIssueProvider getIssueProvider();
 
-    IIssueType getIssueType();
+    public IIssueType getIssueType();
 
-    boolean hasResolution();
+    public boolean hasResolution();
 
-    boolean isIgnored();
+    public boolean isIgnored();
 
-    String getDescription();
+    public String getDescription();
 
-    int getLine();
+    public int getLine();
 
-    int getColumn();
+    public int getColumn();
 
-    ResolutionType getResolutionType();
+    public ResolutionType getResolutionType();
 
-    List<INamedElement> getAffectedNamedElements();
+    public List<INamedElement> getAffectedNamedElements();
 
-    Severity getSeverity();
+    public Severity getSeverity();
 }

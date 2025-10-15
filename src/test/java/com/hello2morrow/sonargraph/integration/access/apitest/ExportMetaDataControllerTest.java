@@ -53,6 +53,7 @@ public final class ExportMetaDataControllerTest
         m_controller = ControllerFactory.createMetaDataController();
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testReadExportMetaData() throws IOException
     {

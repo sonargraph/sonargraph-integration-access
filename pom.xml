@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hello2morrow</groupId>
 	<artifactId>sonargraph-integration-access</artifactId>
-	<version>6.1.4</version>
+	<version>6.1.5</version>
 	<name>Sonargraph Integration</name>
 	<description>Sonargraph Integration</description>
 	<url>http://www.hello2morrow.com</url>
@@ -20,13 +20,13 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	<build>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <url>https://central.sonatype.com/api/v1/publisher/deployments/</url>
+        </repository>
+    </distributionManagement>
+    <build>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -118,17 +118,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.6</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>3.0.0</version>
@@ -164,15 +153,17 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.0.1</version>
 			</plugin>
-			<!-- plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<version>0.7.5.201505241946</version> <executions> <execution> <id>default-prepare-agent</id> 
-				<goals> <goal>prepare-agent</goal> </goals> </execution> <execution> <id>default-prepare-agent-integration</id> 
-				<goals> <goal>prepare-agent-integration</goal> </goals> </execution> <execution> 
-				<id>default-report</id> <goals> <goal>report</goal> </goals> </execution> 
-				<execution> <id>default-report-integration</id> <goals> <goal>report-integration</goal> 
-				</goals> </execution> <execution> <id>default-check</id> <goals> <goal>check</goal> 
-				</goals> </execution> </executions> </plugin -->
-		</plugins>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.6.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 	<dependencies>
 		<dependency>
@@ -207,12 +198,6 @@
 			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.2.13</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<organization>
 		<name>hello2morrow GmbH</name>
@@ -241,27 +226,34 @@
 			<name>Ingmar Kellner</name>
 		</developer>
 	</developers>
-	<profiles>
-		<profile>
-			<id>signing</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-</project>
+    <profiles>
+        <profile>
+            <id>signing</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <keyname>gpg-key</keyname>
+                                    <passphraseServerId>gpg-key</passphraseServerId>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles></project>
