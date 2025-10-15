@@ -243,7 +243,7 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <keyname>gpg-key</keyname>
+                                    <keyname>support@hello2morrow.com</keyname>
                                     <passphraseServerId>gpg-key</passphraseServerId>
                                     <gpgArguments>
                                         <arg>--pinentry-mode</arg>
