@@ -1,6 +1,6 @@
 [![CI Build](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml/badge.svg)](https://github.com/sonargraph/sonargraph-integration-access/actions/workflows/maven.yml)
-![badge](https://img.shields.io/endpoint?url=https://enterprise.hello2morrow.com/badges/sonargraph-integration-access/Core:CoreMaintainabilityLevel)
-![badge](https://img.shields.io/endpoint?url=https://enterprise.hello2morrow.com/badges/sonargraph-integration-access/Core:CoreLinesOfCode)
+<!--![badge](https://img.shields.io/endpoint?url=https://enterprise.hello2morrow.com/badges/sonargraph-integration-access/Core:CoreMaintainabilityLevel)
+![badge](https://img.shields.io/endpoint?url=https://enterprise.hello2morrow.com/badges/sonargraph-integration-access/Core:CoreLinesOfCode)-->
 
 # Sonargraph Integration Access
 

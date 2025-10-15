@@ -26,6 +26,27 @@ public enum ResolutionMode implements IEnumeration
     TASK,
     NONE;
 
+    private final String m_standardName;
+    private final String m_presentationName;
+
+    private ResolutionMode()
+    {
+        m_standardName = Utility.convertConstantNameToStandardName(name());
+        m_presentationName = Utility.convertConstantNameToPresentationName(name());
+    }
+
+    @Override
+    public String getStandardName()
+    {
+        return m_standardName;
+    }
+
+    @Override
+    public String getPresentationName()
+    {
+        return m_presentationName;
+    }
+
     public static ResolutionMode fromString(final String value)
     {
         assert value != null && value.length() > 0 : "Parameter 'value' of method 'fromString' must not be empty";
@@ -47,17 +68,5 @@ public enum ResolutionMode implements IEnumeration
 
         assert false : "Unsupported value: " + value;
         return null;
-    }
-
-    @Override
-    public String getStandardName()
-    {
-        return Utility.convertConstantNameToStandardName(name());
-    }
-
-    @Override
-    public String getPresentationName()
-    {
-        return Utility.convertConstantNameToPresentationName(name());
     }
 }

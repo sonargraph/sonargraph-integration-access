@@ -81,7 +81,7 @@ final class QualityGateReader
         m_globalXmlToElementMap = globalXmlToElementMap;
     }
 
-    public void addQualityGate(final XsdQualityGate xsdQualityGate) throws InvalidMetricIdException
+    public void addQualityGate(final XsdQualityGate xsdQualityGate)
     {
         assert xsdQualityGate != null : "Parameter 'xsdQualityGate' of method 'addQualityGateDetails' must not be null";
 
@@ -172,7 +172,7 @@ final class QualityGateReader
         return null;
     }
 
-    private void processCurrenSystemConditions(final XsdQualityGate xsdQualityGate, final QualityGateImpl qualityGate) throws InvalidMetricIdException
+    private void processCurrenSystemConditions(final XsdQualityGate xsdQualityGate, final QualityGateImpl qualityGate)
     {
         final XsdCurrentSystemConditions xsdCurrentSystemConditions = xsdQualityGate.getCurrentSystemConditions();
         final CurrentSystemConditionsImpl currentSystemConditions = (CurrentSystemConditionsImpl) qualityGate.getCurrentSystemConditions();

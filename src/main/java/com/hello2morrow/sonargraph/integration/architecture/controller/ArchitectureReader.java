@@ -88,6 +88,7 @@ public final class ArchitectureReader
         return Optional.ofNullable(model);
     }
 
+    @SuppressWarnings("deprecation")
     private ArchitecturalModel convertXmlArchitectureToPojo(final Architecture architecture)
     {
         assert architecture != null : "Parameter 'architecture' of method 'convertXmlArchitectureToPojo' must not be null";

@@ -332,7 +332,7 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
 
     public int getNumberOfIssues()
     {
-        assert numberOfIssues == (issueMap.values().stream().mapToInt(i -> i.size()).sum()) : "Number of issues does not match";
+        assert numberOfIssues == issueMap.values().stream().mapToInt(i -> i.size()).sum() : "Number of issues does not match";
         return numberOfIssues;
     }
 
@@ -600,7 +600,6 @@ public final class SoftwareSystemImpl extends NamedElementContainerImpl implemen
         return Collections.unmodifiableList(systemFiles);
     }
 
-    @Deprecated
     public void addSystemFile(final ISystemFile systemFile)
     {
         assert systemFile != null : "Parameter 'systemFile' of method 'addSystemFile' must not be null";

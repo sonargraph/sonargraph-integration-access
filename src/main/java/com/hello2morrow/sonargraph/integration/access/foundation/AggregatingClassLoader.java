@@ -21,35 +21,45 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class AggregatingClassLoader extends ClassLoader
 {
-    private final List<ClassLoader> classLoaders;
+    private final List<ClassLoader> m_classLoaders = new ArrayList<>();
 
-    public AggregatingClassLoader(final ClassLoader... classLoaders)
+    public AggregatingClassLoader(final ClassLoader classLoader)
     {
-        assert classLoaders != null : "Parameter 'classLoaders' of method 'AggregatingClassLoader' must not be null";
-        this.classLoaders = Arrays.asList(classLoaders);
+        assert classLoader != null : "Parameter 'classLoader' of method 'AggregatingClassLoader' must not be null";
+        m_classLoaders.add(classLoader);
     }
 
     public AggregatingClassLoader(final List<ClassLoader> classLoaders)
     {
         assert classLoaders != null : "Parameter 'classLoaders' of method 'AggregatingClassLoader' must not be null";
-        this.classLoaders = new ArrayList<>(classLoaders);
+        addClassLoaders(classLoaders);
     }
 
     public AggregatingClassLoader(final AggregatingClassLoader aggregatingClassLoader)
     {
         assert aggregatingClassLoader != null : "Parameter 'aggregatingClassLoader' of method 'AggregatingClassLoader' must not be null";
-        classLoaders = new ArrayList<>(aggregatingClassLoader.classLoaders);
+        addClassLoaders(aggregatingClassLoader.m_classLoaders);
+    }
+
+    private void addClassLoaders(final List<ClassLoader> classLoaders)
+    {
+        for (var cl : classLoaders)
+        {
+            if (m_classLoaders.isEmpty() || !m_classLoaders.contains(cl))
+            {
+                m_classLoaders.add(cl);
+            }
+        }
     }
 
     public List<ClassLoader> getClassLoaders()
     {
-        return Collections.unmodifiableList(classLoaders);
+        return Collections.unmodifiableList(m_classLoaders);
     }
 
     @Override
@@ -66,7 +76,7 @@ public class AggregatingClassLoader extends ClassLoader
     @Override
     public URL getResource(final String name)
     {
-        for (final ClassLoader loader : classLoaders)
+        for (final ClassLoader loader : m_classLoaders)
         {
             final URL resource = loader.getResource(name);
             if (resource != null)
@@ -80,12 +90,12 @@ public class AggregatingClassLoader extends ClassLoader
     @Override
     protected Class<?> findClass(final String name) throws ClassNotFoundException
     {
-        if (classLoaders.isEmpty())
+        if (m_classLoaders.isEmpty())
         {
             throw new ClassNotFoundException("Unable to locate class '" + name + "' - no class loaders available");
         }
 
-        for (final ClassLoader loader : classLoaders)
+        for (final ClassLoader loader : m_classLoaders)
         {
             try
             {
@@ -96,6 +106,6 @@ public class AggregatingClassLoader extends ClassLoader
                 //Expected if class comes from other class loader
             }
         }
-        throw new ClassNotFoundException("Unable to locate class '" + name + "' - not found by class loaders " + classLoaders);
+        throw new ClassNotFoundException("Unable to locate class '" + name + "' - not found by class loaders " + m_classLoaders);
     }
 }

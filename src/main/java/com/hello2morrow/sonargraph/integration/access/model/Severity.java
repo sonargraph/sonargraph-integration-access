@@ -28,16 +28,25 @@ public enum Severity implements IEnumeration
     INFO,
     NONE;
 
+    private final String m_standardName;
+    private final String m_presentationName;
+
+    private Severity()
+    {
+        m_standardName = Utility.convertConstantNameToStandardName(name());
+        m_presentationName = Utility.convertConstantNameToPresentationName(name());
+    }
+
     @Override
     public String getStandardName()
     {
-        return Utility.convertConstantNameToStandardName(name());
+        return m_standardName;
     }
 
     @Override
     public String getPresentationName()
     {
-        return Utility.convertConstantNameToPresentationName(name());
+        return m_presentationName;
     }
 
     public static Severity fromString(final String name)

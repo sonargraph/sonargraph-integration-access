@@ -75,7 +75,6 @@ import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdReso
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdSoftwareSystemReport;
 import com.hello2morrow.sonargraph.integration.access.persistence.report.XsdToDo;
 
-@SuppressWarnings("deprecation") //We need to handle deprecated ResolutionImpl
 public class ResolutionConverter
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionConverter.class);

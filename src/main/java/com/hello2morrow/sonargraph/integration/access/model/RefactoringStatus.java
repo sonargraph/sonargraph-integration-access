@@ -31,28 +31,32 @@ public enum RefactoringStatus implements IEnumeration
     TARGET_ROOT_DIRECTORY_NOT_FOUND(false),
     NONE(false);
 
+    private final String m_standardName;
+    private final String m_presentationName;
     private final boolean m_isApplicable;
 
     private RefactoringStatus(final boolean isApplicable)
     {
+        m_standardName = Utility.convertConstantNameToStandardName(name());
+        m_presentationName = Utility.convertConstantNameToPresentationName(name());
         m_isApplicable = isApplicable;
-    }
-
-    public boolean isApplicable()
-    {
-        return m_isApplicable;
     }
 
     @Override
     public String getStandardName()
     {
-        return Utility.convertConstantNameToStandardName(name());
+        return m_standardName;
     }
 
     @Override
     public String getPresentationName()
     {
-        return Utility.convertConstantNameToPresentationName(name());
+        return m_presentationName;
+    }
+
+    public boolean isApplicable()
+    {
+        return m_isApplicable;
     }
 
     public static RefactoringStatus createFromStandardName(final String name)
